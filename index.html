@@ -1005,11 +1005,7 @@ document.addEventListener("keydown", e=>{
 <script>
 function closeAuthModal(){
   document.getElementById('authModal').classList.add('hidden');
-  try{ localStorage.setItem('authAgreed_ricochet','1'); }catch(e){}
 }
-(function(){
-  try{ if(localStorage.getItem('authAgreed_ricochet')==='1'){ document.getElementById('authModal').classList.add('hidden'); } }catch(e){}
-})();
 </script>
 
 </body>
