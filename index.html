@@ -440,6 +440,9 @@
   .chatinput{display:flex;gap:7px}
   .chattext{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none}
   .chattext:focus{border-color:var(--ricochet)}
+  .chattools{display:flex;gap:7px;margin-bottom:8px}
+  .trallbtn{background:var(--panel);border:1px solid var(--tank);color:var(--tank);border-radius:11px;padding:7px 14px;font-size:12px;font-weight:700;font-family:inherit}
+  .trallbtn:disabled{opacity:.5}
   .transtog{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--sub);margin-bottom:8px;cursor:pointer}
   .transtog input{accent-color:var(--ricochet)}
   .chatmsg{flex-wrap:wrap}
@@ -563,81 +566,84 @@
   <!-- 🏆 커뮤니티 투표 탭 -->
   <section id="tab-vote" class="tab">
     <div class="subtabs" id="commTabs">
-      <button data-v="chat" class="on" onclick="commView('chat')">💬 <span>채팅</span></button>
-      <button data-v="party" onclick="commView('party')">🎮 <span>파티</span><i class="subbadge" id="ptBadge" style="display:none"></i></button>
-      <button data-v="tier" onclick="commView('tier')">🏆 <span>티어</span></button>
-      <button data-v="tips" onclick="commView('tips')">✍️ <span>팁</span></button>
-      <button data-v="fb" onclick="commView('fb')">📮 <span>피드백</span></button>
-      <button data-v="stats" onclick="commView('stats')">📊 <span>통계</span></button>
+      <button data-v="chat" class="on" onclick="commView('chat')">💬 <span data-ko="채팅">채팅</span></button>
+      <button data-v="party" onclick="commView('party')">🎮 <span data-ko="파티">파티</span><i class="subbadge" id="ptBadge" style="display:none"></i></button>
+      <button data-v="tier" onclick="commView('tier')">🏆 <span data-ko="티어">티어</span></button>
+      <button data-v="tips" onclick="commView('tips')">✍️ <span data-ko="팁">팁</span></button>
+      <button data-v="fb" onclick="commView('fb')">📮 <span data-ko="피드백">피드백</span></button>
+      <button data-v="stats" onclick="commView('stats')">📊 <span data-ko="통계">통계</span></button>
     </div>
     <div class="profilebar" id="profileBar">
       <span class="pfico">👤</span>
       <div class="pfmain">
-        <span class="pflabel">내 커뮤니티 닉네임</span>
+        <span class="pflabel" data-ko="내 커뮤니티 닉네임">내 커뮤니티 닉네임</span>
         <span class="pfnick" id="pfNick">설정 안 됨</span>
       </div>
-      <button class="pfedit" id="pfEditBtn">✏️ 변경</button>
+      <button class="pfedit" id="pfEditBtn" data-ko="✏️ 변경">✏️ 변경</button>
     </div>
     <div class="commv" id="commv-chat">
-<h2>실시간 라운지 <small>전세계 유저와 자유 수다 · 최근 100개</small></h2>
-    <div class="safetybar">🛡️ 욕설 필터 · 신고 3회 누적 시 자동 숨김 · 개인정보 입력 금지 · 도배 방지 5초</div>
-    <label class="transtog"><input type="checkbox" id="chatAutoTr"> 🌐 자동 번역 — 다른 언어 메시지를 내 언어로 바로 표시 (🌐 버튼으로 개별 번역도 가능)</label>
+<h2><span data-ko="실시간 라운지">실시간 라운지</span> <small data-ko="전세계 유저와 자유 수다 · 최근 100개">전세계 유저와 자유 수다 · 최근 100개</small></h2>
+    <div class="safetybar" data-ko="🛡️ 욕설 필터 · 신고 3회 누적 시 자동 숨김 · 개인정보 입력 금지 · 도배 방지 5초">🛡️ 욕설 필터 · 신고 3회 누적 시 자동 숨김 · 개인정보 입력 금지 · 도배 방지 5초</div>
+    <div class="chattools">
+      <button class="trallbtn" id="chatTrAll" data-ko="🌐 전체 번역">🌐 전체 번역</button>
+    </div>
+    <label class="transtog"><input type="checkbox" id="chatAutoTr"> <span data-ko="🌐 자동 번역 — 다른 언어 메시지를 내 언어로 바로 표시 (🌐 버튼으로 개별 번역도 가능)">🌐 자동 번역 — 다른 언어 메시지를 내 언어로 바로 표시 (🌐 버튼으로 개별 번역도 가능)</span></label>
     <div class="chatbox" id="chatBox"><div class="cmtempty">아직 메시지가 없습니다. 첫 인사를 남겨보세요! 👋</div></div>
     <div class="chatinput">
-      <input id="chatText" class="chattext" maxlength="120" placeholder="메시지 입력… (Enter로 전송)">
-      <button class="cmtbtn" id="chatSend">전송</button>
+      <input id="chatText" class="chattext" maxlength="120" data-ko-ph="메시지 입력… (Enter로 전송)" placeholder="메시지 입력… (Enter로 전송)">
+      <button class="cmtbtn" id="chatSend" data-ko="전송">전송</button>
     </div>
 
     </div>
     <div class="commv" id="commv-party" style="display:none">
 
-    <h2>파티 모집 <small>같이 할 팀원 찾기 · 게임 닉네임으로 친구 추가</small></h2>
-    <label class="transtog"><input type="checkbox" id="ptNotif"> 🔔 새 파티 알림 받기 — 사이트가 열려 있는 동안 기기 알림으로 알려드립니다 (원치 않으면 끄면 됩니다)</label>
+    <h2><span data-ko="파티 모집">파티 모집</span> <small data-ko="같이 할 팀원 찾기 · 게임 닉네임으로 친구 추가">같이 할 팀원 찾기 · 게임 닉네임으로 친구 추가</small></h2>
+    <label class="transtog"><input type="checkbox" id="ptNotif"> <span data-ko="🔔 새 파티 알림 받기 — 사이트가 열려 있는 동안 기기 알림으로 알려드립니다 (원치 않으면 끄면 됩니다)">🔔 새 파티 알림 받기 — 사이트가 열려 있는 동안 기기 알림으로 알려드립니다 (원치 않으면 끄면 됩니다)</span></label>
     <div class="cmtcard">
       <div class="cmtrow1">
         <select id="ptMode" class="cmtsel">
-          <option>🎮 캐주얼</option><option>🏆 프로 리그</option><option>🎉 이벤트</option><option>🤝 친선전</option><option>💬 기타</option>
+          <option value="🎮 캐주얼" data-ko="🎮 캐주얼">🎮 캐주얼</option><option value="🏆 프로 리그" data-ko="🏆 프로 리그">🏆 프로 리그</option><option value="🎉 이벤트" data-ko="🎉 이벤트">🎉 이벤트</option><option value="🤝 친선전" data-ko="🤝 친선전">🤝 친선전</option><option value="💬 기타" data-ko="💬 기타">💬 기타</option>
         </select>
         <select id="ptNeed" class="cmtsel" style="flex:0 0 108px" title="모집 인원">
-          <option value="1">1명 모집</option><option value="2" selected>2명 모집</option><option value="3">3명 모집</option><option value="4">4명 모집</option><option value="5">5명 모집</option>
+          <option value="1" data-ko="1명 모집">1명 모집</option><option value="2" selected data-ko="2명 모집">2명 모집</option><option value="3" data-ko="3명 모집">3명 모집</option><option value="4" data-ko="4명 모집">4명 모집</option><option value="5" data-ko="5명 모집">5명 모집</option>
         </select>
       </div>
       <div class="cmtrow1">
-        <input id="ptGameNick" class="cmtname" style="flex:1;width:auto" maxlength="16" placeholder="게임 내 닉네임 (친구 추가용, 필수)">
+        <input id="ptGameNick" class="cmtname" style="flex:1;width:auto" maxlength="16" data-ko-ph="게임 내 닉네임 (친구 추가용, 필수)" placeholder="게임 내 닉네임 (친구 추가용, 필수)">
       </div>
       <div class="cmtrow2">
-        <textarea id="ptText" class="cmttext" rows="2" maxlength="100" placeholder="예) 프로 리그 듀오 구해요! 저녁 9시부터"></textarea>
+        <textarea id="ptText" class="cmttext" rows="2" maxlength="100" data-ko-ph="예) 프로 리그 듀오 구해요! 저녁 9시부터" placeholder="예) 프로 리그 듀오 구해요! 저녁 9시부터"></textarea>
       </div>
       <div class="cmtrow3">
-        <label class="transtog" style="margin:0"><input type="checkbox" id="ptNoJoin"> 참가 신청 안 받기 (게임 내 친추로만)</label>
-        <button class="cmtbtn" id="ptSend">🎮 모집 올리기</button>
+        <label class="transtog" style="margin:0"><input type="checkbox" id="ptNoJoin"> <span data-ko="참가 신청 안 받기 (게임 내 친추로만)">참가 신청 안 받기 (게임 내 친추로만)</span></label>
+        <button class="cmtbtn" id="ptSend" data-ko="🎮 모집 올리기">🎮 모집 올리기</button>
       </div>
     </div>
     <div id="ptList" class="cmtlist"><div class="cmtempty">아직 모집 글이 없습니다. 첫 파티를 만들어보세요! 🎮</div></div>
 </div>
     <div class="commv" id="commv-tier" style="display:none">
-<h2>커뮤니티 티어표 <small>최다 득표 티어 기준 배치</small></h2>
+<h2><span data-ko="커뮤니티 티어표">커뮤니티 티어표</span> <small data-ko="최다 득표 티어 기준 배치">최다 득표 티어 기준 배치</small></h2>
     <div class="vstats" id="voteStats"><span>투표 집계 준비 중…</span></div>
-    <div class="setupbox" style="margin-bottom:11px">🏆 <b>영웅은 가장 많은 표를 받은 티어 줄에 표시됩니다.</b> 예를 들어 A표가 제일 많으면 A줄에 있어요. 카드를 누르면 티어별 <b>득표 분포</b>를 볼 수 있습니다.</div>
+    <div class="setupbox" style="margin-bottom:11px" data-ko="🏆 영웅은 가장 많은 표를 받은 티어 줄에 표시됩니다. 예를 들어 A표가 제일 많으면 A줄에 있어요. 카드를 누르면 티어별 득표 분포를 볼 수 있습니다.">🏆 영웅은 가장 많은 표를 받은 티어 줄에 표시됩니다. 예를 들어 A표가 제일 많으면 A줄에 있어요. 카드를 누르면 티어별 득표 분포를 볼 수 있습니다.</div>
     <div id="tierBoard" class="tierboard"></div>
 
-    <h2 style="margin-top:22px">내 투표 <small>영웅마다 1표 · 다시 누르면 변경</small></h2>
+    <h2 style="margin-top:22px"><span data-ko="내 투표">내 투표</span> <small data-ko="영웅마다 1표 · 다시 누르면 변경">영웅마다 1표 · 다시 누르면 변경</small></h2>
     <div class="votehint" id="voteHint">🔒 연결 중… 잠시만 기다려주세요</div>
     <div id="voteGrid" class="votegrid"></div>
 
     </div>
     <div class="commv" id="commv-tips" style="display:none">
-<h2 style="margin-top:22px">영웅 팁 게시판 <small>한 줄 공략 공유 · 최신순</small></h2>
+<h2 style="margin-top:22px"><span data-ko="영웅 팁 게시판">영웅 팁 게시판</span> <small data-ko="한 줄 공략 공유 · 최신순">한 줄 공략 공유 · 최신순</small></h2>
     <div class="cmtcard">
       <div class="cmtrow1">
         <select id="cmtHero" class="cmtsel"></select>
       </div>
       <div class="cmtrow2">
-        <textarea id="cmtText" class="cmttext" maxlength="200" rows="2" placeholder="나만 아는 꿀팁을 공유해주세요… (200자)"></textarea>
+        <textarea id="cmtText" class="cmttext" maxlength="200" rows="2" data-ko-ph="나만 아는 꿀팁을 공유해주세요… (200자)" placeholder="나만 아는 꿀팁을 공유해주세요… (200자)"></textarea>
       </div>
       <div class="cmtrow3">
         <span class="cmtcount" id="cmtCount">0/200</span>
-        <button class="cmtbtn" id="cmtSend">✍️ 등록</button>
+        <button class="cmtbtn" id="cmtSend" data-ko="✍️ 등록">✍️ 등록</button>
       </div>
     </div>
     <div class="filtchips" id="cmtFilter"></div>
@@ -645,36 +651,36 @@
 
     </div>
     <div class="commv" id="commv-fb" style="display:none">
-<h2 style="margin-top:22px">사이트 피드백 <small>오류 제보 · 기능 제안</small></h2>
+<h2 style="margin-top:22px"><span data-ko="사이트 피드백">사이트 피드백</span> <small data-ko="오류 제보 · 기능 제안">오류 제보 · 기능 제안</small></h2>
     <div class="cmtcard">
       <div class="cmtrow1">
         <select id="fbCat" class="cmtsel">
-          <option>🎯 카운터픽/상성 오류</option>
-          <option>📖 도감 정보 오류</option>
-          <option>🗺️ 게임정보 오류</option>
-          <option>🐞 버그 제보</option>
-          <option>💡 기능 제안</option>
-          <option>💬 기타</option>
+          <option value="🎯 카운터픽/상성 오류" data-ko="🎯 카운터픽/상성 오류">🎯 카운터픽/상성 오류</option>
+          <option value="📖 도감 정보 오류" data-ko="📖 도감 정보 오류">📖 도감 정보 오류</option>
+          <option value="🗺️ 게임정보 오류" data-ko="🗺️ 게임정보 오류">🗺️ 게임정보 오류</option>
+          <option value="🐞 버그 제보" data-ko="🐞 버그 제보">🐞 버그 제보</option>
+          <option value="💡 기능 제안" data-ko="💡 기능 제안">💡 기능 제안</option>
+          <option value="💬 기타" data-ko="💬 기타">💬 기타</option>
         </select>
       </div>
       <div class="cmtrow2">
-        <textarea id="fbText" class="cmttext" maxlength="500" rows="3" placeholder="어떤 정보가 틀렸는지, 어떤 기능이 필요한지 자유롭게 남겨주세요. 제작자가 직접 확인합니다. (500자)"></textarea>
+        <textarea id="fbText" class="cmttext" maxlength="500" rows="3" data-ko-ph="어떤 정보가 틀렸는지, 어떤 기능이 필요한지 자유롭게 남겨주세요. 제작자가 직접 확인합니다. (500자)" placeholder="어떤 정보가 틀렸는지, 어떤 기능이 필요한지 자유롭게 남겨주세요. 제작자가 직접 확인합니다. (500자)"></textarea>
       </div>
       <div class="cmtrow3">
         <span class="cmtcount" id="fbCount">0/500</span>
-        <button class="cmtbtn" id="fbSend">📮 보내기</button>
+        <button class="cmtbtn" id="fbSend" data-ko="📮 보내기">📮 보내기</button>
       </div>
     </div>
     <div id="adminPanel" style="display:none">
-      <button class="cmtbtn" id="adminFbBtn" style="width:100%;margin-bottom:8px">🔑 관리자: 피드백 열람</button>
+      <button class="cmtbtn" id="adminFbBtn" style="width:100%;margin-bottom:8px" data-ko="🔑 관리자: 피드백 열람">🔑 관리자: 피드백 열람</button>
       <div id="adminFbList" class="cmtlist"></div>
     </div>
-    <div class="myuid" id="myUidRow">내 ID: <code id="myUidCode">…</code> <button id="myUidCopy">복사</button></div>
+    <div class="myuid" id="myUidRow"><span data-ko="내 ID:">내 ID:</span> <code id="myUidCode">…</code> <button id="myUidCopy" data-ko="복사">복사</button></div>
 
     </div>
     <div class="commv" id="commv-stats" style="display:none">
-<h2 style="margin-top:22px">방문자 통계 <small>어떤 유저들이 오는지 · 실시간</small></h2>
-    <div id="statsBoard" class="statsboard"><div class="cmtempty">통계 수집 중…</div></div>
+<h2 style="margin-top:22px"><span data-ko="방문자 통계">방문자 통계</span> <small data-ko="어떤 유저들이 오는지 · 실시간">어떤 유저들이 오는지 · 실시간</small></h2>
+    <div id="statsBoard" class="statsboard"><div class="cmtempty" data-ko="통계 수집 중…">통계 수집 중…</div></div>
   
   </div>
 </section>
@@ -689,12 +695,12 @@
 </div>
 <div class="nickmodal" id="nickModal">
   <div class="nickbox">
-    <h3>커뮤니티 닉네임 설정</h3>
-    <p>채팅·팁·파티에서 함께 표시될 닉네임입니다. 언제든 변경할 수 있어요. (2~12자)</p>
-    <input id="nickInput" maxlength="12" placeholder="닉네임 입력…">
+    <h3 data-ko="커뮤니티 닉네임 설정">커뮤니티 닉네임 설정</h3>
+    <p data-ko="채팅·팁·파티에서 함께 표시될 닉네임입니다. 언제든 변경할 수 있어요. (2~12자)">채팅·팁·파티에서 함께 표시될 닉네임입니다. 언제든 변경할 수 있어요. (2~12자)</p>
+    <input id="nickInput" maxlength="12" data-ko-ph="닉네임 입력…" placeholder="닉네임 입력…">
     <div class="nbtns">
-      <button class="ncancel" id="nickCancel">취소</button>
-      <button class="nsave" id="nickSave">저장</button>
+      <button class="ncancel" id="nickCancel" data-ko="취소">취소</button>
+      <button class="nsave" id="nickSave" data-ko="저장">저장</button>
     </div>
   </div>
 </div>
@@ -1361,6 +1367,7 @@ function go(t,btn){
     document.getElementById("headDesc").textContent=T(info.desc);
   }
   window.scrollTo(0,0);
+  if(t==="vote" && window.rsChatToBottom) setTimeout(window.rsChatToBottom, 60);
 }
 let toastTimer;
 function toast(msg){
@@ -1383,6 +1390,51 @@ let LANG=(function(){
   }catch(e){ return "ko" }
 })();
 if(!["ko","en","ja","zh"].includes(LANG)) LANG="ko";
+/* ── 커뮤니티 기능 번역 사전 (en/ja/zh) ── */
+(function(){
+const KO_KEYS = ["커뮤니티","채팅","파티","티어","팁","피드백","통계","내 커뮤니티 닉네임","설정 안 됨","✏️ 변경","커뮤니티 닉네임 설정","채팅·팁·파티에서 함께 표시될 닉네임입니다. 언제든 변경할 수 있어요. (2~12자)","닉네임 입력…","취소","저장","닉네임이 설정되었습니다","먼저 상단에서 커뮤니티 닉네임을 설정해주세요","닉네임은 2~12자로 입력해주세요","🛡️ 사용할 수 없는 닉네임입니다","🛡️ 사용할 수 없는 닉네임입니다 (사칭 방지)","실시간 라운지","전세계 유저와 자유 수다 · 최근 100개","🛡️ 욕설 필터 · 신고 3회 누적 시 자동 숨김 · 개인정보 입력 금지 · 도배 방지 5초","🌐 자동 번역 — 다른 언어 메시지를 내 언어로 바로 표시 (🌐 버튼으로 개별 번역도 가능)","아직 메시지가 없습니다. 첫 인사를 남겨보세요! 👋","메시지 입력… (Enter로 전송)","전송","신고 누적으로 숨겨진 메시지입니다","번역","신고","이 메시지를 삭제할까요?","삭제 실패","전송 실패 — 잠시 후 다시 시도해주세요","⚙️ 서버 규칙이 아직 설정되지 않아 전송할 수 없습니다","이미 같은 언어입니다","번역 실패 — 잠시 후 다시 시도해주세요","🌐 자동 번역 켜짐","내용을 입력해주세요","너무 깁니다","🛡️ 부적절한 표현이 포함되어 있습니다","🛡️ 전화번호·이메일 등 개인정보는 입력할 수 없습니다","도배 방지","초 후에 다시 시도해주세요","이 글을 신고할까요? 신고 3회 누적 시 자동으로 숨겨집니다.","신고가 접수되었습니다","이미 신고했거나 처리할 수 없습니다","연결 중입니다","연결 중입니다 — 잠시 후 다시 시도해주세요","이용이 제한된 계정입니다","파티 모집","같이 할 팀원 찾기 · 게임 닉네임으로 친구 추가","🔔 새 파티 알림 받기 — 사이트가 열려 있는 동안 기기 알림으로 알려드립니다 (원치 않으면 끄면 됩니다)","🎮 캐주얼","🏆 프로 리그","🎉 이벤트","🤝 친선전","💬 기타","1명 모집","2명 모집","3명 모집","4명 모집","5명 모집","게임 내 닉네임 (친구 추가용, 필수)","예) 프로 리그 듀오 구해요! 저녁 9시부터","참가 신청 안 받기 (게임 내 친추로만)","🎮 모집 올리기","아직 모집 글이 없습니다. 첫 파티를 만들어보세요! 🎮","모집중","마감","정원 완료","만료","명","게임 닉네임","눌러서 복사","✋ 참가 신청","⏳ 수락 대기중 · 취소","파티 나가기","✅ 참가 완료","게임 내 친추로 연락","파티 대화","마감하기","다시 열기","삭제","참가 신청","수락","이 모집 글을 삭제할까요?","참가 신청을 보냈습니다! 방장 수락을 기다려주세요 ⏳","신청을 취소했습니다","님을 파티에 수락했습니다 ✅","신청을 거절했습니다","파티에서 나갔습니다","게임 닉네임이 복사되었습니다 — 게임에서 친구 추가하세요!","게임 내 닉네임을 입력해주세요 (친구 추가용)","파티 모집이 올라갔습니다! 🎮","처리 실패 — 잠시 후 다시 시도해주세요","⚙️ 서버 규칙이 아직 설정되지 않았습니다","파티원과 여기서 대화하세요 (수락 전에도 문의 가능)","메시지…","모집","🎮 새 파티 모집!","이 브라우저는 알림을 지원하지 않습니다 (아이폰: 사파리 공유 → 홈 화면에 추가 후 가능)","알림 권한이 거부되었습니다 — 브라우저 설정에서 허용해주세요","🔔 새 파티 알림이 켜졌습니다!","커뮤니티 티어표","최다 득표 티어 기준 배치","🏆 영웅은 가장 많은 표를 받은 티어 줄에 표시됩니다. 예를 들어 A표가 제일 많으면 A줄에 있어요. 카드를 누르면 티어별 득표 분포를 볼 수 있습니다.","내 투표","영웅마다 1표 · 다시 누르면 변경","🔒 연결 중… 잠시만 기다려주세요","연결 완료 — 아래에서 영웅별 티어를 골라주세요. 언제든 바꿀 수 있습니다.","커뮤니티 이용이 제한된 상태입니다. 열람만 가능합니다.","총 투표","표","실시간 자동 갱신","아직 투표가 없습니다 — 첫 표의 주인공이 되어보세요!","눌러서 상세 분포 보기","최다 득표","총","평균","점","영웅은 가장 많은 표를 받은 티어 줄에 배치됩니다. 투표가 실시간으로 반영돼요.","아직 투표가 없습니다","투표 완료!","투표를 취소했습니다","취소 실패 — 잠시 후 다시 시도해주세요","투표 실패 — 네트워크를 확인해주세요","⚙️ 서버 규칙이 아직 설정되지 않아 투표할 수 없습니다","투표 취소","영웅 팁 게시판","한 줄 공략 공유 · 최신순","공통 팁","전체","공통","나만 아는 꿀팁을 공유해주세요… (200자)","✍️ 등록","아직 팁이 없습니다. 첫 팁을 남겨보세요! ✍️","신고 누적으로 숨겨진 글입니다","이 팁을 삭제할까요?","삭제되었습니다","팁이 등록되었습니다! 🎉","⚙️ 서버 규칙이 아직 설정되지 않아 등록할 수 없습니다","등록 실패 — 잠시 후 다시 시도해주세요","방금 전","분 전","시간 전","일 전","사이트 피드백","오류 제보 · 기능 제안","🎯 카운터픽/상성 오류","📖 도감 정보 오류","🗺️ 게임정보 오류","🐞 버그 제보","💡 기능 제안","어떤 정보가 틀렸는지, 어떤 기능이 필요한지 자유롭게 남겨주세요. 제작자가 직접 확인합니다. (500자)","📮 보내기","익명","피드백이 전달되었습니다. 감사합니다! 📮","🔑 관리자: 피드백 열람","아직 피드백이 없습니다","피드백을 불러올 수 없습니다 (관리자 전용)","관리자 모드","내 ID:","복사","복사되었습니다","방문자 통계","어떤 유저들이 오는지 · 실시간","통계 수집 중…","기기","국가","언어","시간대별 방문 (KST)","데이터 없음","📱 모바일","🖥️ PC","시","오늘","이번 주","누적","실시간 채팅 · 티어 투표 · 팁 · 피드백 · 방문자 통계","제작 · 운영 권한자:","· 비공식 팬메이드 · 무단배포 금지"];
+const EN = ["Community","Chat","Party","Tier","Tips","Feedback","Stats","My community nickname","Not set","✏️ Edit","Set community nickname","This nickname will be shown in chat, tips and parties. You can change it anytime. (2–12 chars)","Enter nickname…","Cancel","Save","Nickname saved","Please set your community nickname first (top of page)","Nickname must be 2–12 characters","🛡️ This nickname is not allowed","🛡️ This nickname is not allowed (impersonation protection)","Live Lounge","Chat with players worldwide · last 100","🛡️ Profanity filter · auto-hidden after 3 reports · no personal info · 5s anti-spam","🌐 Auto-translate — show foreign messages in your language (🌐 button for single messages)","No messages yet. Say hello! 👋","Type a message… (Enter to send)","Send","Hidden due to reports","Translate","Report","Delete this message?","Delete failed","Send failed — please try again later","⚙️ Server rules not set up yet — cannot send","Already in your language","Translation failed — try again later","🌐 Auto-translate ON","Please enter some text","Too long","🛡️ Inappropriate language detected","🛡️ Personal info (phone/email) is not allowed","Anti-spam","s — please try again later","Report this post? It will be hidden after 3 reports.","Report submitted","Already reported or cannot process","Connecting…","Connecting — please try again shortly","This account is restricted","Party Finder","Find teammates · add friends via game nickname","🔔 Notify me of new parties — device notifications while this site is open (turn off anytime)","🎮 Casual","🏆 Pro League","🎉 Event","🤝 Friendly","💬 Other","Need 1","Need 2","Need 3","Need 4","Need 5","In-game nickname (for friend requests, required)","e.g. Looking for a Pro League duo! From 9pm","No join requests (friend me in-game instead)","🎮 Post party","No parties yet. Create the first one! 🎮","Open","Closed","Full","Expired","","Game nickname","Tap to copy","✋ Request to join","⏳ Waiting for approval · cancel","Leave party","✅ Joined","Contact via in-game friend request","Party chat","Close","Reopen","Delete","Join requests","Accept","Delete this party post?","Request sent! Wait for the host to accept ⏳","Request cancelled","accepted into the party ✅","Request declined","You left the party","Game nickname copied — add them as a friend in game!","Please enter your in-game nickname (for friend requests)","Party posted! 🎮","Failed — please try again later","⚙️ Server rules not set up yet","Chat with party members here (you can ask before being accepted)","Message…","needs","🎮 New party!","This browser does not support notifications (iPhone: Share → Add to Home Screen)","Notification permission denied — allow it in browser settings","🔔 Party notifications ON!","Community Tier List","Placed by most-voted tier","🏆 Each hero is placed in the tier that received the most votes. e.g. if A has the most votes, the hero sits in row A. Tap a card to see the full vote breakdown.","My Votes","1 vote per hero · tap again to change","🔒 Connecting… please wait","Connected — pick a tier for each hero below. You can change anytime.","Your community access is restricted. View only.","Total votes","","Live updates","No votes yet — be the first to vote!","Tap for vote breakdown","Most voted","Total","Avg","pts","Heroes are placed in the tier with the most votes. Updates in real time.","No votes yet","voted!","Vote cancelled","Cancel failed — try again later","Vote failed — check your connection","⚙️ Server rules not set up yet — cannot vote","Cancel vote","Hero Tips Board","One-line tips · newest first","General tips","All","General","Share your best tip… (200 chars)","✍️ Post","No tips yet. Be the first! ✍️","Hidden due to reports","Delete this tip?","Deleted","Tip posted! 🎉","⚙️ Server rules not set up yet — cannot post","Post failed — try again later","just now","m ago","h ago","d ago","Site Feedback","Report errors · suggest features","🎯 Counter-pick/matchup error","📖 Hero dex error","🗺️ Game info error","🐞 Bug report","💡 Feature request","Tell us what's wrong or what you'd like to see. The creator reads everything. (500 chars)","📮 Send","Anonymous","Feedback sent. Thank you! 📮","🔑 Admin: view feedback","No feedback yet","Cannot load feedback (admin only)","Admin mode","My ID:","Copy","Copied","Visitor Stats","Who visits this site · live","Collecting stats…","Device","Country","Language","Visits by hour (KST)","No data","📱 Mobile","🖥️ PC","h","Today","This week","Total","Live chat · tier votes · tips · feedback · visitor stats","Created & operated by:","· Unofficial fan-made · No redistribution"];
+const JA = ["コミュニティ","チャット","パーティ","ティア","攻略メモ","フィードバック","統計","コミュニティのニックネーム","未設定","✏️ 変更","ニックネーム設定","チャット・攻略メモ・パーティで表示される名前です。いつでも変更できます。(2～12文字)","ニックネームを入力…","キャンセル","保存","ニックネームを設定しました","まず上部でニックネームを設定してください","ニックネームは2～12文字で入力してください","🛡️ このニックネームは使用できません","🛡️ このニックネームは使用できません(なりすまし防止)","リアルタイムラウンジ","世界中のユーザーと雑談 · 最新100件","🛡️ 暴言フィルター · 通報3回で自動非表示 · 個人情報の入力禁止 · 連投防止5秒","🌐 自動翻訳 — 外国語のメッセージを自分の言語で表示 (🌐ボタンで個別翻訳も可能)","まだメッセージがありません。挨拶してみましょう! 👋","メッセージを入力… (Enterで送信)","送信","通報により非表示になりました","翻訳","通報","このメッセージを削除しますか？","削除に失敗しました","送信失敗 — しばらくしてからもう一度お試しください","⚙️ サーバールール未設定のため送信できません","すでに同じ言語です","翻訳失敗 — しばらくしてからもう一度","🌐 自動翻訳ON","内容を入力してください","長すぎます","🛡️ 不適切な表現が含まれています","🛡️ 電話番号・メールなどの個人情報は入力できません","連投防止","秒後にもう一度お試しください","この投稿を通報しますか？通報3回で自動的に非表示になります。","通報を受け付けました","すでに通報済みか、処理できません","接続中です","接続中 — しばらくしてからもう一度","このアカウントは利用制限中です","パーティ募集","一緒に遊ぶ仲間探し · ゲーム内ニックネームでフレンド追加","🔔 新着パーティ通知 — サイトを開いている間、端末に通知します (不要ならオフに)","🎮 カジュアル","🏆 プロリーグ","🎉 イベント","🤝 フレンドリー","💬 その他","1人募集","2人募集","3人募集","4人募集","5人募集","ゲーム内ニックネーム (フレンド追加用・必須)","例) プロリーグのデュオ募集！夜9時から","参加申請を受けない (ゲーム内フレンド追加のみ)","🎮 募集を投稿","まだ募集がありません。最初のパーティを作りましょう! 🎮","募集中","締切","満員","期限切れ","人","ゲームニックネーム","タップでコピー","✋ 参加申請","⏳ 承認待ち · キャンセル","パーティを抜ける","✅ 参加済み","ゲーム内フレンド追加で連絡","パーティチャット","締め切る","再開する","削除","参加申請","承認","この募集を削除しますか？","参加申請を送りました！ホストの承認をお待ちください ⏳","申請をキャンセルしました","さんをパーティに承認しました ✅","申請を拒否しました","パーティを抜けました","ゲームニックネームをコピーしました — ゲームでフレンド追加しましょう!","ゲーム内ニックネームを入力してください (フレンド追加用)","パーティ募集を投稿しました! 🎮","処理失敗 — しばらくしてからもう一度","⚙️ サーバールールが未設定です","パーティメンバーとここで会話できます (承認前でも質問OK)","メッセージ…","募集","🎮 新着パーティ!","このブラウザは通知に対応していません (iPhone: 共有→ホーム画面に追加で可能)","通知が拒否されました — ブラウザ設定で許可してください","🔔 パーティ通知ON!","コミュニティティア表","最多得票ティアに配置","🏆 ヒーローは最も多く票を集めたティアの行に表示されます。例えばA票が最多ならA行に入ります。カードをタップすると得票分布が見られます。","マイ投票","ヒーローごとに1票 · もう一度押すと変更","🔒 接続中… お待ちください","接続完了 — 下でヒーローごとのティアを選んでください。いつでも変更できます。","コミュニティの利用が制限されています。閲覧のみ可能です。","総投票","票","リアルタイム更新","まだ投票がありません — 最初の1票をどうぞ!","タップで得票分布を表示","最多得票","計","平均","点","ヒーローは最多得票のティア行に配置されます。投票はリアルタイムで反映されます。","まだ投票がありません","に投票しました!","投票を取り消しました","取り消し失敗 — しばらくしてからもう一度","投票失敗 — 通信環境をご確認ください","⚙️ サーバールール未設定のため投票できません","投票を取り消す","ヒーロー攻略メモ","一言攻略を共有 · 新着順","共通の攻略","すべて","共通","とっておきの攻略を共有しよう… (200文字)","✍️ 投稿","まだ攻略メモがありません。最初の投稿をどうぞ! ✍️","通報により非表示になりました","この攻略メモを削除しますか？","削除しました","攻略メモを投稿しました! 🎉","⚙️ サーバールール未設定のため投稿できません","投稿失敗 — しばらくしてからもう一度","たった今","分前","時間前","日前","サイトフィードバック","不具合報告 · 機能提案","🎯 カウンターピック/相性の誤り","📖 図鑑情報の誤り","🗺️ ゲーム情報の誤り","🐞 バグ報告","💡 機能提案","間違っている情報や欲しい機能を自由にお書きください。制作者が直接確認します。(500文字)","📮 送信","匿名","フィードバックを送信しました。ありがとうございます! 📮","🔑 管理者: フィードバック閲覧","まだフィードバックがありません","フィードバックを読み込めません (管理者専用)","管理者モード","マイID:","コピー","コピーしました","訪問者統計","どんなユーザーが来ているか · リアルタイム","統計を収集中…","デバイス","国","言語","時間帯別訪問 (KST)","データなし","📱 モバイル","🖥️ PC","時","今日","今週","累計","リアルタイムチャット · ティア投票 · 攻略メモ · フィードバック · 訪問者統計","制作・運営:","· 非公式ファンメイド · 無断転載禁止"];
+const ZH = ["社群","聊天","隊伍","梯隊","攻略","意見回饋","統計","我的社群暱稱","未設定","✏️ 變更","設定社群暱稱","此暱稱將顯示於聊天、攻略與隊伍中，隨時可以更改。(2~12字)","輸入暱稱…","取消","儲存","暱稱已設定","請先在上方設定社群暱稱","暱稱需為2~12個字","🛡️ 此暱稱無法使用","🛡️ 此暱稱無法使用(防止冒名)","即時大廳","與全球玩家暢聊 · 最新100則","🛡️ 髒話過濾 · 檢舉3次自動隱藏 · 禁止輸入個資 · 洗版限制5秒","🌐 自動翻譯 — 將外語訊息以你的語言顯示 (也可用🌐按鈕單獨翻譯)","還沒有訊息，來打個招呼吧! 👋","輸入訊息… (Enter送出)","送出","因檢舉累積已隱藏","翻譯","檢舉","要刪除這則訊息嗎？","刪除失敗","傳送失敗 — 請稍後再試","⚙️ 伺服器規則尚未設定，無法傳送","已是相同語言","翻譯失敗 — 請稍後再試","🌐 自動翻譯已開啟","請輸入內容","內容過長","🛡️ 包含不當字詞","🛡️ 不可輸入電話、Email等個人資料","洗版限制","秒後再試","要檢舉這則貼文嗎？累積3次將自動隱藏。","已收到檢舉","已檢舉過或無法處理","連線中","連線中 — 請稍後再試","此帳號已被限制使用","招募隊伍","尋找隊友 · 用遊戲暱稱加好友","🔔 新隊伍通知 — 網站開啟期間以裝置通知提醒 (不需要可關閉)","🎮 休閒","🏆 職業聯賽","🎉 活動","🤝 友誼賽","💬 其他","招募1人","招募2人","招募3人","招募4人","招募5人","遊戲內暱稱 (加好友用，必填)","例) 徵職業聯賽雙排！晚上9點開始","不接受申請 (請直接遊戲內加好友)","🎮 發佈招募","還沒有招募貼文，來建立第一個隊伍吧! 🎮","招募中","已截止","已滿","已過期","人","遊戲暱稱","點擊複製","✋ 申請加入","⏳ 等待批准 · 取消","退出隊伍","✅ 已加入","請透過遊戲內好友聯繫","隊伍聊天","截止","重新開放","刪除","加入申請","批准","要刪除這則招募嗎？","已送出申請！請等待隊長批准 ⏳","已取消申請","已批准加入隊伍 ✅","已拒絕申請","已退出隊伍","已複製遊戲暱稱 — 快去遊戲裡加好友!","請輸入遊戲內暱稱 (加好友用)","招募已發佈! 🎮","處理失敗 — 請稍後再試","⚙️ 伺服器規則尚未設定","在這裡與隊員對話 (批准前也可詢問)","訊息…","招募","🎮 新隊伍!","此瀏覽器不支援通知 (iPhone: 分享→加入主畫面後可用)","通知權限被拒 — 請在瀏覽器設定中允許","🔔 已開啟隊伍通知!","社群梯隊表","依最多得票梯隊排列","🏆 英雄會顯示在得票最多的梯隊列。例如A票最多就在A列。點擊卡片可查看得票分布。","我的投票","每位英雄1票 · 再點一次可更改","🔒 連線中… 請稍候","連線完成 — 在下方為每位英雄選擇梯隊，隨時可更改。","您的社群使用已受限，僅可瀏覽。","總投票","票","即時更新","還沒有投票 — 成為第一票吧!","點擊查看得票分布","最多得票","共","平均","分","英雄會排在得票最多的梯隊列，投票即時反映。","還沒有投票","投票完成!","已取消投票","取消失敗 — 請稍後再試","投票失敗 — 請確認網路連線","⚙️ 伺服器規則尚未設定，無法投票","取消投票","英雄攻略板","一句話攻略 · 最新優先","通用攻略","全部","通用","分享你的獨門攻略… (200字)","✍️ 發佈","還沒有攻略，來發第一篇吧! ✍️","因檢舉累積已隱藏","要刪除這則攻略嗎？","已刪除","攻略已發佈! 🎉","⚙️ 伺服器規則尚未設定，無法發佈","發佈失敗 — 請稍後再試","剛剛","分鐘前","小時前","天前","網站意見回饋","錯誤回報 · 功能建議","🎯 剋制/對位資料錯誤","📖 圖鑑資料錯誤","🗺️ 遊戲資訊錯誤","🐞 錯誤回報","💡 功能建議","請自由填寫哪些資訊有誤、想要什麼功能。製作者會親自確認。(500字)","📮 送出","匿名","已送出意見回饋，感謝您! 📮","🔑 管理員: 查看回饋","還沒有意見回饋","無法載入回饋 (僅限管理員)","管理員模式","我的ID:","複製","已複製","訪客統計","什麼樣的玩家在造訪 · 即時","統計收集中…","裝置","國家","語言","各時段造訪 (KST)","無資料","📱 行動裝置","🖥️ 電腦","時","今天","本週","累計","即時聊天 · 梯隊投票 · 攻略 · 意見回饋 · 訪客統計","製作・營運:","· 非官方粉絲創作 · 禁止轉載"];
+const langs = { en: EN, ja: JA, zh: ZH };
+for(const l in langs){
+  if(!I18N[l]) I18N[l] = {};
+  KO_KEYS.forEach((k,i)=>{ if(langs[l][i] !== undefined) I18N[l][k] = langs[l][i]; });
+}
+})();
+/* ── 권한 고지 모달/바 번역 ── */
+(function(){
+const M = {
+"⚠ 비공식 테스트 버전": {en:"⚠ Unofficial test version", ja:"⚠ 非公式テスト版", zh:"⚠ 非官方測試版"},
+"📋 운영 권한": {en:"📋 Operation rights", ja:"📋 運営権限", zh:"📋 營運權限"},
+"본 도구는": {en:"This tool was created and operated by", ja:"本ツールは", zh:"本工具由"},
+"이 직접 제작 및 운영하는 비공식 팬메이드 프로젝트입니다.": {en:" as an unofficial fan-made project.", ja:"が個人制作・運営する非公式ファンメイドプロジェクトです。", zh:"個人製作・營運，屬非官方粉絲創作專案。"},
+"제작자의 명시적 허락 없이 무단 배포·복제·2차 수정·상업적 이용을 금합니다.": {en:"Redistribution, copying, modification or commercial use without explicit permission is prohibited.", ja:"制作者の明示的な許可なく、無断配布・複製・二次改変・商用利用を禁じます。", zh:"未經製作者明確許可，禁止擅自散布、複製、二次修改或商業使用。"},
+"🧪 테스트 목적 운영 안내": {en:"🧪 Test operation notice", ja:"🧪 テスト運用のご案内", zh:"🧪 測試營運說明"},
+"현재는": {en:"Currently open temporarily for", ja:"現在は", zh:"目前僅以"},
+"테스트 목적": {en:"testing purposes", ja:"テスト目的", zh:"測試目的"},
+"으로만 임시 공개 중입니다.": {en:" only.", ja:"のみで暫定公開中です。", zh:"暫時公開。"},
+"장기 운영 또는 공식 채널 등록은": {en:"Long-term operation or official channel listing requires", ja:"長期運営または公式チャンネル登録には", zh:"長期營運或官方頻道登錄需要"},
+"게임 운영사의 공식 지정": {en:"official designation by the game publisher", ja:"ゲーム運営会社の公式指定", zh:"遊戲營運商的官方指定"},
+"또는": {en:"or", ja:"または", zh:"或"},
+"제작자의 별도 허락": {en:"separate permission from the creator", ja:"制作者の個別許可", zh:"製作者的另行許可"},
+"이 있어야 가능합니다.": {en:".", ja:"が必要です。", zh:"。"},
+"아래 버튼을 눌러 위 내용에 동의한 후 이용해주세요.": {en:"Please agree to the above by pressing the button below.", ja:"下のボタンを押して上記に同意のうえご利用ください。", zh:"請按下方按鈕，同意上述內容後使用。"},
+"동의하고 시작하기": {en:"Agree & Start", ja:"同意して開始", zh:"同意並開始"},
+"이 페이지는 보호되어 있습니다": {en:"This page is protected", ja:"このページは保護されています", zh:"此頁面受保護"},
+"⚠ 개발자도구 사용이 감지되었습니다": {en:"⚠ Developer tools detected", ja:"⚠ 開発者ツールが検出されました", zh:"⚠ 偵測到開發者工具"}
+};
+for(const k in M){ for(const l of ["en","ja","zh"]){ if(!I18N[l]) I18N[l]={}; I18N[l][k]=M[k][l]; } }
+const M2 = {
+"🌐 전체 번역": {en:"🌐 Translate all", ja:"🌐 まとめて翻訳", zh:"🌐 全部翻譯"},
+"번역 중…": {en:"Translating…", ja:"翻訳中…", zh:"翻譯中…"},
+"번역할 새 메시지가 없습니다": {en:"No new messages to translate", ja:"翻訳する新しいメッセージがありません", zh:"沒有需要翻譯的新訊息"},
+"전체 번역 완료 🌐": {en:"All translated 🌐", ja:"まとめて翻訳しました 🌐", zh:"已全部翻譯 🌐"},
+"모두 같은 언어입니다": {en:"Everything is already in your language", ja:"すべて同じ言語です", zh:"全部都是相同語言"}
+};
+for(const k in M2){ for(const l of ["en","ja","zh"]){ I18N[l][k]=M2[k][l]; } }
+})();
+
 function T(s){ if(LANG==="ko"||s==null||s==="") return s; const d=I18N[LANG]; return (d&&d[s])!==undefined?d[s]:s; }
 function applyStatic(){
   const nav=document.querySelectorAll("nav button");
@@ -1414,6 +1466,7 @@ function applyStatic(){
   const vb=document.getElementById("visitorStats");
   if(vb) vb.innerHTML=`<span><i class="vdot"></i>${T("오늘")} <b id="visitToday">${vT}</b>${T("명")}</span><span><i class="vdot"></i>${T("이번 주")} <b id="visitWeek">${vW}</b>${T("명")}</span><span><i class="vdot"></i>${T("누적")} <b id="visitTotal">${vA}</b>${T("명")}</span>`;
   document.querySelectorAll("[data-ko]").forEach(el=>{ el.textContent=T(el.dataset.ko); });
+  document.querySelectorAll("[data-ko-ph]").forEach(el=>{ el.placeholder=T(el.dataset.koPh); });
   const ab=document.querySelector(".authBadge"); if(ab) ab.textContent=T("⚠ 비공식 테스트 버전");
   const ag=document.querySelector(".authAgree"); if(ag) ag.textContent=T("동의하고 시작하기");
   const ah=document.querySelector(".authBox h3 .y"); if(ah) ah.textContent=T("카운터픽");
@@ -1431,6 +1484,7 @@ function setLang(l){
   document.querySelectorAll("#langSel button").forEach(b=>b.classList.toggle("on",b.dataset.l===l));
   applyStatic();
   renderGrid(); renderRecs(); renderDex(); renderEdit(); renderInfo();
+  document.dispatchEvent(new Event("rs-lang-changed"));
 }
 
 setLang(LANG);
@@ -1476,7 +1530,7 @@ const SCORE = {S:5, A:4, B:3, C:2, D:1};
 const HKEYS = Object.keys(HEROES);
 let MY_UID = null, IS_ADMIN = false, IS_BANNED = false;
 let myVotes = {}, aggCache = null;
-let cmtFilterHero = "all", cmtCache = [], chatCache = [];
+let cmtFilterHero = "all", cmtCache = [], chatCache = [], statsCache = null;
 let reportsCache = { chat:{}, comments:{} };
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -1588,6 +1642,26 @@ window.rsTranslateMsg = async id => {
        if(transCache[id] === null) toast(T("이미 같은 언어입니다")); }
   catch(e){ toast(T("번역 실패 — 잠시 후 다시 시도해주세요")); }
 };
+document.getElementById("chatTrAll").addEventListener("click", async () => {
+  const btn = document.getElementById("chatTrAll");
+  const targets = chatCache.slice(-50).filter(m => m.uid !== MY_UID && transCache[m.id] === undefined);
+  if(!targets.length){ toast(T("번역할 새 메시지가 없습니다")); return; }
+  btn.disabled = true;
+  let done = 0, processed = 0;
+  for(let i = 0; i < targets.length; i += 5){          // 5개씩 병렬 처리
+    const chunk = targets.slice(i, i + 5);
+    await Promise.all(chunk.map(async m => {
+      try{ transCache[m.id] = await translateText(m.text); if(transCache[m.id]) done++; }
+      catch(e){ transCache[m.id] = null; }
+    }));
+    processed += chunk.length;
+    btn.textContent = T("번역 중…") + " " + processed + "/" + targets.length;
+    renderChat();                                       // 청크마다 즉시 표시
+  }
+  btn.disabled = false;
+  btn.textContent = T("🌐 전체 번역");
+  toast(done ? T("전체 번역 완료 🌐") : T("모두 같은 언어입니다"));
+});
 let trBusy = false;
 async function autoTranslateNew(){
   if(!AUTO_TR || trBusy) return;
@@ -1711,9 +1785,24 @@ document.getElementById("voteGrid").addEventListener("click", async e => {
 });
 
 /* ══════ 💬 실시간 라운지 채팅 ══════ */
+let chatStick = true;      // 바닥 고정 모드: 새 메시지 오면 자동 스크롤
+let progScrollUntil = 0;   // 프로그램적 스크롤 중에는 리스너가 개입하지 않도록
+document.getElementById("chatBox").addEventListener("scroll", function(){
+  if(Date.now() < progScrollUntil) return;             // 렌더/자동 스크롤로 인한 이벤트 무시
+  chatStick = this.scrollHeight - this.scrollTop - this.clientHeight < 80;
+});
+function chatToBottom(){
+  const box = document.getElementById("chatBox");
+  chatStick = true;
+  progScrollUntil = Date.now() + 600;
+  box.scrollTop = box.scrollHeight;                                    // 즉시 (백그라운드 탭에서도 동작)
+  requestAnimationFrame(() => { box.scrollTop = box.scrollHeight; }); // 레이아웃 후 보정
+  setTimeout(() => { progScrollUntil = Date.now() + 200; box.scrollTop = box.scrollHeight; }, 120);
+}
+window.rsChatToBottom = chatToBottom;
 function renderChat(){
   const box = document.getElementById("chatBox");
-  const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+  const nearBottom = chatStick;
   const items = chatCache.sort((a,b)=>(a.ts||0)-(b.ts||0)).slice(-100);
   if(!items.length){
     box.innerHTML = `<div class="cmtempty">${T("아직 메시지가 없습니다. 첫 인사를 남겨보세요! 👋")}</div>`;
@@ -1735,7 +1824,11 @@ function renderChat(){
       ${tr?`<span class="mtr">↳ ${esc(tr)}</span>`:""}
     </div>`;
   }).join("");
-  if(nearBottom) box.scrollTop = box.scrollHeight;
+  progScrollUntil = Date.now() + 600;                  // innerHTML 교체로 생기는 scroll(0) 이벤트 무시
+  if(nearBottom){
+    box.scrollTop = box.scrollHeight;                                    // 즉시
+    requestAnimationFrame(() => { box.scrollTop = box.scrollHeight; }); // 보정
+  }
 }
 document.getElementById("chatBox").addEventListener("click", async e => {
   const b = e.target.closest("[data-del-chat]"); if(!b) return;
@@ -1895,13 +1988,14 @@ document.getElementById("adminFbBtn").addEventListener("click", async () => {
 
 /* ══════ 📊 방문자 통계 ══════ */
 const DEVICE_LABEL = { mobile:"📱 모바일", desktop:"🖥️ PC" };
+function dispLocale(){ return LANG === "zh" ? "zh-TW" : (LANG || "ko"); }
 function langLabel(code){
-  try{ return new Intl.DisplayNames(["ko"],{type:"language"}).of(code) || code; }catch(e){ return code; }
+  try{ return new Intl.DisplayNames([dispLocale()],{type:"language"}).of(code) || code; }catch(e){ return code; }
 }
 function countryLabel(code){
   try{
     const flag = code.replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
-    const nm = new Intl.DisplayNames(["ko"],{type:"region"}).of(code) || code;
+    const nm = new Intl.DisplayNames([dispLocale()],{type:"region"}).of(code) || code;
     return flag + " " + nm;
   }catch(e){ return code; }
 }
@@ -1951,6 +2045,7 @@ window.commView = v => {
   document.querySelectorAll(".commv").forEach(x => x.style.display = "none");
   const el = document.getElementById("commv-" + v);
   if(el) el.style.display = "";
+  if(v === "chat") chatToBottom();   // 숨김 시 리셋된 스크롤 복원
   document.querySelectorAll("#commTabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
   if(v === "party"){
     PT_SEEN = Date.now();
@@ -2023,7 +2118,7 @@ function renderParty(){
     </div>` : "";
     return `<div class="ptcard ${closed&&!mine?'closed':''}">
       <div class="pthead">
-        <span class="ptmode">${esc(p.mode||"")}</span>
+        <span class="ptmode">${esc(T(p.mode||""))}</span>
         <span class="ptstate ${closed?'closed':'open'}">${state}</span>
         <span class="ptstate closed">${members.length}/${p.need||1}${T("명")}</span>
       </div>
@@ -2158,6 +2253,11 @@ trTog.addEventListener("change", () => {
   if(AUTO_TR){ toast(T("🌐 자동 번역 켜짐")); autoTranslateNew(); }
 });
 
+document.addEventListener("rs-lang-changed", () => {
+  renderProfile(); renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter();
+  renderCmts(); renderChat(); renderParty(); renderStats(statsCache);
+  if(MY_UID && !IS_BANNED) document.getElementById("voteHint").textContent = "✅ " + T("연결 완료 — 아래에서 영웅별 티어를 골라주세요. 언제든 바꿀 수 있습니다.");
+});
 FB.onValue(FB.ref(FB.db, "tiervote/agg"), snap => { aggCache = snap.val(); renderBoard(); });
 FB.onValue(FB.query(FB.ref(FB.db, "comments"), FB.limitToLast(100)), snap => {
   const v = snap.val() || {};
@@ -2176,7 +2276,7 @@ FB.onValue(FB.ref(FB.db, "reports"), snap => {
   if(!reportsCache.comments) reportsCache.comments = {};
   renderChat(); renderCmts();
 });
-FB.onValue(FB.ref(FB.db, "stats"), snap => renderStats(snap.val()));
+FB.onValue(FB.ref(FB.db, "stats"), snap => { statsCache = snap.val(); renderStats(statsCache); });
 FB.onValue(FB.query(FB.ref(FB.db, "parties"), FB.limitToLast(50)), snap => {
   const v = snap.val() || {};
   const fresh = Object.entries(v).map(([id,p]) => ({ id, ...p }));
