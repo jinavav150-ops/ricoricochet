@@ -15,7 +15,7 @@
     --good:#4ade80; --bad:#ff5d5d;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{background:var(--bg);color:var(--txt);font-family:'Noto Sans KR',sans-serif;padding-bottom:130px;
+  body{background:var(--bg);color:var(--txt);font-family:'Noto Sans KR',sans-serif;padding-bottom:44px;
     -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
   input,textarea{-webkit-user-select:text;user-select:text}
   .display{font-family:'Black Han Sans',sans-serif;font-weight:400;letter-spacing:.5px}
@@ -41,9 +41,19 @@
   body[data-lang="zh"] .hcell.picked::after{content:"敵"}
 
   /* ── 탭 ── */
-  nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--panel);border-top:1px solid var(--line);z-index:50;padding-bottom:env(safe-area-inset-bottom)}
-  nav button{flex:1;background:none;border:none;color:var(--sub);padding:13px 0 11px;font-size:13px;font-family:inherit;font-weight:500;border-top:2px solid transparent}
-  nav button.on{color:var(--ricochet);border-top-color:var(--ricochet)}
+  /* ── 상단 메뉴 (스티키 · 글래스) ── */
+  nav{position:sticky;top:0;z-index:80;display:flex;gap:8px;padding:11px 14px;
+    background:rgba(14,17,24,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  nav button{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);
+    color:var(--sub);padding:9px 16px;border-radius:14px;font-size:13px;font-weight:700;font-family:inherit;
+    white-space:nowrap;flex-shrink:0;transition:color .18s,border-color .18s,transform .18s,box-shadow .18s}
+  nav button svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  nav button:hover{color:var(--txt);border-color:#3d4a66;transform:translateY(-1px)}
+  nav button.on{background:linear-gradient(135deg,var(--ricochet),#ff9500);border-color:var(--ricochet);color:#17130a;
+    box-shadow:0 5px 20px rgba(255,176,46,.35);transform:translateY(-1px)}
+  nav button.on svg{stroke-width:2.2}
 
   main{padding:16px;max-width:560px;margin:0 auto}
   .tab{display:none}.tab.on{display:block}
@@ -277,6 +287,121 @@
   #authBar{background:var(--panel);border-top:1px solid var(--line);text-align:center;padding:6px 16px 8px;font-size:11px;color:var(--sub);padding-bottom:calc(8px + env(safe-area-inset-bottom));position:relative;z-index:40}
   #authBar b{color:var(--ricochet)}
   #authBar .testTag{display:inline-block;background:rgba(255,93,93,.12);border:1px solid var(--bad);color:var(--bad);border-radius:6px;font-size:10px;padding:0px 6px;margin-left:4px;vertical-align:1px;font-weight:700}
+
+  /* ════════ 🏆 커뮤니티 투표 ════════ */
+  .vstats{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+  .vstats span{display:inline-flex;align-items:center;gap:5px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:4px 12px;font-size:11.5px;color:var(--sub)}
+  .vstats b{color:var(--ricochet);font-size:12.5px}
+  .tierboard{display:flex;flex-direction:column;gap:8px}
+  .trow{display:flex;align-items:stretch;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;min-height:64px}
+  .tlabel{width:52px;display:flex;align-items:center;justify-content:center;font-family:'Black Han Sans';font-size:24px;flex-shrink:0}
+  .trow.S .tlabel{background:rgba(255,176,46,.14);color:var(--ricochet)}
+  .trow.A .tlabel{background:rgba(93,169,255,.12);color:var(--tank)}
+  .trow.B .tlabel{background:rgba(74,222,128,.12);color:var(--sup)}
+  .trow.C .tlabel{background:rgba(139,150,171,.10);color:var(--sub)}
+  .trow.D .tlabel{background:rgba(255,93,93,.10);color:var(--bad)}
+  .theroes{display:flex;flex-wrap:wrap;gap:8px;padding:9px 11px;align-items:center;flex:1}
+  .tchip{display:flex;flex-direction:column;align-items:center;gap:3px;width:56px}
+  .tchip img{width:44px;height:44px;border-radius:11px;border:1.5px solid var(--line);object-fit:cover}
+  .tchip .tnm{font-size:10px;color:var(--txt);font-weight:600;white-space:nowrap}
+  .tchip .tsc{font-size:9.5px;color:var(--sub)}
+  .theroes .tempty{color:var(--sub);font-size:11.5px;padding:4px 2px}
+  .votehint{background:var(--panel2);border:1px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:12px;color:var(--sub);margin-bottom:10px}
+  .votegrid{display:flex;flex-direction:column;gap:7px}
+  .vrow{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:8px 11px}
+  .vrow img{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--line);object-fit:cover;flex-shrink:0}
+  .vrow .vnm{font-size:12.5px;font-weight:700;width:56px;flex-shrink:0}
+  .vbtns{display:flex;gap:5px;margin-left:auto}
+  .vbtns button{width:36px;height:32px;border-radius:9px;background:var(--panel2);border:1px solid var(--line);color:var(--sub);font-family:'Black Han Sans';font-size:14px;transition:transform .1s}
+  .vbtns button:active{transform:scale(.92)}
+  .vbtns button.sel-S{background:rgba(255,176,46,.2);border-color:var(--ricochet);color:var(--ricochet)}
+  .vbtns button.sel-A{background:rgba(93,169,255,.18);border-color:var(--tank);color:var(--tank)}
+  .vbtns button.sel-B{background:rgba(74,222,128,.16);border-color:var(--sup);color:var(--sup)}
+  .vbtns button.sel-C{background:rgba(139,150,171,.16);border-color:var(--sub);color:var(--txt)}
+  .vbtns button.sel-D{background:rgba(255,93,93,.16);border-color:var(--bad);color:var(--bad)}
+  /* ── 댓글판 ── */
+  .cmtcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:11px}
+  .cmtrow1{display:flex;gap:8px;margin-bottom:8px}
+  .cmtsel{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:9px 10px;font-size:12.5px;font-family:inherit;outline:none}
+  .cmtname{width:110px;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:9px 10px;font-size:12.5px;font-family:inherit;outline:none}
+  .cmttext{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none;resize:none}
+  .cmttext:focus,.cmtname:focus,.cmtsel:focus{border-color:var(--ricochet)}
+  .cmtrow3{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .cmtcount{font-size:11px;color:var(--sub)}
+  .cmtbtn{background:var(--ricochet);border:none;color:#151515;border-radius:10px;padding:9px 20px;font-size:12.5px;font-weight:700;font-family:inherit}
+  .cmtbtn:disabled{opacity:.45}
+  .filtchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .filtchips button{background:var(--panel);border:1px solid var(--line);color:var(--sub);border-radius:13px;padding:5px 11px;font-size:11.5px;font-family:inherit;font-weight:600}
+  .filtchips button.on{background:var(--ricochet);border-color:var(--ricochet);color:#151515}
+  .cmtlist{display:flex;flex-direction:column;gap:8px}
+  .cmtitem{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:10px 12px}
+  .cmthead{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+  .cmthead img{width:22px;height:22px;border-radius:6px;object-fit:cover}
+  .cmthead .chero{font-size:10.5px;color:var(--ricochet);font-weight:700}
+  .cmthead .cname{font-size:12px;font-weight:700}
+  .cmthead .ctime{font-size:10.5px;color:var(--sub);margin-left:auto}
+  .cmthead .cdel{background:none;border:none;color:var(--sub);font-size:13px;padding:2px 4px;cursor:pointer}
+  .cmtbody{font-size:12.5px;line-height:1.6;color:var(--txt);word-break:break-word;white-space:pre-wrap}
+  .cmtempty{background:var(--panel2);border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center;color:var(--sub);font-size:12px}
+  /* ── 커뮤니티 서브탭 ── */
+  .subtabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;scrollbar-width:none;padding-bottom:2px}
+  .subtabs::-webkit-scrollbar{display:none}
+  .subtabs button{display:flex;align-items:center;gap:5px;background:var(--panel);border:1px solid var(--line);color:var(--sub);
+    border-radius:12px;padding:8px 13px;font-size:12px;font-weight:700;font-family:inherit;white-space:nowrap;flex-shrink:0;position:relative}
+  .subtabs button.on{background:var(--panel2);border-color:var(--ricochet);color:var(--ricochet)}
+  .subbadge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;background:var(--bad);color:#fff;border-radius:8px;
+    font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;font-style:normal}
+  /* ── 파티 모집 ── */
+  .ptcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 13px;position:relative}
+  .ptcard.closed{opacity:.55}
+  .pthead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .ptmode{background:rgba(255,176,46,.13);color:var(--ricochet);border:1px solid var(--ricochet);border-radius:10px;padding:2px 9px;font-size:11px;font-weight:700}
+  .ptstate{border-radius:10px;padding:2px 9px;font-size:11px;font-weight:700}
+  .ptstate.open{background:rgba(74,222,128,.12);color:var(--good);border:1px solid var(--good)}
+  .ptstate.closed{background:rgba(139,150,171,.12);color:var(--sub);border:1px solid var(--sub)}
+  .ptbody{font-size:13px;line-height:1.55;margin-bottom:7px;word-break:break-word}
+  .ptnick{display:inline-flex;align-items:center;gap:5px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:4px 10px;font-size:11.5px;margin-bottom:7px;cursor:pointer}
+  .ptnick b{color:var(--tank)}
+  .ptmembers{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+  .ptmembers span{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:3px 9px;font-size:10.5px;color:var(--txt)}
+  .ptfoot{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .ptfoot .meta{font-size:10.5px;color:var(--sub);margin-right:auto}
+  .ptbtn{background:var(--ricochet);border:none;color:#17130a;border-radius:9px;padding:7px 14px;font-size:11.5px;font-weight:800;font-family:inherit}
+  .ptbtn.ghost{background:var(--panel2);border:1px solid var(--line);color:var(--sub)}
+  .ptbtn:disabled{opacity:.45}
+  /* ── 실시간 채팅 ── */
+  .safetybar{background:var(--panel2);border:1px dashed var(--line);border-radius:11px;padding:8px 12px;font-size:11px;color:var(--sub);margin-bottom:9px}
+  .chatbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;height:320px;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:7px;margin-bottom:8px}
+  .chatmsg{display:flex;align-items:baseline;gap:7px;font-size:12.5px;line-height:1.55;word-break:break-word}
+  .chatmsg .mnm{font-weight:700;flex-shrink:0}
+  .chatmsg .mtx{color:var(--txt)}
+  .chatmsg .mtm{font-size:10px;color:var(--sub);margin-left:auto;flex-shrink:0}
+  .chatmsg .mrep,.chatmsg .mdel{background:none;border:none;color:var(--sub);font-size:11px;padding:0 2px;cursor:pointer;flex-shrink:0;opacity:.6}
+  .chatmsg.hidden-msg{color:var(--sub);font-size:11.5px;font-style:italic}
+  .chatinput{display:flex;gap:7px}
+  .chattext{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:9px 11px;font-size:13px;font-family:inherit;outline:none}
+  .chattext:focus{border-color:var(--ricochet)}
+  .transtog{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--sub);margin-bottom:8px;cursor:pointer}
+  .transtog input{accent-color:var(--ricochet)}
+  .chatmsg{flex-wrap:wrap}
+  .chatmsg .mtr{flex-basis:100%;color:var(--tank);font-size:11.5px;padding:2px 0 0 4px}
+  .banned-notice{background:rgba(255,93,93,.1);border:1px solid var(--bad);color:var(--bad);border-radius:11px;padding:9px 12px;font-size:12px;margin-bottom:8px}
+  .myuid{margin-top:8px;font-size:10.5px;color:var(--sub);text-align:right}
+  .myuid code{background:var(--panel2);padding:2px 6px;border-radius:6px;font-size:10px}
+  .myuid button{background:var(--panel);border:1px solid var(--line);color:var(--sub);border-radius:7px;padding:2px 8px;font-size:10px;font-family:inherit}
+  /* ── 방문자 통계 ── */
+  .statsboard{display:flex;flex-direction:column;gap:10px}
+  .statcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+  .statcard h4{font-size:12px;color:var(--sub);margin-bottom:9px;font-weight:600}
+  .statrow{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .statrow .slb{width:86px;font-size:11.5px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .statrow .sbar{flex:1;height:14px;background:var(--panel2);border-radius:7px;overflow:hidden}
+  .statrow .sbar i{display:block;height:100%;background:linear-gradient(90deg,var(--ricochet),#ffc966);border-radius:7px}
+  .statrow .svl{width:52px;text-align:right;font-size:11px;color:var(--sub);flex-shrink:0}
+  .hourbars{display:flex;align-items:flex-end;gap:2px;height:64px}
+  .hourbars .hb{flex:1;background:var(--ricochet);opacity:.75;border-radius:3px 3px 0 0;min-height:2px}
+  .hourlbl{display:flex;gap:2px;margin-top:3px}
+  .hourlbl span{flex:1;font-size:8px;color:var(--sub);text-align:center}
 </style>
 </head>
 <body>
@@ -294,8 +419,28 @@
   <div class="visitorbar" id="visitorStats">
     <span><i class="vdot"></i>오늘 <b id="visitToday">–</b>명</span>
     <span><i class="vdot"></i>이번 주 <b id="visitWeek">–</b>명</span>
+    <span><i class="vdot"></i>누적 <b id="visitTotal">–</b>명</span>
   </div>
 </header>
+
+<nav>
+  <button class="on" onclick="go('pick',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><line x1="12" y1="1.5" x2="12" y2="5.5"/><line x1="12" y1="18.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="5.5" y2="12"/><line x1="18.5" y1="12" x2="22.5" y2="12"/><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/></svg>
+    <span class="nlbl">카운터픽</span>
+  </button>
+  <button onclick="go('dex',this)">
+    <svg viewBox="0 0 24 24"><path d="M12 5.5C10.2 3.9 7.6 3.4 4.5 3.7c-.6.1-1 .6-1 1.2v13c0 .7.7 1.2 1.4 1.1 2.7-.3 5 .2 7.1 1.7 2.1-1.5 4.4-2 7.1-1.7.7.1 1.4-.4 1.4-1.1v-13c0-.6-.4-1.1-1-1.2-3.1-.3-5.7.2-7.5 1.8z"/><line x1="12" y1="5.5" x2="12" y2="20.4"/></svg>
+    <span class="nlbl">도감</span>
+  </button>
+  <button onclick="go('vote',this)">
+    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3c-1.5 0-2.9-.3-4.1-.9L3 20l1.2-4.2a8 8 0 0 1-1.2-4.3A8.4 8.4 0 0 1 11.5 3.2 8.4 8.4 0 0 1 21 11.5z"/><circle cx="8.2" cy="11.7" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11.7" r="1" fill="currentColor" stroke="none"/><circle cx="15.8" cy="11.7" r="1" fill="currentColor" stroke="none"/></svg>
+    <span class="nlbl">커뮤니티</span>
+  </button>
+  <button onclick="go('info',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polygon points="15.5,8.5 13.4,13.4 8.5,15.5 10.6,10.6" fill="currentColor" stroke="none"/></svg>
+    <span class="nlbl">게임정보</span>
+  </button>
+</nav>
 
 <main>
   <!-- 카운터픽 탭 -->
@@ -355,15 +500,193 @@
     <h2 style="margin-top:18px">상자 종류 <small>보상 등급</small></h2>
     <div id="boxList"></div>
   </section>
+
+  <!-- 🏆 커뮤니티 투표 탭 -->
+  <section id="tab-vote" class="tab">
+    <div class="subtabs" id="commTabs">
+      <button data-v="chat" class="on" onclick="commView('chat')">💬 <span>채팅</span></button>
+      <button data-v="party" onclick="commView('party')">🎮 <span>파티</span><i class="subbadge" id="ptBadge" style="display:none"></i></button>
+      <button data-v="tier" onclick="commView('tier')">🏆 <span>티어</span></button>
+      <button data-v="tips" onclick="commView('tips')">✍️ <span>팁</span></button>
+      <button data-v="fb" onclick="commView('fb')">📮 <span>피드백</span></button>
+      <button data-v="stats" onclick="commView('stats')">📊 <span>통계</span></button>
+    </div>
+    <div class="commv" id="commv-chat">
+<h2>실시간 라운지 <small>전세계 유저와 자유 수다 · 최근 100개</small></h2>
+    <div class="safetybar">🛡️ 욕설 필터 · 신고 3회 누적 시 자동 숨김 · 개인정보 입력 금지 · 도배 방지 5초</div>
+    <label class="transtog"><input type="checkbox" id="chatAutoTr"> 🌐 자동 번역 — 다른 언어 메시지를 내 언어로 바로 표시 (🌐 버튼으로 개별 번역도 가능)</label>
+    <div class="chatbox" id="chatBox"><div class="cmtempty">아직 메시지가 없습니다. 첫 인사를 남겨보세요! 👋</div></div>
+    <div class="chatinput">
+      <input id="chatName" class="cmtname" maxlength="12" placeholder="닉네임">
+      <input id="chatText" class="chattext" maxlength="120" placeholder="메시지 입력… (Enter로 전송)">
+      <button class="cmtbtn" id="chatSend">전송</button>
+    </div>
+
+    </div>
+    <div class="commv" id="commv-party" style="display:none">
+
+    <h2>파티 모집 <small>같이 할 팀원 찾기 · 게임 닉네임으로 친구 추가</small></h2>
+    <label class="transtog"><input type="checkbox" id="ptNotif"> 🔔 새 파티 알림 받기 — 사이트가 열려 있는 동안 기기 알림으로 알려드립니다 (원치 않으면 끄면 됩니다)</label>
+    <div class="cmtcard">
+      <div class="cmtrow1">
+        <select id="ptMode" class="cmtsel">
+          <option>🎮 캐주얼</option><option>🏆 프로 리그</option><option>🎉 이벤트</option><option>🤝 친선전</option><option>💬 기타</option>
+        </select>
+        <select id="ptNeed" class="cmtsel" style="flex:0 0 108px" title="모집 인원">
+          <option value="1">1명 모집</option><option value="2" selected>2명 모집</option><option value="3">3명 모집</option><option value="4">4명 모집</option><option value="5">5명 모집</option>
+        </select>
+      </div>
+      <div class="cmtrow1">
+        <input id="ptGameNick" class="cmtname" style="flex:1;width:auto" maxlength="16" placeholder="게임 내 닉네임 (친구 추가용, 필수)">
+        <input id="ptName" class="cmtname" maxlength="12" placeholder="닉네임">
+      </div>
+      <div class="cmtrow2">
+        <textarea id="ptText" class="cmttext" rows="2" maxlength="100" placeholder="예) 프로 리그 듀오 구해요! 저녁 9시부터"></textarea>
+      </div>
+      <div class="cmtrow3">
+        <label class="transtog" style="margin:0"><input type="checkbox" id="ptNoJoin"> 참가 신청 안 받기 (게임 내 친추로만)</label>
+        <button class="cmtbtn" id="ptSend">🎮 모집 올리기</button>
+      </div>
+    </div>
+    <div id="ptList" class="cmtlist"><div class="cmtempty">아직 모집 글이 없습니다. 첫 파티를 만들어보세요! 🎮</div></div>
+</div>
+    <div class="commv" id="commv-tier" style="display:none">
+<h2>커뮤니티 티어표 <small>방문자 투표 실시간 집계</small></h2>
+    <div class="vstats" id="voteStats"><span>투표 집계 준비 중…</span></div>
+    <div id="tierBoard" class="tierboard"></div>
+
+    <h2 style="margin-top:22px">내 투표 <small>영웅마다 1표 · 다시 누르면 변경</small></h2>
+    <div class="votehint" id="voteHint">🔒 연결 중… 잠시만 기다려주세요</div>
+    <div id="voteGrid" class="votegrid"></div>
+
+    </div>
+    <div class="commv" id="commv-tips" style="display:none">
+<h2 style="margin-top:22px">영웅 팁 게시판 <small>한 줄 공략 공유 · 최신순</small></h2>
+    <div class="cmtcard">
+      <div class="cmtrow1">
+        <select id="cmtHero" class="cmtsel"></select>
+        <input id="cmtName" class="cmtname" maxlength="12" placeholder="닉네임">
+      </div>
+      <div class="cmtrow2">
+        <textarea id="cmtText" class="cmttext" maxlength="200" rows="2" placeholder="나만 아는 꿀팁을 공유해주세요… (200자)"></textarea>
+      </div>
+      <div class="cmtrow3">
+        <span class="cmtcount" id="cmtCount">0/200</span>
+        <button class="cmtbtn" id="cmtSend">✍️ 등록</button>
+      </div>
+    </div>
+    <div class="filtchips" id="cmtFilter"></div>
+    <div id="cmtList" class="cmtlist"></div>
+
+    </div>
+    <div class="commv" id="commv-fb" style="display:none">
+<h2 style="margin-top:22px">사이트 피드백 <small>오류 제보 · 기능 제안</small></h2>
+    <div class="cmtcard">
+      <div class="cmtrow1">
+        <select id="fbCat" class="cmtsel">
+          <option>🎯 카운터픽/상성 오류</option>
+          <option>📖 도감 정보 오류</option>
+          <option>🗺️ 게임정보 오류</option>
+          <option>🐞 버그 제보</option>
+          <option>💡 기능 제안</option>
+          <option>💬 기타</option>
+        </select>
+        <input id="fbName" class="cmtname" maxlength="12" placeholder="닉네임(선택)">
+      </div>
+      <div class="cmtrow2">
+        <textarea id="fbText" class="cmttext" maxlength="500" rows="3" placeholder="어떤 정보가 틀렸는지, 어떤 기능이 필요한지 자유롭게 남겨주세요. 제작자가 직접 확인합니다. (500자)"></textarea>
+      </div>
+      <div class="cmtrow3">
+        <span class="cmtcount" id="fbCount">0/500</span>
+        <button class="cmtbtn" id="fbSend">📮 보내기</button>
+      </div>
+    </div>
+    <div id="adminPanel" style="display:none">
+      <button class="cmtbtn" id="adminFbBtn" style="width:100%;margin-bottom:8px">🔑 관리자: 피드백 열람</button>
+      <div id="adminFbList" class="cmtlist"></div>
+    </div>
+    <div class="myuid" id="myUidRow">내 ID: <code id="myUidCode">…</code> <button id="myUidCopy">복사</button></div>
+
+    </div>
+    <div class="commv" id="commv-stats" style="display:none">
+<h2 style="margin-top:22px">방문자 통계 <small>어떤 유저들이 오는지 · 실시간</small></h2>
+    <div id="statsBoard" class="statsboard"><div class="cmtempty">통계 수집 중…</div></div>
+  
+  </div>
+</section>
 </main>
 
-<nav>
-  <button class="on" onclick="go('pick',this)">🎯 카운터픽</button>
-  <button onclick="go('dex',this)">📖 도감</button>
-  <button onclick="go('info',this)">🗺️ 게임정보</button>
-  <button onclick="go('edit',this)">⚙️ 상성</button>
-</nav>
 <div id="toast"></div>
+
+<script type="module">
+/* ════════ 🔥 Firebase 연결 (Realtime Database) ════════ */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getDatabase, ref, get, set, remove, push, onValue, query, limitToLast, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCP9bgIqyPgPFzC8sr4CC_0FPFWpj_X1zM",
+  authDomain: "ricochet-squad-bc064.firebaseapp.com",
+  databaseURL: "https://ricochet-squad-bc064-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "ricochet-squad-bc064",
+  storageBucket: "ricochet-squad-bc064.firebasestorage.app",
+  messagingSenderId: "866299508933",
+  appId: "1:866299508933:web:e6cffbdb711d8eb10798ac"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const fbDb = getDatabase(fbApp);
+const fbAuth = getAuth(fbApp);
+signInAnonymously(fbAuth).catch(()=>{});
+
+// 익명 로그인 완료를 기다릴 수 있는 Promise (투표·댓글에서 uid 필요)
+const authReady = new Promise(res => onAuthStateChanged(fbAuth, u => { if(u) res(u.uid); }));
+
+// 이후 투표·댓글 등 다른 기능에서 재사용할 수 있도록 전역에 노출
+window.RSFB = { db: fbDb, ref, get, set, remove, push, onValue, query, limitToLast, runTransaction, serverTimestamp, authReady };
+
+/* ── 방문자 카운터: 세션(탭)당 1회만 집계 ── */
+(function(){
+  const pad = n => String(n).padStart(2,"0");
+  function isoWeek(d){
+    const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const dayNum = (dt.getUTCDay()+6)%7;
+    dt.setUTCDate(dt.getUTCDate()-dayNum+3);
+    const firstThu = new Date(Date.UTC(dt.getUTCFullYear(),0,4));
+    const firstDayNum = (firstThu.getUTCDay()+6)%7;
+    firstThu.setUTCDate(firstThu.getUTCDate()-firstDayNum+3);
+    const week = 1+Math.round((dt-firstThu)/604800000);
+    return `${dt.getUTCFullYear()}-W${pad(week)}`;
+  }
+  const now = new Date();
+  const dayKey = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+  const weekKey = isoWeek(now);
+  const dayRef = ref(fbDb, `visits/day/${dayKey}`);
+  const weekRef = ref(fbDb, `visits/week/${weekKey}`);
+  const totalRef = ref(fbDb, `visits/total`);
+  const bump = r => runTransaction(r, cur => (cur||0)+1);
+
+  (async () => {
+    let t, w, tot;
+    const counted = sessionStorage.getItem("rs_visit_counted");
+    if(counted !== dayKey){
+      const [rt, rw, rtot] = await Promise.all([bump(dayRef), bump(weekRef), bump(totalRef)]);
+      t = rt.snapshot.val(); w = rw.snapshot.val(); tot = rtot.snapshot.val();
+      sessionStorage.setItem("rs_visit_counted", dayKey);
+    } else {
+      const [ds, ws, tos] = await Promise.all([get(dayRef), get(weekRef), get(totalRef)]);
+      t = ds.val(); w = ws.val(); tot = tos.val();
+    }
+    if(t!=null && w!=null) w = Math.max(w, t);
+    if(w!=null && tot!=null) tot = Math.max(tot, w);
+    let any=false;
+    if(t!=null){ document.getElementById("visitToday").textContent = t.toLocaleString(); any=true; }
+    if(w!=null){ document.getElementById("visitWeek").textContent = w.toLocaleString(); any=true; }
+    if(tot!=null){ document.getElementById("visitTotal").textContent = tot.toLocaleString(); any=true; }
+    if(any) document.getElementById("visitorStats").style.display = "flex";
+  })().catch(err => console.warn("방문자 카운터 오류:", err));
+})();
+</script>
 
 <script>
 /* ════════ 영웅 데이터 (BlueStacks 티어리스트 2026-02-25 기준) ════════ */
@@ -943,7 +1266,8 @@ const TAB_INFO={
   pick:{title:"카운터픽",desc:"적 팀 픽을 고르면 상성 기반으로 추천 · 2.0.6 기준 초안"},
   dex:{title:"도감",desc:"13명 영웅 · 레벨 1~15 스탯 · 스킬 · 퍽 · 무기"},
   info:{title:"게임정보",desc:"게임 모드 · 맵 · 강화 비용 · 리그 시스템"},
-  edit:{title:"상성 편집",desc:"실전 경험으로 상성을 직접 수정 · 백업 지원"}
+  edit:{title:"상성 편집",desc:"실전 경험으로 상성을 직접 수정 · 백업 지원"},
+  vote:{title:"커뮤니티",desc:"실시간 채팅 · 티어 투표 · 팁 · 피드백 · 방문자 통계"}
 };
 function go(t,btn){
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
@@ -971,7 +1295,8 @@ if(!["ko","en","ja","zh"].includes(LANG)) LANG="ko";
 function T(s){ if(LANG==="ko"||s==null||s==="") return s; const d=I18N[LANG]; return (d&&d[s])!==undefined?d[s]:s; }
 function applyStatic(){
   const nav=document.querySelectorAll("nav button");
-  if(nav.length>=4){ nav[0].textContent="🎯 "+T("카운터픽"); nav[1].textContent="📖 "+T("도감"); nav[2].textContent="🗺️ "+T("게임정보"); nav[3].textContent="⚙️ "+T("상성"); }
+  const nlb=document.querySelectorAll("nav button .nlbl");
+  if(nlb.length>=4){ nlb[0].textContent=T("카운터픽"); nlb[1].textContent=T("도감"); nlb[2].textContent=T("커뮤니티"); nlb[3].textContent=T("게임정보"); }
   const h2p=document.querySelectorAll("#tab-pick h2");
   if(h2p[0]) h2p[0].innerHTML=`${T("적 팀 픽 선택")} <small>${T("최대 3명 · 다시 누르면 해제")}</small>`;
   if(h2p[1]) h2p[1].innerHTML=`${T("추천 픽")} <small>${T("상성 66항목 · 미러픽 · 팀 조합 분석 · 궁연계")}</small>`;
@@ -994,8 +1319,9 @@ function applyStatic(){
   pairs.forEach((p,i)=>{ if(h2i[i]) h2i[i].innerHTML=`${T(p[0])} <small>${T(p[1])}</small>`; });
   const vT=document.getElementById("visitToday")?.textContent||"–";
   const vW=document.getElementById("visitWeek")?.textContent||"–";
+  const vA=document.getElementById("visitTotal")?.textContent||"–";
   const vb=document.getElementById("visitorStats");
-  if(vb) vb.innerHTML=`<span><i class="vdot"></i>${T("오늘")} <b id="visitToday">${vT}</b>${T("명")}</span><span><i class="vdot"></i>${T("이번 주")} <b id="visitWeek">${vW}</b>${T("명")}</span>`;
+  if(vb) vb.innerHTML=`<span><i class="vdot"></i>${T("오늘")} <b id="visitToday">${vT}</b>${T("명")}</span><span><i class="vdot"></i>${T("이번 주")} <b id="visitWeek">${vW}</b>${T("명")}</span><span><i class="vdot"></i>${T("누적")} <b id="visitTotal">${vA}</b>${T("명")}</span>`;
   document.querySelectorAll("[data-ko]").forEach(el=>{ el.textContent=T(el.dataset.ko); });
   const ab=document.querySelector(".authBadge"); if(ab) ab.textContent=T("⚠ 비공식 테스트 버전");
   const ag=document.querySelector(".authAgree"); if(ag) ag.textContent=T("동의하고 시작하기");
@@ -1019,44 +1345,7 @@ function setLang(l){
 setLang(LANG);
 document.getElementById("gameLogo").src = GAME_LOGO;
 
-/* ════════ 방문자 카운터 (CounterAPI 무료 서비스 · 새로고침마다 집계되는 대략치) ════════ */
-(function(){
-  const NS = "ricochetsquad-counterpick";
-  const pad = n => String(n).padStart(2,"0");
-  const dayKey = d => `visits-day-${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  function weekKey(d){
-    const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    const dayNum = (dt.getUTCDay()+6)%7;
-    dt.setUTCDate(dt.getUTCDate()-dayNum+3);
-    const firstThu = new Date(Date.UTC(dt.getUTCFullYear(),0,4));
-    const firstDayNum = (firstThu.getUTCDay()+6)%7;
-    firstThu.setUTCDate(firstThu.getUTCDate()-firstDayNum+3);
-    const week = 1+Math.round((dt-firstThu)/604800000);
-    return `visits-week-${dt.getUTCFullYear()}-W${pad(week)}`;
-  }
-  async function hit(key){
-    const res = await fetch(`https://api.counterapi.dev/v1/${NS}/${key}/up`);
-    if(!res.ok) throw new Error("counter http "+res.status);
-    return (await res.json()).count;
-  }
-  async function hitRetry(key){
-    try{ return await hit(key); }
-    catch(e){
-      await new Promise(r=>setTimeout(r,800));
-      try{ return await hit(key); }catch(e2){ return null; }
-    }
-  }
-  const now = new Date();
-  Promise.all([hitRetry(dayKey(now)), hitRetry(weekKey(now))]).then(([t, w])=>{
-    // 이번 주 방문은 논리적으로 오늘 방문 이상 — 일시적 집계 오차를 화면에서 보정
-    if(t!=null && w!=null) w = Math.max(w, t);
-    else if(t!=null && w==null) w = t;
-    let any=false;
-    if(t!=null){ document.getElementById("visitToday").textContent=t.toLocaleString(); any=true; }
-    if(w!=null){ document.getElementById("visitWeek").textContent=w.toLocaleString(); any=true; }
-    if(any) document.getElementById("visitorStats").style.display="flex";
-  });
-})();
+/* 방문자 카운터: 상단 <script type="module"> 안의 Firebase 코드로 이전됨 */
 
 /* ════════ 복사 방지 (일반 사용자 대상 억제 — 완전 차단은 불가능) ════════ */
 document.addEventListener("contextmenu", e=>e.preventDefault());
@@ -1086,6 +1375,587 @@ document.addEventListener("keydown", e=>{
     last=now;
   },500);
 })();
+</script>
+
+<script type="module">
+/* ════════ 💬 커뮤니티: 투표·채팅·팁·피드백·통계 (Firebase) ════════ */
+const FB = window.RSFB;
+const TIERS = ["S","A","B","C","D"];
+const SCORE = {S:5, A:4, B:3, C:2, D:1};
+const HKEYS = Object.keys(HEROES);
+let MY_UID = null, IS_ADMIN = false, IS_BANNED = false;
+let myVotes = {}, aggCache = null;
+let cmtFilterHero = "all", cmtCache = [], chatCache = [];
+let reportsCache = { chat:{}, comments:{} };
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hName = k => T(HEROES[k]?.ko || k);
+
+/* ══════ 🛡️ 안전 시스템 ══════ */
+const BAD_WORDS = ["시발","씨발","씨빨","씨팔","시팔","ㅅㅂ","ㅆㅂ","병신","ㅂㅅ","븅신","지랄","ㅈㄹ","존나","ㅈㄴ","좆","니미","니애미","니엄마","엠창","애미","애비","느금","개새끼","개색","개세끼","새끼","색기","썅","등신","저능아","한남충","김치녀","보지","자지","꼬추","섹스","야동","창녀","창놈","걸레","강간","fuck","fucking","shit","bitch","asshole","nigger","sex","porn"];
+const RESERVED_NAMES = ["mammon","관리자","운영자","admin","administrator","제작자","운영진","gm","mod"];
+const normTxt = s => String(s).toLowerCase().replace(/[\s\-_.,!?~^*+=/\\|()\[\]{}<>'"`:;@#$%&0-9]/g,"");
+function hasBadWord(s){ const n = normTxt(s); return BAD_WORDS.some(w => n.includes(normTxt(w))); }
+function hasPersonalInfo(s){
+  return /01[016789][\s\-.]?\d{3,4}[\s\-.]?\d{4}/.test(s) || /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(s);
+}
+function checkText(s, maxLen, label){
+  if(s.length < 2){ toast(T("내용을 입력해주세요")); return false; }
+  if(s.length > maxLen){ toast(T("너무 깁니다")); return false; }
+  if(hasBadWord(s)){ toast(T("🛡️ 부적절한 표현이 포함되어 있습니다")); return false; }
+  if(hasPersonalInfo(s)){ toast(T("🛡️ 전화번호·이메일 등 개인정보는 입력할 수 없습니다")); return false; }
+  return true;
+}
+function checkName(s){
+  if(s.length < 2 || s.length > 12){ toast(T("닉네임은 2~12자로 입력해주세요")); return false; }
+  if(hasBadWord(s)){ toast(T("🛡️ 사용할 수 없는 닉네임입니다")); return false; }
+  if(!IS_ADMIN && RESERVED_NAMES.includes(normTxt(s))){ toast(T("🛡️ 사용할 수 없는 닉네임입니다 (사칭 방지)")); return false; }
+  return true;
+}
+const COOLDOWN = { chat:5000, cmt:30000, fb:60000, pt:60000 };
+function cooldownOK(key){
+  const last = +(localStorage.getItem("rs_cd_"+key)||0);
+  const remain = COOLDOWN[key] - (Date.now()-last);
+  if(remain > 0){ toast(T("도배 방지")+": "+Math.ceil(remain/1000)+T("초 후에 다시 시도해주세요")); return false; }
+  return true;
+}
+const stampCooldown = key => localStorage.setItem("rs_cd_"+key, String(Date.now()));
+function reportCount(node, id){ const r = reportsCache[node]?.[id]; return r ? Object.keys(r).length : 0; }
+const isHidden = (node, id) => reportCount(node, id) >= 3;
+async function reportItem(node, id){
+  if(!MY_UID){ toast(T("연결 중입니다")); return; }
+  if(!confirm(T("이 글을 신고할까요? 신고 3회 누적 시 자동으로 숨겨집니다."))) return;
+  try{ await FB.set(FB.ref(FB.db, `reports/${node}/${id}/${MY_UID}`), true); toast(T("신고가 접수되었습니다")); }
+  catch(e){ toast(T("이미 신고했거나 처리할 수 없습니다")); }
+}
+window.rsReport = reportItem;
+const NAME_COLORS = ["#ffb02e","#5da9ff","#4ade80","#f472b6","#a78bfa","#fb923c","#22d3ee","#facc15"];
+function nameColor(uid){ let h=0; for(const c of String(uid)) h=(h*31+c.charCodeAt(0))>>>0; return NAME_COLORS[h%8]; }
+
+/* ══════ 🌐 실시간 번역 (Google 무료 엔드포인트) ══════ */
+const TL_MAP = { ko:"ko", en:"en", ja:"ja", zh:"zh-TW" };
+const transCache = {};                 // msgId -> 번역문 (null = 같은 언어)
+let AUTO_TR = localStorage.getItem("rs_autotr") === "1";
+async function translateText(text){
+  const tl = TL_MAP[LANG] || "ko";
+  const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + tl + "&dt=t&q=" + encodeURIComponent(text);
+  const res = await fetch(url);
+  if(!res.ok) throw new Error("translate http " + res.status);
+  const j = await res.json();
+  const out = (j[0]||[]).map(x => (x && x[0]) || "").join("");
+  const src = (j[2]||"").toLowerCase();
+  const same = src && (TL_MAP[LANG]||"ko").toLowerCase().startsWith(src.split("-")[0]);
+  return same ? null : out;
+}
+window.rsTranslateMsg = async id => {
+  if(transCache[id] !== undefined){ delete transCache[id]; renderChat(); return; }  // 다시 누르면 접기
+  const m = chatCache.find(x => x.id === id); if(!m) return;
+  try{ transCache[id] = await translateText(m.text); renderChat();
+       if(transCache[id] === null) toast(T("이미 같은 언어입니다")); }
+  catch(e){ toast(T("번역 실패 — 잠시 후 다시 시도해주세요")); }
+};
+let trBusy = false;
+async function autoTranslateNew(){
+  if(!AUTO_TR || trBusy) return;
+  trBusy = true;
+  try{
+    const targets = chatCache.slice(-30).filter(m => m.uid !== MY_UID && transCache[m.id] === undefined);
+    for(const m of targets){
+      try{ transCache[m.id] = await translateText(m.text); }
+      catch(e){ transCache[m.id] = null; }
+    }
+    if(targets.length) renderChat();
+  } finally { trBusy = false; }
+}
+
+/* ══════ 🏆 티어보드 ══════ */
+function renderBoard(){
+  const board = document.getElementById("tierBoard");
+  const agg = aggCache || {};
+  let totalVotes = 0;
+  const rows = HKEYS.map(k => {
+    const a = agg[k] || {}; let n = 0, sum = 0;
+    for(const t of TIERS){ const c = a[t]||0; n += c; sum += c*SCORE[t]; }
+    totalVotes += n;
+    return { k, n, avg: n ? sum/n : 0 };
+  });
+  document.getElementById("voteStats").innerHTML =
+    `<span>${T("총 투표")} <b>${totalVotes.toLocaleString()}</b>${T("표")}</span>`+
+    `<span>${T("실시간 자동 갱신")} <b style="color:var(--good)">●</b></span>`;
+  const bucket = { S:[], A:[], B:[], C:[], D:[] };
+  rows.forEach(r => {
+    if(!r.n) return;
+    const t = r.avg >= 4.5 ? "S" : r.avg >= 3.5 ? "A" : r.avg >= 2.5 ? "B" : r.avg >= 1.5 ? "C" : "D";
+    bucket[t].push(r);
+  });
+  board.innerHTML = TIERS.map(t => {
+    const list = bucket[t].sort((a,b)=>b.avg-a.avg);
+    const chips = list.length
+      ? list.map(r => `<div class="tchip"><img src="${PIC[r.k]}" alt=""><span class="tnm">${esc(hName(r.k))}</span><span class="tsc">${r.avg.toFixed(1)}·${r.n}${T("표")}</span></div>`).join("")
+      : `<span class="tempty">${totalVotes===0&&t==="S"?T("아직 투표가 없습니다 — 첫 표의 주인공이 되어보세요!"):"—"}</span>`;
+    return `<div class="trow ${t}"><div class="tlabel">${t}</div><div class="theroes">${chips}</div></div>`;
+  }).join("");
+}
+function renderVoteGrid(){
+  document.getElementById("voteGrid").innerHTML = HKEYS.map(k => `
+    <div class="vrow">
+      <img src="${PIC[k]}" alt=""><span class="vnm">${esc(hName(k))}</span>
+      <div class="vbtns">${TIERS.map(t =>
+        `<button data-h="${k}" data-t="${t}" class="${myVotes[k]===t?("sel-"+t):""}" ${MY_UID&&!IS_BANNED?"":"disabled"}>${t}</button>`).join("")}
+      </div>
+    </div>`).join("");
+}
+document.getElementById("voteGrid").addEventListener("click", async e => {
+  const b = e.target.closest("button[data-h]");
+  if(!b || !MY_UID || IS_BANNED) return;
+  const hero = b.dataset.h, tier = b.dataset.t, prev = myVotes[hero];
+  if(prev === tier) return;
+  myVotes[hero] = tier; renderVoteGrid();
+  try{
+    await FB.set(FB.ref(FB.db, `tiervote/votes/${MY_UID}/${hero}`), tier);
+  }catch(err){
+    myVotes[hero] = prev; renderVoteGrid();
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않아 투표할 수 없습니다") : T("투표 실패 — 네트워크를 확인해주세요"));
+    return;
+  }
+  // 집계는 개별 처리 — 일부 실패해도 투표 자체는 저장됨
+  const bump = (t,d) => FB.runTransaction(FB.ref(FB.db, `tiervote/agg/${hero}/${t}`), c => Math.max(0,(c||0)+d)).catch(()=>{});
+  if(prev) await bump(prev,-1);
+  await bump(tier,+1);
+  toast(`${hName(hero)} → ${tier} ${T("투표 완료!")}`);
+});
+
+/* ══════ 💬 실시간 라운지 채팅 ══════ */
+function renderChat(){
+  const box = document.getElementById("chatBox");
+  const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+  const items = chatCache.sort((a,b)=>(a.ts||0)-(b.ts||0)).slice(-100);
+  if(!items.length){
+    box.innerHTML = `<div class="cmtempty">${T("아직 메시지가 없습니다. 첫 인사를 남겨보세요! 👋")}</div>`;
+    return;
+  }
+  box.innerHTML = items.map(m => {
+    if(isHidden("chat", m.id) && !IS_ADMIN)
+      return `<div class="chatmsg hidden-msg">🚫 ${T("신고 누적으로 숨겨진 메시지입니다")}</div>`;
+    const tm = m.ts ? new Date(m.ts).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",hour12:false}) : "";
+    const mine = m.uid === MY_UID;
+    const tr = transCache[m.id];
+    return `<div class="chatmsg">
+      <span class="mnm" style="color:${nameColor(m.uid)}">${esc(m.name)}</span>
+      <span class="mtx">${esc(m.text)}</span>
+      <span class="mtm">${tm}</span>
+      ${!mine?`<button class="mrep" onclick="rsTranslateMsg('${m.id}')" title="${T("번역")}">🌐</button>`:""}
+      ${!mine&&MY_UID?`<button class="mrep" onclick="rsReport('chat','${m.id}')" title="${T("신고")}">🚩</button>`:""}
+      ${(mine||IS_ADMIN)?`<button class="mdel" data-del-chat="${m.id}">✕</button>`:""}
+      ${tr?`<span class="mtr">↳ ${esc(tr)}</span>`:""}
+    </div>`;
+  }).join("");
+  if(nearBottom) box.scrollTop = box.scrollHeight;
+}
+document.getElementById("chatBox").addEventListener("click", async e => {
+  const b = e.target.closest("[data-del-chat]"); if(!b) return;
+  if(!confirm(T("이 메시지를 삭제할까요?"))) return;
+  try{ await FB.remove(FB.ref(FB.db, `chat/${b.dataset.delChat}`)); }catch(err){ toast(T("삭제 실패")); }
+});
+async function sendChat(){
+  const nameEl = document.getElementById("chatName"), textEl = document.getElementById("chatText");
+  const name = nameEl.value.trim(), text = textEl.value.trim();
+  if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  if(!checkName(name) || !checkText(text, 120) || !cooldownOK("chat")) return;
+  try{
+    await FB.push(FB.ref(FB.db, "chat"), { name, text, uid: MY_UID, ts: FB.serverTimestamp() });
+    localStorage.setItem("rs_nick", name);
+    stampCooldown("chat");
+    textEl.value = "";
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않아 전송할 수 없습니다") : T("전송 실패 — 잠시 후 다시 시도해주세요"));
+  }
+}
+document.getElementById("chatSend").addEventListener("click", sendChat);
+document.getElementById("chatText").addEventListener("keydown", e => { if(e.key==="Enter") sendChat(); });
+
+/* ══════ ✍️ 영웅 팁 게시판 ══════ */
+function heroOptions(){
+  document.getElementById("cmtHero").innerHTML =
+    `<option value="all">🌐 ${T("공통 팁")}</option>` + HKEYS.map(k=>`<option value="${k}">${esc(hName(k))}</option>`).join("");
+}
+function renderCmtFilter(){
+  document.getElementById("cmtFilter").innerHTML =
+    [`<button data-f="all" class="${cmtFilterHero==="all"?"on":""}">${T("전체")}</button>`]
+    .concat(HKEYS.map(k=>`<button data-f="${k}" class="${cmtFilterHero===k?"on":""}">${esc(hName(k))}</button>`)).join("");
+}
+document.getElementById("cmtFilter").addEventListener("click", e => {
+  const b = e.target.closest("button[data-f]"); if(!b) return;
+  cmtFilterHero = b.dataset.f; renderCmtFilter(); renderCmts();
+});
+function relTime(ts){
+  const d = Date.now() - ts;
+  if(d < 60000) return T("방금 전");
+  if(d < 3600000) return Math.floor(d/60000) + T("분 전");
+  if(d < 86400000) return Math.floor(d/3600000) + T("시간 전");
+  return Math.floor(d/86400000) + T("일 전");
+}
+function renderCmts(){
+  const list = document.getElementById("cmtList");
+  const items = cmtCache
+    .filter(c => cmtFilterHero==="all" || c.hero===cmtFilterHero)
+    .sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,50);
+  if(!items.length){
+    list.innerHTML = `<div class="cmtempty">${T("아직 팁이 없습니다. 첫 팁을 남겨보세요! ✍️")}</div>`;
+    return;
+  }
+  list.innerHTML = items.map(c => {
+    if(isHidden("comments", c.id) && !IS_ADMIN)
+      return `<div class="cmtitem"><div class="cmtbody" style="color:var(--sub);font-style:italic">🚫 ${T("신고 누적으로 숨겨진 글입니다")}</div></div>`;
+    const mine = c.uid === MY_UID;
+    return `
+    <div class="cmtitem">
+      <div class="cmthead">
+        ${c.hero!=="all"&&PIC[c.hero]?`<img src="${PIC[c.hero]}" alt="">`:""}
+        <span class="chero">${c.hero==="all"?"🌐 "+T("공통"):esc(hName(c.hero))}</span>
+        <span class="cname">${esc(c.name)}</span>
+        <span class="ctime">${relTime(c.ts||0)}</span>
+        ${!mine&&MY_UID?`<button class="cdel" onclick="rsReport('comments','${c.id}')" title="${T("신고")}">🚩</button>`:""}
+        ${(mine||IS_ADMIN)?`<button class="cdel" data-id="${c.id}" title="${T("삭제")}">✕</button>`:""}
+      </div>
+      <div class="cmtbody">${esc(c.text)}</div>
+    </div>`;
+  }).join("");
+}
+document.getElementById("cmtList").addEventListener("click", async e => {
+  const b = e.target.closest(".cdel[data-id]"); if(!b) return;
+  if(!confirm(T("이 팁을 삭제할까요?"))) return;
+  try{ await FB.remove(FB.ref(FB.db, `comments/${b.dataset.id}`)); toast(T("삭제되었습니다")); }
+  catch(err){ toast(T("삭제 실패")); }
+});
+const cmtText = document.getElementById("cmtText");
+cmtText.addEventListener("input", () => {
+  document.getElementById("cmtCount").textContent = cmtText.value.length + "/200";
+});
+document.getElementById("cmtSend").addEventListener("click", async () => {
+  const name = document.getElementById("cmtName").value.trim();
+  const text = cmtText.value.trim();
+  const hero = document.getElementById("cmtHero").value;
+  if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  if(!checkName(name) || !checkText(text, 200) || !cooldownOK("cmt")) return;
+  const btn = document.getElementById("cmtSend");
+  btn.disabled = true;
+  try{
+    await FB.push(FB.ref(FB.db, "comments"), { hero, name, text, uid: MY_UID, ts: FB.serverTimestamp() });
+    localStorage.setItem("rs_nick", name);
+    stampCooldown("cmt");
+    cmtText.value = ""; document.getElementById("cmtCount").textContent = "0/200";
+    toast(T("팁이 등록되었습니다! 🎉"));
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않아 등록할 수 없습니다") : T("등록 실패 — 잠시 후 다시 시도해주세요"));
+  }
+  btn.disabled = false;
+});
+
+/* ══════ 📮 사이트 피드백 ══════ */
+const fbText = document.getElementById("fbText");
+fbText.addEventListener("input", () => {
+  document.getElementById("fbCount").textContent = fbText.value.length + "/500";
+});
+document.getElementById("fbSend").addEventListener("click", async () => {
+  const cat = document.getElementById("fbCat").value;
+  const name = document.getElementById("fbName").value.trim() || T("익명");
+  const text = fbText.value.trim();
+  if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  if(!checkText(text, 500) || !cooldownOK("fb")) return;
+  if(hasBadWord(name)){ toast(T("🛡️ 사용할 수 없는 닉네임입니다")); return; }
+  const btn = document.getElementById("fbSend");
+  btn.disabled = true;
+  try{
+    await FB.push(FB.ref(FB.db, "feedback"), { cat, name, text, uid: MY_UID, ts: FB.serverTimestamp() });
+    stampCooldown("fb");
+    fbText.value = ""; document.getElementById("fbCount").textContent = "0/500";
+    toast(T("피드백이 전달되었습니다. 감사합니다! 📮"));
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않아 전송할 수 없습니다") : T("전송 실패 — 잠시 후 다시 시도해주세요"));
+  }
+  btn.disabled = false;
+});
+document.getElementById("myUidCopy").addEventListener("click", () => {
+  const code = document.getElementById("myUidCode").textContent;
+  navigator.clipboard?.writeText(code).then(()=>toast(T("복사되었습니다"))).catch(()=>{});
+});
+document.getElementById("adminFbBtn").addEventListener("click", async () => {
+  try{
+    const snap = await FB.get(FB.ref(FB.db, "feedback"));
+    const v = snap.val() || {};
+    const items = Object.entries(v).map(([id,f])=>({id,...f})).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,100);
+    document.getElementById("adminFbList").innerHTML = items.length ? items.map(f=>`
+      <div class="cmtitem">
+        <div class="cmthead"><span class="chero">${esc(f.cat||"")}</span><span class="cname">${esc(f.name||"")}</span><span class="ctime">${relTime(f.ts||0)}</span></div>
+        <div class="cmtbody">${esc(f.text||"")}</div>
+      </div>`).join("") : `<div class="cmtempty">${T("아직 피드백이 없습니다")}</div>`;
+  }catch(e){ toast(T("피드백을 불러올 수 없습니다 (관리자 전용)")); }
+});
+
+/* ══════ 📊 방문자 통계 ══════ */
+const DEVICE_LABEL = { mobile:"📱 모바일", desktop:"🖥️ PC" };
+function langLabel(code){
+  try{ return new Intl.DisplayNames(["ko"],{type:"language"}).of(code) || code; }catch(e){ return code; }
+}
+function countryLabel(code){
+  try{
+    const flag = code.replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
+    const nm = new Intl.DisplayNames(["ko"],{type:"region"}).of(code) || code;
+    return flag + " " + nm;
+  }catch(e){ return code; }
+}
+function statRows(obj, labelFn, max){
+  const entries = Object.entries(obj||{}).sort((a,b)=>b[1]-a[1]).slice(0,max||6);
+  const total = entries.reduce((s,[,v])=>s+v,0) || 1;
+  return entries.map(([k,v])=>`
+    <div class="statrow">
+      <span class="slb">${esc(labelFn(k))}</span>
+      <div class="sbar"><i style="width:${Math.round(v/total*100)}%"></i></div>
+      <span class="svl">${v.toLocaleString()} (${Math.round(v/total*100)}%)</span>
+    </div>`).join("") || `<div class="cmtempty">${T("데이터 없음")}</div>`;
+}
+function renderStats(st){
+  st = st || {};
+  const hours = st.hour || {};
+  const maxH = Math.max(1, ...Object.values(hours));
+  const hourBars = Array.from({length:24},(_,h)=>`<div class="hb" style="height:${Math.round((hours[h]||0)/maxH*100)}%" title="${h}${T("시")}: ${hours[h]||0}"></div>`).join("");
+  const hourLbls = Array.from({length:24},(_,h)=>`<span>${h%6===0?h:""}</span>`).join("");
+  document.getElementById("statsBoard").innerHTML = `
+    <div class="statcard"><h4>📱 ${T("기기")}</h4>${statRows(st.device, k=>T(DEVICE_LABEL[k]||k))}</div>
+    <div class="statcard"><h4>🌍 ${T("국가")}</h4>${statRows(st.country, countryLabel, 8)}</div>
+    <div class="statcard"><h4>🗣️ ${T("언어")}</h4>${statRows(st.lang, langLabel, 6)}</div>
+    <div class="statcard"><h4>🕐 ${T("시간대별 방문 (KST)")}</h4><div class="hourbars">${hourBars}</div><div class="hourlbl">${hourLbls}</div></div>`;
+}
+async function collectStats(){
+  const now = new Date();
+  const dayKey = now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
+  if(sessionStorage.getItem("rs_stats_counted") === dayKey) return;
+  sessionStorage.setItem("rs_stats_counted", dayKey);
+  const bump = path => FB.runTransaction(FB.ref(FB.db, "stats/"+path), c => (c||0)+1).catch(()=>{});
+  const device = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ? "mobile" : "desktop";
+  const lang = (navigator.language||"ko").slice(0,2).toLowerCase();
+  const kstHour = (now.getUTCHours()+9)%24;
+  bump("device/"+device); bump("lang/"+lang); bump("hour/"+kstHour);
+  try{
+    const ctrl = new AbortController(); setTimeout(()=>ctrl.abort(), 4000);
+    const res = await fetch("https://ipapi.co/json/", {signal: ctrl.signal});
+    const j = await res.json();
+    if(j && /^[A-Z]{2}$/.test(j.country_code||"")) bump("country/"+j.country_code);
+  }catch(e){ /* 국가 확인 실패는 무시 */ }
+}
+
+/* ══════ 🧭 커뮤니티 서브뷰 전환 ══════ */
+let PT_SEEN = +(localStorage.getItem("rs_pt_seen") || Date.now());
+window.commView = v => {
+  document.querySelectorAll(".commv").forEach(x => x.style.display = "none");
+  const el = document.getElementById("commv-" + v);
+  if(el) el.style.display = "";
+  document.querySelectorAll("#commTabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  if(v === "party"){
+    PT_SEEN = Date.now();
+    localStorage.setItem("rs_pt_seen", String(PT_SEEN));
+    updatePtBadge();
+  }
+};
+
+/* ══════ 🎮 파티 모집 ══════ */
+let ptCache = [], ptKnown = null, PT_NOTIF = localStorage.getItem("rs_pt_notif") === "1";
+const PT_TTL = 3*3600000;   // 3시간 지난 글은 만료 표시
+
+function updatePtBadge(){
+  const n = ptCache.filter(p => (p.ts||0) > PT_SEEN && p.status === "open" && p.uid !== MY_UID).length;
+  const b = document.getElementById("ptBadge");
+  if(b){ b.style.display = n ? "flex" : "none"; b.textContent = n > 9 ? "9+" : n; }
+}
+function renderParty(){
+  const list = document.getElementById("ptList");
+  const items = ptCache.slice().sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,50);
+  if(!items.length){
+    list.innerHTML = `<div class="cmtempty">${T("아직 모집 글이 없습니다. 첫 파티를 만들어보세요! 🎮")}</div>`;
+    return;
+  }
+  list.innerHTML = items.map(p => {
+    if(isHidden("parties", p.id) && !IS_ADMIN)
+      return `<div class="ptcard closed"><div class="ptbody" style="color:var(--sub);font-style:italic">🚫 ${T("신고 누적으로 숨겨진 글입니다")}</div></div>`;
+    const members = Object.entries(p.members||{});
+    const full = members.length >= (p.need||1);
+    const expired = (Date.now()-(p.ts||0)) > PT_TTL;
+    const closed = p.status !== "open" || full || expired;
+    const mine = p.uid === MY_UID;
+    const joined = MY_UID && p.members && p.members[MY_UID];
+    const state = expired ? T("만료") : p.status !== "open" ? T("마감") : full ? T("정원 완료") : T("모집중");
+    return `<div class="ptcard ${closed?'closed':''}">
+      <div class="pthead">
+        <span class="ptmode">${esc(p.mode||"")}</span>
+        <span class="ptstate ${closed?'closed':'open'}">${state}</span>
+        <span class="ptstate closed">${members.length}/${p.need||1}${T("명")}</span>
+      </div>
+      <div class="ptbody">${esc(p.title||"")}</div>
+      <span class="ptnick" onclick="rsCopyNick('${esc(p.gameNick||"")}')" title="${T("눌러서 복사")}">🎮 ${T("게임 닉네임")}: <b>${esc(p.gameNick||"")}</b> 📋</span>
+      ${members.length?`<div class="ptmembers">${members.map(([,nm])=>`<span>👤 ${esc(nm)}</span>`).join("")}</div>`:""}
+      <div class="ptfoot">
+        <span class="meta">${esc(p.name||"")} · ${relTime(p.ts||0)}</span>
+        ${!mine&&MY_UID&&!closed&&!p.noJoin ? (joined
+          ? `<button class="ptbtn ghost" data-pt-leave="${p.id}">${T("참가 취소")}</button>`
+          : `<button class="ptbtn" data-pt-join="${p.id}">${T("✋ 참가 신청")}</button>`) : ""}
+        ${!mine&&p.noJoin&&!closed?`<span class="meta" style="margin:0">${T("게임 내 친추로 연락")}</span>`:""}
+        ${mine&&!expired?`<button class="ptbtn ghost" data-pt-toggle="${p.id}" data-st="${p.status}">${p.status==="open"?T("마감하기"):T("다시 열기")}</button>`:""}
+        ${(mine||IS_ADMIN)?`<button class="ptbtn ghost" data-pt-del="${p.id}">${T("삭제")}</button>`:""}
+        ${!mine&&MY_UID?`<button class="ptbtn ghost" onclick="rsReport('parties','${p.id}')">🚩</button>`:""}
+      </div>
+    </div>`;
+  }).join("");
+}
+window.rsCopyNick = nick => { navigator.clipboard?.writeText(nick).then(()=>toast(T("게임 닉네임이 복사되었습니다 — 게임에서 친구 추가하세요!"))).catch(()=>{}); };
+document.getElementById("ptList").addEventListener("click", async e => {
+  const j = e.target.closest("[data-pt-join]"), l = e.target.closest("[data-pt-leave]"),
+        t = e.target.closest("[data-pt-toggle]"), d = e.target.closest("[data-pt-del]");
+  try{
+    if(j){
+      const nick = localStorage.getItem("rs_nick") || document.getElementById("ptName").value.trim();
+      if(!nick || nick.length < 2){ toast(T("먼저 위 입력칸에 닉네임을 입력해주세요")); return; }
+      await FB.set(FB.ref(FB.db, `parties/${j.dataset.ptJoin}/members/${MY_UID}`), nick);
+      toast(T("참가 신청 완료! 방장 게임 닉네임으로 친구 추가하세요 🎮"));
+    }
+    if(l){ await FB.remove(FB.ref(FB.db, `parties/${l.dataset.ptLeave}/members/${MY_UID}`)); toast(T("참가를 취소했습니다")); }
+    if(t){ await FB.set(FB.ref(FB.db, `parties/${t.dataset.ptToggle}/status`), t.dataset.st==="open"?"closed":"open"); }
+    if(d){ if(confirm(T("이 모집 글을 삭제할까요?"))) await FB.remove(FB.ref(FB.db, `parties/${d.dataset.ptDel}`)); }
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않았습니다") : T("처리 실패 — 잠시 후 다시 시도해주세요"));
+  }
+});
+const ptText = document.getElementById("ptText");
+document.getElementById("ptSend").addEventListener("click", async () => {
+  const mode = document.getElementById("ptMode").value;
+  const need = +document.getElementById("ptNeed").value || 2;
+  const gameNick = document.getElementById("ptGameNick").value.trim();
+  const name = document.getElementById("ptName").value.trim();
+  const title = ptText.value.trim();
+  const noJoin = document.getElementById("ptNoJoin").checked;
+  if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  if(gameNick.length < 2){ toast(T("게임 내 닉네임을 입력해주세요 (친구 추가용)")); return; }
+  if(hasBadWord(gameNick)){ toast(T("🛡️ 사용할 수 없는 닉네임입니다")); return; }
+  if(!checkName(name) || !checkText(title, 100) || !cooldownOK("pt")) return;
+  const btn = document.getElementById("ptSend");
+  btn.disabled = true;
+  try{
+    await FB.push(FB.ref(FB.db, "parties"), { mode, need, gameNick, name, title, noJoin,
+      uid: MY_UID, ts: FB.serverTimestamp(), status: "open" });
+    localStorage.setItem("rs_nick", name);
+    stampCooldown("pt");
+    ptText.value = "";
+    toast(T("파티 모집이 올라갔습니다! 🎮"));
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않아 등록할 수 없습니다") : T("등록 실패 — 잠시 후 다시 시도해주세요"));
+  }
+  btn.disabled = false;
+});
+
+/* ── 🔔 새 파티 브라우저 알림 (옵트인) ── */
+function notifyParty(p){
+  if(!PT_NOTIF || !("Notification" in window) || Notification.permission !== "granted") return;
+  try{
+    const n = new Notification(T("🎮 새 파티 모집!"), {
+      body: `${p.mode||""} · ${p.title||""} (${T("모집")} ${p.need||1}${T("명")})`,
+      icon: typeof GAME_LOGO !== "undefined" ? GAME_LOGO : undefined,
+      tag: "rs-party-" + p.id
+    });
+    n.onclick = () => { window.focus(); commView("party"); n.close(); };
+  }catch(e){}
+}
+
+/* ══════ 초기화 & 실시간 구독 ══════ */
+renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter(); renderCmts(); renderChat();
+const savedNick = localStorage.getItem("rs_nick") || "";
+document.getElementById("cmtName").value = savedNick;
+document.getElementById("chatName").value = savedNick;
+document.getElementById("ptName").value = savedNick;
+const trTog = document.getElementById("chatAutoTr");
+trTog.checked = AUTO_TR;
+trTog.addEventListener("change", () => {
+  AUTO_TR = trTog.checked;
+  localStorage.setItem("rs_autotr", AUTO_TR ? "1" : "0");
+  if(AUTO_TR){ toast(T("🌐 자동 번역 켜짐")); autoTranslateNew(); }
+});
+
+FB.onValue(FB.ref(FB.db, "tiervote/agg"), snap => { aggCache = snap.val(); renderBoard(); });
+FB.onValue(FB.query(FB.ref(FB.db, "comments"), FB.limitToLast(100)), snap => {
+  const v = snap.val() || {};
+  cmtCache = Object.entries(v).map(([id,c]) => ({ id, ...c }));
+  renderCmts();
+});
+FB.onValue(FB.query(FB.ref(FB.db, "chat"), FB.limitToLast(100)), snap => {
+  const v = snap.val() || {};
+  chatCache = Object.entries(v).map(([id,c]) => ({ id, ...c }));
+  renderChat();
+  autoTranslateNew();
+});
+FB.onValue(FB.ref(FB.db, "reports"), snap => {
+  reportsCache = snap.val() || { chat:{}, comments:{} };
+  if(!reportsCache.chat) reportsCache.chat = {};
+  if(!reportsCache.comments) reportsCache.comments = {};
+  renderChat(); renderCmts();
+});
+FB.onValue(FB.ref(FB.db, "stats"), snap => renderStats(snap.val()));
+FB.onValue(FB.query(FB.ref(FB.db, "parties"), FB.limitToLast(50)), snap => {
+  const v = snap.val() || {};
+  const fresh = Object.entries(v).map(([id,p]) => ({ id, ...p }));
+  if(ptKnown !== null){
+    fresh.forEach(p => { if(!ptKnown.has(p.id) && p.uid !== MY_UID && p.status === "open") notifyParty(p); });
+  }
+  ptKnown = new Set(fresh.map(p => p.id));
+  ptCache = fresh;
+  renderParty(); updatePtBadge();
+});
+const ptTog = document.getElementById("ptNotif");
+ptTog.checked = PT_NOTIF && ("Notification" in window) && Notification.permission === "granted";
+ptTog.addEventListener("change", async () => {
+  if(ptTog.checked){
+    if(!("Notification" in window)){
+      toast(T("이 브라우저는 알림을 지원하지 않습니다 (아이폰: 사파리 공유 → 홈 화면에 추가 후 가능)"));
+      ptTog.checked = false; return;
+    }
+    const perm = await Notification.requestPermission();
+    if(perm !== "granted"){ toast(T("알림 권한이 거부되었습니다 — 브라우저 설정에서 허용해주세요")); ptTog.checked = false; return; }
+    PT_NOTIF = true; toast(T("🔔 새 파티 알림이 켜졌습니다!"));
+  }else{ PT_NOTIF = false; }
+  localStorage.setItem("rs_pt_notif", PT_NOTIF ? "1" : "0");
+});
+
+FB.authReady.then(async uid => {
+  MY_UID = uid;
+  document.getElementById("myUidCode").textContent = uid;
+  try{ IS_ADMIN = (await FB.get(FB.ref(FB.db, `admins/${uid}`))).exists(); }catch(e){ IS_ADMIN = false; }
+  try{ IS_BANNED = (await FB.get(FB.ref(FB.db, `banned/${uid}`))).exists(); }catch(e){ IS_BANNED = false; }
+  const hint = document.getElementById("voteHint");
+  if(IS_BANNED){
+    hint.innerHTML = `<span style="color:var(--bad)">🚫 ${T("커뮤니티 이용이 제한된 상태입니다. 열람만 가능합니다.")}</span>`;
+    ["chatText","chatSend","cmtText","cmtSend","fbText","fbSend"].forEach(id=>{ const el=document.getElementById(id); if(el) el.disabled = true; });
+  }else{
+    hint.textContent = "✅ " + T("연결 완료 — 아래에서 영웅별 티어를 골라주세요. 언제든 바꿀 수 있습니다.");
+  }
+  if(IS_ADMIN){
+    document.getElementById("adminPanel").style.display = "block";
+    toast("🔑 " + T("관리자 모드"));
+  }
+  try{
+    const snap = await FB.get(FB.ref(FB.db, `tiervote/votes/${uid}`));
+    myVotes = snap.val() || {};
+  }catch(e){ myVotes = {}; }
+  renderVoteGrid(); renderCmts(); renderChat();
+  collectStats();
+});
 </script>
 
 <!-- 권한 고지 모달 -->
