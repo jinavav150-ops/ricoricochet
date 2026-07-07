@@ -362,6 +362,24 @@
   .profilebar .pfnick{font-size:14px;font-weight:800;color:var(--ricochet);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .profilebar .pfnick.unset{color:var(--sub);font-weight:600}
   .profilebar .pfedit{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;font-family:inherit;flex-shrink:0}
+  .tchip{cursor:pointer;position:relative;transition:transform .1s}
+  .tchip:active{transform:scale(.94)}
+  .tchip.mine img{border-color:var(--ricochet);box-shadow:0 0 0 2px rgba(255,176,46,.35)}
+  .tchip .myvote{position:absolute;top:-5px;right:-2px;background:var(--ricochet);color:#17130a;font-size:9px;font-weight:900;font-style:normal;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .lbclose2{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--sub);font-size:20px;cursor:pointer;font-family:inherit}
+  .tdhead{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .tdhead img{width:52px;height:52px;border-radius:13px;border:1.5px solid var(--line);object-fit:cover}
+  .tdhead div{display:flex;flex-direction:column;gap:3px}
+  .tdhead b{font-size:17px}
+  .tdhead span{font-size:11.5px;color:var(--sub)}
+  .tdrow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .tdrow.mine .tdt{text-shadow:0 0 10px currentColor}
+  .tdrow .tdt{width:22px;font-family:'Black Han Sans';font-size:16px;text-align:center;flex-shrink:0}
+  .tdrow .tdbar{flex:1;height:14px;background:var(--panel2);border-radius:7px;overflow:hidden}
+  .tdrow .tdbar i{display:block;height:100%;border-radius:7px;min-width:2px}
+  .tdrow .tdv{width:76px;font-size:11px;color:var(--sub);text-align:right;flex-shrink:0}
+  .tdrow .tdmy{background:var(--ricochet);color:#17130a;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:8px;flex-shrink:0}
+  .tdnote{margin-top:12px;font-size:11px;color:var(--sub);line-height:1.5;background:var(--panel2);border-radius:10px;padding:9px 11px}
   .nickmodal{position:fixed;inset:0;background:rgba(8,10,16,.82);z-index:210;display:none;align-items:center;justify-content:center;padding:22px;backdrop-filter:blur(6px)}
   .nickmodal.on{display:flex}
   .nickbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;max-width:340px;width:100%}
@@ -598,8 +616,9 @@
     <div id="ptList" class="cmtlist"><div class="cmtempty">아직 모집 글이 없습니다. 첫 파티를 만들어보세요! 🎮</div></div>
 </div>
     <div class="commv" id="commv-tier" style="display:none">
-<h2>커뮤니티 티어표 <small>방문자 투표 실시간 집계</small></h2>
+<h2>커뮤니티 티어표 <small>최다 득표 티어 기준 배치</small></h2>
     <div class="vstats" id="voteStats"><span>투표 집계 준비 중…</span></div>
+    <div class="setupbox" style="margin-bottom:11px">🏆 <b>영웅은 가장 많은 표를 받은 티어 줄에 표시됩니다.</b> 예를 들어 A표가 제일 많으면 A줄에 있어요. 카드를 누르면 티어별 <b>득표 분포</b>를 볼 수 있습니다.</div>
     <div id="tierBoard" class="tierboard"></div>
 
     <h2 style="margin-top:22px">내 투표 <small>영웅마다 1표 · 다시 누르면 변경</small></h2>
@@ -662,6 +681,12 @@
 </main>
 
 <div id="toast"></div>
+<div class="nickmodal" id="tierModal" onclick="if(event.target===this)rsTierClose()">
+  <div class="nickbox" style="max-width:380px">
+    <button class="lbclose2" onclick="rsTierClose()">✕</button>
+    <div id="tierDetailBody"></div>
+  </div>
+</div>
 <div class="nickmodal" id="nickModal">
   <div class="nickbox">
     <h3>커뮤니티 닉네임 설정</h3>
@@ -1578,33 +1603,69 @@ async function autoTranslateNew(){
 }
 
 /* ══════ 🏆 티어보드 ══════ */
+function heroTierStat(k){
+  const a = (aggCache||{})[k] || {};
+  let n = 0, sum = 0, top = null, topCnt = -1;
+  for(const t of TIERS){
+    const c = a[t]||0; n += c; sum += c*SCORE[t];
+    // 최다 득표 티어 (동률이면 더 높은 티어 우선 — TIERS 순회가 S→D라 첫 최댓값 유지)
+    if(c > topCnt){ topCnt = c; top = t; }
+  }
+  return { k, n, avg: n ? sum/n : 0, top: n ? top : null, topCnt, counts: a };
+}
 function renderBoard(){
   const board = document.getElementById("tierBoard");
-  const agg = aggCache || {};
   let totalVotes = 0;
-  const rows = HKEYS.map(k => {
-    const a = agg[k] || {}; let n = 0, sum = 0;
-    for(const t of TIERS){ const c = a[t]||0; n += c; sum += c*SCORE[t]; }
-    totalVotes += n;
-    return { k, n, avg: n ? sum/n : 0 };
-  });
+  const rows = HKEYS.map(k => { const s = heroTierStat(k); totalVotes += s.n; return s; });
   document.getElementById("voteStats").innerHTML =
     `<span>${T("총 투표")} <b>${totalVotes.toLocaleString()}</b>${T("표")}</span>`+
     `<span>${T("실시간 자동 갱신")} <b style="color:var(--good)">●</b></span>`;
   const bucket = { S:[], A:[], B:[], C:[], D:[] };
-  rows.forEach(r => {
-    if(!r.n) return;
-    const t = r.avg >= 4.5 ? "S" : r.avg >= 3.5 ? "A" : r.avg >= 2.5 ? "B" : r.avg >= 1.5 ? "C" : "D";
-    bucket[t].push(r);
-  });
+  rows.forEach(r => { if(r.n) bucket[r.top].push(r); });
   board.innerHTML = TIERS.map(t => {
-    const list = bucket[t].sort((a,b)=>b.avg-a.avg);
+    const list = bucket[t].sort((a,b)=>b.n-a.n || b.avg-a.avg);
     const chips = list.length
-      ? list.map(r => `<div class="tchip"><img src="${PIC[r.k]}" alt=""><span class="tnm">${esc(hName(r.k))}</span><span class="tsc">${r.avg.toFixed(1)}·${r.n}${T("표")}</span></div>`).join("")
+      ? list.map(r => {
+          const share = Math.round(r.topCnt/r.n*100);
+          const mine = myVotes[r.k] ? ` mine` : ``;
+          return `<div class="tchip${mine}" onclick="rsTierDetail('${r.k}')" title="${T("눌러서 상세 분포 보기")}">
+            <img src="${PIC[r.k]}" alt="">${myVotes[r.k]?`<i class="myvote">${myVotes[r.k]}</i>`:""}
+            <span class="tnm">${esc(hName(r.k))}</span>
+            <span class="tsc">${share}% · ${r.n}${T("표")}</span></div>`;
+        }).join("")
       : `<span class="tempty">${totalVotes===0&&t==="S"?T("아직 투표가 없습니다 — 첫 표의 주인공이 되어보세요!"):"—"}</span>`;
     return `<div class="trow ${t}"><div class="tlabel">${t}</div><div class="theroes">${chips}</div></div>`;
   }).join("");
+  if(tierDetailHero) rsTierDetail(tierDetailHero, true);   // 열려있는 상세는 실시간 갱신
 }
+
+/* ── 영웅 티어 상세 분포 팝업 ── */
+let tierDetailHero = null;
+const TIER_COLORS = { S:"#ffb02e", A:"#5da9ff", B:"#4ade80", C:"#8b96ab", D:"#ff5d5d" };
+window.rsTierDetail = (k, silentUpdate) => {
+  tierDetailHero = k;
+  const s = heroTierStat(k);
+  const maxC = Math.max(1, ...TIERS.map(t=>s.counts[t]||0));
+  const bars = TIERS.map(t => {
+    const c = s.counts[t]||0;
+    const pct = s.n ? Math.round(c/s.n*100) : 0;
+    return `<div class="tdrow${myVotes[k]===t?" mine":""}">
+      <span class="tdt" style="color:${TIER_COLORS[t]}">${t}</span>
+      <div class="tdbar"><i style="width:${Math.round(c/maxC*100)}%;background:${TIER_COLORS[t]}"></i></div>
+      <span class="tdv">${c}${T("표")} (${pct}%)</span>
+      ${myVotes[k]===t?`<span class="tdmy">${T("내 투표")}</span>`:""}
+    </div>`;
+  }).join("");
+  document.getElementById("tierDetailBody").innerHTML = `
+    <div class="tdhead"><img src="${PIC[k]}" alt=""><div>
+      <b>${esc(hName(k))}</b>
+      <span>${s.n?`${T("최다 득표")}: <b style="color:${TIER_COLORS[s.top]}">${s.top}</b> · ${T("총")} ${s.n}${T("표")} · ${T("평균")} ${s.avg.toFixed(1)}${T("점")}`:T("아직 투표가 없습니다")}</span>
+    </div></div>
+    ${bars}
+    <div class="tdnote">ℹ️ ${T("영웅은 가장 많은 표를 받은 티어 줄에 배치됩니다. 투표가 실시간으로 반영돼요.")}</div>`;
+  if(!silentUpdate) document.getElementById("tierModal").classList.add("on");
+};
+window.rsTierClose = () => { tierDetailHero = null; document.getElementById("tierModal").classList.remove("on"); };
 function renderVoteGrid(){
   document.getElementById("voteGrid").innerHTML = HKEYS.map(k => `
     <div class="vrow">
@@ -2161,7 +2222,7 @@ FB.authReady.then(async uid => {
     const snap = await FB.get(FB.ref(FB.db, `tiervote/votes/${uid}`));
     myVotes = snap.val() || {};
   }catch(e){ myVotes = {}; }
-  renderVoteGrid(); renderCmts(); renderChat();
+  renderVoteGrid(); renderBoard(); renderCmts(); renderChat();
   collectStats();
 });
 </script>
