@@ -432,6 +432,7 @@
   .safetybar{background:var(--panel2);border:1px dashed var(--line);border-radius:11px;padding:8px 12px;font-size:11px;color:var(--sub);margin-bottom:9px}
   .chatbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;height:320px;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:7px;margin-bottom:8px}
   .chatmsg{display:flex;align-items:baseline;gap:7px;font-size:12.5px;line-height:1.55;word-break:break-word}
+  .chatmsg .mtx{flex:1 1 auto;min-width:0}
   .chatmsg .mnm{font-weight:700;flex-shrink:0}
   .chatmsg .mtx{color:var(--txt)}
   .chatmsg .mtm{font-size:10px;color:var(--sub);margin-left:auto;flex-shrink:0}
@@ -1433,6 +1434,11 @@ const M2 = {
 "모두 같은 언어입니다": {en:"Everything is already in your language", ja:"すべて同じ言語です", zh:"全部都是相同語言"}
 };
 for(const k in M2){ for(const l of ["en","ja","zh"]){ I18N[l][k]=M2[k][l]; } }
+const M3 = {
+"이 피드백을 삭제할까요?": {en:"Delete this feedback?", ja:"このフィードバックを削除しますか？", zh:"要刪除這則回饋嗎？"},
+"⚙️ 규칙 업데이트가 필요합니다 (피드백 삭제)": {en:"⚙️ Rules update required (feedback delete)", ja:"⚙️ ルールの更新が必要です(フィードバック削除)", zh:"⚙️ 需要更新規則 (刪除回饋)"}
+};
+for(const k in M3){ for(const l of ["en","ja","zh"]){ I18N[l][k]=M3[k][l]; } }
 })();
 
 function T(s){ if(LANG==="ko"||s==null||s==="") return s; const d=I18N[LANG]; return (d&&d[s])!==undefined?d[s]:s; }
@@ -1973,17 +1979,28 @@ document.getElementById("myUidCopy").addEventListener("click", () => {
   const code = document.getElementById("myUidCode").textContent;
   navigator.clipboard?.writeText(code).then(()=>toast(T("복사되었습니다"))).catch(()=>{});
 });
-document.getElementById("adminFbBtn").addEventListener("click", async () => {
+async function loadAdminFeedback(){
   try{
     const snap = await FB.get(FB.ref(FB.db, "feedback"));
     const v = snap.val() || {};
     const items = Object.entries(v).map(([id,f])=>({id,...f})).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,100);
     document.getElementById("adminFbList").innerHTML = items.length ? items.map(f=>`
       <div class="cmtitem">
-        <div class="cmthead"><span class="chero">${esc(f.cat||"")}</span><span class="cname">${esc(f.name||"")}</span><span class="ctime">${relTime(f.ts||0)}</span></div>
+        <div class="cmthead"><span class="chero">${esc(f.cat||"")}</span><span class="cname">${esc(f.name||"")}</span><span class="ctime">${relTime(f.ts||0)}</span>
+          <button class="cdel" data-fb-del="${f.id}" title="${T("삭제")}">✕</button></div>
         <div class="cmtbody">${esc(f.text||"")}</div>
       </div>`).join("") : `<div class="cmtempty">${T("아직 피드백이 없습니다")}</div>`;
   }catch(e){ toast(T("피드백을 불러올 수 없습니다 (관리자 전용)")); }
+}
+document.getElementById("adminFbBtn").addEventListener("click", loadAdminFeedback);
+document.getElementById("adminFbList").addEventListener("click", async e => {
+  const b = e.target.closest("[data-fb-del]"); if(!b) return;
+  if(!confirm(T("이 피드백을 삭제할까요?"))) return;
+  try{ await FB.remove(FB.ref(FB.db, `feedback/${b.dataset.fbDel}`)); toast(T("삭제되었습니다")); loadAdminFeedback(); }
+  catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? T("⚙️ 규칙 업데이트가 필요합니다 (피드백 삭제)") : T("삭제 실패"));
+  }
 });
 
 /* ══════ 📊 방문자 통계 ══════ */
