@@ -1555,7 +1555,7 @@ function setLang(l){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.08-d";
+const SITE_VERSION = "2026.07.08-e";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -1682,6 +1682,26 @@ function cooldownOK(key){
   return true;
 }
 const stampCooldown = key => localStorage.setItem("rs_cd_"+key, String(Date.now()));
+/* 채팅 전용: 5개 버스트 + 3초당 1개 충전 (연속 5번까지 자유, 이후 3초 간격) */
+const CHAT_MAX_BURST = 5, CHAT_REFILL_MS = 3000;
+function chatRateOK(){
+  const now = Date.now(), KEY = "rs_chat_bucket";
+  let st;
+  try{ st = JSON.parse(localStorage.getItem(KEY)); }catch(e){ st = null; }
+  if(!st || typeof st.tokens !== "number") st = { tokens: CHAT_MAX_BURST, ts: now };
+  const refill = Math.floor((now - st.ts) / CHAT_REFILL_MS);
+  if(refill > 0){ st.tokens = Math.min(CHAT_MAX_BURST, st.tokens + refill); st.ts += refill * CHAT_REFILL_MS; }
+  if(st.tokens < 1){
+    const wait = Math.max(1, Math.ceil((CHAT_REFILL_MS - (now - st.ts)) / 1000));
+    toast(T("도배 방지") + ": " + wait + T("초 후에 다시 시도해주세요"));
+    localStorage.setItem(KEY, JSON.stringify(st));
+    return false;
+  }
+  st.tokens -= 1;
+  localStorage.setItem(KEY, JSON.stringify(st));
+  return true;
+}
+window.rsChatRate = chatRateOK;
 function reportCount(node, id){ const r = reportsCache[node]?.[id]; return r ? Object.keys(r).length : 0; }
 const isHidden = (node, id) => reportCount(node, id) >= 3;
 async function reportItem(node, id){
@@ -1917,11 +1937,10 @@ async function sendChat(){
   if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
   if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
   const name = requireNick(); if(!name) return;
-  if(!checkText(text, 120, 1) || !cooldownOK("chat")) return;
+  if(!checkText(text, 120, 1) || !chatRateOK()) return;
   chatSending = true;
   try{
     await FB.push(FB.ref(FB.db, "chat"), { name, text, uid: MY_UID, ts: FB.serverTimestamp() });
-    stampCooldown("chat");
     textEl.value = "";
   }catch(err){
     const perm = String(err&&err.message||err).toLowerCase().includes("permission");
