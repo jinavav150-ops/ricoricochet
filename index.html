@@ -1555,7 +1555,7 @@ function setLang(l){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.08-c";
+const SITE_VERSION = "2026.07.08-d";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -1617,8 +1617,9 @@ function hasBadWord(s){ const n = normTxt(s); return BAD_WORDS.some(w => n.inclu
 function hasPersonalInfo(s){
   return /01[016789][\s\-.]?\d{3,4}[\s\-.]?\d{4}/.test(s) || /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(s);
 }
-function checkText(s, maxLen, label){
-  if(s.length < 2){ toast(T("내용을 입력해주세요")); return false; }
+function checkText(s, maxLen, minLen){
+  if(minLen === undefined) minLen = 2;
+  if(s.length < minLen){ toast(T("내용을 입력해주세요")); return false; }
   if(s.length > maxLen){ toast(T("너무 깁니다")); return false; }
   if(hasBadWord(s)){ toast(T("🛡️ 부적절한 표현이 포함되어 있습니다")); return false; }
   if(hasPersonalInfo(s)){ toast(T("🛡️ 전화번호·이메일 등 개인정보는 입력할 수 없습니다")); return false; }
@@ -1916,7 +1917,7 @@ async function sendChat(){
   if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
   if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
   const name = requireNick(); if(!name) return;
-  if(!checkText(text, 120) || !cooldownOK("chat")) return;
+  if(!checkText(text, 120, 1) || !cooldownOK("chat")) return;
   chatSending = true;
   try{
     await FB.push(FB.ref(FB.db, "chat"), { name, text, uid: MY_UID, ts: FB.serverTimestamp() });
@@ -2007,7 +2008,7 @@ async function sendReply(cid, inputEl){
   if(!MY_UID){ toast(T("연결 중입니다")); return; }
   if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
   const name = requireNick(); if(!name) return;
-  if(!checkText(text, 150) || !cooldownOK("reply")) return;
+  if(!checkText(text, 150, 1) || !cooldownOK("reply")) return;
   inputEl.value = "";
   try{
     await FB.push(FB.ref(FB.db, `comments/${cid}/replies`), { uid: MY_UID, name, text, ts: FB.serverTimestamp() });
@@ -2294,7 +2295,7 @@ async function sendPtMsg(pid, inputEl){
   const text = (inputEl.value||"").trim();
   if(!MY_UID || IS_BANNED) return;
   const name = requireNick(); if(!name) return;
-  if(!checkText(text, 120) || !cooldownOK("ptmsg")) return;
+  if(!checkText(text, 120, 1) || !cooldownOK("ptmsg")) return;
   inputEl.value = "";
   try{
     await FB.push(FB.ref(FB.db, `parties/${pid}/msgs`), { uid: MY_UID, name, text, ts: FB.serverTimestamp() });
