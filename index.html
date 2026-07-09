@@ -456,6 +456,17 @@
   .ptbtn:disabled{opacity:.45}
   /* ── 실시간 채팅 ── */
   .safetybar{background:var(--panel2);border:1px dashed var(--line);border-radius:11px;padding:8px 12px;font-size:11px;color:var(--sub);margin-bottom:9px}
+  /* ── 공지 탭 ── */
+  .notice{max-width:780px;margin:0 auto;line-height:1.7}
+  .notice .nlead{font-size:13.5px;color:var(--txt);margin:2px 0 15px;padding:13px 15px;background:var(--panel2);border:1px solid var(--line);border-radius:13px}
+  .notice .nlead b{color:var(--ricochet)}
+  .notice .ncard{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px 16px;margin-bottom:11px}
+  .notice .ncard h4{margin:0 0 9px;font-size:13.5px;color:var(--ricochet);font-weight:700}
+  .notice .ncard ul{margin:0;padding-left:4px;list-style:none}
+  .notice .ncard li{margin:6px 0;font-size:12.5px;color:var(--sub);padding-left:16px;text-indent:-16px}
+  .notice .ncard li b{color:var(--txt);font-weight:600}
+  .notice .nsign{font-size:12px;color:var(--sub);margin:14px 2px 0;line-height:1.6}
+  .notice .nsign b{color:var(--ricochet)}
   .chatbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;height:320px;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:7px;margin-bottom:8px}
   .chatmsg{display:flex;align-items:baseline;gap:7px;font-size:12.5px;line-height:1.55;word-break:break-word}
   .chatmsg .mtx{flex:1 1 auto;min-width:0}
@@ -513,7 +524,11 @@
 </header>
 
 <nav>
-  <button class="on" onclick="go('pick',this)">
+  <button class="on" onclick="go('notice',this)">
+    <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+    <span class="nlbl">공지</span>
+  </button>
+  <button onclick="go('pick',this)">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><line x1="12" y1="1.5" x2="12" y2="5.5"/><line x1="12" y1="18.5" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="5.5" y2="12"/><line x1="18.5" y1="12" x2="22.5" y2="12"/><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/></svg>
     <span class="nlbl">카운터픽</span>
   </button>
@@ -532,8 +547,13 @@
 </nav>
 
 <main>
+  <!-- 공지 탭 -->
+  <section id="tab-notice" class="tab on">
+    <div id="noticeBody"></div>
+  </section>
+
   <!-- 카운터픽 탭 -->
-  <section id="tab-pick" class="tab on">
+  <section id="tab-pick" class="tab">
     <h2>적 팀 픽 선택 <small>최대 3명 · 다시 누르면 해제</small></h2>
     <div class="grid" id="enemyGrid"></div>
     <div class="selbar" id="selbar"></div>
@@ -848,13 +868,13 @@ const HEROES = {
            skills:[{"name": "집속 수류탄", "desc": "작은 수류탄으로 쪼개지는 수류탄을 던집니다.", "slot": "기본", "lv": 1, "perks": ["소형 수류탄 수 증가", "수류탄 투척 속도 증가"]}, {"name": "접착 지뢰", "desc": "모든 표면에 달라붙는 지뢰를 던집니다.", "slot": "전술", "lv": 7, "perks": ["충전 수 증가", "폭발 지연 감소"]}, {"name": "로켓 세례", "desc": "강력한 유도 미사일을 발사합니다.", "slot": "궁극기", "lv": 12, "perks": ["미사일 수 증가", "미사일 기동성 증가"]}, {"name": "작은 공포", "desc": "세 발을 발사하는 돌격소총", "slot": "무기", "lv": 15, "perks": ["폭발 반경 증가", "이동 속도 증가"]}], lore:"트윙클은 기발한 아이디어와 발명품으로 유명한 실력 있는 엔지니어입니다. 하지만 발명품을 제대로 완성해 내는 경우는 굉장히 드물죠. 14년 전 오로라 운석 추락으로 부모를 잃고 고아원으로 가게 된 트윙클은 그곳에서 엔지니어링 분야에 첫발을 디뎠습니다. 트윙클의 여정은 리코셰로 이어졌고, 그녀는 그곳을 새로운 집으로 삼기로 다짐합니다.\n\n트윙클에 대한 재미있는 사실 하나는 물건을 날려버리는 것을 좋아한다는 것이죠! 처음에는 이러한 습관 때문에 꽤 많은 문제가 생겼지만, 이윽고 자신의 폭발적인 열정을 잘 활용하는 법을 배우게 됩니다. 대체로 그렇다는 말이죠."},
   leo:  {wpn:{name:"유산",desc:"발사 속도가 빠른 기관단총",rTier:"중근거리",rLv:3,rDesc:"연사 화기 — 중근거리 교전",fire:"기본",mech:"히트스캔·연사",code:"SubMachineGun"}, growth:{hp1:550,hpI:16.0,dps1:113,dpsI:3.357,gConf:true,hp15:774,dps15:160}, statConfirmed:true, ko:"레오",   en:"Leo",     role:"Damage",  tier:"A", hp:774, dps:"160", emoji:"🚀",
            skills:[{"name": "제트 서지", "desc": "강력한 제트팩 점프를 활성화합니다.", "slot": "기본", "lv": 1, "perks": ["이륙 시 피해 입힘", "스프링 사용 시 대기 시간 감소"]}, {"name": "스프링", "desc": "선택한 방향으로 짧게 돌진합니다.", "slot": "전술", "lv": 7, "perks": ["스프링 중 치명타 피해", "충전 수 증가"]}, {"name": "때려눕히기", "desc": "적을 기절시키는 수류탄을 던집니다.", "slot": "궁극기", "lv": 12, "perks": ["수류탄 수 증가", "기절 지속 시간 증가"]}, {"name": "유산", "desc": "발사 속도가 빠른 기관단총", "slot": "무기", "lv": 15, "perks": ["공기 제어 향상", "공중에서 발사 속도 증가"]}], lore:"레오는 세계에서 가장 영향력 있는 엑토엔지니어링 기업인 그랜트사 대표의 아들입니다. 하지만 레오는 그의 아버지가 주고자 했던 편안하고 안락한 삶을 바란 적이 없습니다. 대신 자신이 철부지가 아니라는 것을 증명하기 위해 스스로의 길을 개척하기로 했습니다.\n\n레오가 간직했던 과거의 물건은 커스텀 제트팩뿐이었습니다. 레오는 제트팩을 메고 빠르게 이동하며 적을 교란하고 아군을 지원했습니다. 이제 레오는 자신이 내세울 것은 가문 이름뿐이 아니라는 것을 증명하려 합니다. 그에게는 용기와 모험심, 죽여주는 제트팩이 있으니까요."},
-  vector:  {wpn:{name:"에코",desc:"5발을 연사하는 강력한 리볼버 권총",rTier:"중근거리",rLv:3,rDesc:"연사 화기 — 중근거리 교전",fire:"연사",mech:"히트스캔·연사",code:"Revolver + Staff"}, growth:{hp1:650,hpI:19.0,dps1:98,dpsI:2.357,gConf:true,hp15:916,dps15:131}, ko:"벡터",   en:"Vector",  role:"Damage",  tier:"E", hp:650, dps:92,  emoji:"💨",
+  vector:  {wpn:{name:"에코",desc:"5발을 연사하는 강력한 리볼버 권총",rTier:"중근거리",rLv:3,rDesc:"연사 화기 — 중근거리 교전",fire:"연사",mech:"히트스캔·연사",code:"Revolver + Staff"}, growth:{hp1:650,hpI:19.0,dps1:106,dpsI:2.357,gConf:true,hp15:916,dps15:139}, ko:"벡터",   en:"Vector",  role:"Damage",  tier:"E", hp:650, dps:100,  emoji:"💨",
            skills:[{"name": "지뢰 발동", "desc": "명령에 따라 폭발하는 접착 지뢰를 던집니다.", "slot": "기본", "lv": 1, "perks": ["지뢰로 제거 시 대기 시간 초기화", "접착 시 지뢰 발동 피해 증가"]}, {"name": "윈드게이트", "desc": "기류를 만들어 속도와 발사체를 한 방향으로 가속화합니다.", "slot": "전술", "lv": 7, "perks": ["통과 후 공격 범위 증가", "제거할 때마다 대기 시간 초기화"]}, {"name": "공명", "desc": "근접 피해 지팡이로 교체합니다.", "slot": "궁극기", "lv": 12, "perks": ["얼티밋 중 이동 속도 증가", "지팡이로 타격할 때마다 체력 회복"]}, {"name": "에코", "desc": "5발을 연사하는 강력한 리볼버 권총", "slot": "무기", "lv": 15, "perks": ["점사의 마지막 샷이 치명타 피해를 입힘", "기절 시간 감소"]}], lore:"벡터는 냉정하고 계산적인 전략가입니다. 자신을 강화하는 엑토늄만큼이나 정확하죠. 무자비하고 효율을 중시하는 벡터는 믿음이나 감정보다는 결과에 집중합니다.\n\n임무 때문에 이곳에 왔다고 주장하지만, 진의는 여전히 수수께끼로 남아 있습니다. 벡터는 항상 목적이 수단을 정당화한다고 생각합니다."},
   remedy:  {wpn:{name:"불가사의",desc:"에너지 빔을 발사하는 레이저 총",rTier:"중거리",rLv:4,rDesc:"지속 빔 — 거리 유지력이 화력의 핵심",fire:"기본",mech:"레이저·지속 빔",code:"Laser"}, growth:{hp1:550,hpI:16.0,range:true,dmin1:43,dminI:1.214,dmax1:104,dmaxI:3.143,gConf:true,hp15:774}, statConfirmed:true, ko:"레메디", en:"Remedy",  role:"Support", tier:"A", hp:774, dps:"60–148",  emoji:"💊",
            skills:[{"name": "응급처치", "desc": "체력을 회복하는 수류탄을 던집니다.", "slot": "기본", "lv": 1, "perks": ["충전 수 증가", "치유 수류탄이 이동 속도를 증가시킴"]}, {"name": "점프 패드", "desc": "지상에 점프 패드를 설치합니다.", "slot": "전술", "lv": 7, "perks": ["대기 시간 감소", "점프 패드로 치유 수류탄 투척"]}, {"name": "중력 깔때기", "desc": "범위 내 모든 것을 빨아들이는 깔때기를 생성합니다.", "slot": "궁극기", "lv": 12, "perks": ["활성 상태에서 피해를 입힘", "반경 증가"]}, {"name": "불가사의", "desc": "에너지 빔을 발사하는 레이저 총", "slot": "무기", "lv": 15, "perks": ["레이저 냉각 감소", "착지 시 피해를 입힘"]}], lore:"레메디는 자원을 차지하기 위해 끝없이 전쟁을 벌이는 악명 높은 엠페리움 출신입니다. 그녀는 자국의 이상을 숭배하며 자랐고, 그 가치를 옹호하며 자랑스러운 군의관으로 복무했습니다. 하지만 개인적인 비극을 맞이한 후 레메디의 세상이 흔들렸고, 자신이 믿었던 모든 것에 의문을 갖게 되었습니다.\n\n자국의 만행 뒤에 숨겨진 냉엄한 현실을 깨달은 레메디는 도망자가 될 것이라는 것을 알면서도 엠페리움으로부터 등을 돌렸습니다. 이제 그녀는 군대의 규율과 제국의 야망에서 벗어나 새로운 삶을 시작하려 합니다."},
   khan:  {wpn:{name:"시냅스",desc:"전기 급증을 일으키는 총",rTier:"중거리",rLv:4,rDesc:"전기 빔 — 최대 4명 연쇄 타격 (파일 확정)",fire:"기본",mech:"레이저·4연쇄",code:"ElectricGun"}, growth:{hp1:550,hpI:16.0,dps1:82,dpsI:2.429,gConf:true,hp15:774,dps15:116}, ko:"칸",     en:"Khan",    role:"Support", tier:"D", hp:550, dps:82,  emoji:"🔮",
            skills:[{"name": "추적기", "desc": "라이벌을 추적하고 충격 시 피해를 입히는 구체를 방출합니다.", "slot": "기본", "lv": 1, "perks": ["피해 시 실드 매트릭스 대기 시간 감소", "구체 충격 시 폭발"]}, {"name": "실드 매트릭스", "desc": "충격을 일으켜 범위 내 아군에게 방어막을 부여합니다.", "slot": "전술", "lv": 7, "perks": ["충격 시 이동 속도 증가", "첫 충격 시 무적"]}, {"name": "포탑", "desc": "어깨에 장착한 자동 발사 포탑을 배치합니다.", "slot": "궁극기", "lv": 12, "perks": ["포탑이 파괴되지 않고 만료되면 얼티밋 충전", "포탑 체력 증가"]}, {"name": "시냅스", "desc": "전기 급증을 일으키는 총", "slot": "무기", "lv": 15, "perks": ["연쇄 번개 볼트 발사", "방어막 획득 시 공격 범위 증가"]}], lore:"짐 칸 박사는 오로라 충돌 이후에 엑토늄을 연구한 최초의 과학자 중 한 명이었습니다. 박사는 희망을 품고 그랜트사에 몸을 담았지만, 그의 작업물이 무기가 되었을 때 회사를 떠났습니다. 구원을 찾고 싶었던 칸은 리코셰를 구축했고, 자신의 연구를 수행할 팀을 구성했습니다. \n\n그러나 그가 발명한 합성 엑토늄 코어가 오염을 확산시켜 땅을 뒤틀고 닿는 모든 것을 집어삼켰습니다.\n\n칸은 자신의 실수에 대한 책임을 짊어지고 있습니다. 칸은 투사가 아닙니다. 그는 임무의 지휘자로 침착하고 정확하며, 여전히 자신이 파괴한 것을 되돌리려 합니다."},
-  fury:  {wpn:{name:"천둥",desc:"두 발을 빠르게 발사하는 이중 총열 산탄총",rTier:"근거리",rLv:2,rDesc:"산탄 — 가까울수록 강함",fire:"점사",mech:"히트스캔·산탄",code:"Gun(이중총열)"}, growth:{hp1:725,hpI:21.0,dps1:82,dpsI:2.5,gConf:true,hp15:1019,dps15:117}, ko:"퓨리",   en:"Fury",    role:"Tank",    tier:"B", hp:725, dps:82,  emoji:"🥊",
+  fury:  {wpn:{name:"천둥",desc:"두 발을 빠르게 발사하는 이중 총열 산탄총",rTier:"근거리",rLv:2,rDesc:"산탄 — 가까울수록 강함",fire:"점사",mech:"히트스캔·산탄",code:"Gun(이중총열)"}, growth:{hp1:750,hpI:22.0,dps1:82,dpsI:2.5,gConf:true,hp15:1058,dps15:117}, ko:"퓨리",   en:"Fury",    role:"Tank",    tier:"B", hp:750, dps:82,  emoji:"🥊",
            skills:[{"name": "킥", "desc": "라이벌에게 피해를 입히고 기절시키는 강력한 타격을 가합니다.", "slot": "기본", "lv": 1, "perks": ["기절 지속 시간 증가", "마지막 명중 후 킥 대기 시간 초기화"]}, {"name": "오버드라이브", "desc": "받는 피해를 방어막으로 전환합니다.", "slot": "전술", "lv": 7, "perks": ["방어막 생성 중 속도 증가", "방어막 생성 후 폭발"]}, {"name": "지진의 분열", "desc": "에너지를 땅으로 흘려보내 전방에 바위 장애물을 생성합니다.", "slot": "궁극기", "lv": 12, "perks": ["배치 시 피해 입힘", "장애물 수 증가"]}, {"name": "천둥", "desc": "두 발을 빠르게 발사하는 이중 총열 산탄총", "slot": "무기", "lv": 15, "perks": ["제거 시 방어막 획득", "기절한 라이벌에게 치명타 피해"]}], lore:"한때 영국군 정예병이었던 퓨리는 완벽한 투사 양성을 목표로 했던 엑소슈트 기밀 프로그램에 선발되었습니다. 하지만 결국 퓨리는 망가졌습니다. 척추 부상으로 경력은 끝나버렸고, 군대는 증거를 묻었습니다.\n\n실패작으로 낙인찍힌 퓨리는 조용히 전역을 하게 되었습니다. 하지만 '선물' 하나를 얻었죠. 그녀의 목숨을 지킨 불안정한 엑소스켈레톤 프로토타입이었습니다. 퓨리는 자신을 살리는 동시에 자신을 가두는 슈트를 유지하며 어둠 속에서 살아남았습니다.\n\n칸 박사는 그녀의 슈트를 재건하여 무기로 탈바꿈시켰습니다. 이제 퓨리는 다시 일어나 명령이 아닌 자신을 위해서 싸우고 있습니다."},
   jagger:  {wpn:{name:"중무장",desc:"발사 속도가 점점 빨라지는 블래스터 중기관총",rTier:"중거리",rLv:4,rDesc:"기관총 — 지속 사격",fire:"연사",mech:"히트스캔·연사",code:"Machinegun"}, growth:{hp1:700,hpI:20.0,range:true,dmin1:55,dminI:1.643,dmax1:96,dmaxI:5.5,gConf:true,hp15:980}, statConfirmed:true, ko:"재거",   en:"Jagger",  role:"Tank",    tier:"C", hp:980, dps:"78–173",  emoji:"🧱",
            skills:[{"name": "강화 벽", "desc": "영웅 앞에 벽을 세워 공격을 막습니다.", "slot": "기본", "lv": 1, "perks": ["충전 수 증가", "벽 크기 및 체력 증가"]}, {"name": "레킹 볼", "desc": "빠르게 굴러가는 구체로 변신해 적을 기절시킵니다.", "slot": "전술", "lv": 7, "perks": ["들이받기 충돌 피해 증가", "레킹 볼에서 나온 후 방어막 획득"]}, {"name": "접근 금지 구역", "desc": "주위에 지뢰를 뿌립니다.", "slot": "궁극기", "lv": 12, "perks": ["지뢰 수 증가", "활성화 시 모든 대기 시간 초기화"]}, {"name": "중무장", "desc": "발사 속도가 점점 빨라지는 블래스터 중기관총", "slot": "무기", "lv": 15, "perks": ["얼티밋 충전 속도 증가", "최대 발사 속도 증가"]}], lore:"재거는 제대로 인정받지 못한 천재 과학자였습니다. 엉뚱한 결과로 이어지는 발명품을 만들어 내는 재주가 있었죠. 한번은 마음을 담은 선물을 만들었는데, 그 토스터는 쥐를 감지할 때마다 불길을 내뿜었습니다. 재거는 일에만 몰두하는 바람에 다른 것에는 신경을 쓸 겨를이 없었습니다. 물론 가족과 함께할 시간도 없었죠.\n\n그의 아내가 떠났을 때 재거의 세상은 무너졌습니다. 그리고 그 결과 일에 대한 집착은 더 강해졌습니다. 그런 최악의 상황에서 재거는 독특한 발명품을 개발했습니다. 거대한 기계 구체로 변신할 수 있는 슈트였죠. 처음에는 또 다른 실패작처럼 보였지만, 재거는 이내 그 힘을 이해하고 활용했습니다. 강한 정신과 혁신적인 방어구를 갖춘 재거는 출격할 준비가 되었습니다!"},
@@ -1127,12 +1147,14 @@ function renderDex(){
   document.getElementById("dex").innerHTML = Object.entries(HEROES).map(([id,h])=>{
     const g=h.growth, L=h._lv||15;
     const hp=statAt(g,L,"hp"), dps=statAt(g,L,"dps");
+    const commT=(window.RS_COMM_TIER&&window.RS_COMM_TIER[id]);   // 커뮤니티 최다 득표 티어
+    const tierShown=commT||h.tier;                                // 투표 없으면 제작자 평가로 폴백
     return `
     <div class="hero">
       <div class="top">
         <div class="ic">${icon(id)}</div>
         <div><div class="nm">${T(h.ko)}</div><div class="en">${h.en} · <span class="r-${h.role}">${T(ROLE_KO[h.role])}</span></div></div>
-        <div class="tier ${TIER_CLASS[h.tier]||'C'}">${h.tier}</div>
+        <div class="tier ${TIER_CLASS[tierShown]||'C'}"${commT?` title="${T("커뮤니티 투표 티어")}"`:``}>${tierShown}</div>
       </div>
       <div class="lvbar">
         <span class="lvnum">Lv.<b>${L}</b></span>
@@ -1404,15 +1426,106 @@ const TAB_INFO={
   edit:{title:"상성 편집",desc:"실전 경험으로 상성을 직접 수정 · 백업 지원"},
   vote:{title:"커뮤니티",desc:"실시간 채팅 · 티어 투표 · 팁 · 피드백 · 방문자 통계"}
 };
+/* ════════ 📢 공지 (첫 탭) — 4개 언어 ════════ */
+const NOTICE = {
+  ko:{ label:"공지", title:"공지", desc:"사이트 소식 · 앞으로의 운영 방향",
+    html:`<div class="notice">
+      <p class="nlead">안녕하세요, 이 사이트를 만들고 운영하는 <b>MAMMON</b>입니다. RICOCHET SQUAD를 사랑하는 분들을 위한 <b>비공식 팬 사이트</b>예요. 게임을 더 재미있게 즐기실 수 있도록 정확한 정보와 커뮤니티를 계속 다듬고 있습니다.</p>
+      <div class="ncard"><h4>✅ 지금까지 만든 것</h4><ul>
+        <li>🎯 <b>카운터픽</b> — 적 조합에 맞는 상성 추천</li>
+        <li>📖 <b>도감</b> — 13영웅 스탯·스킬·퍽을 게임 데이터에서 직접 추출·검증 (레벨 1~15)</li>
+        <li>💬 <b>커뮤니티</b> — 실시간 채팅·파티 모집·티어 투표·팁·피드백 (한/영/일/중 자동 번역)</li>
+        <li>🔒 <b>안전</b> — 욕설·개인정보 필터, 신고, 보안 강화</li>
+      </ul></div>
+      <div class="ncard"><h4>🆕 최근 업데이트</h4><ul>
+        <li>게임 <b>v2.1.1</b> 밸런스 패치 반영 (퓨리·벡터 스탯 등)</li>
+        <li>도감 티어에 <b>여러분의 투표(커뮤니티 티어)</b>를 실시간 반영</li>
+      </ul></div>
+      <div class="ncard"><h4>🤝 앞으로의 약속</h4><ul>
+        <li>게임이 패치되면 <b>추측이 아닌 실제 게임 데이터</b>를 기준으로 최대한 빠르고 정확하게 반영하겠습니다</li>
+        <li>여러분의 <b>피드백과 티어 투표</b>를 사이트에 계속 녹이겠습니다</li>
+        <li><b>광고 없이 무료로</b>, 공정하고 안전한 커뮤니티를 지키겠습니다</li>
+      </ul></div>
+      <p class="nsign">비공식 팬메이드 · 게임사와 무관합니다. 제안·오류 제보는 <b>커뮤니티 → 피드백</b>으로 언제든 환영합니다. 함께 만들어가요. 감사합니다!<br>— 운영자 <b>MAMMON</b></p>
+    </div>` },
+  en:{ label:"Notice", title:"Notice", desc:"Site news · where we're headed",
+    html:`<div class="notice">
+      <p class="nlead">Hi, I'm <b>MAMMON</b>, the creator and operator of this site — an <b>unofficial fan site</b> for RICOCHET SQUAD lovers. I keep refining accurate info and the community so you can enjoy the game even more.</p>
+      <div class="ncard"><h4>✅ What we've built</h4><ul>
+        <li>🎯 <b>Counter-pick</b> — matchup picks for the enemy lineup</li>
+        <li>📖 <b>Hero Dex</b> — 13 heroes' stats/skills/perks extracted & verified from game data (Lv 1–15)</li>
+        <li>💬 <b>Community</b> — live chat, party finder, tier votes, tips, feedback (auto-translated KO/EN/JA/ZH)</li>
+        <li>🔒 <b>Safety</b> — profanity/personal-info filters, reporting, hardened security</li>
+      </ul></div>
+      <div class="ncard"><h4>🆕 Recent updates</h4><ul>
+        <li>Reflected game <b>v2.1.1</b> balance patch (Fury, Vector stats, etc.)</li>
+        <li>Hero-dex tiers now reflect <b>your community votes</b> in real time</li>
+      </ul></div>
+      <div class="ncard"><h4>🤝 Our promise</h4><ul>
+        <li>When the game gets patched, we reflect it fast and accurately — <b>based on real game data, never guesses</b></li>
+        <li>We keep weaving your <b>feedback and tier votes</b> into the site</li>
+        <li><b>Ad-free, always free</b> — a fair and safe community</li>
+      </ul></div>
+      <p class="nsign">Unofficial fan-made · not affiliated with the game studio. Suggestions & bug reports always welcome via <b>Community → Feedback</b>. Let's build it together. Thank you!<br>— <b>MAMMON</b></p>
+    </div>` },
+  ja:{ label:"お知らせ", title:"お知らせ", desc:"サイトの最新情報 · 今後の方針",
+    html:`<div class="notice">
+      <p class="nlead">こんにちは、このサイトを制作・運営している <b>MAMMON</b> です。RICOCHET SQUAD を愛する皆さんのための<b>非公式ファンサイト</b>です。より楽しく遊べるよう、正確な情報とコミュニティを磨き続けています。</p>
+      <div class="ncard"><h4>✅ これまで作ったもの</h4><ul>
+        <li>🎯 <b>カウンターピック</b> — 敵の編成に合わせた相性おすすめ</li>
+        <li>📖 <b>図鑑</b> — 13ヒーローのステータス・スキル・パークをゲームデータから直接抽出・検証（Lv1〜15）</li>
+        <li>💬 <b>コミュニティ</b> — リアルタイムチャット・パーティ募集・ティア投票・攻略メモ・フィードバック（韓/英/日/中 自動翻訳）</li>
+        <li>🔒 <b>安全</b> — 暴言・個人情報フィルター、通報、セキュリティ強化</li>
+      </ul></div>
+      <div class="ncard"><h4>🆕 最近のアップデート</h4><ul>
+        <li>ゲーム <b>v2.1.1</b> バランス調整を反映（Fury・Vector のステータス等）</li>
+        <li>図鑑のティアに<b>皆さんの投票（コミュニティティア）</b>をリアルタイム反映</li>
+      </ul></div>
+      <div class="ncard"><h4>🤝 これからの約束</h4><ul>
+        <li>ゲームがアップデートされたら、<b>推測ではなく実際のゲームデータ</b>を基に、できる限り早く正確に反映します</li>
+        <li>皆さんの<b>フィードバックとティア投票</b>をサイトに反映し続けます</li>
+        <li><b>広告なし・無料</b>で、公平で安全なコミュニティを守ります</li>
+      </ul></div>
+      <p class="nsign">非公式ファンメイド・ゲーム会社とは無関係です。ご提案・不具合報告は<b>コミュニティ→フィードバック</b>へいつでもどうぞ。一緒に作っていきましょう。ありがとうございます！<br>— <b>MAMMON</b></p>
+    </div>` },
+  zh:{ label:"公告", title:"公告", desc:"網站消息 · 未來方向",
+    html:`<div class="notice">
+      <p class="nlead">您好，我是製作與營運本站的 <b>MAMMON</b>。這是為熱愛 RICOCHET SQUAD 的玩家打造的<b>非官方粉絲網站</b>。我持續打磨準確的資訊與社群，讓你更盡興地遊玩。</p>
+      <div class="ncard"><h4>✅ 目前已完成</h4><ul>
+        <li>🎯 <b>剋制選角</b> — 依敵方陣容推薦剋制英雄</li>
+        <li>📖 <b>圖鑑</b> — 13 位英雄的數值·技能·天賦，直接從遊戲資料擷取並驗證（Lv1〜15）</li>
+        <li>💬 <b>社群</b> — 即時聊天·組隊招募·梯隊投票·攻略·意見回饋（韓/英/日/中 自動翻譯）</li>
+        <li>🔒 <b>安全</b> — 髒話·個資過濾、檢舉、資安強化</li>
+      </ul></div>
+      <div class="ncard"><h4>🆕 最近更新</h4><ul>
+        <li>反映遊戲 <b>v2.1.1</b> 平衡調整（Fury·Vector 等數值）</li>
+        <li>圖鑑梯隊即時反映<b>大家的投票（社群梯隊）</b></li>
+      </ul></div>
+      <div class="ncard"><h4>🤝 未來的承諾</h4><ul>
+        <li>遊戲更新時，<b>以實際遊戲資料為準，絕不臆測</b>，盡快且準確地反映</li>
+        <li>持續把大家的<b>回饋與梯隊投票</b>融入網站</li>
+        <li><b>無廣告·永久免費</b>，守護公平又安全的社群</li>
+      </ul></div>
+      <p class="nsign">非官方粉絲創作·與遊戲公司無關。建議與錯誤回報，歡迎透過 <b>社群→意見回饋</b> 隨時提出。一起打造吧，感謝！<br>— <b>MAMMON</b></p>
+    </div>` }
+};
+function renderNotice(){ const el=document.getElementById("noticeBody"); if(el) el.innerHTML=(NOTICE[LANG]||NOTICE.ko).html; }
 function go(t,btn){
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
   document.getElementById("tab-"+t).classList.add("on");
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("on"));
   btn.classList.add("on");
-  const info=TAB_INFO[t];
-  if(info){
-    document.getElementById("headTitle").textContent=T(info.title);
-    document.getElementById("headDesc").textContent=T(info.desc);
+  if(t==="notice"){
+    const n=NOTICE[LANG]||NOTICE.ko;
+    document.getElementById("headTitle").textContent=n.title;
+    document.getElementById("headDesc").textContent=n.desc;
+    renderNotice();
+  } else {
+    const info=TAB_INFO[t];
+    if(info){
+      document.getElementById("headTitle").textContent=T(info.title);
+      document.getElementById("headDesc").textContent=T(info.desc);
+    }
   }
   window.scrollTo(0,0);
   if(t==="vote" && window.rsChatToBottom) setTimeout(window.rsChatToBottom, 60);
@@ -1506,7 +1619,7 @@ function T(s){ if(LANG==="ko"||s==null||s==="") return s; const d=I18N[LANG]; re
 function applyStatic(){
   const nav=document.querySelectorAll("nav button");
   const nlb=document.querySelectorAll("nav button .nlbl");
-  if(nlb.length>=4){ nlb[0].textContent=T("카운터픽"); nlb[1].textContent=T("도감"); nlb[2].textContent=T("커뮤니티"); nlb[3].textContent=T("게임정보"); }
+  if(nlb.length>=5){ nlb[0].textContent=(NOTICE[LANG]||NOTICE.ko).label; nlb[1].textContent=T("카운터픽"); nlb[2].textContent=T("도감"); nlb[3].textContent=T("커뮤니티"); nlb[4].textContent=T("게임정보"); }
   const h2p=document.querySelectorAll("#tab-pick h2");
   if(h2p[0]) h2p[0].innerHTML=`${T("적 팀 픽 선택")} <small>${T("최대 3명 · 다시 누르면 해제")}</small>`;
   if(h2p[1]) h2p[1].innerHTML=`${T("추천 픽")} <small>${T("상성 66항목 · 미러픽 · 팀 조합 분석 · 궁연계")}</small>`;
@@ -1538,11 +1651,19 @@ function applyStatic(){
   const ag=document.querySelector(".authAgree"); if(ag) ag.textContent=T("동의하고 시작하기");
   const ah=document.querySelector(".authBox h3 .y"); if(ah) ah.textContent=T("카운터픽");
   document.title=T("리코셰 스쿼드 카운터픽");
-  const tabs=["pick","dex","info","edit"];
+  const tabs=["notice","pick","dex","vote","info"];
   const idx=[...document.querySelectorAll("nav button")].findIndex(b=>b.classList.contains("on"));
-  const info=TAB_INFO[tabs[idx>=0?idx:0]];
-  document.getElementById("headTitle").textContent=T(info.title);
-  document.getElementById("headDesc").textContent=T(info.desc);
+  const curT=tabs[idx>=0?idx:0];
+  if(curT==="notice"){
+    const n=NOTICE[LANG]||NOTICE.ko;
+    document.getElementById("headTitle").textContent=n.title;
+    document.getElementById("headDesc").textContent=n.desc;
+  } else {
+    const info=TAB_INFO[curT];
+    document.getElementById("headTitle").textContent=T(info.title);
+    document.getElementById("headDesc").textContent=T(info.desc);
+  }
+  renderNotice();
 }
 function setLang(l){
   LANG=l; try{localStorage.setItem("rs_lang",l)}catch(e){}
@@ -1555,7 +1676,7 @@ function setLang(l){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.08-h";
+const SITE_VERSION = "2026.07.09-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -1818,6 +1939,13 @@ function renderBoard(){
     `<span>${T("실시간 자동 갱신")} <b style="color:var(--good)">●</b></span>`;
   const bucket = { S:[], A:[], B:[], C:[], D:[] };
   rows.forEach(r => { if(r.n) bucket[r.top].push(r); });
+  // 도감 티어 배지에 커뮤니티 최다 득표 티어 반영 (투표 있는 영웅만; 바뀔 때만 도감 재렌더)
+  const commMap = {};
+  rows.forEach(r => { if(r.n) commMap[r.k] = r.top; });
+  if(JSON.stringify(commMap) !== JSON.stringify(window.RS_COMM_TIER || {})){
+    window.RS_COMM_TIER = commMap;
+    if(window.renderDex) window.renderDex();
+  }
   board.innerHTML = TIERS.map(t => {
     const list = bucket[t].sort((a,b)=>b.n-a.n || b.avg-a.avg);
     const chips = list.length
