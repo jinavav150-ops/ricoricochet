@@ -192,7 +192,9 @@
   .ghead b{font-size:13.5px;color:var(--ricochet)}
   .ghead .gsub{font-size:11px;color:var(--sub)}
   .ghead .gtoday{margin-left:auto;font-size:10.5px;color:var(--good);background:rgba(74,222,128,.1);border-radius:8px;padding:2px 8px;white-space:nowrap}
-  .glist{display:flex;flex-direction:column;gap:4px;margin-bottom:9px}
+  .glist{display:flex;flex-direction:column;gap:4px;margin-bottom:9px;max-height:272px;overflow-y:auto;overscroll-behavior:contain;padding-right:4px;-webkit-overflow-scrolling:touch}
+  .glist::-webkit-scrollbar{width:5px}
+  .glist::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
   .glist:empty{display:none}
   .gitem{display:flex;align-items:baseline;gap:6px;font-size:12px;color:var(--txt);flex-wrap:wrap;line-height:1.55}
   .gitem .gwv{flex-shrink:0}
@@ -2116,7 +2118,7 @@ function setLang(l){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.09-t";
+const SITE_VERSION = "2026.07.10-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3063,7 +3065,7 @@ function renderGreets(){
   const todayN = gCache.filter(g => (g.ts||0) >= t0.getTime()).length;
   document.getElementById("gToday").textContent = todayN ? GL("today").replace("{n}", todayN) : "";
   const items = gCache.slice().sort((a,b)=>(b.ts||0)-(a.ts||0))
-    .filter(g => !isHidden("greets", g.id) || IS_ADMIN).slice(0,8);
+    .filter(g => !isHidden("greets", g.id) || IS_ADMIN);   // 전체 표시 (목록 자체가 스크롤)
   document.getElementById("gList").innerHTML = items.length ? items.map(g => {
     const mine = g.uid === MY_UID;
     const tr = bdTrCache["g:"+g.id];
@@ -3493,7 +3495,7 @@ FB.onValue(FB.query(FB.ref(FB.db, "board"), FB.limitToLast(50)), snap => {
   bdCache = Object.entries(v).map(([id,p]) => ({ id, ...p }));
   renderBd();
 });
-FB.onValue(FB.query(FB.ref(FB.db, "greets"), FB.limitToLast(100)), snap => {
+FB.onValue(FB.query(FB.ref(FB.db, "greets"), FB.limitToLast(300)), snap => {
   const v = snap.val() || {};
   gCache = Object.entries(v).map(([id,g]) => ({ id, ...g }));
   renderGreets();
