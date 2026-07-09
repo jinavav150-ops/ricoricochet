@@ -1532,23 +1532,23 @@ function renderNotice(){ const el=document.getElementById("noticeBody"); if(el) 
 /* ════════ ⚠ 권한 고지(모달)·하단 바 — 팬메이드 톤 · 4개 언어 ════════ */
 const AUTH = {
   ko:{ badge:"⚠ 비공식 팬사이트", agree:"동의하고 시작하기",
-    body:`<div class="block"><span class="label">🎮 팬이 만든 사이트</span>이 사이트는 RICOCHET SQUAD를 좋아하는 팬 <b>MAMMON</b>이 재미로 만든 <b>비공식 사이트</b>예요. 게임 제작사와는 무관합니다.</div>
-      <div class="block"><span class="label">🙏 편하게 봐주세요</span>정보에 오류가 있을 수 있어요 (계속 고쳐가는 중!). 이 사이트의 창작물을 <b>통째로 복제·재배포</b>하는 것만 삼가주시면, 나머지는 마음껏 즐겨주세요!</div>
+    body:`<div class="block"><span class="label">🎯 이 사이트의 목적</span>RICOCHET SQUAD를 새로 시작한 분들이 <b>쉽게 정보를 얻고 빠르게 성장</b>하도록, 그리고 유저들이 <b>함께 소통</b>하도록 만들었습니다. 영웅 도감·상성·공략부터 실시간 채팅·파티·티어 투표까지 한곳에서요.</div>
+      <div class="block"><span class="label">🤝 믿고 함께 만들어가요</span>영웅 데이터는 <b>실제 게임 파일과 공식 패치노트</b>를 기준으로 만들고 업데이트마다 반영합니다 (한·영·일·중 지원). 팬 <b>MAMMON</b>이 운영하는 비공식 사이트로 제작사와 무관하며, 오류 제보·제안은 언제든 환영해요!</div>
       <span class="authprompt">아래 버튼을 눌러 시작하기</span>`,
     footer:`팬이 만든 비공식 사이트 · 제작 <b>MAMMON</b> · 게임사와 무관` },
   en:{ badge:"⚠ Unofficial fan site", agree:"Agree & start",
-    body:`<div class="block"><span class="label">🎮 A fan-made site</span>This is an <b>unofficial site</b> made for fun by <b>MAMMON</b>, a fan of RICOCHET SQUAD. It is not affiliated with the game studio.</div>
-      <div class="block"><span class="label">🙏 Please enjoy</span>Some info may be inaccurate (always improving!). Just please don't <b>copy or redistribute</b> the site's content wholesale — otherwise, enjoy!</div>
+    body:`<div class="block"><span class="label">🎯 Why this site exists</span>To help players new to RICOCHET SQUAD <b>find info and grow quickly</b>, and to give the community a place to <b>connect</b>. Hero guides, counter-picks and tips, plus live chat, party finder and tier votes — all in one place.</div>
+      <div class="block"><span class="label">🤝 Trusted, and built together</span>Hero data is based on the <b>actual game files and official patch notes</b>, updated with every patch (Korean/English/Japanese/Chinese). An unofficial site run by <b>MAMMON</b>, a fan — not affiliated with the studio. Corrections & ideas always welcome!</div>
       <span class="authprompt">Tap the button below to start</span>`,
     footer:`Unofficial fan site · made by <b>MAMMON</b> · not affiliated with the studio` },
   ja:{ badge:"⚠ 非公式ファンサイト", agree:"同意して始める",
-    body:`<div class="block"><span class="label">🎮 ファンが作ったサイト</span>このサイトは RICOCHET SQUAD が好きなファン <b>MAMMON</b> が趣味で作った<b>非公式サイト</b>です。ゲーム会社とは無関係です。</div>
-      <div class="block"><span class="label">🙏 気軽にどうぞ</span>情報に誤りがあるかもしれません（随時修正中！）。当サイトの制作物を<b>丸ごと複製・再配布</b>することだけはご遠慮ください。それ以外はどうぞお楽しみください！</div>
+    body:`<div class="block"><span class="label">🎯 このサイトの目的</span>RICOCHET SQUAD を始めたばかりの方が<b>情報を得て早く成長</b>できるように、そしてユーザー同士が<b>交流</b>できる場になるように作りました。ヒーロー図鑑・相性・攻略から、リアルタイムチャット・パーティ募集・ティア投票までひとつに。</div>
+      <div class="block"><span class="label">🤝 信頼と、みんなで一緒に</span>ヒーローデータは<b>実際のゲームファイルと公式パッチノート</b>を基に、アップデートごとに反映します（韓・英・日・中対応）。ファン <b>MAMMON</b> が運営する非公式サイトで、ゲーム会社とは無関係です。ご指摘・ご提案はいつでも歓迎します！</div>
       <span class="authprompt">下のボタンを押して始めましょう</span>`,
     footer:`非公式ファンサイト · 制作 <b>MAMMON</b> · ゲーム会社とは無関係` },
   zh:{ badge:"⚠ 非官方粉絲網站", agree:"同意並開始",
-    body:`<div class="block"><span class="label">🎮 粉絲製作的網站</span>本站是熱愛 RICOCHET SQUAD 的粉絲 <b>MAMMON</b> 出於興趣製作的<b>非官方網站</b>，與遊戲公司無關。</div>
-      <div class="block"><span class="label">🙏 請盡情使用</span>資訊可能有誤（持續修正中！）。只要不<b>整站複製·轉載</b>本站的創作內容，其餘歡迎盡情使用！</div>
+    body:`<div class="block"><span class="label">🎯 本站的目的</span>希望幫助剛接觸 RICOCHET SQUAD 的玩家<b>輕鬆取得資訊、快速成長</b>，也讓玩家能<b>互相交流</b>。從英雄圖鑑·剋制·攻略，到即時聊天·組隊·梯隊投票，全都在這裡。</div>
+      <div class="block"><span class="label">🤝 值得信賴，一起打造</span>英雄資料以<b>實際遊戲檔案與官方更新說明</b>為準製作，每次更新都會反映（韓·英·日·中）。由粉絲 <b>MAMMON</b> 營運的非官方網站，與遊戲公司無關。隨時歡迎回報與建議！</div>
       <span class="authprompt">點擊下方按鈕開始</span>`,
     footer:`非官方粉絲網站 · 製作 <b>MAMMON</b> · 與遊戲公司無關` }
 };
@@ -1725,7 +1725,7 @@ function setLang(l){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.09-e";
+const SITE_VERSION = "2026.07.09-f";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
