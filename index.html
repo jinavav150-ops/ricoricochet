@@ -209,6 +209,8 @@
   .gin input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:9px;color:var(--txt);padding:8px 11px;font-size:12.5px;font-family:inherit;outline:none}
   .gin input:focus{border-color:var(--ricochet)}
   .gdone{font-size:12px;color:var(--good);background:rgba(74,222,128,.08);border-radius:9px;padding:8px 11px}
+  /* 공식 운영진 배지 (uid 기준) */
+  .stfbdg{display:inline-flex;align-items:center;font-size:9.5px;font-weight:800;letter-spacing:.4px;color:#22d3ee;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.4);border-radius:6px;padding:1px 6px;margin-left:5px;white-space:nowrap;flex-shrink:0;cursor:help}
   .weapon{background:var(--panel2);border-radius:9px;padding:8px 10px;margin-bottom:8px}
   .wtop{display:flex;align-items:center;gap:8px}
   .wtop b{font-size:13px;color:var(--txt)}
@@ -2118,7 +2120,7 @@ function setLang(l){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.10-a";
+const SITE_VERSION = "2026.07.10-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -2167,7 +2169,18 @@ const hName = k => T(HEROES[k]?.ko || k);
 
 /* ══════ 🛡️ 안전 시스템 ══════ */
 const BAD_WORDS = ["시발","씨발","씨빨","씨팔","시팔","ㅅㅂ","ㅆㅂ","병신","ㅂㅅ","븅신","지랄","ㅈㄹ","존나","ㅈㄴ","좆","니미","니애미","니엄마","엠창","애미","애비","느금","개새끼","개색","개세끼","새끼","색기","썅","등신","저능아","한남충","김치녀","보지","자지","꼬추","섹스","야동","창녀","창놈","걸레","강간","fuck","fucking","shit","bitch","asshole","nigger","sex","porn"];
-const RESERVED_NAMES = ["mammon","관리자","운영자","admin","administrator","제작자","운영진","gm","mod"];
+const RESERVED_NAMES = ["mammon","관리자","운영자","admin","administrator","제작자","운영진","gm","mod","pistoli"];
+/* ── 공식 운영진 표시 ──
+   uid 기준이라 사칭 불가(닉네임만 흉내내면 RESERVED_NAMES가 차단, 배지는 안 붙음).
+   새 운영진이 방문하면 방명록 등에서 uid 확인 후 여기에 한 줄 추가. */
+const RS_STAFF = {
+  "THuJlJYHPiRJb0RjkpuU2QOAkCv1": { name:"PISTOLI", role:{ko:"리코셰 스쿼드 공식 운영진",en:"Official RICOCHET SQUAD staff",ja:"RICOCHET SQUAD 公式運営",zh:"RICOCHET SQUAD 官方團隊"} }
+};
+const STAFF_BADGE_L = {ko:"운영진",en:"STAFF",ja:"運営",zh:"官方"};
+function staffBadge(uid){
+  const s = RS_STAFF[uid]; if(!s) return "";
+  return `<span class="stfbdg" title="${(s.role[LANG]||s.role.ko)}">✓ ${STAFF_BADGE_L[LANG]||STAFF_BADGE_L.ko}</span>`;
+}
 const normTxt = s => String(s).toLowerCase().replace(/[\s\-_.,!?~^*+=/\\|()\[\]{}<>'"`:;@#$%&0-9]/g,"");
 function hasBadWord(s){ const n = normTxt(s); return BAD_WORDS.some(w => n.includes(normTxt(w))); }
 function hasPersonalInfo(s){
@@ -2184,7 +2197,7 @@ function checkText(s, maxLen, minLen){
 function checkName(s){
   if(s.length < 2 || s.length > 12){ toast(T("닉네임은 2~12자로 입력해주세요")); return false; }
   if(hasBadWord(s)){ toast(T("🛡️ 사용할 수 없는 닉네임입니다")); return false; }
-  if(!IS_ADMIN && RESERVED_NAMES.includes(normTxt(s))){ toast(T("🛡️ 사용할 수 없는 닉네임입니다 (사칭 방지)")); return false; }
+  if(!IS_ADMIN && !RS_STAFF[MY_UID] && RESERVED_NAMES.includes(normTxt(s))){ toast(T("🛡️ 사용할 수 없는 닉네임입니다 (사칭 방지)")); return false; }
   return true;
 }
 /* ══════ 👤 통합 커뮤니티 닉네임 ══════ */
@@ -2226,7 +2239,7 @@ function requireNick(){
 function checkNameSilent(s){
   if(s.length < 2 || s.length > 12) return false;
   if(hasBadWord(s)) return false;
-  if(!IS_ADMIN && RESERVED_NAMES.includes(normTxt(s))) return false;
+  if(!IS_ADMIN && !RS_STAFF[MY_UID] && RESERVED_NAMES.includes(normTxt(s))) return false;
   return true;
 }
 
@@ -2507,7 +2520,7 @@ function renderChat(){
     const mine = m.uid === MY_UID;
     const tr = transCache[m.id];
     return `<div class="chatmsg">
-      <span class="mnm" style="color:${nameColor(m.uid)}">${esc(m.name)}</span>
+      <span class="mnm" style="color:${nameColor(m.uid)}">${esc(m.name)}</span>${staffBadge(m.uid)}
       <span class="mtx">${esc(m.text)}</span>
       <span class="mtm">${tm}</span>
       ${!mine?`<button class="mrep" onclick="rsTranslateMsg('${m.id}')" title="${T("번역")}">🌐</button>`:""}
@@ -2607,7 +2620,7 @@ function renderCmts(){
       <div class="cmthead">
         ${c.hero!=="all"&&PIC[c.hero]?`<img src="${PIC[c.hero]}" alt="">`:""}
         <span class="chero">${c.hero==="all"?"🌐 "+T("공통"):esc(hName(c.hero))}</span>
-        <span class="cname">${esc(c.name)}</span>
+        <span class="cname">${esc(c.name)}</span>${staffBadge(c.uid)}
         <span class="ctime">${relTime(c.ts||0)}</span>
         ${!mine&&MY_UID?`<button class="cdel" onclick="rsReport('comments','${c.id}')" title="${T("신고")}">🚩</button>`:""}
         ${(mine||IS_ADMIN)?`<button class="cdel" data-id="${c.id}" title="${T("삭제")}">✕</button>`:""}
@@ -2619,7 +2632,7 @@ function renderCmts(){
         <button class="cmtact ${open?'rep-on':''}" data-reply-toggle="${c.id}">💬 ${T("댓글")}${replies.length?` <b>${replies.length}</b>`:''}</button>
       </div>
       ${open ? `<div class="replywrap">
-        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}">${esc(r.name)}</span>${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-reply-del="${c.id}|${r.id}" title="${T("삭제")}">✕</button>`:''}</div>`).join('') || `<div class="replyempty">${T("첫 댓글을 남겨보세요")}</div>`}
+        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-reply-del="${c.id}|${r.id}" title="${T("삭제")}">✕</button>`:''}</div>`).join('') || `<div class="replyempty">${T("첫 댓글을 남겨보세요")}</div>`}
         <div class="replyin"><input maxlength="150" placeholder="${T("댓글…")}" data-reply-input="${c.id}"><button data-reply-send="${c.id}">${T("등록")}</button></div>
       </div>` : ''}
     </div>`;
@@ -2901,7 +2914,7 @@ function renderBd(){
     return `
     <div class="cmtitem bditem${open?" open":""}">
       <div class="cmthead">
-        <span class="cname" style="color:${nameColor(p.uid)}">${esc(p.name)}</span>
+        <span class="cname" style="color:${nameColor(p.uid)}">${esc(p.name)}</span>${staffBadge(p.uid)}
         <span class="ctime">${relTime(p.ts||0)}</span>
         ${!mine&&MY_UID?`<button class="cdel" onclick="rsReport('board','${p.id}')" title="${T("신고")}">🚩</button>`:""}
         ${(mine||IS_ADMIN)?`<button class="cdel" data-bd-del="${p.id}" title="${T("삭제")}">✕</button>`:""}
@@ -2922,7 +2935,7 @@ function renderBd(){
         ${!mine?`<button class="cmtact ${bdTrCache["p:"+p.id]!==undefined?'rep-on':''}" data-bd-tr="${p.id}" title="${T("번역")}">🌐</button>`:""}
       </div>
       ${open ? `<div class="replywrap">
-        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}">${esc(r.name)}</span>${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${r.uid!==MY_UID?`<button class="rdel" data-bd-rtr="${p.id}|${r.id}" title="${T("번역")}">🌐</button>`:""}${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-bd-rdel="${p.id}|${r.id}" title="${T("삭제")}">✕</button>`:""}${bdTrCache["r:"+p.id+"|"+r.id]?`<span class="bdrtr">↳ ${esc(bdTrCache["r:"+p.id+"|"+r.id])}</span>`:""}</div>`).join("")}
+        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${r.uid!==MY_UID?`<button class="rdel" data-bd-rtr="${p.id}|${r.id}" title="${T("번역")}">🌐</button>`:""}${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-bd-rdel="${p.id}|${r.id}" title="${T("삭제")}">✕</button>`:""}${bdTrCache["r:"+p.id+"|"+r.id]?`<span class="bdrtr">↳ ${esc(bdTrCache["r:"+p.id+"|"+r.id])}</span>`:""}</div>`).join("")}
         <div class="replyin"><input maxlength="150" placeholder="${BL("commentPh")}" data-bd-rinput="${p.id}"><button data-bd-rsend="${p.id}">${BL("regBtn")}</button></div>
       </div>` : ''}
     </div>`;
@@ -3071,7 +3084,7 @@ function renderGreets(){
     const tr = bdTrCache["g:"+g.id];
     return `<div class="gitem">
       <span class="gwv">👋</span>
-      <span class="gnm" style="color:${nameColor(g.uid)}">${esc(g.name)}</span>
+      <span class="gnm" style="color:${nameColor(g.uid)}">${esc(g.name)}</span>${staffBadge(g.uid)}
       ${g.text?`<span class="gtx">${esc(g.text)}</span>`:""}
       <span class="gtm">${relTime(g.ts||0)}</span>
       ${g.text&&!mine?`<button class="gact" data-g-tr="${g.id}" title="${T("번역")}">🌐</button>`:""}
@@ -3322,7 +3335,7 @@ function renderParty(){
     // 파티방 채팅창
     const msgs = Object.entries(p.msgs||{}).map(([id,m])=>({id,...m})).sort((a,b)=>(a.ts||0)-(b.ts||0)).slice(-50);
     const chatBox = (canChat && chatOpen) ? `<div class="ptchatwrap">
-      <div class="ptchatbox" data-pt-box="${p.id}">${msgs.length?msgs.map(m=>`<div class="ptmsg"><span class="pmn" style="color:${nameColor(m.uid)}">${esc(m.name)}</span>${esc(m.text)}<span class="pmt">${m.ts?new Date(m.ts).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",hour12:false}):""}</span></div>`).join(""):`<div class="meta">${T("파티원과 여기서 대화하세요 (수락 전에도 문의 가능)")}</div>`}</div>
+      <div class="ptchatbox" data-pt-box="${p.id}">${msgs.length?msgs.map(m=>`<div class="ptmsg"><span class="pmn" style="color:${nameColor(m.uid)}">${esc(m.name)}</span>${staffBadge(m.uid)}${esc(m.text)}<span class="pmt">${m.ts?new Date(m.ts).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",hour12:false}):""}</span></div>`).join(""):`<div class="meta">${T("파티원과 여기서 대화하세요 (수락 전에도 문의 가능)")}</div>`}</div>
       <div class="ptchatin"><input maxlength="120" placeholder="${T("메시지…")}" data-pt-input="${p.id}"><button data-pt-msg="${p.id}">${T("전송")}</button></div>
     </div>` : "";
     return `<div class="ptcard ${closed&&!mine?'closed':''}">
@@ -3336,7 +3349,7 @@ function renderParty(){
       ${memberBlock}
       ${applicantBlock}
       <div class="ptfoot">
-        <span class="meta">${esc(p.name||"")} · ${relTime(p.ts||0)}</span>
+        <span class="meta">${esc(p.name||"")}${staffBadge(p.uid)} · ${relTime(p.ts||0)}</span>
         ${joinAction}
         ${!mine&&p.noJoin&&!closed?`<span class="meta" style="margin:0">${T("게임 내 친추로 연락")}</span>`:""}
         ${chatBtn}
