@@ -2116,7 +2116,7 @@ function setLang(l){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.09-s";
+const SITE_VERSION = "2026.07.09-t";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3120,7 +3120,13 @@ document.getElementById("gList").addEventListener("click", async e => {
   }
   if(del){
     if(!confirm(GL("delConfirm"))) return;
-    try{ await FB.remove(FB.ref(FB.db, `greets/${del.dataset.gDel}`)); toast(T("삭제되었습니다")); }
+    const g = gCache.find(x=>x.id===del.dataset.gDel);
+    try{
+      await FB.remove(FB.ref(FB.db, `greets/${del.dataset.gDel}`));
+      toast(T("삭제되었습니다"));
+      // 본인 인사를 지우면 오늘 다시 남길 수 있게 (고쳐 쓰기 허용)
+      if(g && g.uid === MY_UID){ localStorage.removeItem("rs_greet_day"); gStatic(); }
+    }
     catch(err){ toast(T("삭제 실패")); }
   }
 });
