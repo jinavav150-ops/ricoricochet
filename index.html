@@ -287,6 +287,7 @@
   .authBox .authBody .block{background:var(--panel2);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:12.5px;line-height:1.7}
   .authBox .authBody .block .label{font-size:10px;color:var(--ricochet);font-weight:700;margin-bottom:4px;display:block}
   .authAgree{width:100%;background:var(--ricochet);color:#181000;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer}
+  .authBody .authprompt{display:block;font-size:12.5px;color:var(--sub);margin-top:4px}
   /* ── 하단 권한 표시 바 ── */
   #authBar{background:var(--panel);border-top:1px solid var(--line);text-align:center;padding:6px 16px 8px;font-size:11px;color:var(--sub);padding-bottom:calc(8px + env(safe-area-inset-bottom));position:relative;z-index:40}
   #authBar b{color:var(--ricochet)}
@@ -1528,6 +1529,37 @@ const NOTICE = {
     </div>` }
 };
 function renderNotice(){ const el=document.getElementById("noticeBody"); if(el) el.innerHTML=(NOTICE[LANG]||NOTICE.ko).html; }
+/* ════════ ⚠ 권한 고지(모달)·하단 바 — 팬메이드 톤 · 4개 언어 ════════ */
+const AUTH = {
+  ko:{ badge:"⚠ 비공식 팬사이트", agree:"동의하고 시작하기",
+    body:`<div class="block"><span class="label">🎮 팬이 만든 사이트</span>이 사이트는 RICOCHET SQUAD를 좋아하는 팬 <b>MAMMON</b>이 재미로 만든 <b>비공식 사이트</b>예요. 게임 제작사와는 무관합니다.</div>
+      <div class="block"><span class="label">🙏 편하게 봐주세요</span>정보에 오류가 있을 수 있어요 (계속 고쳐가는 중!). 이 사이트의 창작물을 <b>통째로 복제·재배포</b>하는 것만 삼가주시면, 나머지는 마음껏 즐겨주세요!</div>
+      <span class="authprompt">아래 버튼을 눌러 시작하기</span>`,
+    footer:`팬이 만든 비공식 사이트 · 제작 <b>MAMMON</b> · 게임사와 무관` },
+  en:{ badge:"⚠ Unofficial fan site", agree:"Agree & start",
+    body:`<div class="block"><span class="label">🎮 A fan-made site</span>This is an <b>unofficial site</b> made for fun by <b>MAMMON</b>, a fan of RICOCHET SQUAD. It is not affiliated with the game studio.</div>
+      <div class="block"><span class="label">🙏 Please enjoy</span>Some info may be inaccurate (always improving!). Just please don't <b>copy or redistribute</b> the site's content wholesale — otherwise, enjoy!</div>
+      <span class="authprompt">Tap the button below to start</span>`,
+    footer:`Unofficial fan site · made by <b>MAMMON</b> · not affiliated with the studio` },
+  ja:{ badge:"⚠ 非公式ファンサイト", agree:"同意して始める",
+    body:`<div class="block"><span class="label">🎮 ファンが作ったサイト</span>このサイトは RICOCHET SQUAD が好きなファン <b>MAMMON</b> が趣味で作った<b>非公式サイト</b>です。ゲーム会社とは無関係です。</div>
+      <div class="block"><span class="label">🙏 気軽にどうぞ</span>情報に誤りがあるかもしれません（随時修正中！）。当サイトの制作物を<b>丸ごと複製・再配布</b>することだけはご遠慮ください。それ以外はどうぞお楽しみください！</div>
+      <span class="authprompt">下のボタンを押して始めましょう</span>`,
+    footer:`非公式ファンサイト · 制作 <b>MAMMON</b> · ゲーム会社とは無関係` },
+  zh:{ badge:"⚠ 非官方粉絲網站", agree:"同意並開始",
+    body:`<div class="block"><span class="label">🎮 粉絲製作的網站</span>本站是熱愛 RICOCHET SQUAD 的粉絲 <b>MAMMON</b> 出於興趣製作的<b>非官方網站</b>，與遊戲公司無關。</div>
+      <div class="block"><span class="label">🙏 請盡情使用</span>資訊可能有誤（持續修正中！）。只要不<b>整站複製·轉載</b>本站的創作內容，其餘歡迎盡情使用！</div>
+      <span class="authprompt">點擊下方按鈕開始</span>`,
+    footer:`非官方粉絲網站 · 製作 <b>MAMMON</b> · 與遊戲公司無關` }
+};
+function renderAuthText(){
+  const a = AUTH[LANG] || AUTH.ko;
+  const badge=document.querySelector(".authBadge"); if(badge) badge.textContent=a.badge;
+  const body=document.getElementById("authBodyText"); if(body) body.innerHTML=a.body;
+  const agree=document.querySelector(".authAgree"); if(agree) agree.textContent=a.agree;
+  const foot=document.getElementById("authBarText"); if(foot) foot.innerHTML=a.footer;
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", renderAuthText); else renderAuthText();
 function go(t,btn){
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
   document.getElementById("tab-"+t).classList.add("on");
@@ -1665,8 +1697,7 @@ function applyStatic(){
   if(vb) vb.innerHTML=`<span><i class="vdot"></i>${T("오늘")} <b id="visitToday">${vT}</b>${T("명")}</span><span><i class="vdot"></i>${T("이번 주")} <b id="visitWeek">${vW}</b>${T("명")}</span><span><i class="vdot"></i>${T("누적")} <b id="visitTotal">${vA}</b>${T("명")}</span>`;
   document.querySelectorAll("[data-ko]").forEach(el=>{ el.textContent=T(el.dataset.ko); });
   document.querySelectorAll("[data-ko-ph]").forEach(el=>{ el.placeholder=T(el.dataset.koPh); });
-  const ab=document.querySelector(".authBadge"); if(ab) ab.textContent=T("⚠ 비공식 테스트 버전");
-  const ag=document.querySelector(".authAgree"); if(ag) ag.textContent=T("동의하고 시작하기");
+  renderAuthText();
   const ah=document.querySelector(".authBox h3 .y"); if(ah) ah.textContent=T("카운터픽");
   document.title=T("리코셰 스쿼드 카운터픽");
   const tabs=["notice","pick","dex","vote","info"];
@@ -1694,7 +1725,7 @@ function setLang(l){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.09-d";
+const SITE_VERSION = "2026.07.09-e";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -2686,28 +2717,16 @@ FB.authReady.then(async uid => {
 <!-- 권한 고지 모달 -->
 <div id="authModal">
   <div class="authBox">
-    <div class="authBadge">⚠ 비공식 테스트 버전</div>
+    <div class="authBadge">⚠ 비공식 팬사이트</div>
     <h3 class="display">RICOCHET <span class="y">카운터픽</span></h3>
-    <div class="authBody">
-      <div class="block">
-        <span class="label" data-ko="📋 운영 권한">📋 운영 권한</span>
-        <span data-ko="본 도구는">본 도구는</span> <b>MAMMON</b><span data-ko="이 직접 제작 및 운영하는 비공식 팬메이드 프로젝트입니다.">이 직접 제작 및 운영하는 비공식 팬메이드 프로젝트입니다.</span><br>
-        <span data-ko="제작자의 명시적 허락 없이 무단 배포·복제·2차 수정·상업적 이용을 금합니다.">제작자의 명시적 허락 없이 무단 배포·복제·2차 수정·상업적 이용을 금합니다.</span>
-      </div>
-      <div class="block">
-        <span class="label" data-ko="🧪 테스트 목적 운영 안내">🧪 테스트 목적 운영 안내</span>
-        <span data-ko="현재는">현재는</span> <b data-ko="테스트 목적">테스트 목적</b><span data-ko="으로만 임시 공개 중입니다.">으로만 임시 공개 중입니다.</span><br>
-        <span data-ko="장기 운영 또는 공식 채널 등록은">장기 운영 또는 공식 채널 등록은</span> <b data-ko="게임 운영사의 공식 지정">게임 운영사의 공식 지정</b> <span data-ko="또는">또는</span> <b data-ko="제작자의 별도 허락">제작자의 별도 허락</b><span data-ko="이 있어야 가능합니다.">이 있어야 가능합니다.</span>
-      </div>
-      <span data-ko="아래 버튼을 눌러 위 내용에 동의한 후 이용해주세요.">아래 버튼을 눌러 위 내용에 동의한 후 이용해주세요.</span>
-    </div>
+    <div class="authBody" id="authBodyText"></div>
     <button class="authAgree" onclick="closeAuthModal()">동의하고 시작하기</button>
   </div>
 </div>
 
 <!-- 상단 및 하단 권한 표시 바 -->
 <div id="authBar">
-  <span data-ko="제작 · 운영 권한자:">제작 · 운영 권한자:</span> <b>MAMMON</b> <span data-ko="· 비공식 팬메이드 · 무단배포 금지">· 비공식 팬메이드 · 무단배포 금지</span><span class="testTag">TEST</span>
+  <span id="authBarText">팬이 만든 비공식 사이트 · 제작 <b>MAMMON</b> · 게임사와 무관</span>
   <span class="verTag" id="verTag"></span>
 </div>
 
