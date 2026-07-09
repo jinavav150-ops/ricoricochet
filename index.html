@@ -49,11 +49,12 @@
   nav button{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);
     color:var(--sub);padding:9px 16px;border-radius:14px;font-size:13px;font-weight:700;font-family:inherit;
     white-space:nowrap;flex-shrink:0;transition:color .18s,border-color .18s,transform .18s,box-shadow .18s}
-  nav button svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  /* ── UI 아이콘 표준(세련된 미니멀 라인) ── 새 아이콘도 이대로: viewBox 0 0 24 24 · stroke currentColor · fill none · 얇은 획(1.6, 활성 1.85) · round cap/join · 채움 강조는 fill:currentColor 점만 ── */
+  nav button svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;transition:stroke-width .15s ease}
   nav button:hover{color:var(--txt);border-color:#3d4a66;transform:translateY(-1px)}
   nav button.on{background:linear-gradient(135deg,var(--ricochet),#ff9500);border-color:var(--ricochet);color:#17130a;
     box-shadow:0 5px 20px rgba(255,176,46,.35);transform:translateY(-1px)}
-  nav button.on svg{stroke-width:2.2}
+  nav button.on svg{stroke-width:1.85}
 
   main{padding:16px;max-width:560px;margin:0 auto}
   .tab{display:none}.tab.on{display:block}
@@ -135,6 +136,77 @@
   .trust{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:11.5px;color:var(--sub);line-height:1.7;margin-bottom:12px}
   .trust b{color:var(--txt);font-size:12.5px}
   .growthnote{font-size:10.5px;color:var(--sub);background:rgba(255,176,46,.06);border-radius:7px;padding:5px 9px;margin-bottom:8px}
+  /* 영웅별 밸런스 패치 노트 카드 (아이콘은 미니멀 라인 표준: stroke 1.6~1.85) */
+  .patchnote{background:var(--panel2);border-radius:9px;padding:8px 10px;margin-bottom:8px}
+  .pnhead{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+  .pnhead b{font-size:12px;color:var(--txt)}
+  .pnbadge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;display:inline-flex;align-items:center;gap:4px}
+  .pnbadge svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round}
+  .pnbadge.buff{background:rgba(74,222,128,.13);color:#4ade80}
+  .pnbadge.nerf{background:rgba(255,93,93,.13);color:#ff5d5d}
+  .pnlink{margin-left:auto;font-size:10px;color:var(--sub);text-decoration:none;border:1px solid var(--line);padding:2px 7px;border-radius:8px;white-space:nowrap}
+  .pnlist{list-style:none;margin:0;padding:0;font-size:11.5px;color:var(--sub);line-height:1.8}
+  .pnlist li{display:flex;gap:6px;align-items:baseline}
+  .pnlist li::before{content:"·";color:var(--ricochet);font-weight:800}
+  /* ── 📝 자유게시판 ── */
+  .bdprofile{margin-bottom:11px}
+  .bdtools{gap:8px}
+  .bdmedia{display:flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);color:var(--sub);border-radius:9px;padding:7px 11px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer}
+  .bdmedia:hover{color:var(--txt);border-color:#3d4a66}
+  .bdmedia svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .bdmedia.has{color:var(--ricochet);border-color:var(--ricochet)}
+  .bdnote{font-size:10.5px;color:var(--sub);margin-top:7px;opacity:.85}
+  .bdprev{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px}
+  .bdprev:empty{display:none}
+  .bdprev .bpitem{position:relative}
+  .bdprev img{width:76px;height:76px;object-fit:cover;border-radius:9px;border:1px solid var(--line);display:block}
+  .bdprev .bpvid{display:flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:11.5px;color:var(--sub);max-width:100%}
+  .bdprev .bpx{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--bad,#ff5d5d);color:#fff;border:none;font-size:11px;line-height:1;cursor:pointer}
+  .bdprev .bpvid .bpx{position:static;flex-shrink:0}
+  .bditem .bdtitlerow{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+  .bditem .bdtitle{font-size:13.5px;font-weight:800;color:var(--txt);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bditem.open .bdtitle{white-space:normal}
+  .bdcaret{color:var(--sub);font-size:10px;flex-shrink:0;transition:transform .15s}
+  .bditem.open .bdcaret{transform:rotate(180deg)}
+  .bdbadges{display:inline-flex;gap:5px;flex-shrink:0}
+  .bdbadge{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--sub);background:var(--panel2);border-radius:7px;padding:2px 7px}
+  .bdbadge svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .bdpreviewtxt{font-size:12px;color:var(--sub);margin-top:5px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .bdbody{font-size:12.8px;color:var(--txt);line-height:1.75;margin-top:8px;word-break:break-word;white-space:pre-wrap}
+  .bdphotos{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  .bdphotos img{max-width:100%;max-height:420px;object-fit:contain;border-radius:11px;border:1px solid var(--line);cursor:zoom-in;align-self:flex-start;background:#000}
+  .bdvidbox{margin-top:10px}
+  .bdplay{display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:11px;padding:12px 16px;font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;width:100%;justify-content:center}
+  .bdplay:hover{border-color:var(--ricochet);color:var(--ricochet)}
+  .bdplay svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .bdvidbox video{width:100%;max-height:440px;border-radius:11px;background:#000;display:block}
+  .bdlightbox{position:fixed;inset:0;background:rgba(6,9,16,.92);z-index:300;display:flex;align-items:center;justify-content:center;padding:18px;cursor:zoom-out}
+  .bdlightbox img{max-width:100%;max-height:100%;border-radius:10px}
+  .bdloading{font-size:11.5px;color:var(--sub);padding:8px 2px}
+  .bdtr{font-size:12px;color:#8ecbff;margin-top:7px;white-space:pre-wrap;background:rgba(93,169,255,.07);border-radius:8px;padding:6px 9px;word-break:break-word}
+  .bdrtr{display:block;font-size:11px;color:#8ecbff;margin-top:3px;white-space:pre-wrap;word-break:break-word}
+  /* ── 👋 방명록 (공지 첫 화면) ── */
+  .greetcard{background:var(--panel);border:1px solid var(--line);border-left:3px solid #ffb02e;border-radius:12px;padding:12px 15px;margin-bottom:13px}
+  .ghead{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .ghead svg{width:17px;height:17px;stroke:var(--ricochet);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  .ghead b{font-size:13.5px;color:var(--ricochet)}
+  .ghead .gsub{font-size:11px;color:var(--sub)}
+  .ghead .gtoday{margin-left:auto;font-size:10.5px;color:var(--good);background:rgba(74,222,128,.1);border-radius:8px;padding:2px 8px;white-space:nowrap}
+  .glist{display:flex;flex-direction:column;gap:4px;margin-bottom:9px}
+  .glist:empty{display:none}
+  .gitem{display:flex;align-items:baseline;gap:6px;font-size:12px;color:var(--txt);flex-wrap:wrap;line-height:1.55}
+  .gitem .gwv{flex-shrink:0}
+  .gitem .gnm{font-weight:700}
+  .gitem .gtx{color:var(--sub)}
+  .gitem .gtm{font-size:10px;color:var(--sub);opacity:.7}
+  .gitem .gact{background:none;border:none;color:var(--sub);font-size:10.5px;cursor:pointer;padding:0 2px;opacity:.75}
+  .gitem .gact:hover{opacity:1}
+  .gitem .gtr{display:block;width:100%;font-size:11px;color:#8ecbff;margin:0 0 2px 22px}
+  .gempty{font-size:11.5px;color:var(--sub);margin-bottom:9px}
+  .gin{display:flex;gap:8px}
+  .gin input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:9px;color:var(--txt);padding:8px 11px;font-size:12.5px;font-family:inherit;outline:none}
+  .gin input:focus{border-color:var(--ricochet)}
+  .gdone{font-size:12px;color:var(--good);background:rgba(74,222,128,.08);border-radius:9px;padding:8px 11px}
   .weapon{background:var(--panel2);border-radius:9px;padding:8px 10px;margin-bottom:8px}
   .wtop{display:flex;align-items:center;gap:8px}
   .wtop b{font-size:13px;color:var(--txt)}
@@ -375,9 +447,9 @@
   .subtabs::-webkit-scrollbar{display:none}
   .subtabs button{display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);color:var(--sub);
     border-radius:12px;padding:8px 13px;font-size:12px;font-weight:700;font-family:inherit;white-space:nowrap;flex-shrink:0;position:relative;transition:color .15s,border-color .15s,background .15s}
-  .subtabs button svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  .subtabs button svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
   .subtabs button.on{background:var(--panel2);border-color:var(--ricochet);color:var(--ricochet)}
-  .subtabs button.on svg{stroke-width:2.2}
+  .subtabs button.on svg{stroke-width:1.85}
   .subbadge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;background:var(--bad);color:#fff;border-radius:8px;
     font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;font-style:normal}
   /* ── 통합 프로필 바 ── */
@@ -461,16 +533,49 @@
   .notice{max-width:780px;margin:0 auto;line-height:1.7}
   .notice .nlead{font-size:13.5px;color:var(--txt);margin:2px 0 15px;padding:13px 15px;background:var(--panel2);border:1px solid var(--line);border-radius:13px}
   .notice .nlead b{color:var(--ricochet)}
-  .notice .ncard{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px 16px;margin-bottom:11px}
-  .notice .ncard h4{margin:0 0 9px;font-size:13.5px;color:var(--ricochet);font-weight:700}
+  .notice .ncard{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc,var(--ricochet));border-radius:12px;padding:13px 16px 13px 15px;margin-bottom:11px}
+  .notice .ncard h4{margin:0 0 9px;font-size:13.5px;color:var(--acc,var(--ricochet));font-weight:700}
+  /* 섹션별 조화로운 액센트 컬러 — 주요 포인트가 하나씩 눈에 들어오게 (사이트 팔레트에서 선정) */
+  .notice .ncard:nth-of-type(1){--acc:#4ade80}  /* 지금까지 만든 것 · 초록 */
+  .notice .ncard:nth-of-type(2){--acc:#ffb02e}  /* 게임 패치 · 오렌지(브랜드) */
+  .notice .ncard:nth-of-type(3){--acc:#5da9ff}  /* 사이트 업데이트 · 파랑 */
+  .notice .ncard:nth-of-type(4){--acc:#f472b6}  /* 앞으로의 약속 · 분홍 */
+  .notice .ncard:nth-of-type(5){--acc:#22d3ee}  /* 공식 링크 · 시안 */
+  .notice .ncard .nico{color:var(--acc,var(--ricochet))}
+  .notice .ncard a{color:var(--acc,var(--ricochet))}
   .notice .ncard ul{margin:0;padding-left:4px;list-style:none}
   .notice .ncard li{margin:6px 0;font-size:12.5px;color:var(--sub);padding-left:16px;text-indent:-16px}
   .notice .ncard li b{color:var(--txt);font-weight:600}
   .notice .nsign{font-size:12px;color:var(--sub);margin:14px 2px 0;line-height:1.6}
   .notice .nsign b{color:var(--ricochet)}
+  /* ── 도감 영웅 검색창 ── */
+  .dexsearch{display:flex;align-items:center;gap:9px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:13px;transition:border-color .15s}
+  .dexsearch:focus-within{border-color:var(--ricochet)}
+  .dexsearch svg{width:17px;height:17px;stroke:var(--sub);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  .dexsearch:focus-within svg{stroke:var(--ricochet)}
+  .dexsearch input{flex:1;min-width:0;background:none;border:none;outline:none;color:var(--txt);font-family:inherit;font-size:14px}
+  .dexsearch input::placeholder{color:var(--sub)}
+  .dexsearch button{background:none;border:none;color:var(--sub);cursor:pointer;font-size:14px;padding:2px 5px;line-height:1;border-radius:6px}
+  .dexsearch button:hover{color:var(--txt);background:var(--panel)}
+  .notice .patchver{font-size:10.5px;color:var(--acc,var(--ricochet));background:rgba(255,176,46,.12);border:1px solid var(--acc,var(--ricochet));border-radius:6px;padding:1px 6px;font-weight:700;vertical-align:1px}
+  .notice .patchdate{font-size:10.5px;color:var(--sub);margin-left:7px;vertical-align:1px;font-weight:600}
+  .notice .npatchlink{margin:9px 0 0;font-size:11.5px}
+  .notice .ulog li{margin:7px 0}
+  .notice .udate{display:inline-block;font-size:10.5px;color:var(--acc,var(--ricochet));background:rgba(255,255,255,.06);border-radius:5px;padding:1px 6px;margin-right:8px;font-weight:700;vertical-align:1px}
+  .nico{width:16px;height:16px;fill:none;stroke:currentColor;color:var(--ricochet);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;margin-right:5px;flex-shrink:0}
+  .notice .ncard h4 .nico{width:17px;height:17px;vertical-align:-3px}
+  .notice .ncard li{padding-left:21px;text-indent:-21px}
   .notice a{color:var(--ricochet);text-decoration:none;font-weight:600}
   .notice a:hover{text-decoration:underline}
-  .chatbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;height:320px;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:7px;margin-bottom:8px}
+  /* ── 커뮤니티 드롭다운 (nav) ── */
+  #commTabs{display:none}
+  .navcaret{font-size:10px;opacity:.7;margin-left:-2px}
+  #commMenu{position:fixed;z-index:90;min-width:168px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.45);display:none;flex-direction:column;gap:2px}
+  #commMenu.open{display:flex}
+  #commMenu button{display:flex;align-items:center;gap:9px;width:100%;background:none;border:none;color:var(--txt);font-family:inherit;font-size:13px;font-weight:600;padding:10px 12px;border-radius:8px;cursor:pointer;text-align:left}
+  #commMenu button:hover{background:var(--panel)}
+  #commMenu button svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  .chatbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;height:clamp(380px,58vh,640px);overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:7px;margin-bottom:8px}
   .chatmsg{display:flex;align-items:baseline;gap:7px;font-size:12.5px;line-height:1.55;word-break:break-word}
   .chatmsg .mtx{flex:1 1 auto;min-width:0}
   .chatmsg .mnm{font-weight:700;flex-shrink:0}
@@ -539,19 +644,51 @@
     <svg viewBox="0 0 24 24"><path d="M12 5.5C10.2 3.9 7.6 3.4 4.5 3.7c-.6.1-1 .6-1 1.2v13c0 .7.7 1.2 1.4 1.1 2.7-.3 5 .2 7.1 1.7 2.1-1.5 4.4-2 7.1-1.7.7.1 1.4-.4 1.4-1.1v-13c0-.6-.4-1.1-1-1.2-3.1-.3-5.7.2-7.5 1.8z"/><line x1="12" y1="5.5" x2="12" y2="20.4"/></svg>
     <span class="nlbl">도감</span>
   </button>
-  <button onclick="go('vote',this)">
-    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3c-1.5 0-2.9-.3-4.1-.9L3 20l1.2-4.2a8 8 0 0 1-1.2-4.3A8.4 8.4 0 0 1 11.5 3.2 8.4 8.4 0 0 1 21 11.5z"/><circle cx="8.2" cy="11.7" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11.7" r="1" fill="currentColor" stroke="none"/><circle cx="15.8" cy="11.7" r="1" fill="currentColor" stroke="none"/></svg>
-    <span class="nlbl">커뮤니티</span>
+  <button id="navBoard" onclick="go('board',this)">
+    <svg viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
+    <span class="nlbl">자유게시판</span>
+  </button>
+  <button id="navChat" onclick="goComm('chat',this)">
+    <svg viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 0 1-11.5 7.2L4 20l1.3-4.3A8 8 0 1 1 20 11.5z"/><circle cx="8.5" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+    <span class="nlbl">채팅</span>
+  </button>
+  <button id="navParty" onclick="goComm('party',this)">
+    <svg viewBox="0 0 24 24"><path d="M7 8h10a5 5 0 0 1 5 5 3.4 3.4 0 0 1-6.1 2l-.6-.8H8.7l-.6.8A3.4 3.4 0 0 1 2 13a5 5 0 0 1 5-5z"/><line x1="7" y1="11.2" x2="7" y2="14.8"/><line x1="5.2" y1="13" x2="8.8" y2="13"/><circle cx="16" cy="11.6" r="1" fill="currentColor" stroke="none"/><circle cx="18" cy="13.6" r="1" fill="currentColor" stroke="none"/></svg>
+    <span class="nlbl">파티</span><i class="subbadge" id="ptBadge" style="display:none"></i>
+  </button>
+  <button id="navComm" onclick="toggleCommMenu()">
+    <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16.4 5.5a3.2 3.2 0 0 1 0 5.8"/><path d="M18 13.4a6 6 0 0 1 3 5.6"/></svg>
+    <span class="nlbl">커뮤니티</span><i class="navcaret">▾</i>
   </button>
   <button onclick="go('info',this)">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polygon points="15.5,8.5 13.4,13.4 8.5,15.5 10.6,10.6" fill="currentColor" stroke="none"/></svg>
     <span class="nlbl">게임정보</span>
   </button>
 </nav>
+<div id="commMenu">
+  <button onclick="goCommMenu('tier')"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5H4v1.5a3 3 0 0 0 3 3"/><path d="M17 5h3v1.5a3 3 0 0 1-3 3"/><path d="M9.5 19h5"/><path d="M12 14v5"/></svg><span data-ko="티어">티어</span></button>
+  <button onclick="goCommMenu('tips')"><svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 1 3.6 10.8c-.6.5-.9 1-.9 1.7H9.3c0-.7-.3-1.2-.9-1.7A6 6 0 0 1 12 3z"/></svg><span data-ko="팁">팁</span></button>
+  <button onclick="goCommMenu('fb')"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 3.5z"/><line x1="8" y1="9.5" x2="16" y2="9.5"/><line x1="8" y1="12.5" x2="13" y2="12.5"/></svg><span data-ko="피드백">피드백</span></button>
+  <button onclick="goCommMenu('stats')"><svg viewBox="0 0 24 24"><path d="M4 20V4"/><path d="M4 20h16"/><rect x="7.5" y="12" width="3" height="5" rx="0.7"/><rect x="13.5" y="8" width="3" height="9" rx="0.7"/></svg><span data-ko="통계">통계</span></button>
+</div>
 
 <main>
   <!-- 공지 탭 -->
   <section id="tab-notice" class="tab on">
+    <!-- 👋 방명록 (문구는 gStatic()이 4개 언어로 렌더 — data-ko 쓰지 말 것) -->
+    <div class="greetcard">
+      <div class="ghead">
+        <svg viewBox="0 0 24 24"><path d="M7 11.5V6.2a1.6 1.6 0 0 1 3.2 0v4.3m0-5.6a1.6 1.6 0 0 1 3.2 0v5.6m0-4.3a1.6 1.6 0 0 1 3.2 0v5.5m0-2.6a1.6 1.6 0 0 1 3.2.6c0 4.5-1.4 6-2.4 7.6-1.3 2-3.4 3.2-6 3.2-2.1 0-3.6-.6-4.9-1.9L4 15.9a1.7 1.7 0 0 1 2.4-2.4l1.4 1.4"/></svg>
+        <b id="gTitle">방명록</b><span class="gsub" id="gSub"></span>
+        <span class="gtoday" id="gToday"></span>
+      </div>
+      <div id="gList" class="glist"></div>
+      <div class="gin" id="gIn">
+        <input id="gText" maxlength="30" autocomplete="off">
+        <button id="gSend" class="cmtbtn"></button>
+      </div>
+      <div class="gdone" id="gDone" style="display:none"></div>
+    </div>
     <div id="noticeBody"></div>
   </section>
 
@@ -573,7 +710,40 @@
       · 레벨1(잠금화면) + 레벨15 두 지점으로 정확한 성장 곡선 산출<br>
       · 체력 증가량이 전원 정수(▲13~21)로 검증됨
     </div>
+    <div class="dexsearch">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.2" y1="16.2" x2="21" y2="21"/></svg>
+      <input id="dexSearch" type="text" placeholder="영웅 검색…" oninput="dexSearchInput(this.value)" autocomplete="off">
+      <button id="dexClear" onclick="dexSearchClear()" style="display:none" aria-label="clear">✕</button>
+    </div>
     <div id="dex"></div>
+  </section>
+
+  <!-- 📝 자유게시판 탭 (문구는 전부 bdStatic()이 4개 언어로 렌더 — data-ko 쓰지 말 것) -->
+  <section id="tab-board" class="tab">
+    <div class="safetybar" id="bdSafety"></div>
+    <div class="profilebar bdprofile" id="bdProfileBar">
+      <span class="pfico">👤</span>
+      <div class="pfmain">
+        <span class="pflabel" id="bdPfLabel">내 커뮤니티 닉네임</span>
+        <span class="pfnick" id="bdPfNick">설정 안 됨</span>
+      </div>
+      <button class="pfedit" id="bdPfEditBtn">✏️ 변경</button>
+    </div>
+    <div class="cmtcard">
+      <div class="cmtrow1"><input id="bdTitle" class="cmtname" style="flex:1;width:auto" maxlength="60" autocomplete="off"></div>
+      <div class="cmtrow2"><textarea id="bdText" class="cmttext" rows="3" maxlength="1000"></textarea></div>
+      <div id="bdPrev" class="bdprev"></div>
+      <div class="cmtrow3 bdtools">
+        <button class="bdmedia" id="bdPhotoBtn"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2.5"/><circle cx="12" cy="13" r="4"/><path d="M9 6l1.2-2h3.6L15 6"/></svg><span id="bdPhotoLbl">사진</span></button>
+        <button class="bdmedia" id="bdVideoBtn"><svg viewBox="0 0 24 24"><rect x="3" y="5.5" width="13" height="13" rx="2.5"/><path d="M16 10.5l5-3v9l-5-3"/></svg><span id="bdVideoLbl">영상</span></button>
+        <span class="cmtcount" id="bdCount">0/1000</span>
+        <button class="cmtbtn" id="bdSend">등록</button>
+      </div>
+      <input type="file" id="bdPhotoFile" accept="image/*" multiple style="display:none">
+      <input type="file" id="bdVideoFile" accept="video/mp4,video/webm,video/quicktime" style="display:none">
+      <div class="bdnote" id="bdNote"></div>
+    </div>
+    <div id="bdList" class="cmtlist"></div>
   </section>
 
   <!-- 상성 편집 탭 -->
@@ -621,7 +791,7 @@
         <span data-ko="채팅">채팅</span></button>
       <button data-v="party" onclick="commView('party')">
         <svg viewBox="0 0 24 24"><path d="M7 8h10a5 5 0 0 1 5 5 3.4 3.4 0 0 1-6.1 2l-.6-.8H8.7l-.6.8A3.4 3.4 0 0 1 2 13a5 5 0 0 1 5-5z"/><line x1="7" y1="11.2" x2="7" y2="14.8"/><line x1="5.2" y1="13" x2="8.8" y2="13"/><circle cx="16" cy="11.6" r="1" fill="currentColor" stroke="none"/><circle cx="18" cy="13.6" r="1" fill="currentColor" stroke="none"/></svg>
-        <span data-ko="파티">파티</span><i class="subbadge" id="ptBadge" style="display:none"></i></button>
+        <span data-ko="파티">파티</span></button>
       <button data-v="tier" onclick="commView('tier')">
         <svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5H4v1.5a3 3 0 0 0 3 3"/><path d="M17 5h3v1.5a3 3 0 0 1-3 3"/><path d="M9.5 19h5"/><path d="M12 14v5"/></svg>
         <span data-ko="티어">티어</span></button>
@@ -1146,8 +1316,84 @@ function statAt(g,L,which){
   const base=which==="hp"?g.hp1:g.dps1, inc=which==="hp"?g.hpI:g.dpsI;
   return Math.round(base + inc*(L-1));
 }
+/* ── 영웅별 밸런스 패치 노트 ──
+   출처: 공식 패치노트 페이지(niceplans.studio/patchnotes_<버전>_<언어>) — 문구·수치는 공식 원문,
+   영웅명 中日 표기는 게임 공식 로케일 파일 기준. 새 패치가 나오면 HERO_PATCHES에 항목 추가. */
+const PATCH_L = {
+  head:{ko:"밸런스 패치",en:"Balance Patch",ja:"バランス調整",zh:"平衡調整"},
+  buff:{ko:"버프",en:"Buff",ja:"強化",zh:"加強"},
+  nerf:{ko:"너프",en:"Nerf",ja:"弱体化",zh:"削弱"},
+  src:{ko:"공식 노트",en:"Official notes",ja:"公式ノート",zh:"官方公告"}
+};
+const PATCH_URL_LANG = {ko:"ko",en:"en",ja:"jp",zh:"cn"};   // 공식 페이지 언어 코드
+const HERO_PATCHES = {
+  khan:[{ver:"2.1.1",kind:"nerf",notes:{
+    ko:["궁극기 비용 2600 → 2400","포탑 체력 350 → 300","포탑 피해 27 → 24 (DPS 108 → 96)","포탑 사거리 15 → 13"],
+    en:["Ultimate cost 2600 → 2400","Turret health 350 → 300","Turret shot damage 27 → 24 (DPS 108 → 96)","Turret attack range 15 → 13"],
+    ja:["アルティメットのコスト 2600 → 2400","タレットの体力 350 → 300","タレットの射撃ダメージ 27 → 24（DPS 108 → 96）","タレットの攻撃射程 15 → 13"],
+    zh:["大招消耗 2600 → 2400","炮台生命值 350 → 300","炮台單發傷害 27 → 24（DPS 108 → 96）","炮台攻擊射程 15 → 13"]}}],
+  vector:[{ver:"2.1.1",kind:"buff",notes:{
+    ko:["탄환 피해 26 → 28 (DPS 98 → 106)","궁극기 중 이동 속도 15% → 25%","스태프 피해 104 → 100","스태프 공격 속도 1.35 → 1.7회/초 (DPS 140 → 170)"],
+    en:["Bullet damage 26 → 28 (DPS 98 → 106)","Ultimate movement speed bonus 15% → 25%","Staff damage 104 → 100","Staff attack rate 1.35 → 1.7/s (staff DPS 140 → 170)"],
+    ja:["弾丸のダメージ 26 → 28（DPS 98 → 106）","アルティメット中の移動速度ボーナス 15% → 25%","スタッフのダメージ 104 → 100","スタッフの攻撃速度 1.35 → 1.7回/秒（DPS 140 → 170）"],
+    zh:["子彈傷害 26 → 28（DPS 98 → 106）","大招移動速度加成 15% → 25%","手杖傷害 104 → 100","手杖攻擊頻率 1.35 → 1.7次/秒（DPS 140 → 170）"]}}],
+  fury:[{ver:"2.1.1",kind:"buff",notes:{
+    ko:["킥 피해 121 → 133","최대 체력 725 → 750","오버드라이브 쿨다운 10초 → 8초"],
+    en:["Kick damage 121 → 133","Maximum health 725 → 750","Overdrive cooldown 10s → 8s"],
+    ja:["キックのダメージ 121 → 133","最大体力 725 → 750","オーバードライブのクールダウン 10秒 → 8秒"],
+    zh:["踢擊傷害 121 → 133","最大生命值 725 → 750","過載冷卻時間 10秒 → 8秒"]}}],
+  sejin:[{ver:"2.1.1",kind:"nerf",notes:{
+    ko:["마크당 피해 증가 50% → 35%","마크 지속 시간 7초 → 6초"],
+    en:["Damage increase per mark 50% → 35%","Mark duration 7s → 6s"],
+    ja:["マーク1つあたりのダメージ増加量 50% → 35%","マークの持続時間 7秒 → 6秒"],
+    zh:["每層印記傷害加成 50% → 35%","印記持續時間 7秒 → 6秒"]}}]
+};
+const PN_ARROW = {
+  buff:'<svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+  nerf:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'
+};
+function patchBlock(id){
+  const list = HERO_PATCHES[id]; if(!list || !list.length) return "";
+  const L = PATCH_L, ul = PATCH_URL_LANG[LANG] || "en";
+  return list.map(p => {
+    const notes = p.notes[LANG] || p.notes.ko;
+    return `<div class="patchnote">
+      <div class="pnhead"><b>v${p.ver} ${L.head[LANG]||L.head.ko}</b>
+        <span class="pnbadge ${p.kind}">${PN_ARROW[p.kind]}${L[p.kind][LANG]||L[p.kind].ko}</span>
+        <a class="pnlink" href="https://niceplans.studio/patchnotes_${p.ver}_${ul}" target="_blank" rel="noopener">${L.src[LANG]||L.src.ko} ↗</a>
+      </div>
+      <ul class="pnlist">${notes.map(n=>`<li>${n}</li>`).join("")}</ul>
+    </div>`;
+  }).join("");
+}
+/* 도감 영웅 검색 (이름으로 필터 — 검색하면 해당 캐릭터만 바로 표시) */
+let dexQuery = "";
+const DEX_SEARCH_PH = { ko:"영웅 검색…", en:"Search heroes…", ja:"ヒーロー検索…", zh:"搜尋英雄…" };
+const DEX_NORESULT = { ko:"검색 결과가 없습니다", en:"No heroes found", ja:"該当するヒーローがいません", zh:"找不到英雄" };
+function dexMatch(h){
+  if(!dexQuery) return true;
+  const q = dexQuery.toLowerCase();
+  return String(h.ko||"").toLowerCase().includes(q)
+      || String(h.en||"").toLowerCase().includes(q)
+      || String(T(h.ko||"")).toLowerCase().includes(q);
+}
+function dexSearchInput(v){
+  dexQuery = (v||"").trim();
+  const clr = document.getElementById("dexClear"); if(clr) clr.style.display = dexQuery ? "block" : "none";
+  renderDex();
+}
+function dexSearchClear(){
+  dexQuery = "";
+  const si = document.getElementById("dexSearch"); if(si){ si.value=""; si.focus(); }
+  const clr = document.getElementById("dexClear"); if(clr) clr.style.display = "none";
+  renderDex();
+}
 function renderDex(){
-  document.getElementById("dex").innerHTML = Object.entries(HEROES).map(([id,h])=>{
+  const si = document.getElementById("dexSearch"); if(si) si.placeholder = DEX_SEARCH_PH[LANG] || DEX_SEARCH_PH.ko;
+  const dexEl = document.getElementById("dex");
+  const entries = Object.entries(HEROES).filter(([id,h])=>dexMatch(h));
+  if(!entries.length){ dexEl.innerHTML = `<div class="cmtempty">🔍 ${DEX_NORESULT[LANG]||DEX_NORESULT.ko}</div>`; return; }
+  dexEl.innerHTML = entries.map(([id,h])=>{
     const g=h.growth, L=h._lv||15;
     const hp=statAt(g,L,"hp"), dps=statAt(g,L,"dps");
     const commT=(window.RS_COMM_TIER&&window.RS_COMM_TIER[id]);   // 커뮤니티 최다 득표 티어
@@ -1178,6 +1424,7 @@ function renderDex(){
         <span class="statlv">${g&&g.gConf?T("✓ 실측 성장"):T("추정 성장")}</span>
       </div>
       <div class="growthnote">${T("✓ 완전 확정 — 레벨1~15 실측 (레벨당 체력 +{n})").replace("{n}",g?g.hpI:"?")}</div>
+      ${patchBlock(id)}
       ${h.wpn?`<div class="weapon">
         <div class="wtop"><span class="range range${h.wpn.rLv}">${T(h.wpn.rTier)}</span><b>${T(h.wpn.name)}</b>${h.wpn.mech?`<span class="mech">${T(h.wpn.mech)}</span>`:""}<span class="fire">${T(h.wpn.fire)}</span></div>
         <div class="rangebar"><div class="rangefill" style="width:${h.wpn.rLv/6*100}%"></div></div>
@@ -1422,6 +1669,45 @@ function resetData(){
 }
 
 /* ════════ 공통 ════════ */
+/* ════════ 📝 자유게시판 다국어 (자체 사전 + bdStatic/renderBd 렌더 패턴) ════════ */
+const BOARD_L = {
+  nav:{ko:"자유게시판",en:"Board",ja:"掲示板",zh:"留言板"},
+  head:{ko:"자유게시판",en:"Free Board",ja:"自由掲示板",zh:"自由留言板"},
+  desc:{ko:"자유 이야기 · 스크린샷 · 플레이 영상 공유",en:"Free talk · screenshots · gameplay clips",ja:"自由な話・スクショ・プレイ動画の共有",zh:"自由聊天・截圖・遊玩影片分享"},
+  safety:{ko:"🛡️ 욕설 필터 · 신고 3회 누적 시 자동 숨김 · 개인정보 입력 금지 · 사진 최대 4장 · 영상 1개(10MB 이하)",en:"🛡️ Profanity filter · auto-hidden after 3 reports · no personal info · up to 4 photos · 1 video (≤10MB)",ja:"🛡️ 暴言フィルター · 通報3回で自動非表示 · 個人情報の入力禁止 · 写真は最大4枚 · 動画1本(10MB以下)",zh:"🛡️ 髒話過濾 · 檢舉滿3次自動隱藏 · 禁止輸入個人資訊 · 照片最多4張 · 影片1部(10MB以內)"},
+  titlePh:{ko:"제목 (필수 · 60자)",en:"Title (required · 60 chars)",ja:"タイトル（必須・60字）",zh:"標題（必填・60字）"},
+  textPh:{ko:"내용을 입력하세요… (1000자 · 사진/영상만 올릴 땐 비워도 돼요)",en:"Write something… (1000 chars · optional if attaching media)",ja:"内容を入力…（1000字・写真/動画のみなら空欄OK）",zh:"輸入內容…（1000字・只傳照片/影片可留空）"},
+  photo:{ko:"사진",en:"Photo",ja:"写真",zh:"照片"},
+  video:{ko:"영상",en:"Video",ja:"動画",zh:"影片"},
+  post:{ko:"✍️ 등록",en:"✍️ Post",ja:"✍️ 投稿",zh:"✍️ 發布"},
+  note:{ko:"사진은 자동 압축돼요 · 영상은 MP4 권장(최대 10MB)",en:"Photos are auto-compressed · MP4 recommended for video (max 10MB)",ja:"写真は自動圧縮 · 動画はMP4推奨（最大10MB）",zh:"照片會自動壓縮 · 影片建議MP4（最大10MB）"},
+  nickLabel:{ko:"내 커뮤니티 닉네임",en:"My community nickname",ja:"コミュニティニックネーム",zh:"我的社群暱稱"},
+  nickUnset:{ko:"설정 안 됨",en:"Not set",ja:"未設定",zh:"未設定"},
+  nickEdit:{ko:"✏️ 변경",en:"✏️ Edit",ja:"✏️ 変更",zh:"✏️ 修改"},
+  empty:{ko:"아직 게시글이 없습니다. 첫 글을 남겨보세요! ✍️",en:"No posts yet — be the first! ✍️",ja:"まだ投稿がありません。最初の投稿をどうぞ！✍️",zh:"目前還沒有貼文，來發第一篇吧！✍️"},
+  needTitle:{ko:"제목을 입력해주세요",en:"Please enter a title",ja:"タイトルを入力してください",zh:"請輸入標題"},
+  needBody:{ko:"내용을 쓰거나 사진/영상을 첨부해주세요",en:"Add some text or attach a photo/video",ja:"内容を書くか写真/動画を添付してください",zh:"請輸入內容或附上照片/影片"},
+  photoMax:{ko:"사진은 최대 4장까지 첨부할 수 있어요",en:"Up to 4 photos",ja:"写真は最大4枚まで",zh:"照片最多4張"},
+  photoFail:{ko:"이미지를 처리할 수 없습니다 (다른 사진으로 시도해주세요)",en:"Couldn't process this image — try another",ja:"画像を処理できません（別の写真でお試しください）",zh:"無法處理此圖片（請換一張試試）"},
+  vidMax:{ko:"영상은 10MB 이하만 올릴 수 있어요",en:"Video must be 10MB or smaller",ja:"動画は10MB以下のみ",zh:"影片需在10MB以內"},
+  vidOne:{ko:"영상은 1개만 첨부할 수 있어요",en:"Only one video per post",ja:"動画は1本まで",zh:"每篇限1部影片"},
+  vidType:{ko:"지원하지 않는 영상 형식입니다 (MP4 권장)",en:"Unsupported video format (MP4 recommended)",ja:"未対応の動画形式です（MP4推奨）",zh:"不支援的影片格式（建議MP4）"},
+  uploading:{ko:"업로드 중…",en:"Uploading…",ja:"アップロード中…",zh:"上傳中…"},
+  postDone:{ko:"게시글이 등록되었습니다! 🎉",en:"Posted! 🎉",ja:"投稿しました！🎉",zh:"已發布！🎉"},
+  mediaFail:{ko:"사진/영상 업로드에 실패해 게시글을 취소했습니다 — 다시 시도해주세요",en:"Media upload failed — post was cancelled, please retry",ja:"メディアのアップロードに失敗し投稿を取り消しました — 再度お試しください",zh:"媒體上傳失敗，貼文已取消 — 請重試"},
+  play:{ko:"영상 재생",en:"Play video",ja:"動画を再生",zh:"播放影片"},
+  vidLoading:{ko:"영상 불러오는 중…",en:"Loading video…",ja:"動画を読み込み中…",zh:"影片載入中…"},
+  vidFail:{ko:"영상을 불러올 수 없습니다",en:"Couldn't load the video",ja:"動画を読み込めません",zh:"無法載入影片"},
+  photoLoading:{ko:"사진 불러오는 중…",en:"Loading photos…",ja:"写真を読み込み中…",zh:"照片載入中…"},
+  comment:{ko:"댓글",en:"Comments",ja:"コメント",zh:"留言"},
+  commentPh:{ko:"댓글…",en:"Comment…",ja:"コメント…",zh:"留言…"},
+  regBtn:{ko:"등록",en:"Post",ja:"送信",zh:"送出"},
+  delPost:{ko:"이 게시글을 삭제할까요? (사진·영상·댓글도 함께 삭제됩니다)",en:"Delete this post? (photos, video & comments too)",ja:"この投稿を削除しますか？（写真・動画・コメントも削除）",zh:"要刪除這篇貼文嗎？（照片、影片與留言也會刪除）"},
+  delCmt:{ko:"이 댓글을 삭제할까요?",en:"Delete this comment?",ja:"このコメントを削除しますか？",zh:"要刪除這則留言嗎？"},
+  rulesNeed:{ko:"⚙️ 서버 규칙 업데이트(v9)가 필요합니다 — 관리자에게 알려주세요",en:"⚙️ Server rules update (v9) required — please tell the admin",ja:"⚙️ サーバールールの更新(v9)が必要です — 管理者へお知らせください",zh:"⚙️ 需要更新伺服器規則(v9) — 請告知管理員"},
+  failGeneric:{ko:"처리 실패 — 잠시 후 다시 시도해주세요",en:"Failed — please try again shortly",ja:"失敗しました — しばらくして再度お試しください",zh:"處理失敗 — 請稍後再試"}
+};
+const BL = k => (BOARD_L[k]||{})[LANG] || (BOARD_L[k]||{}).ko || k;
 const TAB_INFO={
   pick:{title:"카운터픽",desc:"적 팀 픽을 고르면 상성 기반으로 추천 · 2.0.6 기준 초안"},
   dex:{title:"도감",desc:"13명 영웅 · 레벨 1~15 스탯 · 스킬 · 퍽 · 무기"},
@@ -1440,10 +1726,7 @@ const NOTICE = {
         <li>💬 <b>커뮤니티</b> — 실시간 채팅·파티 모집·티어 투표·팁·피드백 (한/영/일/중 자동 번역)</li>
         <li>🔒 <b>안전</b> — 욕설·개인정보 필터, 신고, 보안 강화</li>
       </ul></div>
-      <div class="ncard"><h4>🆕 최근 업데이트</h4><ul>
-        <li>게임 <b>v2.1.1</b> 밸런스 패치 반영 (퓨리·벡터 스탯 등)</li>
-        <li>도감 티어에 <b>여러분의 투표(커뮤니티 티어)</b>를 실시간 반영</li>
-      </ul></div>
+      {{GAMEPATCH}}{{SITEUPDATES}}
       <div class="ncard"><h4>🤝 앞으로의 약속</h4><ul>
         <li>게임이 패치되면 <b>추측이 아닌 실제 게임 데이터</b>를 기준으로 최대한 빠르고 정확하게 반영하겠습니다</li>
         <li>여러분의 <b>피드백과 티어 투표</b>를 사이트에 계속 녹이겠습니다</li>
@@ -1464,10 +1747,7 @@ const NOTICE = {
         <li>💬 <b>Community</b> — live chat, party finder, tier votes, tips, feedback (auto-translated KO/EN/JA/ZH)</li>
         <li>🔒 <b>Safety</b> — profanity/personal-info filters, reporting, hardened security</li>
       </ul></div>
-      <div class="ncard"><h4>🆕 Recent updates</h4><ul>
-        <li>Reflected game <b>v2.1.1</b> balance patch (Fury, Vector stats, etc.)</li>
-        <li>Hero-dex tiers now reflect <b>your community votes</b> in real time</li>
-      </ul></div>
+      {{GAMEPATCH}}{{SITEUPDATES}}
       <div class="ncard"><h4>🤝 Our promise</h4><ul>
         <li>When the game gets patched, we reflect it fast and accurately — <b>based on real game data, never guesses</b></li>
         <li>We keep weaving your <b>feedback and tier votes</b> into the site</li>
@@ -1488,10 +1768,7 @@ const NOTICE = {
         <li>💬 <b>コミュニティ</b> — リアルタイムチャット・パーティ募集・ティア投票・攻略メモ・フィードバック（韓/英/日/中 自動翻訳）</li>
         <li>🔒 <b>安全</b> — 暴言・個人情報フィルター、通報、セキュリティ強化</li>
       </ul></div>
-      <div class="ncard"><h4>🆕 最近のアップデート</h4><ul>
-        <li>ゲーム <b>v2.1.1</b> バランス調整を反映（Fury・Vector のステータス等）</li>
-        <li>図鑑のティアに<b>皆さんの投票（コミュニティティア）</b>をリアルタイム反映</li>
-      </ul></div>
+      {{GAMEPATCH}}{{SITEUPDATES}}
       <div class="ncard"><h4>🤝 これからの約束</h4><ul>
         <li>ゲームがアップデートされたら、<b>推測ではなく実際のゲームデータ</b>を基に、できる限り早く正確に反映します</li>
         <li>皆さんの<b>フィードバックとティア投票</b>をサイトに反映し続けます</li>
@@ -1512,10 +1789,7 @@ const NOTICE = {
         <li>💬 <b>社群</b> — 即時聊天·組隊招募·梯隊投票·攻略·意見回饋（韓/英/日/中 自動翻譯）</li>
         <li>🔒 <b>安全</b> — 髒話·個資過濾、檢舉、資安強化</li>
       </ul></div>
-      <div class="ncard"><h4>🆕 最近更新</h4><ul>
-        <li>反映遊戲 <b>v2.1.1</b> 平衡調整（Fury·Vector 等數值）</li>
-        <li>圖鑑梯隊即時反映<b>大家的投票（社群梯隊）</b></li>
-      </ul></div>
+      {{GAMEPATCH}}{{SITEUPDATES}}
       <div class="ncard"><h4>🤝 未來的承諾</h4><ul>
         <li>遊戲更新時，<b>以實際遊戲資料為準，絕不臆測</b>，盡快且準確地反映</li>
         <li>持續把大家的<b>回饋與梯隊投票</b>融入網站</li>
@@ -1528,7 +1802,103 @@ const NOTICE = {
       <p class="nsign">非官方粉絲創作·與遊戲公司無關。建議與錯誤回報，歡迎透過 <b>社群→意見回饋</b> 隨時提出。一起打造吧，感謝！<br>— <b>MAMMON</b></p>
     </div>` }
 };
-function renderNotice(){ const el=document.getElementById("noticeBody"); if(el) el.innerHTML=(NOTICE[LANG]||NOTICE.ko).html; }
+/* 🎮 최신 게임 패치 (공식 패치노트 기준) — 새 패치 나오면 이 객체만 갱신 */
+const GAME_PATCH = {
+  ver:"v2.1.1", date:"2026-07-09", url:"https://niceplans.studio/patchnotes_2.1.1_en",
+  head:{ ko:"🎮 게임 패치 소식", en:"🎮 Game patch news", ja:"🎮 ゲームパッチ情報", zh:"🎮 遊戲更新消息" },
+  more:{ ko:"공식 패치노트 보기 ↗", en:"View official patch notes ↗", ja:"公式パッチノートを見る ↗", zh:"查看官方更新說明 ↗" },
+  items:{
+    ko:["<b>퓨리</b> 버프 — 최대 체력 725→750 · 킥 피해 121→133 · 오버드라이브 쿨 10→8초",
+        "<b>벡터</b> 버프 — 기본 DPS 98→106 · 스태프 공속·궁 이동속도 상향",
+        "<b>세진</b> 너프 — 마크 중첩 피해 50%→35% · 지속 7→6초",
+        "<b>칸</b> 너프 — 포탑 체력·피해·사거리 하향"],
+    en:["<b>Fury</b> buff — Max HP 725→750 · Kick 121→133 · Overdrive CD 10→8s",
+        "<b>Vector</b> buff — Base DPS 98→106 · staff fire-rate & ult move-speed up",
+        "<b>Se-Jin</b> nerf — Mark stack dmg 50%→35% · duration 7→6s",
+        "<b>Khan</b> nerf — turret HP/damage/range reduced"],
+    ja:["<b>Fury</b> 強化 — 最大HP 725→750 · キック 121→133 · オーバードライブCT 10→8秒",
+        "<b>Vector</b> 強化 — 基本DPS 98→106 · スタッフ攻速・アルト移動速度UP",
+        "<b>Se-Jin</b> 弱体 — マーク重複ダメージ 50%→35% · 持続 7→6秒",
+        "<b>Khan</b> 弱体 — タレットのHP・ダメージ・射程を下方"],
+    zh:["<b>Fury</b> 增強 — 最大生命 725→750 · 踢擊 121→133 · 超載冷卻 10→8秒",
+        "<b>Vector</b> 增強 — 基礎DPS 98→106 · 法杖攻速·大招移速提升",
+        "<b>Se-Jin</b> 削弱 — 標記疊加傷害 50%→35% · 持續 7→6秒",
+        "<b>Khan</b> 削弱 — 砲塔生命·傷害·射程下調"]
+  }
+};
+/* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
+const SITE_UPDATES = [
+  { date:"2026-07-09",
+    ko:"도감에 영웅 검색 추가 · 공지 디자인 개선(라인 아이콘·섹션별 색)",
+    en:"Hero search in the dex · notice redesign (line icons, section colors)",
+    ja:"図鑑にヒーロー検索 · お知らせのデザイン改善（ラインアイコン・セクション色）",
+    zh:"圖鑑新增英雄搜尋 · 公告改版（線條圖示·分區配色）" },
+  { date:"2026-07-09",
+    ko:"메뉴 개편 — 채팅·파티를 상단에서 바로 열 수 있게, 커뮤니티는 드롭다운으로",
+    en:"Menu revamp — open chat & party right from the top, community in a dropdown",
+    ja:"メニュー刷新 — チャット・パーティを上部からすぐ開けるように、コミュニティはドロップダウンに",
+    zh:"選單改版 — 聊天·組隊可從頂部直接開啟，社群整理進下拉選單" },
+  { date:"2026-07-09",
+    ko:"공지 탭 신설 · 공식 링크 추가 · 도감 티어에 커뮤니티 투표 반영",
+    en:"New Notice tab · official links · hero-dex tiers reflect community votes",
+    ja:"お知らせタブ新設 · 公式リンク · 図鑑ティアにコミュニティ投票を反映",
+    zh:"新增公告分頁 · 官方連結 · 圖鑑梯隊反映社群投票" },
+  { date:"2026-07-09",
+    ko:"게임 v2.1.1 밸런스 패치 반영 (퓨리·벡터·세진·칸)",
+    en:"Reflected game v2.1.1 balance patch (Fury/Vector/Se-Jin/Khan)",
+    ja:"ゲーム v2.1.1 バランス調整を反映（Fury/Vector/Se-Jin/Khan）",
+    zh:"反映遊戲 v2.1.1 平衡調整（Fury/Vector/Se-Jin/Khan）" },
+  { date:"2026-07-08",
+    ko:"보안 강화 · 채팅 번역 정확도 개선 · 번역 안정성 향상",
+    en:"Security hardening · better chat-translation accuracy & reliability",
+    ja:"セキュリティ強化 · チャット翻訳の精度・安定性を改善",
+    zh:"資安強化 · 聊天翻譯精準度與穩定性提升" },
+  { date:"2026-07-08",
+    ko:"팁 좋아요·댓글 · 채팅 도배방지 개선",
+    en:"Tip likes & comments · improved chat anti-spam",
+    ja:"攻略メモのいいね・コメント · 連投防止の改善",
+    zh:"攻略按讚·留言 · 洗版防護改善" },
+  { date:"2026-07-08",
+    ko:"도감 스킬 아이콘 전면 재정리 · 사이트 버전 표기 도입",
+    en:"Hero-dex skill icons fully re-mapped · site version label added",
+    ja:"図鑑スキルアイコンを全面再整理 · サイトバージョン表記を追加",
+    zh:"圖鑑技能圖示全面重整 · 新增網站版本標示" },
+  { date:"2026-07-06",
+    ko:"사이트 오픈 — 카운터픽·도감·커뮤니티(채팅·파티·티어·팁·피드백·통계)·다국어",
+    en:"Site launch — counter-picks, hero dex, community (chat/party/tier/tips/feedback/stats) & multilingual",
+    ja:"サイト公開 — カウンターピック・図鑑・コミュニティ（チャット/パーティ/ティア/攻略/フィードバック/統計）・多言語",
+    zh:"網站上線 — 剋制選角·圖鑑·社群（聊天/組隊/梯隊/攻略/回饋/統計）·多語言" }
+];
+function ncardPatch(){
+  const g=GAME_PATCH, L=LANG;
+  const items=(g.items[L]||g.items.ko).map(x=>`<li>${x}</li>`).join("");
+  return `<div class="ncard"><h4>${g.head[L]||g.head.ko} <span class="patchver">${g.ver}</span><span class="patchdate">${g.date}</span></h4><ul>${items}</ul>`
+    +`<p class="npatchlink"><a href="${g.url}" target="_blank" rel="noopener noreferrer">${g.more[L]||g.more.ko}</a></p></div>`;
+}
+function ncardUpdates(){
+  const L=LANG, head={ko:"🆕 사이트 업데이트",en:"🆕 Site updates",ja:"🆕 サイト更新",zh:"🆕 網站更新"}[L]||"🆕 사이트 업데이트";
+  const rows=SITE_UPDATES.slice(0,8).map(u=>`<li><span class="udate">${u.date}</span>${u[L]||u.ko}</li>`).join("");
+  return `<div class="ncard"><h4>${head}</h4><ul class="ulog">${rows}</ul></div>`;
+}
+/* 🎨 미니멀 라인 아이콘 세트 (공지·모달의 이모지를 통일된 라인 아이콘으로 치환) */
+const IC = {
+  check:'<svg class="nico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.3l2.5 2.5 4.9-5"/></svg>',
+  patch:'<svg class="nico" viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="10" rx="4.5"/><line x1="7" y1="10.5" x2="7" y2="13.5"/><line x1="5.5" y1="12" x2="8.5" y2="12"/><circle cx="15.3" cy="11" r="1.1" fill="currentColor" stroke="none"/><circle cx="17.5" cy="13" r="1.1" fill="currentColor" stroke="none"/></svg>',
+  spark:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 3.5l1.9 5.6 5.6 1.9-5.6 1.9L12 18.5l-1.9-5.6L4.5 11l5.6-1.9z"/></svg>',
+  heart:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 20S4.5 15.5 4.5 10.2A3.7 3.7 0 0 1 12 7a3.7 3.7 0 0 1 7.5 3.2C19.5 15.5 12 20 12 20z"/></svg>',
+  link:'<svg class="nico" viewBox="0 0 24 24"><path d="M10 13.5l4-4"/><path d="M9 11l-1.8 1.8a3 3 0 0 0 4.2 4.2L13 15"/><path d="M15 13l1.8-1.8a3 3 0 0 0-4.2-4.2L11 8.8"/></svg>',
+  target:'<svg class="nico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.6"/><circle cx="12" cy="12" r="0.7" fill="currentColor" stroke="none"/></svg>',
+  book:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 5.5C10.2 3.9 7.6 3.4 4.5 3.7c-.6.1-1 .6-1 1.2v13c0 .7.7 1.2 1.4 1.1 2.7-.3 5 .2 7.1 1.7 2.1-1.5 4.4-2 7.1-1.7.7.1 1.4-.4 1.4-1.1v-13c0-.6-.4-1.1-1-1.2-3.1-.3-5.7.2-7.5 1.8z"/><line x1="12" y1="5.5" x2="12" y2="20.4"/></svg>',
+  people:'<svg class="nico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16.4 5.5a3.2 3.2 0 0 1 0 5.8"/><path d="M18 13.4a6 6 0 0 1 3 5.6"/></svg>',
+  shield:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 3l7 2.8v4.7c0 4.4-3 8-7 9.2-4-1.2-7-4.8-7-9.2V5.8z"/><path d="M9 12l2 2 4-4.2"/></svg>',
+  download:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 4v9.5"/><path d="M8 10l4 4 4-4"/><path d="M5.5 19h13"/></svg>'
+};
+const EMO2IC = { "✅":IC.check, "🎮":IC.patch, "🆕":IC.spark, "🤝":IC.heart, "🔗":IC.link, "🎯":IC.target, "📖":IC.book, "💬":IC.people, "🔒":IC.shield, "📱":IC.download };
+function iconize(html){ for(const k in EMO2IC) html=html.split(k).join(EMO2IC[k]); return html; }
+function renderNotice(){
+  const el=document.getElementById("noticeBody"); if(!el) return;
+  el.innerHTML=iconize((NOTICE[LANG]||NOTICE.ko).html.replace("{{GAMEPATCH}}",ncardPatch()).replace("{{SITEUPDATES}}",ncardUpdates()));
+}
 /* ════════ ⚠ 권한 고지(모달)·하단 바 — 팬메이드 톤 · 4개 언어 ════════ */
 const AUTH = {
   ko:{ badge:"⚠ 비공식 팬사이트", agree:"동의하고 시작하기",
@@ -1555,31 +1925,63 @@ const AUTH = {
 function renderAuthText(){
   const a = AUTH[LANG] || AUTH.ko;
   const badge=document.querySelector(".authBadge"); if(badge) badge.textContent=a.badge;
-  const body=document.getElementById("authBodyText"); if(body) body.innerHTML=a.body;
+  const body=document.getElementById("authBodyText"); if(body) body.innerHTML=iconize(a.body);
   const agree=document.querySelector(".authAgree"); if(agree) agree.textContent=a.agree;
   const foot=document.getElementById("authBarText"); if(foot) foot.innerHTML=a.footer;
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", renderAuthText); else renderAuthText();
+/* 현재 활성 뷰 추적 (헤더 재적용용) */
+let CURVIEW = "notice";
+/* 커뮤니티 서브뷰별 헤더 (제목·부제 — 전부 I18N에 있는 키) */
+const GOCOMM_HEAD = {
+  chat:["채팅","전세계 유저와 자유 수다 · 최근 100개"],
+  party:["파티","같이 할 팀원 찾기 · 게임 닉네임으로 친구 추가"],
+  tier:["티어","최다 득표 티어 기준 배치"],
+  tips:["팁","영웅 팁 게시판"],
+  fb:["피드백","오류 제보 · 기능 제안"],
+  stats:["통계","방문자 통계"]
+};
+function setHead(a,b){ const t=document.getElementById("headTitle"),d=document.getElementById("headDesc"); if(t)t.textContent=a; if(d)d.textContent=b; }
+function applyHeader(){
+  const v=CURVIEW;
+  if(v==="notice"){ const n=NOTICE[LANG]||NOTICE.ko; setHead(n.title,n.desc); return; }
+  if(v==="board"){ setHead(BL("head"), BL("desc")); return; }
+  if(v.indexOf("comm:")===0){ const h=GOCOMM_HEAD[v.slice(5)]; if(h) setHead(T(h[0]),T(h[1])); return; }
+  const info=TAB_INFO[v]; if(info) setHead(T(info.title),T(info.desc));
+}
 function go(t,btn){
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
   document.getElementById("tab-"+t).classList.add("on");
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("on"));
   btn.classList.add("on");
-  if(t==="notice"){
-    const n=NOTICE[LANG]||NOTICE.ko;
-    document.getElementById("headTitle").textContent=n.title;
-    document.getElementById("headDesc").textContent=n.desc;
-    renderNotice();
-  } else {
-    const info=TAB_INFO[t];
-    if(info){
-      document.getElementById("headTitle").textContent=T(info.title);
-      document.getElementById("headDesc").textContent=T(info.desc);
-    }
-  }
+  CURVIEW=t; applyHeader(); closeCommMenu();
   window.scrollTo(0,0);
-  if(t==="vote" && window.rsChatToBottom) setTimeout(window.rsChatToBottom, 60);
 }
+/* 채팅·파티(상단 독립 버튼)·티어/팁/피드백/통계(커뮤니티 드롭다운) → 커뮤니티 탭의 서브뷰로 이동 */
+function goComm(sub,btn){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  document.getElementById("tab-vote").classList.add("on");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("on"));
+  if(btn) btn.classList.add("on");
+  CURVIEW="comm:"+sub; applyHeader();
+  if(window.commView) window.commView(sub);
+  closeCommMenu();
+  window.scrollTo(0,0);
+}
+window.goComm=goComm;
+function goCommMenu(sub){ goComm(sub, document.getElementById("navComm")); }
+function toggleCommMenu(){
+  const m=document.getElementById("commMenu"); if(!m) return;
+  if(m.classList.contains("open")){ m.classList.remove("open"); return; }
+  const r=document.getElementById("navComm").getBoundingClientRect();
+  m.style.top=(r.bottom+6)+"px";
+  m.style.left=Math.max(8,Math.min(r.left, window.innerWidth-180))+"px";
+  m.classList.add("open");
+}
+function closeCommMenu(){ const m=document.getElementById("commMenu"); if(m) m.classList.remove("open"); }
+document.addEventListener("click",e=>{ if(!e.target.closest("#navComm") && !e.target.closest("#commMenu")) closeCommMenu(); });
+window.addEventListener("scroll",closeCommMenu,{passive:true});
+window.addEventListener("resize",closeCommMenu);
 let toastTimer;
 function toast(msg){
   const t=document.getElementById("toast");
@@ -1669,7 +2071,7 @@ function T(s){ if(LANG==="ko"||s==null||s==="") return s; const d=I18N[LANG]; re
 function applyStatic(){
   const nav=document.querySelectorAll("nav button");
   const nlb=document.querySelectorAll("nav button .nlbl");
-  if(nlb.length>=5){ nlb[0].textContent=(NOTICE[LANG]||NOTICE.ko).label; nlb[1].textContent=T("카운터픽"); nlb[2].textContent=T("도감"); nlb[3].textContent=T("커뮤니티"); nlb[4].textContent=T("게임정보"); }
+  if(nlb.length>=8){ nlb[0].textContent=(NOTICE[LANG]||NOTICE.ko).label; nlb[1].textContent=T("카운터픽"); nlb[2].textContent=T("도감"); nlb[3].textContent=BL("nav"); nlb[4].textContent=T("채팅"); nlb[5].textContent=T("파티"); nlb[6].textContent=T("커뮤니티"); nlb[7].textContent=T("게임정보"); }
   const h2p=document.querySelectorAll("#tab-pick h2");
   if(h2p[0]) h2p[0].innerHTML=`${T("적 팀 픽 선택")} <small>${T("최대 3명 · 다시 누르면 해제")}</small>`;
   if(h2p[1]) h2p[1].innerHTML=`${T("추천 픽")} <small>${T("상성 66항목 · 미러픽 · 팀 조합 분석 · 궁연계")}</small>`;
@@ -1700,18 +2102,7 @@ function applyStatic(){
   renderAuthText();
   const ah=document.querySelector(".authBox h3 .y"); if(ah) ah.textContent=T("카운터픽");
   document.title=T("리코셰 스쿼드 카운터픽");
-  const tabs=["notice","pick","dex","vote","info"];
-  const idx=[...document.querySelectorAll("nav button")].findIndex(b=>b.classList.contains("on"));
-  const curT=tabs[idx>=0?idx:0];
-  if(curT==="notice"){
-    const n=NOTICE[LANG]||NOTICE.ko;
-    document.getElementById("headTitle").textContent=n.title;
-    document.getElementById("headDesc").textContent=n.desc;
-  } else {
-    const info=TAB_INFO[curT];
-    document.getElementById("headTitle").textContent=T(info.title);
-    document.getElementById("headDesc").textContent=T(info.desc);
-  }
+  applyHeader();
   renderNotice();
 }
 function setLang(l){
@@ -1725,7 +2116,7 @@ function setLang(l){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.09-f";
+const SITE_VERSION = "2026.07.09-s";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -1837,7 +2228,7 @@ function checkNameSilent(s){
   return true;
 }
 
-const COOLDOWN = { chat:5000, cmt:30000, fb:60000, pt:60000, ptmsg:3000, reply:5000 };
+const COOLDOWN = { chat:5000, cmt:30000, fb:60000, pt:60000, ptmsg:3000, reply:5000, bpost:60000, breply:5000 };
 function cooldownOK(key){
   const last = +(localStorage.getItem("rs_cd_"+key)||0);
   const remain = COOLDOWN[key] - (Date.now()-last);
@@ -2309,6 +2700,431 @@ document.getElementById("cmtSend").addEventListener("click", async () => {
   btn.disabled = false;
 });
 
+/* ══════ 📝 자유게시판 ══════
+   데이터: board/<pid>{uid,name,title,text,ts,ph,vid,likes,dislikes,replies}
+   미디어: boardmedia/<pid>/photos/{0..3}(base64), boardmedia/<pid>/video/v(base64)
+   — 목록은 글만 구독(가벼움), 사진은 글을 펼칠 때 1회 로드, 영상은 재생 버튼 클릭 시에만 로드 */
+const BD_MAX_PHOTOS = 4, BD_PHOTO_MAXDIM = 1280, BD_PHOTO_MAXCHARS = 800000;
+const BD_VIDEO_MAXBYTES = 10 * 1024 * 1024;
+const BD_IMG_RE = /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+/=]+$/;
+const BD_VID_RE = /^data:video\/[\w.+-]+(;codecs=[\w.,+-]+)?;base64,[A-Za-z0-9+/=]+$/;
+let bdCache = [], bdOpen = new Set(), bdMediaCache = {}, bdVideoState = {};
+let bdDraftPhotos = [], bdDraftVideo = null;
+const bdTrCache = {};   // "p:<pid>" 글(제목+본문) / "r:<pid>|<rid>" 댓글 → 번역문 (null = 같은 언어)
+const BD_IC = {
+  photo:'<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2.5"/><circle cx="12" cy="13" r="4"/><path d="M9 6l1.2-2h3.6L15 6"/></svg>',
+  video:'<svg viewBox="0 0 24 24"><rect x="3" y="5.5" width="13" height="13" rx="2.5"/><path d="M16 10.5l5-3v9l-5-3"/></svg>',
+  play:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polygon points="10,8.5 16,12 10,15.5" fill="currentColor" stroke="none"/></svg>'
+};
+function bdStatic(){
+  document.getElementById("bdSafety").textContent = BL("safety");
+  document.getElementById("bdTitle").placeholder = BL("titlePh");
+  document.getElementById("bdText").placeholder = BL("textPh");
+  document.getElementById("bdPhotoLbl").textContent = BL("photo");
+  document.getElementById("bdVideoLbl").textContent = BL("video");
+  document.getElementById("bdSend").textContent = BL("post");
+  document.getElementById("bdNote").textContent = BL("note");
+  document.getElementById("bdPfLabel").textContent = BL("nickLabel");
+  document.getElementById("bdPfEditBtn").textContent = BL("nickEdit");
+  const n = getNick();
+  const el = document.getElementById("bdPfNick");
+  el.textContent = n || BL("nickUnset");
+  el.classList.toggle("unset", !n);
+  document.getElementById("bdProfileBar").classList.toggle("warn", !n);
+}
+document.getElementById("bdPfEditBtn").addEventListener("click", openNickModal);
+document.addEventListener("rs-nick-changed", bdStatic);
+/* 사진 첨부: 캔버스로 리사이즈(최대 1280px)·JPEG 압축 — 용량 초과 시 품질 단계적 하향 */
+function bdCompressImage(file){
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      try{
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if(!w || !h) return rej(new Error("decode"));
+        const sc = Math.min(1, BD_PHOTO_MAXDIM / Math.max(w, h));
+        w = Math.round(w*sc); h = Math.round(h*sc);
+        const cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+        cv.getContext("2d").drawImage(img, 0, 0, w, h);
+        let q = 0.82, out = cv.toDataURL("image/jpeg", q);
+        while(out.length > BD_PHOTO_MAXCHARS && q > 0.4){ q -= 0.12; out = cv.toDataURL("image/jpeg", q); }
+        out.length > BD_PHOTO_MAXCHARS ? rej(new Error("too-big")) : res(out);
+      }catch(e){ rej(e); }
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("decode")); };
+    img.src = url;
+  });
+}
+function bdRenderPrev(){
+  const box = document.getElementById("bdPrev");
+  box.innerHTML =
+    bdDraftPhotos.map((p,i)=>`<div class="bpitem"><img src="${p}" alt=""><button class="bpx" data-bd-prm="${i}">✕</button></div>`).join("") +
+    (bdDraftVideo ? `<div class="bpitem bpvid">${BD_IC.video} <span>${esc(bdDraftVideo.name)} · ${(bdDraftVideo.size/1048576).toFixed(1)}MB</span><button class="bpx" data-bd-vrm="1">✕</button></div>` : "");
+  document.getElementById("bdPhotoBtn").classList.toggle("has", bdDraftPhotos.length>0);
+  document.getElementById("bdVideoBtn").classList.toggle("has", !!bdDraftVideo);
+}
+document.getElementById("bdPrev").addEventListener("click", e => {
+  const prm = e.target.closest("[data-bd-prm]"), vrm = e.target.closest("[data-bd-vrm]");
+  if(prm){ bdDraftPhotos.splice(+prm.dataset.bdPrm, 1); bdRenderPrev(); }
+  if(vrm){ bdDraftVideo = null; document.getElementById("bdVideoFile").value = ""; bdRenderPrev(); }
+});
+document.getElementById("bdPhotoBtn").addEventListener("click", () => document.getElementById("bdPhotoFile").click());
+document.getElementById("bdVideoBtn").addEventListener("click", () => document.getElementById("bdVideoFile").click());
+document.getElementById("bdPhotoFile").addEventListener("change", async e => {
+  const files = [...(e.target.files||[])];
+  e.target.value = "";
+  for(const f of files){
+    if(bdDraftPhotos.length >= BD_MAX_PHOTOS){ toast(BL("photoMax")); break; }
+    try{ bdDraftPhotos.push(await bdCompressImage(f)); }
+    catch(err){ toast(BL("photoFail")); }
+  }
+  bdRenderPrev();
+});
+document.getElementById("bdVideoFile").addEventListener("change", e => {
+  const f = (e.target.files||[])[0];
+  if(!f) return;
+  if(bdDraftVideo){ toast(BL("vidOne")); e.target.value=""; return; }
+  if(!/^video\//.test(f.type)){ toast(BL("vidType")); e.target.value=""; return; }
+  if(f.size > BD_VIDEO_MAXBYTES){ toast(BL("vidMax")); e.target.value=""; return; }
+  const rd = new FileReader();
+  rd.onload = () => { bdDraftVideo = { data: rd.result, name: f.name, size: f.size }; bdRenderPrev(); };
+  rd.onerror = () => toast(BL("vidType"));
+  rd.readAsDataURL(f);
+});
+const bdTextEl = document.getElementById("bdText");
+bdTextEl.addEventListener("input", () => {
+  document.getElementById("bdCount").textContent = bdTextEl.value.length + "/1000";
+});
+document.getElementById("bdSend").addEventListener("click", async () => {
+  const title = document.getElementById("bdTitle").value.trim();
+  const text = bdTextEl.value.trim();
+  if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  const name = requireNick(); if(!name) return;
+  if(!title){ toast(BL("needTitle")); return; }
+  if(!checkText(title, 60, 1)) return;
+  if(!text && !bdDraftPhotos.length && !bdDraftVideo){ toast(BL("needBody")); return; }
+  if(text && !checkText(text, 1000, 1)) return;
+  if(!cooldownOK("bpost")) return;
+  const btn = document.getElementById("bdSend");
+  btn.disabled = true; btn.textContent = BL("uploading");
+  let postRef = null;
+  try{
+    postRef = FB.push(FB.ref(FB.db, "board"));
+    await FB.set(postRef, { uid: MY_UID, name, title, text, ts: FB.serverTimestamp(),
+                            ph: bdDraftPhotos.length, vid: bdDraftVideo ? 1 : 0 });
+    // 미디어는 글 생성 후 별도 경로에 저장 (사진과 영상을 나눠 써서 1회 쓰기 용량 제한 회피)
+    if(bdDraftPhotos.length){
+      const ph = {}; bdDraftPhotos.forEach((p,i)=>{ ph[i] = p; });
+      await FB.set(FB.ref(FB.db, `boardmedia/${postRef.key}/photos`), ph);
+    }
+    if(bdDraftVideo) await FB.set(FB.ref(FB.db, `boardmedia/${postRef.key}/video`), { v: bdDraftVideo.data });
+    stampCooldown("bpost");
+    document.getElementById("bdTitle").value = ""; bdTextEl.value = "";
+    document.getElementById("bdCount").textContent = "0/1000";
+    bdDraftPhotos = []; bdDraftVideo = null;
+    document.getElementById("bdPhotoFile").value = ""; document.getElementById("bdVideoFile").value = "";
+    bdRenderPrev();
+    toast(BL("postDone"));
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    // 미디어 저장 실패 시 반쪽짜리 글이 남지 않게 글 자체를 회수
+    if(postRef){ try{ await FB.remove(FB.ref(FB.db, `boardmedia/${postRef.key}`)); await FB.remove(postRef); }catch(e2){} }
+    toast(perm ? BL("rulesNeed") : BL("mediaFail"));
+  }
+  btn.disabled = false; btn.textContent = BL("post");
+});
+async function bdLoadPhotos(pid){
+  if(bdMediaCache[pid]) return;
+  bdMediaCache[pid] = "loading";
+  try{
+    const snap = await FB.get(FB.ref(FB.db, `boardmedia/${pid}/photos`));
+    bdMediaCache[pid] = Object.values(snap.val()||{}).filter(s => typeof s === "string" && BD_IMG_RE.test(s));
+  }catch(e){ bdMediaCache[pid] = []; }
+  renderBd();
+}
+async function bdPlayVideo(pid){
+  if(bdVideoState[pid] === "loading" || (bdVideoState[pid]||"").startsWith("blob:")) return;
+  bdVideoState[pid] = "loading"; renderBd();
+  try{
+    const snap = await FB.get(FB.ref(FB.db, `boardmedia/${pid}/video/v`));
+    const s = snap.val();
+    if(typeof s !== "string" || !BD_VID_RE.test(s)) throw new Error("bad");
+    const comma = s.indexOf(","), mime = s.slice(5, s.indexOf(";"));
+    const bin = atob(s.slice(comma+1));
+    const arr = new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) arr[i] = bin.charCodeAt(i);
+    bdVideoState[pid] = URL.createObjectURL(new Blob([arr], { type: mime }));
+  }catch(e){ bdVideoState[pid] = null; toast(BL("vidFail")); }
+  renderBd();
+}
+window.bdViewPhoto = src => {
+  if(typeof src !== "string" || !BD_IMG_RE.test(src)) return;
+  const ov = document.createElement("div");
+  ov.className = "bdlightbox";
+  const im = document.createElement("img"); im.src = src; ov.appendChild(im);
+  ov.addEventListener("click", () => ov.remove());
+  document.body.appendChild(ov);
+};
+function renderBd(){
+  const list = document.getElementById("bdList");
+  const items = bdCache.slice().sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,50);   // 최신순
+  if(!items.length){ list.innerHTML = `<div class="cmtempty">${BL("empty")}</div>`; return; }
+  list.innerHTML = items.map(p => {
+    if(isHidden("board", p.id) && !IS_ADMIN)
+      return `<div class="cmtitem"><div class="cmtbody" style="color:var(--sub);font-style:italic">🚫 ${T("신고 누적으로 숨겨진 글입니다")}</div></div>`;
+    const mine = p.uid === MY_UID;
+    const likes = Object.keys(p.likes||{}).length, dislikes = Object.keys(p.dislikes||{}).length;
+    const iLike = MY_UID && p.likes && p.likes[MY_UID], iDislike = MY_UID && p.dislikes && p.dislikes[MY_UID];
+    const replies = Object.entries(p.replies||{}).map(([id,r])=>({id,...r})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+    const open = bdOpen.has(p.id);
+    const badges = `${p.ph?`<span class="bdbadge">${BD_IC.photo}${p.ph}</span>`:""}${p.vid?`<span class="bdbadge">${BD_IC.video}</span>`:""}`;
+    let media = "";
+    if(open && p.ph){
+      const m = bdMediaCache[p.id];
+      if(m === "loading" || !m) media += `<div class="bdloading">${BL("photoLoading")}</div>`;
+      else media += `<div class="bdphotos">${m.map((s,i)=>`<img src="${s}" alt="" data-bd-photo="${p.id}|${i}" loading="lazy">`).join("")}</div>`;
+    }
+    if(open && p.vid){
+      const vs = bdVideoState[p.id];
+      if(typeof vs === "string" && vs.startsWith("blob:"))
+        media += `<div class="bdvidbox"><video controls autoplay playsinline src="${vs}"></video></div>`;
+      else if(vs === "loading")
+        media += `<div class="bdvidbox"><div class="bdloading">${BL("vidLoading")}</div></div>`;
+      else
+        media += `<div class="bdvidbox"><button class="bdplay" data-bd-play="${p.id}">${BD_IC.play}${BL("play")}</button></div>`;
+    }
+    return `
+    <div class="cmtitem bditem${open?" open":""}">
+      <div class="cmthead">
+        <span class="cname" style="color:${nameColor(p.uid)}">${esc(p.name)}</span>
+        <span class="ctime">${relTime(p.ts||0)}</span>
+        ${!mine&&MY_UID?`<button class="cdel" onclick="rsReport('board','${p.id}')" title="${T("신고")}">🚩</button>`:""}
+        ${(mine||IS_ADMIN)?`<button class="cdel" data-bd-del="${p.id}" title="${T("삭제")}">✕</button>`:""}
+      </div>
+      <div class="bdtitlerow" data-bd-open="${p.id}">
+        <span class="bdtitle">${esc(p.title||"")}</span>
+        <span class="bdbadges">${badges}</span>
+        <span class="bdcaret">▼</span>
+      </div>
+      ${!open && p.text ? `<div class="bdpreviewtxt">${esc(p.text)}</div>` : ""}
+      ${open && p.text ? `<div class="bdbody">${esc(p.text)}</div>` : ""}
+      ${bdTrCache["p:"+p.id]?`<div class="bdtr">↳ ${esc(bdTrCache["p:"+p.id])}</div>`:""}
+      ${media}
+      <div class="cmtacts">
+        <button class="cmtact ${iLike?'like-on':''}" data-bd-like="${p.id}">👍 <b>${likes}</b></button>
+        <button class="cmtact ${iDislike?'dis-on':''}" data-bd-dislike="${p.id}">👎 <b>${dislikes}</b></button>
+        <button class="cmtact ${open?'rep-on':''}" data-bd-open="${p.id}">💬 ${BL("comment")}${replies.length?` <b>${replies.length}</b>`:''}</button>
+        ${!mine?`<button class="cmtact ${bdTrCache["p:"+p.id]!==undefined?'rep-on':''}" data-bd-tr="${p.id}" title="${T("번역")}">🌐</button>`:""}
+      </div>
+      ${open ? `<div class="replywrap">
+        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}">${esc(r.name)}</span>${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${r.uid!==MY_UID?`<button class="rdel" data-bd-rtr="${p.id}|${r.id}" title="${T("번역")}">🌐</button>`:""}${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-bd-rdel="${p.id}|${r.id}" title="${T("삭제")}">✕</button>`:""}${bdTrCache["r:"+p.id+"|"+r.id]?`<span class="bdrtr">↳ ${esc(bdTrCache["r:"+p.id+"|"+r.id])}</span>`:""}</div>`).join("")}
+        <div class="replyin"><input maxlength="150" placeholder="${BL("commentPh")}" data-bd-rinput="${p.id}"><button data-bd-rsend="${p.id}">${BL("regBtn")}</button></div>
+      </div>` : ''}
+    </div>`;
+  }).join("");
+}
+async function bdSendReply(pid, inputEl){
+  const text = (inputEl.value||"").trim();
+  if(!MY_UID){ toast(T("연결 중입니다")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  const name = requireNick(); if(!name) return;
+  if(!checkText(text, 150, 1) || !cooldownOK("breply")) return;
+  inputEl.value = "";
+  try{
+    await FB.push(FB.ref(FB.db, `board/${pid}/replies`), { uid: MY_UID, name, text, ts: FB.serverTimestamp() });
+    stampCooldown("breply");
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? BL("rulesNeed") : BL("failGeneric"));
+  }
+}
+document.getElementById("bdList").addEventListener("keydown", e => {
+  const inp = e.target.closest("[data-bd-rinput]");
+  if(inp && e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); bdSendReply(inp.dataset.bdRinput, inp); }
+});
+document.getElementById("bdList").addEventListener("click", async e => {
+  const openT = e.target.closest("[data-bd-open]"), del = e.target.closest("[data-bd-del]"),
+        like = e.target.closest("[data-bd-like]"), dislike = e.target.closest("[data-bd-dislike]"),
+        play = e.target.closest("[data-bd-play]"), photo = e.target.closest("[data-bd-photo]"),
+        rsend = e.target.closest("[data-bd-rsend]"), rdel = e.target.closest("[data-bd-rdel]"),
+        tr = e.target.closest("[data-bd-tr]"), rtr = e.target.closest("[data-bd-rtr]");
+  if(tr){
+    const key = "p:"+tr.dataset.bdTr;
+    if(bdTrCache[key] !== undefined){ delete bdTrCache[key]; renderBd(); return; }   // 다시 누르면 접기
+    const p = bdCache.find(x=>x.id===tr.dataset.bdTr); if(!p) return;
+    try{
+      bdTrCache[key] = await translateText([p.title||"", p.text||""].filter(Boolean).join("\n\n"));
+      renderBd();
+      if(bdTrCache[key] === null) toast(T("이미 같은 언어입니다"));
+    }catch(err){ toast(T("번역 실패 — 잠시 후 다시 시도해주세요")); }
+    return;
+  }
+  if(rtr){
+    const key = "r:"+rtr.dataset.bdRtr;
+    if(bdTrCache[key] !== undefined){ delete bdTrCache[key]; renderBd(); return; }
+    const [pid,rid] = rtr.dataset.bdRtr.split("|");
+    const r = (bdCache.find(x=>x.id===pid)||{}).replies?.[rid]; if(!r) return;
+    try{
+      bdTrCache[key] = await translateText(r.text||"");
+      renderBd();
+      if(bdTrCache[key] === null) toast(T("이미 같은 언어입니다"));
+    }catch(err){ toast(T("번역 실패 — 잠시 후 다시 시도해주세요")); }
+    return;
+  }
+  if(photo){
+    const [pid,i] = photo.dataset.bdPhoto.split("|");
+    const m = bdMediaCache[pid];
+    if(Array.isArray(m) && m[+i]) bdViewPhoto(m[+i]);
+    return;
+  }
+  if(openT){
+    const id = openT.dataset.bdOpen;
+    if(bdOpen.has(id)) bdOpen.delete(id);
+    else { bdOpen.add(id); const p = bdCache.find(x=>x.id===id); if(p && p.ph) bdLoadPhotos(id); }
+    renderBd(); return;
+  }
+  if(play){ bdPlayVideo(play.dataset.bdPlay); return; }
+  if(del){
+    if(!confirm(BL("delPost"))) return;
+    try{
+      await FB.remove(FB.ref(FB.db, `boardmedia/${del.dataset.bdDel}`));
+      await FB.remove(FB.ref(FB.db, `board/${del.dataset.bdDel}`));
+      toast(T("삭제되었습니다"));
+    }catch(err){ toast(T("삭제 실패")); }
+    return;
+  }
+  if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  try{
+    if(like){
+      const id = like.dataset.bdLike, p = bdCache.find(x=>x.id===id);
+      const on = p&&p.likes&&p.likes[MY_UID];
+      await FB.set(FB.ref(FB.db,`board/${id}/likes/${MY_UID}`), on?null:true);
+      if(!on && p&&p.dislikes&&p.dislikes[MY_UID]) await FB.set(FB.ref(FB.db,`board/${id}/dislikes/${MY_UID}`), null);
+    }
+    if(dislike){
+      const id = dislike.dataset.bdDislike, p = bdCache.find(x=>x.id===id);
+      const on = p&&p.dislikes&&p.dislikes[MY_UID];
+      await FB.set(FB.ref(FB.db,`board/${id}/dislikes/${MY_UID}`), on?null:true);
+      if(!on && p&&p.likes&&p.likes[MY_UID]) await FB.set(FB.ref(FB.db,`board/${id}/likes/${MY_UID}`), null);
+    }
+    if(rsend){ const inp = e.currentTarget.querySelector(`[data-bd-rinput="${rsend.dataset.bdRsend}"]`); if(inp) bdSendReply(rsend.dataset.bdRsend, inp); }
+    if(rdel){ const [pid,rid] = rdel.dataset.bdRdel.split('|'); if(confirm(BL("delCmt"))) await FB.remove(FB.ref(FB.db,`board/${pid}/replies/${rid}`)); }
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? BL("rulesNeed") : BL("failGeneric"));
+  }
+});
+
+/* 콘솔 디버그용 — DB 없이 게시판 렌더를 확인 (rsBdDebug.inject([{id,uid,name,title,text,ts,ph,vid}])) */
+window.rsBdDebug = {
+  inject(posts){ bdCache = posts; renderBd(); },
+  media(pid, arr){ bdMediaCache[pid] = arr; renderBd(); },
+  video(pid, url){ bdVideoState[pid] = url; renderBd(); },
+  compress: bdCompressImage,
+  draft(){ return { photos: bdDraftPhotos.length, video: !!bdDraftVideo }; },
+  greets(list){ gCache = list; renderGreets(); }
+};
+
+/* ══════ 👋 방명록 (공지 첫 화면) ══════
+   greets/<gid>{uid,name,text?,ts} — 하루 1회(기기 기준), 한 줄 인사는 선택(≤30자).
+   번역 캐시는 게시판과 공유(bdTrCache, "g:" 키 — 언어 전환 시 함께 초기화됨) */
+const GREET_L = {
+  title:{ko:"방명록",en:"Guestbook",ja:"ゲストブック",zh:"訪客簿"},
+  sub:{ko:"다녀간 흔적을 남겨보세요",en:"Say hi as you pass by",ja:"あいさつを残していってね",zh:"路過留個招呼吧"},
+  today:{ko:"오늘 {n}명이 인사했어요",en:"{n} said hi today",ja:"今日 {n}人があいさつ",zh:"今天 {n}人打過招呼"},
+  ph:{ko:"한 줄 인사 (선택 · 30자)",en:"One-line hello (optional · 30 chars)",ja:"ひとことあいさつ（任意・30字）",zh:"一句話招呼（選填・30字）"},
+  send:{ko:"👋 인사 남기기",en:"👋 Say hi",ja:"👋 あいさつする",zh:"👋 打招呼"},
+  done:{ko:"✓ 오늘 인사를 남겼어요 — 내일 또 만나요!",en:"✓ You said hi today — see you tomorrow!",ja:"✓ 今日のあいさつ完了 — また明日！",zh:"✓ 今天已打過招呼 — 明天見！"},
+  empty:{ko:"아직 인사가 없어요 — 첫 👋를 남겨보세요!",en:"No hellos yet — leave the first 👋!",ja:"まだあいさつがありません — 最初の👋をどうぞ！",zh:"還沒有人打招呼 — 留下第一個👋吧！"},
+  sent:{ko:"인사를 남겼습니다! 👋",en:"Hi sent! 👋",ja:"あいさつしました！👋",zh:"已打招呼！👋"},
+  delConfirm:{ko:"이 인사를 삭제할까요?",en:"Delete this hello?",ja:"このあいさつを削除しますか？",zh:"要刪除這則招呼嗎？"},
+  rulesNeed:{ko:"⚙️ 서버 규칙 업데이트(v10)가 필요합니다 — 관리자에게 알려주세요",en:"⚙️ Server rules update (v10) required",ja:"⚙️ サーバールールの更新(v10)が必要です",zh:"⚙️ 需要更新伺服器規則(v10)"}
+};
+const GL = k => (GREET_L[k]||{})[LANG] || (GREET_L[k]||{}).ko || k;
+let gCache = [];
+const gTodayKey = () => new Date().toDateString();
+const gDoneToday = () => localStorage.getItem("rs_greet_day") === gTodayKey();
+function gStatic(){
+  document.getElementById("gTitle").textContent = GL("title");
+  document.getElementById("gSub").textContent = GL("sub");
+  document.getElementById("gText").placeholder = GL("ph");
+  document.getElementById("gSend").textContent = GL("send");
+  document.getElementById("gDone").textContent = GL("done");
+  const done = gDoneToday();
+  document.getElementById("gIn").style.display = done ? "none" : "flex";
+  document.getElementById("gDone").style.display = done ? "block" : "none";
+}
+function renderGreets(){
+  const t0 = new Date(); t0.setHours(0,0,0,0);
+  const todayN = gCache.filter(g => (g.ts||0) >= t0.getTime()).length;
+  document.getElementById("gToday").textContent = todayN ? GL("today").replace("{n}", todayN) : "";
+  const items = gCache.slice().sort((a,b)=>(b.ts||0)-(a.ts||0))
+    .filter(g => !isHidden("greets", g.id) || IS_ADMIN).slice(0,8);
+  document.getElementById("gList").innerHTML = items.length ? items.map(g => {
+    const mine = g.uid === MY_UID;
+    const tr = bdTrCache["g:"+g.id];
+    return `<div class="gitem">
+      <span class="gwv">👋</span>
+      <span class="gnm" style="color:${nameColor(g.uid)}">${esc(g.name)}</span>
+      ${g.text?`<span class="gtx">${esc(g.text)}</span>`:""}
+      <span class="gtm">${relTime(g.ts||0)}</span>
+      ${g.text&&!mine?`<button class="gact" data-g-tr="${g.id}" title="${T("번역")}">🌐</button>`:""}
+      ${g.text&&!mine&&MY_UID?`<button class="gact" onclick="rsReport('greets','${g.id}')" title="${T("신고")}">🚩</button>`:""}
+      ${(mine||IS_ADMIN)?`<button class="gact" data-g-del="${g.id}" title="${T("삭제")}">✕</button>`:""}
+      ${tr?`<span class="gtr">↳ ${esc(tr)}</span>`:""}
+    </div>`;
+  }).join("") : `<div class="gempty">${GL("empty")}</div>`;
+}
+document.getElementById("gSend").addEventListener("click", async () => {
+  const text = document.getElementById("gText").value.trim();
+  if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  const name = requireNick(); if(!name) return;
+  if(gDoneToday()){ gStatic(); return; }
+  if(text && !checkText(text, 30, 1)) return;
+  const btn = document.getElementById("gSend");
+  btn.disabled = true;
+  try{
+    const payload = { uid: MY_UID, name, ts: FB.serverTimestamp() };
+    if(text) payload.text = text;
+    await FB.push(FB.ref(FB.db, "greets"), payload);
+    localStorage.setItem("rs_greet_day", gTodayKey());
+    document.getElementById("gText").value = "";
+    gStatic();
+    toast(GL("sent"));
+  }catch(err){
+    const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm ? GL("rulesNeed") : BL("failGeneric"));
+  }
+  btn.disabled = false;
+});
+document.getElementById("gText").addEventListener("keydown", e => {
+  if(e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); document.getElementById("gSend").click(); }
+});
+document.getElementById("gList").addEventListener("click", async e => {
+  const tr = e.target.closest("[data-g-tr]"), del = e.target.closest("[data-g-del]");
+  if(tr){
+    const key = "g:"+tr.dataset.gTr;
+    if(bdTrCache[key] !== undefined){ delete bdTrCache[key]; renderGreets(); return; }
+    const g = gCache.find(x=>x.id===tr.dataset.gTr); if(!g || !g.text) return;
+    try{
+      bdTrCache[key] = await translateText(g.text);
+      renderGreets();
+      if(bdTrCache[key] === null) toast(T("이미 같은 언어입니다"));
+    }catch(err){ toast(T("번역 실패 — 잠시 후 다시 시도해주세요")); }
+    return;
+  }
+  if(del){
+    if(!confirm(GL("delConfirm"))) return;
+    try{ await FB.remove(FB.ref(FB.db, `greets/${del.dataset.gDel}`)); toast(T("삭제되었습니다")); }
+    catch(err){ toast(T("삭제 실패")); }
+  }
+});
+
 /* ══════ 📮 사이트 피드백 ══════ */
 const fbText = document.getElementById("fbText");
 fbText.addEventListener("input", () => {
@@ -2617,12 +3433,12 @@ function notifyParty(p){
       icon: typeof GAME_LOGO !== "undefined" ? GAME_LOGO : undefined,
       tag: "rs-party-" + p.id
     });
-    n.onclick = () => { window.focus(); commView("party"); n.close(); };
+    n.onclick = () => { window.focus(); (window.goComm ? window.goComm("party", document.getElementById("navParty")) : commView("party")); n.close(); };
   }catch(e){}
 }
 
 /* ══════ 초기화 & 실시간 구독 ══════ */
-renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter(); renderCmts(); renderChat();
+renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter(); renderCmts(); renderChat(); bdStatic(); renderBd(); gStatic(); renderGreets();
 // 통합 프로필 바 + 닉네임 모달
 renderProfile();
 document.getElementById("pfEditBtn").addEventListener("click", openNickModal);
@@ -2642,6 +3458,8 @@ trTog.addEventListener("change", () => {
 
 document.addEventListener("rs-lang-changed", () => {
   renderProfile(); renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter();
+  for(const k in bdTrCache) delete bdTrCache[k];   // 번역은 언어별이라 언어 전환 시 초기화 (게시판+방명록 공유)
+  bdStatic(); renderBd(); gStatic(); renderGreets();
   renderCmts(); renderChat(); renderParty(); renderStats(statsCache);
   if(MY_UID && !IS_BANNED) document.getElementById("voteHint").textContent = "✅ " + T("연결 완료 — 아래에서 영웅별 티어를 골라주세요. 언제든 바꿀 수 있습니다.");
 });
@@ -2658,10 +3476,21 @@ FB.onValue(FB.query(FB.ref(FB.db, "chat"), FB.limitToLast(100)), snap => {
   autoTranslateNew();
 });
 FB.onValue(FB.ref(FB.db, "reports"), snap => {
-  reportsCache = snap.val() || { chat:{}, comments:{} };
+  reportsCache = snap.val() || { chat:{}, comments:{}, board:{} };
   if(!reportsCache.chat) reportsCache.chat = {};
   if(!reportsCache.comments) reportsCache.comments = {};
-  renderChat(); renderCmts();
+  if(!reportsCache.board) reportsCache.board = {};
+  renderChat(); renderCmts(); renderBd();
+});
+FB.onValue(FB.query(FB.ref(FB.db, "board"), FB.limitToLast(50)), snap => {
+  const v = snap.val() || {};
+  bdCache = Object.entries(v).map(([id,p]) => ({ id, ...p }));
+  renderBd();
+});
+FB.onValue(FB.query(FB.ref(FB.db, "greets"), FB.limitToLast(100)), snap => {
+  const v = snap.val() || {};
+  gCache = Object.entries(v).map(([id,g]) => ({ id, ...g }));
+  renderGreets();
 });
 FB.onValue(FB.ref(FB.db, "stats"), snap => { statsCache = snap.val(); renderStats(statsCache); });
 FB.onValue(FB.query(FB.ref(FB.db, "parties"), FB.limitToLast(50)), snap => {
@@ -2697,7 +3526,7 @@ FB.authReady.then(async uid => {
   const hint = document.getElementById("voteHint");
   if(IS_BANNED){
     hint.innerHTML = `<span style="color:var(--bad)">🚫 ${T("커뮤니티 이용이 제한된 상태입니다. 열람만 가능합니다.")}</span>`;
-    ["chatText","chatSend","cmtText","cmtSend","fbText","fbSend"].forEach(id=>{ const el=document.getElementById(id); if(el) el.disabled = true; });
+    ["chatText","chatSend","cmtText","cmtSend","fbText","fbSend","bdTitle","bdText","bdSend","bdPhotoBtn","bdVideoBtn","gText","gSend"].forEach(id=>{ const el=document.getElementById(id); if(el) el.disabled = true; });
   }else{
     hint.textContent = "✅ " + T("연결 완료 — 아래에서 영웅별 티어를 골라주세요. 언제든 바꿀 수 있습니다.");
   }
@@ -2709,7 +3538,7 @@ FB.authReady.then(async uid => {
     const snap = await FB.get(FB.ref(FB.db, `tiervote/votes/${uid}`));
     myVotes = snap.val() || {};
   }catch(e){ myVotes = {}; }
-  renderVoteGrid(); renderBoard(); renderCmts(); renderChat(); renderParty();
+  renderVoteGrid(); renderBoard(); renderCmts(); renderChat(); renderParty(); renderBd();
   collectStats();
 });
 </script>
