@@ -936,6 +936,11 @@
         <button class="cmtbtn" id="fbSend" data-ko="📮 보내기">📮 보내기</button>
       </div>
     </div>
+    <!-- 내가 보낸 피드백 + 운영자 답장 (renderMyFb가 4개 언어로 렌더) -->
+    <div id="myFbWrap" style="display:none">
+      <h2 style="margin-top:20px"><span id="myFbTitle">내가 보낸 피드백</span></h2>
+      <div id="myFbList" class="cmtlist"></div>
+    </div>
     <div id="adminPanel" style="display:none">
       <button class="cmtbtn" id="adminFbBtn" style="width:100%;margin-bottom:8px" data-ko="🔑 관리자: 피드백 열람">🔑 관리자: 피드백 열람</button>
       <div id="adminFbList" class="cmtlist"></div>
@@ -1141,11 +1146,11 @@ const DEFAULT_MATCHUPS = {
   "dread>sejin":[1,"방패가 회로 볼트를 흡수하고 봉쇄 결박은 순간이동기 반응을 봉인 — 프로토타입은 엄폐를 나온 순간 자동 명중"],
   /* ── 오니 관련 ── */
   "oni>calibri":[1,"영적 돌진 연쇄 접근이면 632 HP는 방망이 두 방 — 소용돌이 궁이 켜지기 전에 공허 전하 스턴"],
-  "nova>oni":[2,"영적 돌진 진입을 바인드샷으로 고정 — 근접에 붙은 오니에게 초신성 자폭 확정 명중"],
+  "oni>nova":[1,"바인드샷만 안 맞으면 근접 164 DPS로 확정 우세 — 결박당해도 잡은 물체 던지기로 대응, 초신성 폭발은 영적 돌진 무적시간으로 회피 (커뮤니티 제보)"],
   "magnus>oni":[1,"근접 202 vs 164 DPS 맞교환 우위 — 공허 전하 스턴 타이밍은 불굴의 의지 무적으로 무효화"],
   "oni>twinkle":[1,"이탈기 없는 트윙클에게 돌진 — 지뢰 셋업 전에 붙으면 164 DPS 근접에 무방비"],
   "leo>oni":[1,"물체 없는 공중은 영적 돌진 불가 지대 — 제트 서지 수직 이탈 후 방망이 사거리 밖 일방 사격"],
-  "vector>oni":[1,"영적 돌진 도착 지점에 지뢰 발동 — 916 HP 맷집과 윈드게이트 이탈로 근접 유지를 거부"],
+  "vector>oni":[2,"2.1.1 버프로 데미지 레이스 역전(DPS 106·스태프 170) — 916 HP 맷집에 오니가 맞교환으로 못 뚫고, 스턴 지속 감소 퍽이 공허 전하 스턴마저 무력화 (커뮤니티 제보)"],
   "oni>remedy":[2,"영적 돌진 백라인 직행 — 점프 패드 반응 전 164 DPS로 힐러 증발, 중력 깔때기는 자기방어가 안 됨"],
   "khan>oni":[1,"진입 버스트 타이밍에 실드 매트릭스+무적 퍽 — 추적기 구체가 도주하는 오니를 추격 마무리"],
   "fury>oni":[1,"164 DPS 방망이가 오버드라이브 실드만 충전 — 킥 스턴 후 기절 치명타 산탄 반격"],
@@ -1256,6 +1261,25 @@ const store = {
   set(d){ try{ localStorage.setItem("rs_matchups_v2",JSON.stringify(d)) }catch(e){} }
 };
 MATCHUPS = store.get() || {...DEFAULT_MATCHUPS};
+/* 시드 상성 마이그레이션 — 기본 상성표가 바뀌면, 사용자가 직접 수정하지 않은 항목만 새 기본값으로 갱신.
+   (직접 수정한 항목은 보존. 새 항목 추가 시: SEEDV 올리고 여기 케이스 추가) */
+(function(){
+  const SEEDV = 2;
+  try{
+    const cur = +(localStorage.getItem("rs_matchups_seedv")||1);
+    if(cur < 2){
+      // v2 (2026-07-11, あろめん侍 커뮤니티 제보): 벡터>오니 격상, 노바>오니 → 오니>노바 반전
+      const same = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+      const oldVecOni = [1,"영적 돌진 도착 지점에 지뢰 발동 — 916 HP 맷집과 윈드게이트 이탈로 근접 유지를 거부"];
+      const oldNovaOni = [2,"영적 돌진 진입을 바인드샷으로 고정 — 근접에 붙은 오니에게 초신성 자폭 확정 명중"];
+      if(!MATCHUPS["vector>oni"] || same(MATCHUPS["vector>oni"], oldVecOni)) MATCHUPS["vector>oni"] = DEFAULT_MATCHUPS["vector>oni"];
+      if(MATCHUPS["nova>oni"] && same(MATCHUPS["nova>oni"], oldNovaOni)) delete MATCHUPS["nova>oni"];
+      if(!MATCHUPS["oni>nova"] && !MATCHUPS["nova>oni"]) MATCHUPS["oni>nova"] = DEFAULT_MATCHUPS["oni>nova"];
+      store.set(MATCHUPS);
+    }
+    if(cur < SEEDV) localStorage.setItem("rs_matchups_seedv", String(SEEDV));
+  }catch(e){}
+})();
 
 let enemies = [];
 let edScoreVal = 1;
@@ -2264,7 +2288,11 @@ const INST_L = {
   desc:{ko:"홈 화면에 추가하면 주소 입력 없이 아이콘으로 바로 열려요",en:"Add to your home screen — open with one tap, no typing the address",ja:"ホーム画面に追加すればアイコンからすぐ開けます",zh:"加到主畫面後，點圖示即可直接開啟"},
   btn:{ko:"📲 설치",en:"📲 Install",ja:"📲 追加",zh:"📲 安裝"},
   ios:{ko:"사파리 하단 공유 버튼(⬆)을 누르고 \"홈 화면에 추가\"를 선택하세요",en:"Tap the Share button (⬆) then \"Add to Home Screen\"",ja:"共有ボタン(⬆)から「ホーム画面に追加」を選択してください",zh:"點下方分享按鈕(⬆)，選「加入主畫面」"},
-  done:{ko:"설치되었습니다! 홈 화면에서 열어보세요 🎉",en:"Installed! Open it from your home screen 🎉",ja:"追加しました！ホーム画面から開けます 🎉",zh:"已安裝！請從主畫面開啟 🎉"}
+  done:{ko:"설치되었습니다! 홈 화면에서 열어보세요 🎉",en:"Installed! Open it from your home screen 🎉",ja:"追加しました！ホーム画面から開けます 🎉",zh:"已安裝！請從主畫面開啟 🎉"},
+  kakao:{ko:"카카오톡 안에서는 앱 설치가 안 돼요 — 버튼을 누르면 브라우저로 열려서 설치할 수 있어요",en:"Apps can't be installed inside KakaoTalk — tap the button to open in your browser",ja:"カカオトーク内ではアプリを追加できません — ボタンでブラウザを開いてください",zh:"KakaoTalk 內無法安裝 — 點按鈕改用瀏覽器開啟"},
+  openBtn:{ko:"🌐 브라우저로 열기",en:"🌐 Open in browser",ja:"🌐 ブラウザで開く",zh:"🌐 用瀏覽器開啟"},
+  inapp:{ko:"앱 내 브라우저에서는 설치가 안 돼요 — 메뉴(⋮ 또는 공유)에서 \"다른 브라우저로 열기\"를 눌러주세요",en:"In-app browsers can't install apps — open this page in Chrome/Safari from the menu (⋮ or Share)",ja:"アプリ内ブラウザでは追加できません — メニュー(⋮/共有)から外部ブラウザで開いてください",zh:"App 內建瀏覽器無法安裝 — 請從選單(⋮/分享)改用外部瀏覽器開啟"},
+  menu:{ko:"브라우저 메뉴(⋮)를 열고 \"앱 설치\" 또는 \"홈 화면에 추가\"를 눌러주세요",en:"Open the browser menu (⋮) and tap \"Install app\" or \"Add to Home screen\"",ja:"ブラウザのメニュー(⋮)から「アプリをインストール」または「ホーム画面に追加」を選択してください",zh:"開啟瀏覽器選單(⋮)，點「安裝應用程式」或「加到主畫面」"}
 };
 let instPrompt = null;
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); instPrompt = e; instStatic(); });
@@ -2275,28 +2303,50 @@ window.addEventListener("appinstalled", () => {
   if(typeof toast === "function") toast(INST_L.done[LANG]||INST_L.done.ko);
 });
 function instEnv(){
+  const ua = navigator.userAgent || "";
   const standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
-  const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  return { standalone, ios };
+  const ios = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  const android = /Android/i.test(ua);
+  const kakao = /KAKAOTALK/i.test(ua);                                        // 카카오톡 인앱 브라우저
+  const inapp = kakao || /Instagram|FBAN|FBAV|Line\/|NAVER\(inapp|DaumApps/i.test(ua);   // 기타 인앱
+  return { standalone, ios, android, kakao, inapp };
 }
+let instMode = null;   // "kakao" | "inapp" | "prompt" | "ios" | "menu" | null
 function instStatic(){
   // 공지 탭 카드 + 시작 모달 카드 둘 다 같은 규칙으로 표시/숨김
   const cards = [document.getElementById("instCard"), document.getElementById("authInstCard")].filter(Boolean);
   if(!cards.length) return;
-  const { standalone, ios } = instEnv();
+  const { standalone, ios, android, kakao, inapp } = instEnv();
   const hidden = +(localStorage.getItem("rs_inst_hide")||0) > Date.now();
-  const show = !(standalone || localStorage.getItem("rs_inst_done") || hidden || (!instPrompt && !ios));
+  // 환경별 안내 모드 결정 (모바일이면 어떤 브라우저든 항상 안내가 나오도록)
+  instMode = null;
+  if(!(standalone || localStorage.getItem("rs_inst_done") || hidden)){
+    if(kakao) instMode = "kakao";
+    else if(inapp) instMode = "inapp";
+    else if(instPrompt) instMode = "prompt";
+    else if(ios) instMode = "ios";
+    else if(android) instMode = "menu";
+  }
   const L = k => (INST_L[k][LANG]||INST_L[k].ko);
+  const descKey = { kakao:"kakao", inapp:"inapp", prompt:"desc", ios:"ios", menu:"menu" }[instMode];
   cards.forEach(card => {
-    if(!show){ card.style.display = "none"; return; }
+    if(!instMode){ card.style.display = "none"; return; }
     card.style.display = "flex";
     card.querySelector(".insttxt b").textContent = L("title");
-    card.querySelector(".insttxt span").textContent = instPrompt ? L("desc") : L("ios");
+    card.querySelector(".insttxt span").textContent = L(descKey);
     const btn = card.querySelector(".instbtn");
-    if(btn){ btn.style.display = instPrompt ? "" : "none"; btn.textContent = L("btn"); }
+    if(btn){
+      const hasBtn = instMode === "prompt" || instMode === "kakao";
+      btn.style.display = hasBtn ? "" : "none";
+      btn.textContent = instMode === "kakao" ? L("openBtn") : L("btn");
+    }
   });
 }
 async function instGo(){
+  if(instMode === "kakao"){   // 카카오톡 공식 스킴으로 외부 브라우저 열기
+    location.href = "kakaotalk://web/openExternal?url=" + encodeURIComponent(location.href.split("#")[0]);
+    return;
+  }
   if(!instPrompt) return;
   instPrompt.prompt();
   try{ const r = await instPrompt.userChoice; if(r && r.outcome === "accepted") localStorage.setItem("rs_inst_done","1"); }catch(e){}
@@ -2308,7 +2358,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.10-i";
+const SITE_VERSION = "2026.07.11-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3360,16 +3410,74 @@ document.getElementById("fbSend").addEventListener("click", async () => {
   const btn = document.getElementById("fbSend");
   btn.disabled = true;
   try{
-    await FB.push(FB.ref(FB.db, "feedback"), { cat, name, text, uid: MY_UID, ts: FB.serverTimestamp() });
+    const ref = FB.push(FB.ref(FB.db, "feedback"));
+    await FB.set(ref, { cat, name, text, uid: MY_UID, ts: FB.serverTimestamp() });
+    myFbAdd(ref.key);          // 내 피드백 목록에 기억 → 답장 오면 여기서 확인
     stampCooldown("fb");
     fbText.value = ""; document.getElementById("fbCount").textContent = "0/500";
     toast(T("피드백이 전달되었습니다. 감사합니다! 📮"));
+    renderMyFb();
   }catch(err){
     const perm = String(err&&err.message||err).toLowerCase().includes("permission");
     toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않아 전송할 수 없습니다") : T("전송 실패 — 잠시 후 다시 시도해주세요"));
   }
   btn.disabled = false;
 });
+/* ── 📮 피드백 답장 (운영자 답장 → 작성자 확인) ──
+   내가 보낸 피드백 id를 이 기기에 기억(rs_my_fb) → 개별 조회(규칙 v11: 작성자 본인 읽기 허용).
+   운영자는 관리자 패널에서 답장 작성 → feedback/<fid>/reply{text,ts}. 접속 시 새 답장 토스트 알림. */
+const FBR_L = {
+  myTitle:{ko:"내가 보낸 피드백",en:"My feedback",ja:"送信したフィードバック",zh:"我送出的意見"},
+  waiting:{ko:"⏳ 답변 대기 중 — 운영자가 확인하면 여기에 답장이 표시돼요",en:"⏳ Awaiting reply — MAMMON's answer will appear here",ja:"⏳ 返信待ち — 運営者の返信がここに表示されます",zh:"⏳ 等待回覆 — 管理員的回覆會顯示在這裡"},
+  replyTag:{ko:"💬 운영자 답변",en:"💬 Reply from MAMMON",ja:"💬 運営者の返信",zh:"💬 管理員回覆"},
+  gone:{ko:"(정리된 피드백입니다)",en:"(This feedback was archived)",ja:"(整理済みのフィードバックです)",zh:"(此意見已整理)"},
+  newReply:{ko:"📮 내 피드백에 운영자 답변이 도착했어요! (소통 아님 — 피드백 메뉴에서 확인)",en:"📮 MAMMON replied to your feedback! (Feedback menu)",ja:"📮 フィードバックに返信が届きました！(フィードバックで確認)",zh:"📮 你的意見收到回覆了！(請到意見回饋查看)"},
+  replyPh:{ko:"답장 입력… (500자)",en:"Write a reply… (500)",ja:"返信を入力…(500)",zh:"輸入回覆…(500)"},
+  replyBtn:{ko:"답장",en:"Reply",ja:"返信",zh:"回覆"},
+  replySent:{ko:"답장을 보냈습니다 📮",en:"Reply sent 📮",ja:"返信しました 📮",zh:"已回覆 📮"}
+};
+const FBR = k => (FBR_L[k][LANG]||FBR_L[k].ko);
+window.rsFbDebug = { get renderMyFb(){ return renderMyFb; }, get checkMyFbReplies(){ return checkMyFbReplies; }, myFbIds: () => myFbIds(), myFbAdd: id => myFbAdd(id) };   // 콘솔 점검용
+const myFbIds = () => { try{ return JSON.parse(localStorage.getItem("rs_my_fb")||"[]"); }catch(e){ return []; } };
+function myFbAdd(id){ const a = myFbIds(); a.unshift(id); try{ localStorage.setItem("rs_my_fb", JSON.stringify(a.slice(0,20))); }catch(e){} }
+async function renderMyFb(markSeen){
+  const wrap = document.getElementById("myFbWrap"), list = document.getElementById("myFbList");
+  if(!wrap) return;
+  const ids = myFbIds();
+  if(!ids.length || !MY_UID){ wrap.style.display = "none"; return; }
+  document.getElementById("myFbTitle").textContent = FBR("myTitle");
+  const rows = await Promise.all(ids.map(async id => {
+    try{ const s = await FB.get(FB.ref(FB.db, `feedback/${id}`)); return { id, v: s.val() }; }
+    catch(e){ return { id, v: undefined }; }        // 규칙 미배포(v10 이하) 등 읽기 실패
+  }));
+  let latestReply = 0, shown = 0;
+  const html = rows.map(({id,v}) => {
+    if(v === undefined) return "";
+    shown++;
+    if(v === null) return `<div class="cmtitem"><div class="cmtbody" style="color:var(--sub);font-style:italic">${FBR("gone")}</div></div>`;
+    const rep = v.reply;
+    if(rep && rep.ts) latestReply = Math.max(latestReply, rep.ts);
+    return `<div class="cmtitem">
+      <div class="cmthead"><span class="chero">${esc(v.cat||"")}</span><span class="ctime">${relTime(v.ts||0)}</span></div>
+      <div class="cmtbody">${esc(v.text||"")}</div>
+      ${rep ? `<div class="bdtr"><b>${FBR("replyTag")}</b> · ${relTime(rep.ts||0)}<br>${esc(rep.text||"")}</div>`
+            : `<div class="growthnote" style="margin-top:8px">${FBR("waiting")}</div>`}
+    </div>`;
+  }).join("");
+  wrap.style.display = shown ? "block" : "none";
+  list.innerHTML = html;
+  if(markSeen && latestReply) try{ localStorage.setItem("rs_fb_seen", String(latestReply)); }catch(e){}
+}
+async function checkMyFbReplies(){        // 접속 시 새 답장이 있으면 알림
+  try{
+    const seen = +(localStorage.getItem("rs_fb_seen")||0);
+    for(const id of myFbIds().slice(0,10)){
+      let ts = null;
+      try{ ts = (await FB.get(FB.ref(FB.db, `feedback/${id}/reply/ts`))).val(); }catch(e){}
+      if(ts && ts > seen){ toast(FBR("newReply")); return; }
+    }
+  }catch(e){}
+}
 document.getElementById("myUidCopy").addEventListener("click", () => {
   const code = document.getElementById("myUidCode").textContent;
   navigator.clipboard?.writeText(code).then(()=>toast(T("복사되었습니다"))).catch(()=>{});
@@ -3384,17 +3492,41 @@ async function loadAdminFeedback(){
         <div class="cmthead"><span class="chero">${esc(f.cat||"")}</span><span class="cname">${esc(f.name||"")}</span><span class="ctime">${relTime(f.ts||0)}</span>
           <button class="cdel" data-fb-del="${f.id}" title="${T("삭제")}">✕</button></div>
         <div class="cmtbody">${esc(f.text||"")}</div>
+        ${f.reply?`<div class="bdtr"><b>${FBR("replyTag")}</b> · ${relTime(f.reply.ts||0)}<br>${esc(f.reply.text||"")}</div>`:""}
+        <div class="replyin"><input maxlength="500" placeholder="${FBR("replyPh")}" data-fb-rinput="${f.id}" value=""><button data-fb-rsend="${f.id}">${FBR("replyBtn")}</button></div>
       </div>`).join("") : `<div class="cmtempty">${T("아직 피드백이 없습니다")}</div>`;
   }catch(e){ toast(T("피드백을 불러올 수 없습니다 (관리자 전용)")); }
 }
 document.getElementById("adminFbBtn").addEventListener("click", loadAdminFeedback);
 document.getElementById("adminFbList").addEventListener("click", async e => {
+  const rs = e.target.closest("[data-fb-rsend]");
+  if(rs){   // 운영자 답장 전송
+    const inp = document.querySelector(`[data-fb-rinput="${rs.dataset.fbRsend}"]`);
+    const text = (inp && inp.value || "").trim();
+    if(!text || text.length > 500) return;
+    try{
+      await FB.set(FB.ref(FB.db, `feedback/${rs.dataset.fbRsend}/reply`), { text, ts: FB.serverTimestamp() });
+      toast(FBR("replySent")); loadAdminFeedback();
+    }catch(err){
+      const perm = String(err&&err.message||err).toLowerCase().includes("permission");
+      toast(perm ? "⚙️ 규칙 v11 게시가 필요합니다 (피드백 답장)" : T("전송 실패 — 네트워크를 확인해주세요"));
+    }
+    return;
+  }
   const b = e.target.closest("[data-fb-del]"); if(!b) return;
   if(!confirm(T("이 피드백을 삭제할까요?"))) return;
   try{ await FB.remove(FB.ref(FB.db, `feedback/${b.dataset.fbDel}`)); toast(T("삭제되었습니다")); loadAdminFeedback(); }
   catch(err){
     const perm = String(err&&err.message||err).toLowerCase().includes("permission");
     toast(perm ? T("⚙️ 규칙 업데이트가 필요합니다 (피드백 삭제)") : T("삭제 실패"));
+  }
+});
+document.getElementById("adminFbList").addEventListener("keydown", e => {
+  const inp = e.target.closest("[data-fb-rinput]");
+  if(inp && e.key === "Enter" && !e.isComposing && e.keyCode !== 229){
+    e.preventDefault();
+    const btn = document.querySelector(`[data-fb-rsend="${inp.dataset.fbRinput}"]`);
+    if(btn) btn.click();
   }
 });
 
@@ -3466,6 +3598,7 @@ window.commView = v => {
   const el = document.getElementById("commv-" + v);
   if(el) el.style.display = "";
   if(v === "chat") chatToBottom();   // 숨김 시 리셋된 스크롤 복원
+  if(v === "fb") renderMyFb(true);   // 내 피드백 + 운영자 답장 (열람 = 새 답장 확인 처리)
   document.querySelectorAll("#commTabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
   if(v === "party"){
     PT_SEEN = Date.now();
@@ -3681,6 +3814,7 @@ document.addEventListener("rs-lang-changed", () => {
   renderProfile(); renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter();
   for(const k in bdTrCache) delete bdTrCache[k];   // 번역은 언어별이라 언어 전환 시 초기화 (게시판+방명록 공유)
   bdStatic(); renderBd(); gStatic(); renderGreets();
+  const fbv = document.getElementById("commv-fb"); if(fbv && getComputedStyle(fbv).display !== "none") renderMyFb();
   renderCmts(); renderChat(); renderParty(); renderStats(statsCache);
   if(MY_UID && !IS_BANNED) document.getElementById("voteHint").textContent = "✅ " + T("연결 완료 — 아래에서 영웅별 티어를 골라주세요. 언제든 바꿀 수 있습니다.");
 });
@@ -3760,6 +3894,7 @@ FB.authReady.then(async uid => {
     myVotes = snap.val() || {};
   }catch(e){ myVotes = {}; }
   renderVoteGrid(); renderBoard(); renderCmts(); renderChat(); renderParty(); renderBd();
+  checkMyFbReplies();
   collectStats();
 });
 </script>
