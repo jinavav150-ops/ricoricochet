@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>리코셰 스쿼드 카운터픽</title>
+<!-- PWA (홈 화면 앱 설치) -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0e1118">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RicoSquad">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -224,6 +233,14 @@
   .gin input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:9px;color:var(--txt);padding:8px 11px;font-size:12.5px;font-family:inherit;outline:none}
   .gin input:focus{border-color:var(--ricochet)}
   .gdone{font-size:12px;color:var(--good);background:rgba(74,222,128,.08);border-radius:9px;padding:8px 11px}
+  /* ── 📲 앱 설치(PWA) 안내 카드 ── */
+  .instcard{display:flex;align-items:center;gap:11px;background:var(--panel);border:1px solid rgba(255,176,46,.4);border-radius:13px;padding:10px 12px;margin-bottom:13px}
+  .instcard .instic{width:40px;height:40px;border-radius:10px;flex-shrink:0}
+  .instcard .insttxt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.5}
+  .instcard .insttxt b{font-size:13px;color:var(--txt)}
+  .instcard .insttxt span{font-size:11px;color:var(--sub)}
+  .instcard .instx{background:none;border:none;color:var(--sub);font-size:13px;cursor:pointer;padding:4px;flex-shrink:0}
+  .authinst{margin:14px 0 0;text-align:left;background:var(--panel2)}
   /* 공식 운영진 배지 (uid 기준) */
   .stfbdg{display:inline-flex;align-items:center;font-size:9.5px;font-weight:800;letter-spacing:.4px;color:#22d3ee;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.4);border-radius:6px;padding:1px 6px;margin-left:5px;white-space:nowrap;flex-shrink:0;cursor:help}
   .weapon{background:var(--panel2);border-radius:9px;padding:8px 10px;margin-bottom:8px}
@@ -697,6 +714,13 @@
         <button id="gSend" class="cmtbtn"></button>
       </div>
       <div class="gdone" id="gDone" style="display:none"></div>
+    </div>
+    <!-- 📲 앱 설치(PWA) 안내 — 문구는 instStatic()이 4개 언어로 렌더, 설치됨/닫음 상태면 자동 숨김 -->
+    <div class="instcard" id="instCard" style="display:none">
+      <img src="icon-192.png" alt="" class="instic">
+      <div class="insttxt"><b></b><span></span></div>
+      <button class="cmtbtn instbtn" onclick="instGo()"></button>
+      <button class="instx" onclick="instHide()" aria-label="close">✕</button>
     </div>
     <div id="noticeBody"></div>
   </section>
@@ -2219,6 +2243,7 @@ function applyStatic(){
   applyHeader();
   renderNotice();
   if(window.rsNavUpdate) window.rsNavUpdate();
+  if(typeof instStatic === "function") instStatic();
 }
 function setLang(l){
   LANG=l; try{localStorage.setItem("rs_lang",l)}catch(e){}
@@ -2230,8 +2255,60 @@ function setLang(l){
   document.dispatchEvent(new Event("rs-lang-changed"));
 }
 
+/* ══════ 📲 앱 설치(PWA) — 홈 화면 추가 안내 ══════
+   안드로이드/데스크톱: 브라우저 설치 프롬프트(beforeinstallprompt) 연결.
+   아이폰: 프롬프트 API가 없어 "공유 → 홈 화면에 추가" 안내 문구 표시.
+   설치됨·"닫기" 누름(30일)·이미 앱으로 실행 중이면 카드 자동 숨김. */
+const INST_L = {
+  title:{ko:"앱으로 설치하기",en:"Install as an app",ja:"アプリとして追加",zh:"安裝為 App"},
+  desc:{ko:"홈 화면에 추가하면 주소 입력 없이 아이콘으로 바로 열려요",en:"Add to your home screen — open with one tap, no typing the address",ja:"ホーム画面に追加すればアイコンからすぐ開けます",zh:"加到主畫面後，點圖示即可直接開啟"},
+  btn:{ko:"📲 설치",en:"📲 Install",ja:"📲 追加",zh:"📲 安裝"},
+  ios:{ko:"사파리 하단 공유 버튼(⬆)을 누르고 \"홈 화면에 추가\"를 선택하세요",en:"Tap the Share button (⬆) then \"Add to Home Screen\"",ja:"共有ボタン(⬆)から「ホーム画面に追加」を選択してください",zh:"點下方分享按鈕(⬆)，選「加入主畫面」"},
+  done:{ko:"설치되었습니다! 홈 화면에서 열어보세요 🎉",en:"Installed! Open it from your home screen 🎉",ja:"追加しました！ホーム画面から開けます 🎉",zh:"已安裝！請從主畫面開啟 🎉"}
+};
+let instPrompt = null;
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); instPrompt = e; instStatic(); });
+window.addEventListener("appinstalled", () => {
+  instPrompt = null;
+  localStorage.setItem("rs_inst_done","1");
+  instStatic();
+  if(typeof toast === "function") toast(INST_L.done[LANG]||INST_L.done.ko);
+});
+function instEnv(){
+  const standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+  const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  return { standalone, ios };
+}
+function instStatic(){
+  // 공지 탭 카드 + 시작 모달 카드 둘 다 같은 규칙으로 표시/숨김
+  const cards = [document.getElementById("instCard"), document.getElementById("authInstCard")].filter(Boolean);
+  if(!cards.length) return;
+  const { standalone, ios } = instEnv();
+  const hidden = +(localStorage.getItem("rs_inst_hide")||0) > Date.now();
+  const show = !(standalone || localStorage.getItem("rs_inst_done") || hidden || (!instPrompt && !ios));
+  const L = k => (INST_L[k][LANG]||INST_L[k].ko);
+  cards.forEach(card => {
+    if(!show){ card.style.display = "none"; return; }
+    card.style.display = "flex";
+    card.querySelector(".insttxt b").textContent = L("title");
+    card.querySelector(".insttxt span").textContent = instPrompt ? L("desc") : L("ios");
+    const btn = card.querySelector(".instbtn");
+    if(btn){ btn.style.display = instPrompt ? "" : "none"; btn.textContent = L("btn"); }
+  });
+}
+async function instGo(){
+  if(!instPrompt) return;
+  instPrompt.prompt();
+  try{ const r = await instPrompt.userChoice; if(r && r.outcome === "accepted") localStorage.setItem("rs_inst_done","1"); }catch(e){}
+  instPrompt = null; instStatic();
+}
+function instHide(){ localStorage.setItem("rs_inst_hide", String(Date.now() + 30*86400000)); instStatic(); }
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(()=>{}); });
+}
+
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.10-g";
+const SITE_VERSION = "2026.07.10-i";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3693,6 +3770,12 @@ FB.authReady.then(async uid => {
     <div class="authBadge">⚠ 비공식 팬사이트</div>
     <h3 class="display">RICOCHET <span class="y">카운터픽</span></h3>
     <div class="authBody" id="authBodyText"></div>
+    <!-- 📲 앱 설치 안내 (설치 가능할 때만 instStatic()이 표시 · 4개 언어) -->
+    <div class="instcard authinst" id="authInstCard" style="display:none">
+      <img src="icon-192.png" alt="" class="instic">
+      <div class="insttxt"><b></b><span></span></div>
+      <button class="cmtbtn instbtn" onclick="instGo()"></button>
+    </div>
     <button class="authAgree" onclick="closeAuthModal()">동의하고 시작하기</button>
   </div>
 </div>
