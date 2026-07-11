@@ -45,6 +45,30 @@
   .langsel{position:absolute;top:16px;right:14px;display:flex;gap:5px;z-index:5}
   .langsel button{background:var(--panel);border:1px solid var(--line);color:var(--sub);border-radius:14px;padding:3px 9px;font-size:11px;font-family:inherit;cursor:pointer}
   .langsel button.on{color:var(--ricochet);border-color:var(--ricochet)}
+  /* 👤 내 정보 버튼 (오른쪽 상단, 언어선택 아래) + 마이 페이지 */
+  .mebtn{position:absolute;top:50px;right:14px;z-index:5;display:inline-flex;align-items:center;gap:5px;background:var(--panel);border:1px solid rgba(255,176,46,.45);color:var(--ricochet);border-radius:14px;padding:5px 11px;font-size:11.5px;font-weight:800;font-family:inherit;cursor:pointer}
+  .mebtn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+  .mebtn:hover{background:rgba(255,176,46,.12)}
+  .mecard{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:14px}
+  .mecard .meav{width:56px;height:56px;border-radius:14px;object-fit:cover;background:var(--panel);border:1px solid var(--line);flex-shrink:0}
+  .mecard .meav.ph{display:flex;align-items:center;justify-content:center;font-size:24px}
+  .mecard .meinfo{flex:1;min-width:0;line-height:1.5}
+  .mecard .menick{font-size:16px;font-weight:800;color:var(--txt)}
+  .mecard .memeta{font-size:11.5px;color:var(--sub);margin-top:2px}
+  .mecard .memeta b{color:var(--ricochet)}
+  .mecard .mebio{font-size:12px;color:var(--txt);margin-top:4px;word-break:break-word}
+  .meform{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:14px;display:flex;flex-direction:column;gap:9px}
+  .meform label{font-size:11px;color:var(--sub);font-weight:700;margin-bottom:-4px}
+  .meform input,.meform select{background:var(--panel2);border:1px solid var(--line);border-radius:9px;color:var(--txt);padding:9px 11px;font-size:13px;font-family:inherit;outline:none;width:100%}
+  .meform input:focus,.meform select:focus{border-color:var(--ricochet)}
+  .meacts{display:flex;flex-direction:column;gap:8px}
+  .meact{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:13px;color:var(--txt);cursor:pointer;text-align:left;font-family:inherit;width:100%}
+  .meact:hover{border-color:#3d4a66}
+  .meact .meicn{font-size:16px;flex-shrink:0}
+  .meact b{margin-left:auto;color:var(--ricochet);font-weight:800;font-size:15px}
+  .mesec{font-size:12px;color:var(--sub);font-weight:800;margin:4px 0 8px}
+  [data-uprof]{cursor:pointer}
+  [data-uprof]:hover{text-decoration:underline}
   body[data-lang="en"] .hcell.picked::after{content:"ENEMY"}
   body[data-lang="ja"] .hcell.picked::after{content:"敵"}
   body[data-lang="zh"] .hcell.picked::after{content:"敵"}
@@ -661,6 +685,10 @@
     <button data-l="ja" onclick="setLang('ja')">日本語</button>
     <button data-l="zh" onclick="setLang('zh')">繁中</button>
   </div>
+  <button class="mebtn" id="meBtn" onclick="openMe()">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>
+    <span id="meBtnLbl">내 정보</span><i class="subbadge" id="meBadge" style="display:none"></i>
+  </button>
   <img id="gameLogo" alt="Ricochet Squad">
   <h1 class="display">RICOCHET <span class="y" id="headTitle">카운터픽</span></h1>
   <p id="headDesc">적 팀 픽을 고르면 상성 기반으로 추천 · 2.0.6 기준 초안</p>
@@ -942,6 +970,7 @@
       <div id="myFbList" class="cmtlist"></div>
     </div>
     <div id="adminPanel" style="display:none">
+      <label class="transtog" style="margin-bottom:8px"><input type="checkbox" id="fbNotif"> <span id="fbNotifLbl">🔔 새 피드백 알림 받기</span></label>
       <button class="cmtbtn" id="adminFbBtn" style="width:100%;margin-bottom:8px" data-ko="🔑 관리자: 피드백 열람">🔑 관리자: 피드백 열람</button>
       <div id="adminFbList" class="cmtlist"></div>
     </div>
@@ -961,6 +990,13 @@
   <div class="nickbox" style="max-width:380px">
     <button class="lbclose2" onclick="rsTierClose()">✕</button>
     <div id="tierDetailBody"></div>
+  </div>
+</div>
+<!-- 👤 내 정보 (마이 페이지) 모달 — 내용은 renderMe()가 4개 언어로 렌더 -->
+<div class="nickmodal" id="meModal" onclick="if(event.target===this)closeMe()">
+  <div class="nickbox" style="max-width:460px;max-height:88vh;overflow-y:auto">
+    <button class="lbclose2" onclick="closeMe()">✕</button>
+    <div id="meBody"></div>
   </div>
 </div>
 <div class="nickmodal" id="nickModal">
@@ -1898,6 +1934,36 @@ const GAME_PATCH = {
 };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-07-11",
+    ko:"👥 친구 기능 추가 — 닉네임을 누르면 그 유저 프로필을 보고, 친구 추가·승락·삭제 가능",
+    en:"👥 Friends — tap any nickname to see their profile, then add / accept / remove friends",
+    ja:"👥 フレンド機能 — ニックネームをタップしてプロフィールを見て、申請・承認・削除ができます",
+    zh:"👥 好友功能 — 點暱稱查看檔案，可加好友／接受／刪除" },
+  { date:"2026-07-11",
+    ko:"👤 내 정보(마이 페이지) 신설 — 게임 닉네임·주력 영웅 3개·리그·한 줄 소개를 등록하고, 내 활동을 한눈에 (오른쪽 위 ‘내 정보’)",
+    en:"👤 My Profile page — set your in-game nickname, up to 3 main heroes, league & bio; see your activity ('My Info' top-right)",
+    ja:"👤 マイプロフィール新設 — ゲーム名・メインヒーロー3体・リーグ・ひとこと紹介を登録、活動もまとめて確認（右上『マイ情報』）",
+    zh:"👤 新增我的檔案 — 設定遊戲暱稱·3個主力英雄·段位·簡介，並查看自己的活動（右上『我的資訊』）" },
+  { date:"2026-07-11",
+    ko:"📲 홈 화면 앱 설치 지원 — 주소 입력 없이 아이콘으로 바로 열기 (안드로이드·아이폰·카카오톡 모두 안내)",
+    en:"📲 Install as a home-screen app — open by icon, no typing the address (Android/iPhone/KakaoTalk supported)",
+    ja:"📲 ホーム画面アプリに対応 — アドレス入力なしでアイコンからすぐ起動（Android・iPhone・カカオトーク対応）",
+    zh:"📲 支援安裝為主畫面 App — 免輸入網址、點圖示直接開啟（Android／iPhone／KakaoTalk 皆有引導）" },
+  { date:"2026-07-11",
+    ko:"메뉴 대개편 — 상단을 5개(공지·소통·게임정보·피드백·통계)로 정리, 티어표를 게임정보로 이동해 찾기 쉽게",
+    en:"Major menu revamp — top reorganized into 5 sections; tier list moved into Game Info for easy access",
+    ja:"メニュー大刷新 — 上部を5つ（お知らせ・交流・ゲーム情報・フィードバック・統計）に整理、ティア表をゲーム情報へ移動",
+    zh:"選單大改版 — 頂部整理為 5 區，梯隊表移入遊戲資訊更好找" },
+  { date:"2026-07-11",
+    ko:"자유게시판을 피드형으로 — 사진이 목록에서 바로 보이고, 글·댓글에 번역 버튼 추가",
+    en:"Free board now a feed — photos show inline, translate buttons on posts & comments",
+    ja:"自由掲示板をフィード形式に — 写真が一覧で表示、投稿・コメントに翻訳ボタン追加",
+    zh:"自由留言板改為動態牆 — 照片直接顯示，貼文與留言加上翻譯按鈕" },
+  { date:"2026-07-11",
+    ko:"피드백에 운영자 답장 기능 · 제보 상성 반영(오니↔벡터/노바) · 방명록·운영진 배지",
+    en:"Replies to feedback from the creator · matchup fixes from reports (Oni vs Vector/Nova) · guestbook & staff badges",
+    ja:"フィードバックに運営者の返信機能 · 相性の提報を反映（オニ↔ヴェクター/ノヴァ）· ゲストブック・運営バッジ",
+    zh:"意見回饋新增管理員回覆 · 依提報修正克制（奧尼↔維克托/諾娃）· 訪客簿與官方徽章" },
   { date:"2026-07-09",
     ko:"도감에 영웅 검색 추가 · 공지 디자인 개선(라인 아이콘·섹션별 색)",
     en:"Hero search in the dex · notice redesign (line icons, section colors)",
@@ -2268,6 +2334,7 @@ function applyStatic(){
   renderNotice();
   if(window.rsNavUpdate) window.rsNavUpdate();
   if(typeof instStatic === "function") instStatic();
+  if(window.rsMeSync) window.rsMeSync();
 }
 function setLang(l){
   LANG=l; try{localStorage.setItem("rs_lang",l)}catch(e){}
@@ -2358,7 +2425,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.11-a";
+const SITE_VERSION = "2026.07.11-f";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -2440,6 +2507,281 @@ function checkName(s){
 }
 /* ══════ 👤 통합 커뮤니티 닉네임 ══════ */
 function getNick(){ return (localStorage.getItem("rs_nick") || "").trim(); }
+
+/* ══════ 👤 내 정보 (마이 페이지) ══════
+   게임 프로필(주력영웅·리그·한 줄 소개)은 이 기기에 저장(localStorage) · 내 활동은 기존 데이터 집계.
+   → Firebase 규칙 변경 불필요. 게임 닉네임은 파티와 rs_gamenick 공유. */
+const ME_L = {
+  btn:{ko:"내 정보",en:"My Info",ja:"マイ情報",zh:"我的資訊"},
+  title:{ko:"내 정보",en:"My Profile",ja:"マイプロフィール",zh:"我的檔案"},
+  ofTitle:{ko:"님의 프로필",en:"'s profile",ja:"さんのプロフィール",zh:" 的檔案"},
+  guide:{ko:"프로필은 다른 유저에게도 보여요 · 내 활동은 나만 볼 수 있어요",en:"Your profile is visible to others · your activity is private to you",ja:"プロフィールは他ユーザーにも表示 · アクティビティは自分だけ",zh:"檔案會顯示給其他人 · 活動僅自己可見"},
+  edit:{ko:"프로필 편집",en:"Edit profile",ja:"プロフィール編集",zh:"編輯檔案"},
+  gameNick:{ko:"게임 닉네임",en:"In-game nickname",ja:"ゲーム内ニックネーム",zh:"遊戲暱稱"},
+  mainHero:{ko:"주력 영웅 (최대 3)",en:"Main heroes (up to 3)",ja:"メインヒーロー（最大3）",zh:"主力英雄（最多3）"},
+  league:{ko:"리그 / 티어",en:"League / Tier",ja:"リーグ / ティア",zh:"聯賽 / 段位"},
+  bio:{ko:"한 줄 소개",en:"One-line bio",ja:"ひとこと紹介",zh:"一句話介紹"},
+  bioPh:{ko:"예) 근접 장인입니다",en:"e.g. Melee main",ja:"例）近接メイン",zh:"例）近戰主力"},
+  save:{ko:"저장",en:"Save",ja:"保存",zh:"儲存"},
+  saved:{ko:"프로필이 저장되었습니다 ✓",en:"Profile saved ✓",ja:"プロフィールを保存しました ✓",zh:"檔案已儲存 ✓"},
+  saveFail:{ko:"저장 실패 — 잠시 후 다시 시도해주세요 (규칙 v12 필요)",en:"Save failed — try again later (rules v12 needed)",ja:"保存に失敗しました（ルールv12が必要）",zh:"儲存失敗（需規則v12）"},
+  none:{ko:"선택 안 함",en:"None",ja:"未設定",zh:"未設定"},
+  noNick:{ko:"커뮤니티 닉네임 미설정",en:"No community nickname",ja:"コミュニティ名 未設定",zh:"未設定社群暱稱"},
+  activity:{ko:"내 활동 (나만 보임)",en:"My activity (private)",ja:"マイアクティビティ（自分のみ）",zh:"我的活動（僅自己）"},
+  posts:{ko:"내 게시글",en:"My posts",ja:"マイ投稿",zh:"我的貼文"},
+  votes:{ko:"내 티어 투표",en:"My tier votes",ja:"マイ投票",zh:"我的梯隊投票"},
+  greets:{ko:"방명록 인사",en:"Guestbook hi",ja:"ゲストブック",zh:"訪客簿招呼"},
+  tips:{ko:"내 팁",en:"My tips",ja:"マイ攻略",zh:"我的攻略"},
+  fb:{ko:"내 피드백",en:"My feedback",ja:"マイ意見",zh:"我的意見"},
+  done:{ko:"완료",en:"done",ja:"済み",zh:"完成"},
+  noProfile:{ko:"아직 프로필을 등록하지 않은 유저예요",en:"This user hasn't set up a profile yet",ja:"まだプロフィール未設定のユーザーです",zh:"此用戶尚未設定檔案"},
+  loading:{ko:"불러오는 중…",en:"Loading…",ja:"読み込み中…",zh:"載入中…"}
+};
+const MEL = k => (ME_L[k][LANG]||ME_L[k].ko);
+function getProfile(){ try{ return JSON.parse(localStorage.getItem("rs_profile")||"{}"); }catch(e){ return {}; } }
+function profMains(p){ return [p.main1||p.main, p.main2, p.main3].filter(Boolean); }   // main(구버전) 호환
+function myCounts(){
+  const uid = MY_UID;
+  return {
+    posts:  uid ? (typeof bdCache!=="undefined"?bdCache:[]).filter(p=>p.uid===uid).length : 0,
+    votes:  typeof myVotes!=="undefined" ? Object.keys(myVotes||{}).length : 0,
+    greets: uid ? (typeof gCache!=="undefined"?gCache:[]).filter(g=>g.uid===uid).length : 0,
+    tips:   uid ? (typeof cmtCache!=="undefined"?cmtCache:[]).filter(c=>c.uid===uid).length : 0,
+    fb:     (typeof myFbIds==="function" ? myFbIds().length : 0)
+  };
+}
+/* 프로필 카드(공통) — 게임 닉·주력영웅(최대3)·리그·소개. 남/본인 모두 이 카드로 표시 */
+function profileCardHtml(p, nick){
+  const mains = profMains(p);
+  const av0 = mains[0] && typeof PIC!=="undefined" && PIC[mains[0]]
+    ? `<img class="meav" src="${PIC[mains[0]]}" alt="">` : `<div class="meav ph">👤</div>`;
+  const heroNames = mains.map(k=>esc(hName(k))).join(", ");
+  const metaBits = [heroNames?`<b>${heroNames}</b>`:"", p.league?esc(p.league):""].filter(Boolean).join(" · ");
+  const gnick = p.gnick || "";
+  return `<div class="mecard">${av0}
+    <div class="meinfo">
+      <div class="menick">${nick?esc(nick):`<span style="color:var(--sub);font-weight:600">${MEL("noNick")}</span>`}</div>
+      <div class="memeta">${gnick?`🎮 ${esc(gnick)}`:""}${gnick&&metaBits?" · ":""}${metaBits}</div>
+      ${p.bio?`<div class="mebio">"${esc(p.bio)}"</div>`:""}
+    </div></div>`;
+}
+function renderMe(){
+  const body = document.getElementById("meBody"); if(!body) return;
+  meViewUid = null;
+  const p = getProfile();
+  const nick = getNick();
+  const gnick = localStorage.getItem("rs_gamenick") || "";
+  const mains = profMains(p);
+  const heroSel = (i, sel) => `<select id="meMain${i}"><option value="">${MEL("none")}</option>` +
+    (typeof HKEYS!=="undefined"?HKEYS:[]).map(k=>`<option value="${k}"${sel===k?" selected":""}>${esc(hName(k))}</option>`).join("") + `</select>`;
+  const leagueOpts = `<option value="">${MEL("none")}</option>` +
+    (typeof LEAGUES!=="undefined"?LEAGUES:[]).map(l=>`<option value="${esc(l)}"${p.league===l?" selected":""}>${esc(l)}</option>`).join("");
+  const c = myCounts();
+  body.innerHTML = `
+    <h3>${MEL("title")}</h3>
+    ${profileCardHtml({...p, gnick}, nick)}
+    <div class="mesec">${MEL("edit")}</div>
+    <div class="meform">
+      <label>${MEL("gameNick")}</label>
+      <input id="meGNick" maxlength="30" value="${esc(gnick)}" autocomplete="off">
+      <label>${MEL("mainHero")}</label>
+      ${heroSel(1, mains[0]||"")}${heroSel(2, mains[1]||"")}${heroSel(3, mains[2]||"")}
+      <label>${MEL("league")}</label>
+      <select id="meLeague">${leagueOpts}</select>
+      <label>${MEL("bio")}</label>
+      <input id="meBio" maxlength="40" value="${esc(p.bio||"")}" placeholder="${MEL("bioPh")}" autocomplete="off">
+      <button class="cmtbtn" data-me-save style="margin-top:2px">${MEL("save")}</button>
+      <div class="bdnote">${MEL("guide")}</div>
+    </div>
+    ${typeof frSectionsHtml === "function" ? frSectionsHtml() : ""}
+    <div class="mesec">${MEL("activity")}</div>
+    <div class="meacts">
+      <button class="meact" data-me-go="board"><span class="meicn">📝</span>${MEL("posts")}<b>${c.posts}</b></button>
+      <button class="meact" data-me-go="tier"><span class="meicn">🏆</span>${MEL("votes")}<b>${c.votes}</b></button>
+      <button class="meact" data-me-go="tips"><span class="meicn">💬</span>${MEL("tips")}<b>${c.tips}</b></button>
+      <button class="meact" data-me-go="greets"><span class="meicn">👋</span>${MEL("greets")}<b>${c.greets>0?MEL("done"):"—"}</b></button>
+      <button class="meact" data-me-go="fb"><span class="meicn">📮</span>${MEL("fb")}<b>${c.fb}</b></button>
+    </div>`;
+}
+function openMe(){ if(!document.getElementById("meBody")) return; renderMe(); document.getElementById("meModal").classList.add("on"); }
+function closeMe(){ meViewUid = null; document.getElementById("meModal").classList.remove("on"); }
+/* 다른 유저 프로필 보기 — 서버에서 읽고 게임 정보만 표시(내 활동은 안 보임). 본인이면 마이페이지로. */
+async function openUserProfile(uid, fallbackName){
+  if(!uid) return;
+  if(uid === MY_UID){ openMe(); return; }
+  const body = document.getElementById("meBody"); if(!body) return;
+  meViewUid = uid;
+  body.innerHTML = `<h3>${esc(fallbackName||"")}${MEL("ofTitle")}</h3><div class="bdloading">${MEL("loading")}</div>`;
+  document.getElementById("meModal").classList.add("on");
+  let p = null;
+  try{ p = (await FB.get(FB.ref(FB.db, "profiles/" + uid))).val(); }catch(e){}
+  // 보낸 요청 상태 동기화: 요청이 사라졌고 친구도 아니면(거절됨) 보냄 표시 제거
+  if(frOut()[uid] && !frCache[uid]){
+    try{ const s = await FB.get(FB.ref(FB.db, `friendReqs/${uid}/${MY_UID}`)); if(!s.exists()){ const o=frOut(); delete o[uid]; frOutSet(o); } }catch(e){}
+  }
+  if(meViewUid !== uid) return;   // 그 사이 다른 화면으로 이동함
+  const nm = (p && p.name) || fallbackName || "";
+  body.innerHTML = `<h3>${esc(nm)}${MEL("ofTitle")}</h3>` +
+    (p ? profileCardHtml(p, nm) : `<div class="cmtempty">${MEL("noProfile")}</div>`) +
+    (MY_UID ? frActionHtml(uid, nm) : "");
+}
+window.openMe = openMe; window.closeMe = closeMe; window.openUserProfile = openUserProfile;
+window.rsMeSync = () => {   // 언어 전환 시 버튼 라벨 + 열려있는 모달(마이페이지) 갱신
+  const mel = document.getElementById("meBtnLbl"); if(mel) mel.textContent = MEL("btn");
+  const mm = document.getElementById("meModal");
+  if(mm && mm.classList.contains("on") && document.querySelector("#meBody [data-me-save]")) renderMe();
+};
+document.getElementById("meBody").addEventListener("click", async e => {
+  // 친구 액션 (요청/취소/승락/거절/삭제) — 처리 후 모달 갱신
+  const fs = e.target.closest("[data-fr-send]"), fc = e.target.closest("[data-fr-cancel]"),
+        fa = e.target.closest("[data-fr-accept]"), fd = e.target.closest("[data-fr-decline]"),
+        fx = e.target.closest("[data-fr-del]");
+  if(fs || fc || fa || fd || fx){
+    e.stopPropagation();
+    if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+    if(fs) await frSend(fs.dataset.frSend, fs.dataset.frName||"");
+    else if(fc) await frCancel(fc.dataset.frCancel);
+    else if(fa) await frAccept(fa.dataset.frAccept);
+    else if(fd) await frDecline(fd.dataset.frDecline);
+    else if(fx) await frRemove(fx.dataset.frDel);
+    setTimeout(frRefreshView, 350);   // 구독 반영 시간 살짝 대기
+    return;
+  }
+  const save = e.target.closest("[data-me-save]"), go = e.target.closest("[data-me-go]");
+  if(save){
+    const gn = (document.getElementById("meGNick").value||"").trim();
+    const mains = [1,2,3].map(i=>document.getElementById("meMain"+i).value).filter(Boolean);
+    const prof = { main1: mains[0]||"", main2: mains[1]||"", main3: mains[2]||"",
+                   league: document.getElementById("meLeague").value || "", bio: (document.getElementById("meBio").value||"").trim() };
+    if(gn){ localStorage.setItem("rs_gamenick", gn); const pt=document.getElementById("ptGameNick"); if(pt) pt.value=gn; }
+    try{ localStorage.setItem("rs_profile", JSON.stringify(prof)); }catch(e){}
+    renderMe();
+    // 서버에도 저장 → 다른 유저가 볼 수 있게 (규칙 v12). 실패해도 로컬엔 저장됨.
+    if(MY_UID){
+      FB.set(FB.ref(FB.db, "profiles/" + MY_UID), { name: getNick()||"", gnick: gn, main1: prof.main1, main2: prof.main2, main3: prof.main3, league: prof.league, bio: prof.bio, ts: FB.serverTimestamp() })
+        .then(()=>toast(MEL("saved")))
+        .catch(()=>toast(MEL("saveFail")));
+    }else toast(MEL("saved"));
+    return;
+  }
+  if(go){
+    const dest = go.dataset.meGo;
+    closeMe();
+    if(dest === "greets"){ if(window.navGo) navGo("notice"); }
+    else if(window.goSub) goSub(dest);
+  }
+});
+/* 사이트 전역: 닉네임 클릭 → 프로필 보기 (닉네임 요소에 data-uprof="uid" data-uname="name") */
+document.body.addEventListener("click", e => {
+  const el = e.target.closest("[data-uprof]");
+  if(el){ e.stopPropagation(); openUserProfile(el.dataset.uprof, el.dataset.uname || el.textContent); }
+});
+
+/* ══════ 👥 친구 시스템 ══════
+   friendReqs/<받는이>/<보낸이>{name,ts} = 대기 요청 · friends/<uid>/<fid>{name,ts} = 확정 친구(양쪽에 기록).
+   승락 없이는 남의 친구목록에 못 들어감(규칙 v13). 내 친구/요청 목록은 나만 읽음. 보낸 요청은 이 기기에 기억. */
+const FR_L = {
+  friends:{ko:"내 친구",en:"My friends",ja:"フレンド",zh:"我的好友"},
+  reqs:{ko:"받은 친구 요청",en:"Friend requests",ja:"届いたフレンド申請",zh:"收到的好友邀請"},
+  add:{ko:"➕ 친구 추가",en:"➕ Add friend",ja:"➕ フレンド申請",zh:"➕ 加好友"},
+  sent:{ko:"⏳ 요청 보냄 — 누르면 취소",en:"⏳ Request sent — tap to cancel",ja:"⏳ 申請済み — タップで取消",zh:"⏳ 已送出 — 點擊取消"},
+  accept:{ko:"✔ 승락",en:"✔ Accept",ja:"✔ 承認",zh:"✔ 接受"},
+  decline:{ko:"거절",en:"Decline",ja:"拒否",zh:"拒絕"},
+  isFriend:{ko:"✔ 친구예요",en:"✔ Friends",ja:"✔ フレンド",zh:"✔ 已是好友"},
+  remove:{ko:"친구 삭제",en:"Remove",ja:"削除",zh:"刪除"},
+  reqSentT:{ko:"친구 요청을 보냈어요 ✓",en:"Friend request sent ✓",ja:"フレンド申請を送りました ✓",zh:"已送出好友邀請 ✓"},
+  canceledT:{ko:"요청을 취소했어요",en:"Request cancelled",ja:"申請を取り消しました",zh:"已取消邀請"},
+  acceptedT:{ko:"친구가 되었어요! 🎉",en:"You are now friends! 🎉",ja:"フレンドになりました！🎉",zh:"成為好友了！🎉"},
+  declinedT:{ko:"요청을 거절했어요",en:"Request declined",ja:"申請を拒否しました",zh:"已拒絕邀請"},
+  removedT:{ko:"친구를 삭제했어요",en:"Friend removed",ja:"フレンドを削除しました",zh:"已刪除好友"},
+  delConfirm:{ko:"이 친구를 삭제할까요? (상대 목록에서도 사라져요)",en:"Remove this friend? (removed from both lists)",ja:"このフレンドを削除しますか？（相手側からも消えます）",zh:"要刪除這位好友嗎？（雙方列表都會移除）"},
+  newReq:{ko:"📩 {n}님이 친구 요청을 보냈어요! (내 정보에서 확인)",en:"📩 {n} sent you a friend request! (see My Info)",ja:"📩 {n}さんからフレンド申請が届きました！",zh:"📩 {n} 送來好友邀請！（請至我的資訊查看）"},
+  needRules:{ko:"⚙️ 규칙 v13 게시가 필요합니다 (친구 기능)",en:"⚙️ Rules v13 required (friends)",ja:"⚙️ ルールv13が必要です",zh:"⚙️ 需要規則v13"},
+  empty:{ko:"아직 친구가 없어요 — 닉네임을 눌러 친구를 추가해보세요!",en:"No friends yet — tap a nickname to add one!",ja:"まだフレンドがいません — ニックネームをタップして追加！",zh:"還沒有好友 — 點暱稱加好友吧！"},
+  failT:{ko:"처리 실패 — 잠시 후 다시 시도해주세요",en:"Failed — try again shortly",ja:"失敗しました — 後でもう一度",zh:"處理失敗 — 請稍後再試"}
+};
+const FRL = k => (FR_L[k][LANG]||FR_L[k].ko);
+let frCache = {}, frInCache = {}, frInKnown = null, meViewUid = null;
+const frOut = () => { try{ return JSON.parse(localStorage.getItem("rs_freq_out")||"{}"); }catch(e){ return {}; } };
+const frOutSet = o => { try{ localStorage.setItem("rs_freq_out", JSON.stringify(o)); }catch(e){} };
+function frState(uid){
+  if(frCache[uid]) return "friend";
+  if(frInCache[uid]) return "incoming";
+  if(frOut()[uid]) return "outgoing";
+  return "none";
+}
+function frBadge(){
+  const n = Object.keys(frInCache).length;
+  const b = document.getElementById("meBadge");
+  if(b){ b.style.display = n ? "flex" : "none"; b.textContent = n > 9 ? "9+" : n; }
+}
+function frActionHtml(uid, name){
+  const st = frState(uid);
+  if(st === "friend")
+    return `<div class="meacts" style="margin-top:10px"><button class="meact"><span class="meicn">👥</span>${FRL("isFriend")}<b data-fr-del="${uid}" style="color:var(--bad,#ff5d5d);cursor:pointer">✕ ${FRL("remove")}</b></button></div>`;
+  if(st === "incoming")
+    return `<div class="meacts" style="margin-top:10px"><button class="cmtbtn" data-fr-accept="${uid}">${FRL("accept")}</button><button class="meact" data-fr-decline="${uid}" style="justify-content:center">${FRL("decline")}</button></div>`;
+  if(st === "outgoing")
+    return `<div class="meacts" style="margin-top:10px"><button class="meact" data-fr-cancel="${uid}" style="justify-content:center">${FRL("sent")}</button></div>`;
+  return `<div class="meacts" style="margin-top:10px"><button class="cmtbtn" data-fr-send="${uid}" data-fr-name="${esc(name||"")}">${FRL("add")}</button></div>`;
+}
+function frSectionsHtml(){
+  const reqs = Object.entries(frInCache);
+  const frs = Object.entries(frCache);
+  let html = "";
+  if(reqs.length){
+    html += `<div class="mesec">📩 ${FRL("reqs")} (${reqs.length})</div><div class="meacts">` +
+      reqs.map(([uid,r])=>`<div class="meact"><span class="meicn">👤</span><span data-uprof="${uid}" data-uname="${esc(r.name||"")}">${esc(r.name||"?")}</span>
+        <b data-fr-accept="${uid}" style="cursor:pointer">${FRL("accept")}</b>
+        <b data-fr-decline="${uid}" style="cursor:pointer;color:var(--sub);margin-left:8px">${FRL("decline")}</b></div>`).join("") + `</div>`;
+  }
+  html += `<div class="mesec">👥 ${FRL("friends")} (${frs.length})</div>`;
+  html += frs.length
+    ? `<div class="meacts">` + frs.map(([uid,f])=>`<div class="meact"><span class="meicn">👤</span><span data-uprof="${uid}" data-uname="${esc(f.name||"")}">${esc(f.name||"?")}</span>
+        <b data-fr-del="${uid}" style="cursor:pointer;color:var(--sub)">✕</b></div>`).join("") + `</div>`
+    : `<div class="bdnote" style="margin:0 0 6px">${FRL("empty")}</div>`;
+  return html;
+}
+async function frSend(uid, name){
+  const my = requireNick(); if(!my) return;
+  try{
+    await FB.set(FB.ref(FB.db, `friendReqs/${uid}/${MY_UID}`), { name: my, ts: FB.serverTimestamp() });
+    const o = frOut(); o[uid] = { name: name||"", ts: Date.now() }; frOutSet(o);
+    toast(FRL("reqSentT"));
+  }catch(e){ toast(String(e&&e.message||e).toLowerCase().includes("permission") ? FRL("needRules") : FRL("failT")); }
+}
+async function frCancel(uid){
+  try{ await FB.remove(FB.ref(FB.db, `friendReqs/${uid}/${MY_UID}`)); }catch(e){}
+  const o = frOut(); delete o[uid]; frOutSet(o);
+  toast(FRL("canceledT"));
+}
+async function frAccept(uid){
+  const r = frInCache[uid]; if(!r) return;
+  const my = requireNick(); if(!my) return;
+  try{
+    await FB.set(FB.ref(FB.db, `friends/${MY_UID}/${uid}`), { name: r.name||"", ts: FB.serverTimestamp() });
+    await FB.set(FB.ref(FB.db, `friends/${uid}/${MY_UID}`), { name: my, ts: FB.serverTimestamp() });   // 요청이 있어야 규칙 통과
+    await FB.remove(FB.ref(FB.db, `friendReqs/${MY_UID}/${uid}`));
+    toast(FRL("acceptedT"));
+  }catch(e){ toast(String(e&&e.message||e).toLowerCase().includes("permission") ? FRL("needRules") : FRL("failT")); }
+}
+async function frDecline(uid){
+  try{ await FB.remove(FB.ref(FB.db, `friendReqs/${MY_UID}/${uid}`)); toast(FRL("declinedT")); }catch(e){ toast(FRL("failT")); }
+}
+async function frRemove(uid){
+  if(!confirm(FRL("delConfirm"))) return;
+  try{
+    await FB.remove(FB.ref(FB.db, `friends/${MY_UID}/${uid}`));
+    await FB.remove(FB.ref(FB.db, `friends/${uid}/${MY_UID}`));
+    toast(FRL("removedT"));
+  }catch(e){ toast(FRL("failT")); }
+}
+function frRefreshView(){   // 열려 있는 모달 갱신
+  const mm = document.getElementById("meModal");
+  if(!mm || !mm.classList.contains("on")) return;
+  if(meViewUid) openUserProfile(meViewUid); else if(document.querySelector("#meBody [data-me-save]")) renderMe();
+}
+window.rsFrDebug = { state: uid=>frState(uid), inject(fr,inq){ frCache=fr||{}; frInCache=inq||{}; frBadge(); frRefreshView(); } };
 function renderProfile(){
   const el = document.getElementById("pfNick");
   const n = getNick();
@@ -2758,7 +3100,7 @@ function renderChat(){
     const mine = m.uid === MY_UID;
     const tr = transCache[m.id];
     return `<div class="chatmsg">
-      <span class="mnm" style="color:${nameColor(m.uid)}">${esc(m.name)}</span>${staffBadge(m.uid)}
+      <span class="mnm" style="color:${nameColor(m.uid)}" data-uprof="${m.uid}" data-uname="${esc(m.name)}">${esc(m.name)}</span>${staffBadge(m.uid)}
       <span class="mtx">${esc(m.text)}</span>
       <span class="mtm">${tm}</span>
       ${!mine?`<button class="mrep" onclick="rsTranslateMsg('${m.id}')" title="${T("번역")}">🌐</button>`:""}
@@ -2858,7 +3200,7 @@ function renderCmts(){
       <div class="cmthead">
         ${c.hero!=="all"&&PIC[c.hero]?`<img src="${PIC[c.hero]}" alt="">`:""}
         <span class="chero">${c.hero==="all"?"🌐 "+T("공통"):esc(hName(c.hero))}</span>
-        <span class="cname">${esc(c.name)}</span>${staffBadge(c.uid)}
+        <span class="cname" data-uprof="${c.uid}" data-uname="${esc(c.name)}">${esc(c.name)}</span>${staffBadge(c.uid)}
         <span class="ctime">${relTime(c.ts||0)}</span>
         ${!mine&&MY_UID?`<button class="cdel" onclick="rsReport('comments','${c.id}')" title="${T("신고")}">🚩</button>`:""}
         ${(mine||IS_ADMIN)?`<button class="cdel" data-id="${c.id}" title="${T("삭제")}">✕</button>`:""}
@@ -2870,7 +3212,7 @@ function renderCmts(){
         <button class="cmtact ${open?'rep-on':''}" data-reply-toggle="${c.id}">💬 ${T("댓글")}${replies.length?` <b>${replies.length}</b>`:''}</button>
       </div>
       ${open ? `<div class="replywrap">
-        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-reply-del="${c.id}|${r.id}" title="${T("삭제")}">✕</button>`:''}</div>`).join('') || `<div class="replyempty">${T("첫 댓글을 남겨보세요")}</div>`}
+        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}" data-uprof="${r.uid}" data-uname="${esc(r.name)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-reply-del="${c.id}|${r.id}" title="${T("삭제")}">✕</button>`:''}</div>`).join('') || `<div class="replyempty">${T("첫 댓글을 남겨보세요")}</div>`}
         <div class="replyin"><input maxlength="150" placeholder="${T("댓글…")}" data-reply-input="${c.id}"><button data-reply-send="${c.id}">${T("등록")}</button></div>
       </div>` : ''}
     </div>`;
@@ -3153,7 +3495,7 @@ function renderBd(){
     return `
     <div class="cmtitem bditem${open?" open":""}">
       <div class="cmthead">
-        <span class="cname" style="color:${nameColor(p.uid)}">${esc(p.name)}</span>${staffBadge(p.uid)}
+        <span class="cname" style="color:${nameColor(p.uid)}" data-uprof="${p.uid}" data-uname="${esc(p.name)}">${esc(p.name)}</span>${staffBadge(p.uid)}
         <span class="ctime">${relTime(p.ts||0)}</span>
         ${!mine&&MY_UID?`<button class="cdel" onclick="rsReport('board','${p.id}')" title="${T("신고")}">🚩</button>`:""}
         ${(mine||IS_ADMIN)?`<button class="cdel" data-bd-del="${p.id}" title="${T("삭제")}">✕</button>`:""}
@@ -3169,7 +3511,7 @@ function renderBd(){
         ${!mine?`<button class="cmtact ${bdTrCache["p:"+p.id]!==undefined?'rep-on':''}" data-bd-tr="${p.id}" title="${T("번역")}">🌐</button>`:""}
       </div>
       ${open ? `<div class="replywrap">
-        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${r.uid!==MY_UID?`<button class="rdel" data-bd-rtr="${p.id}|${r.id}" title="${T("번역")}">🌐</button>`:""}${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-bd-rdel="${p.id}|${r.id}" title="${T("삭제")}">✕</button>`:""}${bdTrCache["r:"+p.id+"|"+r.id]?`<span class="bdrtr">↳ ${esc(bdTrCache["r:"+p.id+"|"+r.id])}</span>`:""}</div>`).join("")}
+        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}" data-uprof="${r.uid}" data-uname="${esc(r.name)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${r.uid!==MY_UID?`<button class="rdel" data-bd-rtr="${p.id}|${r.id}" title="${T("번역")}">🌐</button>`:""}${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-bd-rdel="${p.id}|${r.id}" title="${T("삭제")}">✕</button>`:""}${bdTrCache["r:"+p.id+"|"+r.id]?`<span class="bdrtr">↳ ${esc(bdTrCache["r:"+p.id+"|"+r.id])}</span>`:""}</div>`).join("")}
         <div class="replyin"><input maxlength="150" placeholder="${BL("commentPh")}" data-bd-rinput="${p.id}"><button data-bd-rsend="${p.id}">${BL("regBtn")}</button></div>
       </div>` : ''}
     </div>`;
@@ -3332,7 +3674,7 @@ function renderGreets(){
     const tr = bdTrCache["g:"+g.id];
     return `<div class="gitem">
       <span class="gwv">👋</span>
-      <span class="gnm" style="color:${nameColor(g.uid)}">${esc(g.name)}</span>${staffBadge(g.uid)}
+      <span class="gnm" style="color:${nameColor(g.uid)}" data-uprof="${g.uid}" data-uname="${esc(g.name)}">${esc(g.name)}</span>${staffBadge(g.uid)}
       ${g.text?`<span class="gtx">${esc(g.text)}</span>`:""}
       <span class="gtm">${relTime(g.ts||0)}</span>
       ${g.text&&!mine?`<button class="gact" data-g-tr="${g.id}" title="${T("번역")}">🌐</button>`:""}
@@ -3668,7 +4010,7 @@ function renderParty(){
     // 파티방 채팅창
     const msgs = Object.entries(p.msgs||{}).map(([id,m])=>({id,...m})).sort((a,b)=>(a.ts||0)-(b.ts||0)).slice(-50);
     const chatBox = (canChat && chatOpen) ? `<div class="ptchatwrap">
-      <div class="ptchatbox" data-pt-box="${p.id}">${msgs.length?msgs.map(m=>`<div class="ptmsg"><span class="pmn" style="color:${nameColor(m.uid)}">${esc(m.name)}</span>${staffBadge(m.uid)}${esc(m.text)}<span class="pmt">${m.ts?new Date(m.ts).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",hour12:false}):""}</span></div>`).join(""):`<div class="meta">${T("파티원과 여기서 대화하세요 (수락 전에도 문의 가능)")}</div>`}</div>
+      <div class="ptchatbox" data-pt-box="${p.id}">${msgs.length?msgs.map(m=>`<div class="ptmsg"><span class="pmn" style="color:${nameColor(m.uid)}" data-uprof="${m.uid}" data-uname="${esc(m.name)}">${esc(m.name)}</span>${staffBadge(m.uid)}${esc(m.text)}<span class="pmt">${m.ts?new Date(m.ts).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",hour12:false}):""}</span></div>`).join(""):`<div class="meta">${T("파티원과 여기서 대화하세요 (수락 전에도 문의 가능)")}</div>`}</div>
       <div class="ptchatin"><input maxlength="120" placeholder="${T("메시지…")}" data-pt-input="${p.id}"><button data-pt-msg="${p.id}">${T("전송")}</button></div>
     </div>` : "";
     return `<div class="ptcard ${closed&&!mine?'closed':''}">
@@ -3791,6 +4133,39 @@ function notifyParty(p){
   }catch(e){}
 }
 
+/* ── 🔔 새 피드백 알림 (관리자 전용 · 옵트인) ──
+   관리자만 feedback을 구독(규칙상 관리자만 읽기 가능)하고, 새 글이 오면 알림.
+   ※ 사이트/앱이 열려 있을 때만 뜸(진짜 백그라운드 푸시는 유료 서버 필요). */
+const FBN_L = {
+  label:{ko:"🔔 새 피드백 알림 받기",en:"🔔 Notify me of new feedback",ja:"🔔 新しいフィードバック通知",zh:"🔔 新意見通知"},
+  title:{ko:"📮 새 피드백이 도착했어요",en:"📮 New feedback received",ja:"📮 新しいフィードバックが届きました",zh:"📮 收到新意見回饋"},
+  on:{ko:"🔔 새 피드백 알림이 켜졌어요!",en:"🔔 Feedback notifications ON!",ja:"🔔 フィードバック通知をオンにしました！",zh:"🔔 已開啟新意見通知！"}
+};
+const FBNL = k => (FBN_L[k][LANG]||FBN_L[k].ko);
+let FB_NOTIF = localStorage.getItem("rs_fb_notif") === "1", fbKnown = null;
+function notifyFeedback(f){
+  if(!IS_ADMIN || !FB_NOTIF || !("Notification" in window) || Notification.permission !== "granted") return;
+  try{
+    const n = new Notification(FBNL("title"), {
+      body: (f.cat ? f.cat + " · " : "") + (f.text || "").slice(0, 90),
+      icon: typeof GAME_LOGO !== "undefined" ? GAME_LOGO : undefined,
+      tag: "rs-fb-" + f.id
+    });
+    n.onclick = () => { window.focus(); if(window.goSub) goSub("fb"); if(window.loadAdminFeedback) loadAdminFeedback(); n.close(); };
+  }catch(e){}
+}
+document.getElementById("fbNotifLbl").textContent = FBN_L.label.ko;
+document.getElementById("fbNotif").addEventListener("change", async e => {
+  const t = e.target;
+  if(t.checked){
+    if(!("Notification" in window)){ toast(T("이 브라우저는 알림을 지원하지 않습니다 (아이폰: 사파리 공유 → 홈 화면에 추가 후 가능)")); t.checked = false; return; }
+    const perm = await Notification.requestPermission();
+    if(perm !== "granted"){ toast(T("알림 권한이 거부되었습니다 — 브라우저 설정에서 허용해주세요")); t.checked = false; return; }
+    FB_NOTIF = true; toast(FBNL("on"));
+  }else{ FB_NOTIF = false; }
+  localStorage.setItem("rs_fb_notif", FB_NOTIF ? "1" : "0");
+});
+
 /* ══════ 초기화 & 실시간 구독 ══════ */
 renderBoard(); renderVoteGrid(); heroOptions(); renderCmtFilter(); renderCmts(); renderChat(); bdStatic(); renderBd(); gStatic(); renderGreets();
 // 통합 프로필 바 + 닉네임 모달
@@ -3887,8 +4262,31 @@ FB.authReady.then(async uid => {
   }
   if(IS_ADMIN){
     document.getElementById("adminPanel").style.display = "block";
+    document.getElementById("fbNotifLbl").textContent = FBNL("label");
+    document.getElementById("fbNotif").checked = FB_NOTIF && ("Notification" in window) && Notification.permission === "granted";
     toast("🔑 " + T("관리자 모드"));
+    // 관리자만 피드백 구독 → 새 글 오면 알림 (첫 로드는 기준선만 잡고 알림 안 띄움)
+    FB.onValue(FB.query(FB.ref(FB.db, "feedback"), FB.limitToLast(30)), snap => {
+      const v = snap.val() || {};
+      const fresh = Object.entries(v).map(([id,f]) => ({ id, ...f }));
+      if(fbKnown !== null) fresh.forEach(f => { if(!fbKnown.has(f.id) && f.uid !== MY_UID) notifyFeedback(f); });
+      fbKnown = new Set(fresh.map(f => f.id));
+    });
   }
+  // 👥 친구 데이터 구독 (규칙상 본인 것만 읽힘 — v13 미게시 시 조용히 무시)
+  FB.onValue(FB.ref(FB.db, `friends/${uid}`), snap => {
+    frCache = snap.val() || {};
+    const o = frOut(); let ch = false;
+    for(const k in o) if(frCache[k]){ delete o[k]; ch = true; }   // 상대가 수락함 → 보냄 표시 정리
+    if(ch) frOutSet(o);
+    frBadge(); frRefreshView();
+  }, ()=>{});
+  FB.onValue(FB.ref(FB.db, `friendReqs/${uid}`), snap => {
+    const v = snap.val() || {};
+    if(frInKnown !== null){ for(const k in v) if(!(k in frInKnown)) toast(FRL("newReq").replace("{n}", (v[k]&&v[k].name)||"")); }
+    frInKnown = v; frInCache = v;
+    frBadge(); frRefreshView();
+  }, ()=>{});
   try{
     const snap = await FB.get(FB.ref(FB.db, `tiervote/votes/${uid}`));
     myVotes = snap.val() || {};
