@@ -37,7 +37,12 @@
   header h1{font-size:26px;line-height:1.15}
   header h1 .y{color:var(--ricochet)}
   header p{color:var(--sub);font-size:12px;margin-top:4px}
-  .visitorbar{display:none;gap:8px;flex-wrap:wrap;margin-top:9px}
+  .visitorrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}
+  .vnotice{display:inline-flex;align-items:center;gap:5px;background:var(--panel);border:1px solid rgba(255,176,46,.45);color:var(--ricochet);border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:700;font-family:inherit;cursor:pointer}
+  .vnotice svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  .vnotice:hover{background:rgba(255,176,46,.1)}
+  .vnotice.on{background:linear-gradient(135deg,var(--ricochet),#ff9500);border-color:var(--ricochet);color:#17130a}
+  .visitorbar{display:none;gap:8px;flex-wrap:wrap}
   .visitorbar span{display:inline-flex;align-items:center;gap:5px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:3px 11px;font-size:11.5px;color:var(--sub)}
   .visitorbar b{color:var(--ricochet);font-weight:700;font-size:12.5px}
   .visitorbar .vdot{width:5px;height:5px;border-radius:50%;background:var(--sub);opacity:.55;flex-shrink:0}
@@ -54,6 +59,7 @@
   .mecard .meav.ph{display:flex;align-items:center;justify-content:center;font-size:24px}
   .mecard .meinfo{flex:1;min-width:0;line-height:1.5}
   .mecard .menick{font-size:16px;font-weight:800;color:var(--txt)}
+  .mecard .meflag{margin-right:5px;font-size:17px;vertical-align:-1px}
   .mecard .memeta{font-size:11.5px;color:var(--sub);margin-top:2px}
   .mecard .memeta b{color:var(--ricochet)}
   .mecard .mebio{font-size:12px;color:var(--txt);margin-top:4px;word-break:break-word}
@@ -69,6 +75,17 @@
   .mesec{font-size:12px;color:var(--sub);font-weight:800;margin:4px 0 8px}
   [data-uprof]{cursor:pointer}
   [data-uprof]:hover{text-decoration:underline}
+  /* ── 🚨 알려진 이슈 ── */
+  #issueBanner{display:flex;align-items:center;gap:8px;width:100%;border:none;background:linear-gradient(90deg,rgba(255,93,93,.16),rgba(255,176,46,.12));border-bottom:1px solid rgba(255,93,93,.35);color:var(--txt);font-family:inherit;font-size:12px;font-weight:700;padding:9px 14px;cursor:pointer;text-align:left}
+  #issueBanner .ibtxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #issueBanner .ibmore{flex-shrink:0;font-size:11px;color:var(--ricochet);font-weight:800}
+  #issueBanner .ibx{flex-shrink:0;color:var(--sub);padding:2px 6px;font-size:12px}
+  .issuecard{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc,#ffb02e);border-radius:12px;padding:13px 15px;margin-bottom:11px}
+  .isshead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .isshead b{font-size:14px;color:var(--txt);flex:1;min-width:0}
+  .issbadge{font-size:10.5px;font-weight:800;border:1px solid;border-radius:8px;padding:2px 8px;white-space:nowrap;background:rgba(255,255,255,.03)}
+  .issdate{font-size:10.5px;color:var(--sub);margin-top:4px}
+  .issbody{font-size:12.8px;color:var(--txt);line-height:1.75;margin-top:7px;word-break:break-word}
   body[data-lang="en"] .hcell.picked::after{content:"ENEMY"}
   body[data-lang="ja"] .hcell.picked::after{content:"敵"}
   body[data-lang="zh"] .hcell.picked::after{content:"敵"}
@@ -692,26 +709,27 @@
   <img id="gameLogo" alt="Ricochet Squad">
   <h1 class="display">RICOCHET <span class="y" id="headTitle">카운터픽</span></h1>
   <p id="headDesc">적 팀 픽을 고르면 상성 기반으로 추천 · 2.0.6 기준 초안</p>
-  <div class="visitorbar" id="visitorStats">
-    <span><i class="vdot"></i>오늘 <b id="visitToday">–</b>명</span>
-    <span><i class="vdot"></i>이번 주 <b id="visitWeek">–</b>명</span>
-    <span><i class="vdot"></i>누적 <b id="visitTotal">–</b>명</span>
+  <div class="visitorrow">
+    <button class="vnotice" id="vNoticeBtn" onclick="navGo('notice')">
+      <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span id="vNoticeLbl">공지</span>
+    </button>
+    <div class="visitorbar" id="visitorStats">
+      <span><i class="vdot"></i>오늘 <b id="visitToday">–</b>명</span>
+      <span><i class="vdot"></i>이번 주 <b id="visitWeek">–</b>명</span>
+      <span><i class="vdot"></i>누적 <b id="visitTotal">–</b>명</span>
+    </div>
   </div>
 </header>
 
 <div class="navbar">
 <nav>
-  <button class="on" data-g="notice" onclick="navGo('notice')">
-    <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-    <span class="nlbl">공지</span>
+  <button class="on" data-g="game" onclick="navGo('game')">
+    <svg viewBox="0 0 24 24"><path d="M12 5.5C10.2 3.9 7.6 3.4 4.5 3.7c-.6.1-1 .6-1 1.2v13c0 .7.7 1.2 1.4 1.1 2.7-.3 5 .2 7.1 1.7 2.1-1.5 4.4-2 7.1-1.7.7.1 1.4-.4 1.4-1.1v-13c0-.6-.4-1.1-1-1.2-3.1-.3-5.7.2-7.5 1.8z"/><line x1="12" y1="5.5" x2="12" y2="20.4"/></svg>
+    <span class="nlbl">게임정보</span>
   </button>
   <button data-g="talk" onclick="navGo('talk')">
     <svg viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 0 1-11.5 7.2L4 20l1.3-4.3A8 8 0 1 1 20 11.5z"/><circle cx="8.5" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
     <span class="nlbl">소통</span><i class="subbadge" id="ptBadge" style="display:none"></i>
-  </button>
-  <button data-g="game" onclick="navGo('game')">
-    <svg viewBox="0 0 24 24"><path d="M12 5.5C10.2 3.9 7.6 3.4 4.5 3.7c-.6.1-1 .6-1 1.2v13c0 .7.7 1.2 1.4 1.1 2.7-.3 5 .2 7.1 1.7 2.1-1.5 4.4-2 7.1-1.7.7.1 1.4-.4 1.4-1.1v-13c0-.6-.4-1.1-1-1.2-3.1-.3-5.7.2-7.5 1.8z"/><line x1="12" y1="5.5" x2="12" y2="20.4"/></svg>
-    <span class="nlbl">게임정보</span>
   </button>
   <button data-g="feedback" onclick="navGo('feedback')">
     <svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 3.5z"/><line x1="8" y1="9.5" x2="16" y2="9.5"/><line x1="8" y1="12.5" x2="13" y2="12.5"/></svg>
@@ -725,11 +743,24 @@
 <div class="navhint" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
 </div>
 <div class="subnav" id="subNav" style="display:none"></div>
+<!-- 🚨 활성 이슈 경고 배너 (fixed 아닌 이슈가 있으면 표시 · 누르면 이슈 화면 · ✕로 닫기) -->
+<button id="issueBanner" style="display:none" onclick="goSub('issues')">
+  <span class="ibtxt"></span><span class="ibmore"></span>
+  <span class="ibx" onclick="issBannerClose(event)">✕</span>
+</button>
 
 <main>
   <!-- 공지 탭 -->
-  <section id="tab-notice" class="tab on">
-    <!-- 👋 방명록 (문구는 gStatic()이 4개 언어로 렌더 — data-ko 쓰지 말 것) -->
+  <section id="tab-notice" class="tab">
+    <!-- 📲 앱 설치(PWA) 안내 — 문구는 instStatic()이 4개 언어로 렌더, 설치됨/닫음 상태면 자동 숨김 -->
+    <div class="instcard" id="instCard" style="display:none">
+      <img src="icon-192.png" alt="" class="instic">
+      <div class="insttxt"><b></b><span></span></div>
+      <button class="cmtbtn instbtn" onclick="instGo()"></button>
+      <button class="instx" onclick="instHide()" aria-label="close">✕</button>
+    </div>
+    <div id="noticeBody"></div>
+    <!-- 👋 방명록 — 공지 맨 아래 (2026-07-11 운영자 Delta 피드백: 정보가 우선, 방명록은 보조) -->
     <div class="greetcard">
       <div class="ghead">
         <svg viewBox="0 0 24 24"><path d="M7 11.5V6.2a1.6 1.6 0 0 1 3.2 0v4.3m0-5.6a1.6 1.6 0 0 1 3.2 0v5.6m0-4.3a1.6 1.6 0 0 1 3.2 0v5.5m0-2.6a1.6 1.6 0 0 1 3.2.6c0 4.5-1.4 6-2.4 7.6-1.3 2-3.4 3.2-6 3.2-2.1 0-3.6-.6-4.9-1.9L4 15.9a1.7 1.7 0 0 1 2.4-2.4l1.4 1.4"/></svg>
@@ -743,18 +774,17 @@
       </div>
       <div class="gdone" id="gDone" style="display:none"></div>
     </div>
-    <!-- 📲 앱 설치(PWA) 안내 — 문구는 instStatic()이 4개 언어로 렌더, 설치됨/닫음 상태면 자동 숨김 -->
-    <div class="instcard" id="instCard" style="display:none">
-      <img src="icon-192.png" alt="" class="instic">
-      <div class="insttxt"><b></b><span></span></div>
-      <button class="cmtbtn instbtn" onclick="instGo()"></button>
-      <button class="instx" onclick="instHide()" aria-label="close">✕</button>
-    </div>
-    <div id="noticeBody"></div>
+  </section>
+
+  <!-- 🚨 알려진 이슈 탭 (내용은 renderIssues가 GAME_ISSUES에서 4개 언어로 렌더) -->
+  <section id="tab-issues" class="tab">
+    <div id="issueList"></div>
+    <div class="setupbox" id="issueGuide" style="margin-top:12px"></div>
+    <button class="cmtbtn" id="issueRelayBtn" onclick="rsGoRelay()" style="width:100%;margin-top:10px"></button>
   </section>
 
   <!-- 카운터픽 탭 -->
-  <section id="tab-pick" class="tab">
+  <section id="tab-pick" class="tab on">
     <h2>적 팀 픽 선택 <small>최대 3명 · 다시 누르면 해제</small></h2>
     <div class="grid" id="enemyGrid"></div>
     <div class="selbar" id="selbar"></div>
@@ -952,6 +982,7 @@
           <option value="📖 도감 정보 오류" data-ko="📖 도감 정보 오류">📖 도감 정보 오류</option>
           <option value="🗺️ 게임정보 오류" data-ko="🗺️ 게임정보 오류">🗺️ 게임정보 오류</option>
           <option value="🐞 버그 제보" data-ko="🐞 버그 제보">🐞 버그 제보</option>
+          <option value="📡 운영진 전달" data-ko="📡 운영진 전달">📡 운영진 전달</option>
           <option value="💡 기능 제안" data-ko="💡 기능 제안">💡 기능 제안</option>
           <option value="💬 기타" data-ko="💬 기타">💬 기타</option>
         </select>
@@ -1935,6 +1966,21 @@ const GAME_PATCH = {
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
   { date:"2026-07-11",
+    ko:"🌍 내 정보에 국가 선택 추가 — 프로필에 국기가 표시돼요 · 이슈 화면에 \"📡 운영진에게 전달하기\" 버튼 추가로 제보가 더 쉬워졌어요",
+    en:"🌍 Country picker in My Profile — your flag shows on your profile · plus a \"📡 Relay to devs\" button on the Issues page for easier reporting",
+    ja:"🌍 マイ情報に国選択を追加 — プロフィールに国旗が表示 · 不具合ページに「📡 運営に伝える」ボタンを追加",
+    zh:"🌍 我的資訊新增國家選擇 — 檔案會顯示國旗 · 問題頁新增「📡 向開發團隊回報」按鈕，回報更方便" },
+  { date:"2026-07-11",
+    ko:"🚨 알려진 이슈 보드 신설 — 게임 문제 현황·해결법·개발사 전달 상태를 한곳에서 (게임정보 > 이슈). 제보는 피드백의 \"📡 운영진 전달\"로",
+    en:"🚨 New Known Issues board — game problems, workarounds & dev-relay status in one place (Game Info > Issues). Report via Feedback \"📡 Relay to devs\"",
+    ja:"🚨 既知の不具合ボード新設 — 問題状況・対処法・報告状況をひとつに（ゲーム情報 > 不具合）。提報はフィードバックの「📡 運営に伝える」で",
+    zh:"🚨 新增已知問題看板 — 問題現況·解法·回報狀態一目瞭然（遊戲資訊 > 問題）。回報請用意見回饋「📡 轉達開發團隊」" },
+  { date:"2026-07-11",
+    ko:"🎯 첫 화면을 카운터픽(게임정보)으로 개편 — 게임 정보가 사이트의 중심이 되도록 (개발사 피드백 반영)",
+    en:"🎯 Landing is now Counter Picks (Game Info) — putting the game data front and center (per developer feedback)",
+    ja:"🎯 トップ画面をカウンターピック（ゲーム情報）に刷新 — ゲーム情報を中心に（開発チームのフィードバック反映）",
+    zh:"🎯 首頁改為克制（遊戲資訊）— 讓遊戲資料成為核心（依開發團隊回饋）" },
+  { date:"2026-07-11",
     ko:"👥 친구 기능 추가 — 닉네임을 누르면 그 유저 프로필을 보고, 친구 추가·승락·삭제 가능",
     en:"👥 Friends — tap any nickname to see their profile, then add / accept / remove friends",
     ja:"👥 フレンド機能 — ニックネームをタップしてプロフィールを見て、申請・承認・削除ができます",
@@ -2016,6 +2062,83 @@ function ncardUpdates(){
   const rows=SITE_UPDATES.slice(0,8).map(u=>`<li><span class="udate">${u.date}</span>${u[L]||u.ko}</li>`).join("");
   return `<div class="ncard"><h4>${head}</h4><ul class="ulog">${rows}</ul></div>`;
 }
+
+/* ══════ 🚨 알려진 이슈 (게임 문제 현황판) ══════
+   MAMMON이 직접 갱신: 항목 추가/수정 후 배포. status = "ok"(해결법 있음)·"sent"(개발사 전달됨)·"watch"(확인 중)·"fixed"(수정됨).
+   fixed가 아닌 이슈가 있으면 상단 경고 배너 표시(유저가 ✕로 닫으면 그 이슈는 다시 안 뜸).
+   유저 제보 = 피드백의 "📡 운영진 전달" 카테고리(비공개·운영자만 열람) → 확인 후 여기에 정리 게시. */
+const GAME_ISSUES = [
+  { id:"update-0711", date:"2026-07-11", status:"ok",
+    ko:{t:"매칭이 안 되나요? — 공지 없는 업데이트", d:"어제부터 게임이 안내 없이 3차례 업데이트되어, 업데이트한 유저와 안 한 유저가 서로 매칭되지 않습니다. 앱스토어/플레이스토어에서 게임을 수동 업데이트하면 해결됩니다. (실행 시 자동 업데이트 안내를 개발사에 제안해 두었어요)"},
+    en:{t:"Can't find matches? — Silent updates", d:"The game updated 3 times since yesterday without notice, so updated and non-updated players can't match together. Manually update the game from the App Store / Play Store to fix it. (We've suggested an auto-update prompt to the devs.)"},
+    ja:{t:"マッチしない？ — 告知なしアップデート", d:"昨日からゲームが告知なしで3回更新され、更新済みと未更新のプレイヤーがマッチングできません。App Store / Playストアから手動でアップデートすると解決します。（起動時の自動更新案内を開発チームに提案済み）"},
+    zh:{t:"配不到對手？— 無公告更新", d:"遊戲自昨天起無公告更新了3次，已更新與未更新的玩家無法互相配對。請到 App Store / Play 商店手動更新即可解決。（已向開發團隊建議啟動時自動更新提示）"} },
+  { id:"crit-0711", date:"2026-07-11", status:"sent",
+    ko:{t:"치명타 퍽 미작동 버그", d:"최신 업데이트 이후 치명타 퍽을 장착해도 치명타가 발생하지 않는 문제가 여러 영웅에서 제보되었습니다. 개발사에 전달 완료 — 수정을 기다리고 있습니다."},
+    en:{t:"Crit perks not working", d:"Since the latest update, critical hits don't proc even with crit perks equipped — reported across multiple heroes. Relayed to the devs — awaiting a fix."},
+    ja:{t:"クリティカルパーク不発バグ", d:"最新アップデート以降、クリティカル系パークを装備してもクリティカルが発生しない問題が複数ヒーローで報告されています。開発チームに報告済み — 修正待ちです。"},
+    zh:{t:"暴擊符文失效", d:"最新更新後，即使裝備暴擊符文也不會觸發暴擊，多名英雄皆有回報。已回報開發團隊 — 等待修復中。"} }
+];
+const ISS_L = {
+  head:{ko:"알려진 이슈",en:"Known Issues",ja:"既知の不具合",zh:"已知問題"},
+  sub:{ko:"게임 문제 현황 · 해결법 · 개발사 전달 상태",en:"Current game issues · workarounds · relay status",ja:"ゲームの問題状況 · 対処法 · 報告状況",zh:"遊戲問題現況 · 解法 · 回報狀態"},
+  ok:{ko:"✅ 해결법 있음",en:"✅ Workaround",ja:"✅ 対処法あり",zh:"✅ 有解法"},
+  sent:{ko:"📨 개발사 전달됨",en:"📨 Relayed to devs",ja:"📨 開発に報告済み",zh:"📨 已回報開發"},
+  watch:{ko:"👀 확인 중",en:"👀 Investigating",ja:"👀 確認中",zh:"👀 確認中"},
+  fixed:{ko:"🛠 수정됨",en:"🛠 Fixed",ja:"🛠 修正済み",zh:"🛠 已修復"},
+  empty:{ko:"현재 알려진 이슈가 없습니다 ✨",en:"No known issues right now ✨",ja:"現在、既知の不具合はありません ✨",zh:"目前沒有已知問題 ✨"},
+  guide:{ko:"🎮 게임 문제를 발견하셨나요? 아래 버튼으로 전달해주세요. 내용은 공개되지 않고 운영자만 확인하며, 정리해서 개발사에 전달하고 이곳에 현황을 올립니다.",en:"🎮 Found a game issue? Use the button below. Reports stay private (admin only); I relay them to the devs and post the status here.",ja:"🎮 ゲームの問題を見つけたら、下のボタンから送ってください。内容は非公開（運営者のみ閲覧）で、開発チームに伝えて状況をここに掲載します。",zh:"🎮 發現遊戲問題？請用下方按鈕送出。內容不公開（僅管理員可見），我會轉達開發並在此更新狀態。"},
+  relayBtn:{ko:"📡 운영진에게 전달하기",en:"📡 Relay an issue to the devs",ja:"📡 運営に問題を伝える",zh:"📡 向開發團隊回報"},
+  bannerMore:{ko:"자세히 보기",en:"Details",ja:"詳細",zh:"詳情"}
+};
+const ISL = k => (ISS_L[k]||{})[LANG] || (ISS_L[k]||{}).ko || k;
+const ISS_COLOR = { ok:"#4ade80", sent:"#5da9ff", watch:"#ffb02e", fixed:"#8b96ab" };
+function issDismissed(){ try{ return JSON.parse(localStorage.getItem("rs_iss_dismiss")||"[]"); }catch(e){ return []; } }
+function renderIssues(){
+  const list = document.getElementById("issueList");
+  if(list){
+    const L = LANG;
+    list.innerHTML = GAME_ISSUES.length ? GAME_ISSUES.map(i=>{
+      const c = i[L]||i.ko, col = ISS_COLOR[i.status]||"#ffb02e";
+      return `<div class="issuecard" style="--acc:${col}">
+        <div class="isshead"><b>${c.t}</b><span class="issbadge" style="color:${col};border-color:${col}">${ISL(i.status)}</span></div>
+        <div class="issdate">${i.date}</div>
+        <div class="issbody">${c.d}</div>
+      </div>`;
+    }).join("") : `<div class="cmtempty">${ISL("empty")}</div>`;
+    const g = document.getElementById("issueGuide"); if(g) g.textContent = ISL("guide");
+    const rb = document.getElementById("issueRelayBtn"); if(rb) rb.textContent = ISL("relayBtn");
+  }
+  // 상단 경고 배너: fixed 아닌 이슈 중 유저가 닫지 않은 첫 항목
+  const ban = document.getElementById("issueBanner");
+  if(ban){
+    const dis = issDismissed();
+    const act = GAME_ISSUES.find(i=>i.status!=="fixed" && !dis.includes(i.id));
+    if(act){
+      const c = act[LANG]||act.ko;
+      ban.style.display = "flex";
+      ban.querySelector(".ibtxt").textContent = "🚨 " + c.t;
+      ban.querySelector(".ibmore").textContent = ISL("bannerMore") + " ›";
+      ban.dataset.iid = act.id;
+    }else ban.style.display = "none";
+  }
+}
+/* 이슈 화면 → 피드백으로 이동 + "📡 운영진 전달" 카테고리 미리 선택 */
+window.rsGoRelay = function(){
+  if(window.goSub) goSub("fb");
+  setTimeout(()=>{
+    const sel = document.getElementById("fbCat");
+    if(sel){ const opt = [...sel.options].find(o=>o.value.indexOf("운영진 전달")>=0); if(opt){ sel.value = opt.value; } }
+    const t = document.getElementById("fbText"); if(t) t.focus();
+  }, 120);
+};
+function issBannerClose(ev){
+  ev.stopPropagation();
+  const ban = document.getElementById("issueBanner");
+  const id = ban && ban.dataset.iid;
+  if(id){ const d = issDismissed(); if(!d.includes(id)) d.push(id); try{ localStorage.setItem("rs_iss_dismiss", JSON.stringify(d)); }catch(e){} }
+  renderIssues();
+}
 /* 🎨 미니멀 라인 아이콘 세트 (공지·모달의 이모지를 통일된 라인 아이콘으로 치환) */
 const IC = {
   check:'<svg class="nico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.3l2.5 2.5 4.9-5"/></svg>',
@@ -2067,7 +2190,7 @@ function renderAuthText(){
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", renderAuthText); else renderAuthText();
 /* 현재 활성 뷰 추적 (헤더 재적용용) */
-let CURVIEW = "notice";
+let CURVIEW = "pick";   // 기본 랜딩 = 카운터픽 (2026-07-11 운영자 Delta 요청: 게임정보가 메인)
 /* 커뮤니티 서브뷰별 헤더 (제목·부제 — 전부 I18N에 있는 키) */
 const GOCOMM_HEAD = {
   chat:["채팅","전세계 유저와 자유 수다 · 최근 100개"],
@@ -2082,6 +2205,7 @@ function applyHeader(){
   const v=CURVIEW;
   if(v==="notice"){ const n=NOTICE[LANG]||NOTICE.ko; setHead(n.title,n.desc); return; }
   if(v==="board"){ setHead(BL("head"), BL("desc")); return; }
+  if(v==="issues"){ setHead(ISL("head"), ISL("sub")); return; }
   if(v.indexOf("comm:")===0){ const h=GOCOMM_HEAD[v.slice(5)]; if(h) setHead(T(h[0]),T(h[1])); return; }
   const info=TAB_INFO[v]; if(info) setHead(v==="info"?SL("info"):T(info.title),T(info.desc));
 }
@@ -2090,13 +2214,13 @@ function applyHeader(){
 const SUB_OF = {
   notice:{g:"notice", view:"notice"},
   chat:{g:"talk", view:"comm:chat"}, party:{g:"talk", view:"comm:party"}, board:{g:"talk", view:"board"},
-  pick:{g:"game", view:"pick"}, dex:{g:"game", view:"dex"}, tier:{g:"game", view:"comm:tier"}, tips:{g:"game", view:"comm:tips"}, info:{g:"game", view:"info"},
+  pick:{g:"game", view:"pick"}, dex:{g:"game", view:"dex"}, tier:{g:"game", view:"comm:tier"}, tips:{g:"game", view:"comm:tips"}, info:{g:"game", view:"info"}, issues:{g:"game", view:"issues"},
   fb:{g:"feedback", view:"comm:fb"}, stats:{g:"stats", view:"comm:stats"}
 };
 const NAV_GROUPS = {
   notice:{ subs:["notice"], solo:true },
   talk:{ subs:["chat","party","board"] },
-  game:{ subs:["pick","dex","tier","tips","info"] },
+  game:{ subs:["pick","dex","tier","tips","info","issues"] },
   feedback:{ subs:["fb"], solo:true },
   stats:{ subs:["stats"], solo:true }
 };
@@ -2117,6 +2241,7 @@ const SUB_LABEL = {
   tier:{ko:"티어표",en:"Tier List",ja:"ティア表",zh:"梯度表"},
   tips:{ko:"팁",en:"Tips",ja:"攻略メモ",zh:"攻略"},
   info:{ko:"게임 시스템",en:"Game System",ja:"ゲームシステム",zh:"遊戲系統"},
+  issues:{ko:"이슈",en:"Issues",ja:"不具合",zh:"問題"},
   fb:{ko:"피드백",en:"Feedback",ja:"フィードバック",zh:"意見回饋"},
   stats:{ko:"통계",en:"Stats",ja:"統計",zh:"統計"}
 };
@@ -2128,12 +2253,13 @@ const SUB_ICON = {
   dex:'<svg viewBox="0 0 24 24"><path d="M12 5.5C10.2 3.9 7.6 3.4 4.5 3.7c-.6.1-1 .6-1 1.2v13c0 .7.7 1.2 1.4 1.1 2.7-.3 5 .2 7.1 1.7 2.1-1.5 4.4-2 7.1-1.7.7.1 1.4-.4 1.4-1.1v-13c0-.6-.4-1.1-1-1.2-3.1-.3-5.7.2-7.5 1.8z"/><line x1="12" y1="5.5" x2="12" y2="20.4"/></svg>',
   tier:'<svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5H4v1.5a3 3 0 0 0 3 3"/><path d="M17 5h3v1.5a3 3 0 0 1-3 3"/><path d="M9.5 19h5"/><path d="M12 14v5"/></svg>',
   tips:'<svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 1 3.6 10.8c-.6.5-.9 1-.9 1.7H9.3c0-.7-.3-1.2-.9-1.7A6 6 0 0 1 12 3z"/></svg>',
-  info:'<svg viewBox="0 0 24 24"><path d="M9 4L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><line x1="9" y1="4" x2="9" y2="17"/><line x1="15" y1="6.5" x2="15" y2="19.5"/></svg>'
+  info:'<svg viewBox="0 0 24 24"><path d="M9 4L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><line x1="9" y1="4" x2="9" y2="17"/><line x1="15" y1="6.5" x2="15" y2="19.5"/></svg>',
+  issues:'<svg viewBox="0 0 24 24"><path d="M12 4L2.8 19.5h18.4z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>'
 };
 const SL = s => (SUB_LABEL[s]||{})[LANG] || (SUB_LABEL[s]||{}).ko || s;
 const GRL = g => (GROUP_LABEL[g]||{})[LANG] || (GROUP_LABEL[g]||{}).ko || g;
-let CURGROUP = "notice";
-const groupLast = { talk:"chat", game:"dex" };   // 그룹 재방문 시 마지막 본 서브 기억
+let CURGROUP = "game";
+const groupLast = { talk:"chat", game:"pick" };   // 그룹 재방문 시 마지막 본 서브 기억
 
 function showView(view){
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
@@ -2164,6 +2290,7 @@ function goSub(sub){
   CURGROUP=meta.g;
   if(NAV_GROUPS[CURGROUP] && !NAV_GROUPS[CURGROUP].solo) groupLast[CURGROUP]=sub;
   document.querySelectorAll("nav button[data-g]").forEach(b=>b.classList.toggle("on", b.dataset.g===CURGROUP));
+  const vn=document.getElementById("vNoticeBtn"); if(vn) vn.classList.toggle("on", CURGROUP==="notice");   // 공지 칩(헤더) 활성 표시
   showView(meta.view);
   renderSubnav();
   const active=document.querySelector(`#subNav button[data-sub="${sub}"]`);
@@ -2299,6 +2426,7 @@ for(const k in OFFICIAL_TR){ for(const l of ["en","ja","zh"]){ if(OFFICIAL_TR[k]
 function T(s){ if(LANG==="ko"||s==null||s==="") return s; const d=I18N[LANG]; return (d&&d[s])!==undefined?d[s]:s; }
 function applyStatic(){
   document.querySelectorAll("nav button[data-g]").forEach(b=>{ const l=b.querySelector(".nlbl"); if(l) l.textContent=GRL(b.dataset.g); });
+  const vnl=document.getElementById("vNoticeLbl"); if(vnl) vnl.textContent=(NOTICE[LANG]||NOTICE.ko).label;
   if(typeof renderSubnav==="function") renderSubnav();
   const h2p=document.querySelectorAll("#tab-pick h2");
   if(h2p[0]) h2p[0].innerHTML=`${T("적 팀 픽 선택")} <small>${T("최대 3명 · 다시 누르면 해제")}</small>`;
@@ -2332,6 +2460,7 @@ function applyStatic(){
   document.title=T("리코셰 스쿼드 카운터픽");
   applyHeader();
   renderNotice();
+  renderIssues();
   if(window.rsNavUpdate) window.rsNavUpdate();
   if(typeof instStatic === "function") instStatic();
   if(window.rsMeSync) window.rsMeSync();
@@ -2425,7 +2554,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.11-f";
+const SITE_VERSION = "2026.07.11-k";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -2521,6 +2650,7 @@ const ME_L = {
   mainHero:{ko:"주력 영웅 (최대 3)",en:"Main heroes (up to 3)",ja:"メインヒーロー（最大3）",zh:"主力英雄（最多3）"},
   league:{ko:"리그 / 티어",en:"League / Tier",ja:"リーグ / ティア",zh:"聯賽 / 段位"},
   bio:{ko:"한 줄 소개",en:"One-line bio",ja:"ひとこと紹介",zh:"一句話介紹"},
+  country:{ko:"국가",en:"Country",ja:"国",zh:"國家"},
   bioPh:{ko:"예) 근접 장인입니다",en:"e.g. Melee main",ja:"例）近接メイン",zh:"例）近戰主力"},
   save:{ko:"저장",en:"Save",ja:"保存",zh:"儲存"},
   saved:{ko:"프로필이 저장되었습니다 ✓",en:"Profile saved ✓",ja:"プロフィールを保存しました ✓",zh:"檔案已儲存 ✓"},
@@ -2540,6 +2670,11 @@ const ME_L = {
 const MEL = k => (ME_L[k][LANG]||ME_L[k].ko);
 function getProfile(){ try{ return JSON.parse(localStorage.getItem("rs_profile")||"{}"); }catch(e){ return {}; } }
 function profMains(p){ return [p.main1||p.main, p.main2, p.main3].filter(Boolean); }   // main(구버전) 호환
+/* 🌍 국가: 코드에서 국기 이모지 자동 생성 + 국가명은 브라우저 Intl.DisplayNames로 4개 언어 자동 번역 (하드코딩 없음) */
+const COUNTRY_CODES = ["KR","JP","CN","TW","HK","US","CA","GB","DE","FR","ES","IT","NL","PL","RU","UA","SE","TR",
+  "BR","MX","AR","CL","PE","CO","AU","NZ","IN","ID","TH","VN","PH","MY","SG","SA","AE","EG","ZA","PT","FI","NO","DK","GR","CZ","RO","HU","IL"];
+function flagOf(code){ return /^[A-Z]{2}$/.test(code) ? code.replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0))) : ""; }
+function countryName(code){ try{ return new Intl.DisplayNames([LANG], {type:"region"}).of(code) || code; }catch(e){ return code; } }
 function myCounts(){
   const uid = MY_UID;
   return {
@@ -2558,9 +2693,10 @@ function profileCardHtml(p, nick){
   const heroNames = mains.map(k=>esc(hName(k))).join(", ");
   const metaBits = [heroNames?`<b>${heroNames}</b>`:"", p.league?esc(p.league):""].filter(Boolean).join(" · ");
   const gnick = p.gnick || "";
+  const flag = p.country ? `<span class="meflag" title="${esc(countryName(p.country))}">${flagOf(p.country)}</span>` : "";
   return `<div class="mecard">${av0}
     <div class="meinfo">
-      <div class="menick">${nick?esc(nick):`<span style="color:var(--sub);font-weight:600">${MEL("noNick")}</span>`}</div>
+      <div class="menick">${flag}${nick?esc(nick):`<span style="color:var(--sub);font-weight:600">${MEL("noNick")}</span>`}</div>
       <div class="memeta">${gnick?`🎮 ${esc(gnick)}`:""}${gnick&&metaBits?" · ":""}${metaBits}</div>
       ${p.bio?`<div class="mebio">"${esc(p.bio)}"</div>`:""}
     </div></div>`;
@@ -2576,6 +2712,9 @@ function renderMe(){
     (typeof HKEYS!=="undefined"?HKEYS:[]).map(k=>`<option value="${k}"${sel===k?" selected":""}>${esc(hName(k))}</option>`).join("") + `</select>`;
   const leagueOpts = `<option value="">${MEL("none")}</option>` +
     (typeof LEAGUES!=="undefined"?LEAGUES:[]).map(l=>`<option value="${esc(l)}"${p.league===l?" selected":""}>${esc(l)}</option>`).join("");
+  const countryOpts = `<option value="">${MEL("none")}</option>` +
+    COUNTRY_CODES.map(cc=>({cc,nm:countryName(cc)})).sort((a,b)=>a.nm.localeCompare(b.nm,LANG))
+      .map(o=>`<option value="${o.cc}"${p.country===o.cc?" selected":""}>${flagOf(o.cc)} ${esc(o.nm)}</option>`).join("");
   const c = myCounts();
   body.innerHTML = `
     <h3>${MEL("title")}</h3>
@@ -2586,6 +2725,8 @@ function renderMe(){
       <input id="meGNick" maxlength="30" value="${esc(gnick)}" autocomplete="off">
       <label>${MEL("mainHero")}</label>
       ${heroSel(1, mains[0]||"")}${heroSel(2, mains[1]||"")}${heroSel(3, mains[2]||"")}
+      <label>${MEL("country")}</label>
+      <select id="meCountry">${countryOpts}</select>
       <label>${MEL("league")}</label>
       <select id="meLeague">${leagueOpts}</select>
       <label>${MEL("bio")}</label>
@@ -2652,13 +2793,14 @@ document.getElementById("meBody").addEventListener("click", async e => {
     const gn = (document.getElementById("meGNick").value||"").trim();
     const mains = [1,2,3].map(i=>document.getElementById("meMain"+i).value).filter(Boolean);
     const prof = { main1: mains[0]||"", main2: mains[1]||"", main3: mains[2]||"",
+                   country: document.getElementById("meCountry").value || "",
                    league: document.getElementById("meLeague").value || "", bio: (document.getElementById("meBio").value||"").trim() };
     if(gn){ localStorage.setItem("rs_gamenick", gn); const pt=document.getElementById("ptGameNick"); if(pt) pt.value=gn; }
     try{ localStorage.setItem("rs_profile", JSON.stringify(prof)); }catch(e){}
     renderMe();
-    // 서버에도 저장 → 다른 유저가 볼 수 있게 (규칙 v12). 실패해도 로컬엔 저장됨.
+    // 서버에도 저장 → 다른 유저가 볼 수 있게 (규칙 v14). 실패해도 로컬엔 저장됨.
     if(MY_UID){
-      FB.set(FB.ref(FB.db, "profiles/" + MY_UID), { name: getNick()||"", gnick: gn, main1: prof.main1, main2: prof.main2, main3: prof.main3, league: prof.league, bio: prof.bio, ts: FB.serverTimestamp() })
+      FB.set(FB.ref(FB.db, "profiles/" + MY_UID), { name: getNick()||"", gnick: gn, main1: prof.main1, main2: prof.main2, main3: prof.main3, country: prof.country, league: prof.league, bio: prof.bio, ts: FB.serverTimestamp() })
         .then(()=>toast(MEL("saved")))
         .catch(()=>toast(MEL("saveFail")));
     }else toast(MEL("saved"));
