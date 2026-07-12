@@ -4385,17 +4385,39 @@ function renderPubFb(){
       +'<span class="ctime">'+relTime(f.ts||0)+'</span>'+(IS_ADMIN?'<button class="cdel" data-pfdel="'+f.id+'" title="'+T("삭제")+'">✕</button>':'')+'</div>'
       +'<div class="cmtbody">'+esc(f.text||"")+'</div>'
       +'<div class="cmtacts"><button class="cmtact '+(iLike?'like-on':'')+'" data-pflike="'+f.id+'">👍 <b>'+likes+'</b></button>'
-      +'<button class="cmtact '+(iDis?'dis-on':'')+'" data-pfdis="'+f.id+'">👎 <b>'+dislikes+'</b></button></div></div>';
+      +'<button class="cmtact '+(iDis?'dis-on':'')+'" data-pfdis="'+f.id+'">👎 <b>'+dislikes+'</b></button></div>'
+      +(f.reply?'<div class="bdtr"><b>'+FBR("replyTag")+'</b> · '+relTime(f.reply.ts||0)+'<br>'+esc(f.reply.text||"")+'</div>':'')
+      +(IS_ADMIN?'<div class="replyin"><input maxlength="500" placeholder="'+FBR("replyPh")+'" data-pfrin="'+f.id+'" value="'+(f.reply?esc(f.reply.text||""):"")+'"><button data-pfrsend="'+f.id+'">'+(f.reply?FBR("replyEdit"):FBR("replyBtn"))+'</button>'+(f.reply?'<button class="replydel" data-pfrdel="'+f.id+'">'+FBR("replyDel")+'</button>':'')+'</div>':'')
+      +'</div>';
   }).join("");
 }
 window.rsPubFbSync = renderPubFb;
+document.getElementById("pubFbList").addEventListener("keydown", e=>{
+  const inp=e.target.closest("[data-pfrin]");
+  if(inp && e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); const b=document.querySelector('[data-pfrsend="'+inp.dataset.pfrin+'"]'); if(b) b.click(); }
+});
 FB.onValue(FB.ref(FB.db,"pubfb"), snap=>{
   const v=snap.val()||{};
-  pubfbCache=Object.entries(v).map(([id,f])=>({id, cat:f.cat, name:f.name, text:f.text, uid:f.uid, ts:f.ts||0, likes:f.likes, dislikes:f.dislikes}))
+  pubfbCache=Object.entries(v).map(([id,f])=>({id, cat:f.cat, name:f.name, text:f.text, uid:f.uid, ts:f.ts||0, likes:f.likes, dislikes:f.dislikes, reply:f.reply}))
     .filter(f=>typeof f.text==="string");
   renderPubFb();
 }, ()=>{ pubfbCache=[]; renderPubFb(); });
 document.getElementById("pubFbList").addEventListener("click", async e=>{
+  const rsend=e.target.closest("[data-pfrsend]"), rdel=e.target.closest("[data-pfrdel]");
+  if(rsend && IS_ADMIN){   // 관리자 공개 답변 전송/수정
+    const id=rsend.dataset.pfrsend, inp=document.querySelector('[data-pfrin="'+id+'"]');
+    const text=(inp&&inp.value||"").trim(); if(!text||text.length>500) return;
+    const isEdit=!!document.querySelector('[data-pfrdel="'+id+'"]');
+    try{ await FB.set(FB.ref(FB.db,"pubfb/"+id+"/reply"), {text, ts:FB.serverTimestamp()}); toast(FBR(isEdit?"replyEdited":"replySent")); }
+    catch(err){ const perm=String(err&&err.message||err).toLowerCase().includes("permission"); toast(perm?"⚙️ 규칙 v18 게시가 필요합니다 (공개 답변)":T("전송 실패 — 네트워크를 확인해주세요")); }
+    return;
+  }
+  if(rdel && IS_ADMIN){   // 관리자 공개 답변 삭제
+    if(!confirm(FBR("replyDelConfirm"))) return;
+    try{ await FB.remove(FB.ref(FB.db,"pubfb/"+rdel.dataset.pfrdel+"/reply")); toast(FBR("replyDeleted")); }
+    catch(err){ toast(T("삭제 실패")); }
+    return;
+  }
   const del=e.target.closest("[data-pfdel]"), like=e.target.closest("[data-pflike]"), dis=e.target.closest("[data-pfdis]");
   if(del && IS_ADMIN){
     if(!confirm(PUBFB("del"))) return;
@@ -4595,10 +4617,15 @@ async function adminPublishAll(){
     const pubIds = new Set(pubfbCache.map(x=>x.id));
     let n=0;
     for(const [id,f] of Object.entries(v)){
-      if(pubIds.has(id)) continue;                 // 이미 공개됨 → 투표 보존 위해 건너뜀
       const text=((f&&f.text)||"").trim();
       if(!text) continue;                           // 사진만 있는 빈 글은 텍스트 보드에 못 올림
-      await FB.set(FB.ref(FB.db, "pubfb/"+id), { cat:((f.cat||"💬 기타")+"").slice(0,30), name:((f.name||"익명")+"").slice(0,12), text:text.slice(0,500), uid:(f.uid||"unknown")+"", ts:f.ts||Date.now() });
+      if(pubIds.has(id)){                            // 이미 공개됨 → 본문·투표는 그대로 두고 답변만 동기화
+        if(f.reply&&f.reply.text){ await FB.set(FB.ref(FB.db, "pubfb/"+id+"/reply"), { text:(f.reply.text+"").slice(0,500), ts:f.reply.ts||Date.now() }); n++; }
+        continue;
+      }
+      const pobj={ cat:((f.cat||"💬 기타")+"").slice(0,30), name:((f.name||"익명")+"").slice(0,12), text:text.slice(0,500), uid:(f.uid||"unknown")+"", ts:f.ts||Date.now() };
+      if(f.reply&&f.reply.text) pobj.reply={ text:(f.reply.text+"").slice(0,500), ts:f.reply.ts||Date.now() };
+      await FB.set(FB.ref(FB.db, "pubfb/"+id), pobj);
       n++;
     }
     toast(n? PUBFB("pubAllDone").replace("{n}", n) : PUBFB("pubAllNone"));
@@ -4615,7 +4642,7 @@ document.getElementById("adminFbList").addEventListener("click", async e => {
     const id=pub.dataset.fbPub, f=adminFbItems.find(x=>x.id===id), isPubd=pubfbCache.some(x=>x.id===id);
     try{
       if(isPubd){ await FB.remove(FB.ref(FB.db,"pubfb/"+id)); toast(PUBFB("unpublished")); }
-      else if(f){ await FB.set(FB.ref(FB.db,"pubfb/"+id), { cat:f.cat, name:f.name, text:f.text, uid:f.uid, ts:f.ts||Date.now() }); toast(PUBFB("published")); }
+      else if(f){ const obj={ cat:f.cat, name:f.name, text:f.text, uid:f.uid, ts:f.ts||Date.now() }; if(f.reply&&f.reply.text) obj.reply={ text:f.reply.text, ts:f.reply.ts||Date.now() }; await FB.set(FB.ref(FB.db,"pubfb/"+id), obj); toast(PUBFB("published")); }
       setTimeout(loadAdminFeedback, 300);
     }catch(err){ const perm=String(err&&err.message||err).toLowerCase().includes("permission"); toast(perm?"⚙️ 규칙 v18 게시가 필요합니다 (공개 게시판)":T("전송 실패 — 네트워크를 확인해주세요")); }
     return;
