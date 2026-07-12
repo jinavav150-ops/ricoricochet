@@ -228,6 +228,16 @@
   .bdmedia svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
   .bdmedia.has{color:var(--ricochet);border-color:var(--ricochet)}
   .bdnote{font-size:10.5px;color:var(--sub);margin-top:7px;opacity:.85}
+  /* 🎁 프로모 코드 */
+  .promo{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-bottom:8px}
+  .promoinfo{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .promocode{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:16px;font-weight:800;letter-spacing:1px;color:var(--ricochet);word-break:break-all}
+  .promoreward{font-size:11.5px;color:var(--sub)}
+  .promoact{display:flex;align-items:center;gap:6px;flex-shrink:0}
+  .promocopy{display:flex;align-items:center;gap:5px;background:var(--ricochet);color:#141414;border:none;border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:800;font-family:inherit;cursor:pointer;white-space:nowrap}
+  .promocopy svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .promodel{background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;width:30px;height:30px;font-size:13px;cursor:pointer;flex-shrink:0}
+  .promodel:hover{color:var(--bad,#ff5d5d);border-color:var(--bad,#ff5d5d)}
   .bdprev{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px}
   .bdprev:empty{display:none}
   .bdprev .bpitem{position:relative}
@@ -795,6 +805,14 @@
     <div id="issueList"></div>
     <div class="setupbox" id="issueGuide" style="margin-top:12px"></div>
     <button class="cmtbtn" id="issueRelayBtn" onclick="rsGoRelay()" style="width:100%;margin-top:10px"></button>
+  </section>
+
+  <!-- 🎁 프로모 코드 탭 (내용은 renderCodes가 4개 언어로 렌더) -->
+  <section id="tab-codes" class="tab">
+    <div id="codesHead"></div>
+    <div id="codesList"></div>
+    <div id="codesAdmin" style="display:none"></div>
+    <div class="bdnote" id="codesNote" style="margin-top:10px"></div>
   </section>
 
   <!-- 카운터픽 탭 -->
@@ -1947,7 +1965,7 @@ const NOTICE = {
         <li>💬 <b>커뮤니티</b> — 실시간 채팅·파티 모집·티어 투표·팁·피드백 (한/영/일/중 자동 번역)</li>
         <li>🔒 <b>안전</b> — 욕설·개인정보 필터, 신고, 보안 강화</li>
       </ul></div>
-      {{GAMEPATCH}}{{SITEUPDATES}}
+      {{GAMEPATCH}}{{ROADMAP}}{{SITEUPDATES}}
       <div class="ncard"><h4>🤝 앞으로의 약속</h4><ul>
         <li>게임이 패치되면 <b>추측이 아닌 실제 게임 데이터</b>를 기준으로 최대한 빠르고 정확하게 반영하겠습니다</li>
         <li>여러분의 <b>피드백과 티어 투표</b>를 사이트에 계속 녹이겠습니다</li>
@@ -1968,7 +1986,7 @@ const NOTICE = {
         <li>💬 <b>Community</b> — live chat, party finder, tier votes, tips, feedback (auto-translated KO/EN/JA/ZH)</li>
         <li>🔒 <b>Safety</b> — profanity/personal-info filters, reporting, hardened security</li>
       </ul></div>
-      {{GAMEPATCH}}{{SITEUPDATES}}
+      {{GAMEPATCH}}{{ROADMAP}}{{SITEUPDATES}}
       <div class="ncard"><h4>🤝 Our promise</h4><ul>
         <li>When the game gets patched, we reflect it fast and accurately — <b>based on real game data, never guesses</b></li>
         <li>We keep weaving your <b>feedback and tier votes</b> into the site</li>
@@ -1989,7 +2007,7 @@ const NOTICE = {
         <li>💬 <b>コミュニティ</b> — リアルタイムチャット・パーティ募集・ティア投票・攻略メモ・フィードバック（韓/英/日/中 自動翻訳）</li>
         <li>🔒 <b>安全</b> — 暴言・個人情報フィルター、通報、セキュリティ強化</li>
       </ul></div>
-      {{GAMEPATCH}}{{SITEUPDATES}}
+      {{GAMEPATCH}}{{ROADMAP}}{{SITEUPDATES}}
       <div class="ncard"><h4>🤝 これからの約束</h4><ul>
         <li>ゲームがアップデートされたら、<b>推測ではなく実際のゲームデータ</b>を基に、できる限り早く正確に反映します</li>
         <li>皆さんの<b>フィードバックとティア投票</b>をサイトに反映し続けます</li>
@@ -2010,7 +2028,7 @@ const NOTICE = {
         <li>💬 <b>社群</b> — 即時聊天·組隊招募·梯隊投票·攻略·意見回饋（韓/英/日/中 自動翻譯）</li>
         <li>🔒 <b>安全</b> — 髒話·個資過濾、檢舉、資安強化</li>
       </ul></div>
-      {{GAMEPATCH}}{{SITEUPDATES}}
+      {{GAMEPATCH}}{{ROADMAP}}{{SITEUPDATES}}
       <div class="ncard"><h4>🤝 未來的承諾</h4><ul>
         <li>遊戲更新時，<b>以實際遊戲資料為準，絕不臆測</b>，盡快且準確地反映</li>
         <li>持續把大家的<b>回饋與梯隊投票</b>融入網站</li>
@@ -2047,8 +2065,41 @@ const GAME_PATCH = {
         "<b>Khan</b> 削弱 — 砲塔生命·傷害·射程下調"]
   }
 };
+/* 🚀 개발사 로드맵 — 개발사가 공식 디스코드(good-to-know)에서 밝힌 향후 계획. 추측 금지, 공식 발표만 반영. */
+const GAME_ROADMAP = {
+  head:{ ko:"🚀 개발사 로드맵 — 앞으로 나올 것", en:"🚀 Dev roadmap — what's coming", ja:"🚀 開発ロードマップ — 今後の予定", zh:"🚀 開發藍圖 — 即將登場" },
+  note:{ ko:"개발사 공식 안내(공식 디스코드) 기준 · 시기는 미정", en:"From the studio's official Discord · timing TBD", ja:"開発チーム公式Discord基準 · 時期は未定", zh:"依開發團隊官方 Discord · 時間未定" },
+  items:{
+    ko:["🦸 <b>새 영웅</b> 계속 추가 — 히어로 슈터의 핵심이니까요",
+        "🗺️ <b>새 맵</b> 계속 제작 — 신선한 플레이를 위해",
+        "🎮 <b>새 게임 모드</b> 준비 중 — 유저 피드백이 중요하다고 해요",
+        "🚢 우주선 안 빈 공간도 일부 채울 예정 (새 확장은 없음)"],
+    en:["🦸 <b>New heroes</b> keep coming — core to a hero shooter",
+        "🗺️ <b>New maps</b> in the works — for fresh gameplay",
+        "🎮 <b>New game modes</b> planned — your feedback matters",
+        "🚢 Some empty rooms on the ship will be filled (no new extensions)"],
+    ja:["🦸 <b>新ヒーロー</b>を継続追加 — ヒーローシューターの核心",
+        "🗺️ <b>新マップ</b>を制作中 — 新鮮なプレイのため",
+        "🎮 <b>新ゲームモード</b>を予定 — ユーザーの声が重要",
+        "🚢 宇宙船の空き部屋も一部オープン予定（新規拡張はなし）"],
+    zh:["🦸 <b>新英雄</b>持續推出 — 英雄射擊的核心",
+        "🗺️ <b>新地圖</b>製作中 — 帶來新鮮玩法",
+        "🎮 <b>新遊戲模式</b>規劃中 — 你的回饋很重要",
+        "🚢 太空船的空房間也將部分開放（無新擴充）"]
+  }
+};
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-07-12",
+    ko:"🚀 공지에 '개발사 로드맵' 카드 추가 — 새 영웅·새 맵·새 게임모드 등 앞으로 나올 것을 공식 발표 기준으로 정리",
+    en:"🚀 New 'Dev roadmap' card in Notice — upcoming heroes, maps & game modes, based on official announcements",
+    ja:"🚀 お知らせに「開発ロードマップ」カード追加 — 新ヒーロー・新マップ・新モードなど公式発表ベースで整理",
+    zh:"🚀 公告新增「開發藍圖」卡片 — 依官方發表整理即將登場的新英雄·新地圖·新模式" },
+  { date:"2026-07-12",
+    ko:"🎁 프로모 코드 페이지 신설 — 게임정보 > 코드에서 리딤 코드를 복사해 무료 보상을 받으세요 (공식 디스코드 기준)",
+    en:"🎁 New Promo Codes page — copy redeem codes from Game Info > Codes for free rewards (from the official Discord)",
+    ja:"🎁 プロモコードページ新設 — ゲーム情報 > コードでリディームコードをコピーして無料報酬を（公式Discord基準）",
+    zh:"🎁 新增兌換碼頁面 — 在遊戲資訊 > 兌換碼複製代碼即可獲得免費獎勵（依官方 Discord）" },
   { date:"2026-07-11",
     ko:"⭐ 도감에 특전(퍽) 추천 투표 — 스킬마다 2가지 특전 중 뭘 찍을지 투표하고, 전세계 유저의 선택 비율을 확인하세요 (레벨 1·7·12·15 해금)",
     en:"⭐ Perk vote in the Dex — for each skill, vote which of the two perks to pick and see the community's split (unlocks at Lv 1·7·12·15)",
@@ -2156,6 +2207,12 @@ function ncardPatch(){
   return `<div class="ncard"><h4>${g.head[L]||g.head.ko} <span class="patchver">${g.ver}</span><span class="patchdate">${g.date}</span></h4><ul>${items}</ul>`
     +`<p class="npatchlink"><a href="${g.url}" target="_blank" rel="noopener noreferrer">${g.more[L]||g.more.ko}</a></p></div>`;
 }
+function ncardRoadmap(){
+  const g=GAME_ROADMAP, L=LANG;
+  const items=(g.items[L]||g.items.ko).map(x=>`<li>${x}</li>`).join("");
+  return `<div class="ncard"><h4>${g.head[L]||g.head.ko}</h4><ul>${items}</ul>`
+    +`<p style="margin-top:8px;font-size:11px;opacity:.6">${g.note[L]||g.note.ko}</p></div>`;
+}
 function ncardUpdates(){
   const L=LANG, head={ko:"🆕 사이트 업데이트",en:"🆕 Site updates",ja:"🆕 サイト更新",zh:"🆕 網站更新"}[L]||"🆕 사이트 업데이트";
   const rows=SITE_UPDATES.slice(0,8).map(u=>`<li><span class="udate">${u.date}</span>${u[L]||u.ko}</li>`).join("");
@@ -2249,13 +2306,17 @@ const IC = {
   book:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 5.5C10.2 3.9 7.6 3.4 4.5 3.7c-.6.1-1 .6-1 1.2v13c0 .7.7 1.2 1.4 1.1 2.7-.3 5 .2 7.1 1.7 2.1-1.5 4.4-2 7.1-1.7.7.1 1.4-.4 1.4-1.1v-13c0-.6-.4-1.1-1-1.2-3.1-.3-5.7.2-7.5 1.8z"/><line x1="12" y1="5.5" x2="12" y2="20.4"/></svg>',
   people:'<svg class="nico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16.4 5.5a3.2 3.2 0 0 1 0 5.8"/><path d="M18 13.4a6 6 0 0 1 3 5.6"/></svg>',
   shield:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 3l7 2.8v4.7c0 4.4-3 8-7 9.2-4-1.2-7-4.8-7-9.2V5.8z"/><path d="M9 12l2 2 4-4.2"/></svg>',
-  download:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 4v9.5"/><path d="M8 10l4 4 4-4"/><path d="M5.5 19h13"/></svg>'
+  download:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 4v9.5"/><path d="M8 10l4 4 4-4"/><path d="M5.5 19h13"/></svg>',
+  rocket:'<svg class="nico" viewBox="0 0 24 24"><path d="M12 3.5c2.6 1.7 4 4.6 4 8.2l-1.4 3.8H9.4L8 11.7c0-3.6 1.4-6.5 4-8.2z"/><circle cx="12" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M8.7 15l-2.2 2.4M15.3 15l2.2 2.4"/><path d="M10.3 19c.6 1.1 2.8 1.1 3.4 0"/></svg>',
+  hero:'<svg class="nico" viewBox="0 0 24 24"><path d="M4 9c2.4-1 5-1.5 8-1.5s5.6.5 8 1.5c0 3.6-2 5.6-4.6 5.6-1.5 0-2.4-1-3.4-1s-1.9 1-3.4 1C6 14.6 4 12.6 4 9z"/><circle cx="8.6" cy="10.6" r="1" fill="currentColor" stroke="none"/><circle cx="15.4" cy="10.6" r="1" fill="currentColor" stroke="none"/></svg>',
+  map:'<svg class="nico" viewBox="0 0 24 24"><path d="M9 5L4 6.5v13L9 18l6 2.5 5-1.5v-13L15 7.5 9 5z"/><line x1="9" y1="5" x2="9" y2="18"/><line x1="15" y1="7.5" x2="15" y2="20.5"/></svg>',
+  ship:'<svg class="nico" viewBox="0 0 24 24"><path d="M4.5 14h15l-1.8 4.2a2 2 0 0 1-1.8 1.2H8.1a2 2 0 0 1-1.8-1.2z"/><path d="M6.5 14V8h6l3.5 6"/><line x1="9" y1="8" x2="9" y2="4.5"/><path d="M9 4.8l3.2 1.8L9 7.4"/></svg>'
 };
-const EMO2IC = { "✅":IC.check, "🎮":IC.patch, "🆕":IC.spark, "🤝":IC.heart, "🔗":IC.link, "🎯":IC.target, "📖":IC.book, "💬":IC.people, "🔒":IC.shield, "📱":IC.download };
+const EMO2IC = { "✅":IC.check, "🎮":IC.patch, "🆕":IC.spark, "🤝":IC.heart, "🔗":IC.link, "🎯":IC.target, "📖":IC.book, "💬":IC.people, "🔒":IC.shield, "📱":IC.download, "🚀":IC.rocket, "🦸":IC.hero, "🗺️":IC.map, "🚢":IC.ship };
 function iconize(html){ for(const k in EMO2IC) html=html.split(k).join(EMO2IC[k]); return html; }
 function renderNotice(){
   const el=document.getElementById("noticeBody"); if(!el) return;
-  el.innerHTML=iconize((NOTICE[LANG]||NOTICE.ko).html.replace("{{GAMEPATCH}}",ncardPatch()).replace("{{SITEUPDATES}}",ncardUpdates()));
+  el.innerHTML=iconize((NOTICE[LANG]||NOTICE.ko).html.replace("{{GAMEPATCH}}",ncardPatch()).replace("{{ROADMAP}}",ncardRoadmap()).replace("{{SITEUPDATES}}",ncardUpdates()));
 }
 /* ════════ ⚠ 권한 고지(모달)·하단 바 — 팬메이드 톤 · 4개 언어 ════════ */
 const AUTH = {
@@ -2314,12 +2375,13 @@ const SUB_OF = {
   notice:{g:"notice", view:"notice"},
   chat:{g:"talk", view:"comm:chat"}, party:{g:"talk", view:"comm:party"}, board:{g:"talk", view:"board"},
   pick:{g:"game", view:"pick"}, dex:{g:"game", view:"dex"}, tier:{g:"game", view:"comm:tier"}, tips:{g:"game", view:"comm:tips"}, info:{g:"game", view:"info"}, issues:{g:"game", view:"issues"},
+  codes:{g:"game", view:"codes"},
   fb:{g:"feedback", view:"comm:fb"}, stats:{g:"stats", view:"comm:stats"}
 };
 const NAV_GROUPS = {
   notice:{ subs:["notice"], solo:true },
   talk:{ subs:["chat","party","board"] },
-  game:{ subs:["pick","dex","tier","tips","info","issues"] },
+  game:{ subs:["pick","dex","tier","tips","info","issues","codes"] },
   feedback:{ subs:["fb"], solo:true },
   stats:{ subs:["stats"], solo:true }
 };
@@ -2341,6 +2403,7 @@ const SUB_LABEL = {
   tips:{ko:"팁",en:"Tips",ja:"攻略メモ",zh:"攻略"},
   info:{ko:"게임 시스템",en:"Game System",ja:"ゲームシステム",zh:"遊戲系統"},
   issues:{ko:"이슈",en:"Issues",ja:"不具合",zh:"問題"},
+  codes:{ko:"코드",en:"Codes",ja:"コード",zh:"兌換碼"},
   fb:{ko:"피드백",en:"Feedback",ja:"フィードバック",zh:"意見回饋"},
   stats:{ko:"통계",en:"Stats",ja:"統計",zh:"統計"}
 };
@@ -2353,7 +2416,8 @@ const SUB_ICON = {
   tier:'<svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5H4v1.5a3 3 0 0 0 3 3"/><path d="M17 5h3v1.5a3 3 0 0 1-3 3"/><path d="M9.5 19h5"/><path d="M12 14v5"/></svg>',
   tips:'<svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 1 3.6 10.8c-.6.5-.9 1-.9 1.7H9.3c0-.7-.3-1.2-.9-1.7A6 6 0 0 1 12 3z"/></svg>',
   info:'<svg viewBox="0 0 24 24"><path d="M9 4L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><line x1="9" y1="4" x2="9" y2="17"/><line x1="15" y1="6.5" x2="15" y2="19.5"/></svg>',
-  issues:'<svg viewBox="0 0 24 24"><path d="M12 4L2.8 19.5h18.4z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>'
+  issues:'<svg viewBox="0 0 24 24"><path d="M12 4L2.8 19.5h18.4z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>',
+  codes:'<svg viewBox="0 0 24 24"><rect x="3.5" y="8.5" width="17" height="12" rx="1.5"/><path d="M3.5 12.5h17"/><path d="M12 8.5v12"/><path d="M12 8.5S10.5 4.5 8 4.5a2 2 0 0 0 0 4z"/><path d="M12 8.5s1.5-4 4-4a2 2 0 0 1 0 4z"/></svg>'
 };
 const SL = s => (SUB_LABEL[s]||{})[LANG] || (SUB_LABEL[s]||{}).ko || s;
 const GRL = g => (GROUP_LABEL[g]||{})[LANG] || (GROUP_LABEL[g]||{}).ko || g;
@@ -2564,6 +2628,7 @@ function applyStatic(){
   applyHeader();
   renderNotice();
   renderIssues();
+  if(window.rsCodesSync) window.rsCodesSync();
   if(window.rsNavUpdate) window.rsNavUpdate();
   if(typeof instStatic === "function") instStatic();
   if(window.rsMeSync) window.rsMeSync();
@@ -2657,7 +2722,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.12-a";
+const SITE_VERSION = "2026.07.12-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3348,6 +3413,103 @@ document.getElementById("dex").addEventListener("click", async e => {
     toast(perm ? PV("need") : PV("fail"));
   }
 });
+
+/* ══════ 🎁 프로모 코드 (게임 리딤 코드) — 공개 열람 + 관리자 편집, 규칙 v17 필요 ══════
+   Firebase promocodes/<id>={code,reward,ts}. 비어있으면 PROMO_SEED(발견 시점 코드) 표시.
+   코드 출처: 공식 디스코드 PISTOLI 2026-07-04. 손수정보다 관리자 UI로 갱신 권장. */
+const PROMO_SEED = [
+  { code:"RICOJOIN1RS", reward:"" },
+  { code:"PLAYRIC3GO",  reward:"" },
+  { code:"SQUADNEW2X",  reward:"" },
+  { code:"AREYOUPRO",   reward:"" }
+];
+const PROMO_L = {
+  title:{ko:"🎁 프로모 코드",en:"🎁 Promo Codes",ja:"🎁 プロモコード",zh:"🎁 兌換碼"},
+  sub:{ko:"게임에서 입력하면 보상을 받는 코드",en:"Redeem in-game for free rewards",ja:"ゲームで入力すると報酬がもらえるコード",zh:"在遊戲中輸入即可獲得獎勵"},
+  how:{ko:"게임 → 설정 → 코드 입력란에 붙여넣으세요",en:"Paste it in the game's code redemption box",ja:"ゲーム内のコード入力欄に貼り付けてください",zh:"請貼到遊戲的兌換碼輸入框"},
+  copy:{ko:"복사",en:"Copy",ja:"コピー",zh:"複製"},
+  copied:{ko:"복사됨! 게임에 붙여넣으세요",en:"Copied! Paste it in-game",ja:"コピーしました！ゲームに貼り付けてください",zh:"已複製！請貼到遊戲中"},
+  src:{ko:"출처: 공식 디스코드 · 코드는 언제든 만료될 수 있어요",en:"Source: official Discord · codes may expire anytime",ja:"出典: 公式Discord · コードは期限切れになることがあります",zh:"來源：官方 Discord · 兌換碼隨時可能過期"},
+  empty:{ko:"현재 등록된 코드가 없어요",en:"No codes right now",ja:"現在コードはありません",zh:"目前沒有兌換碼"},
+  addCode:{ko:"코드 (영문·숫자)",en:"Code (letters/numbers)",ja:"コード（英数字）",zh:"兌換碼（英數字）"},
+  addReward:{ko:"보상 설명 (선택)",en:"Reward (optional)",ja:"報酬（任意）",zh:"獎勵（選填）"},
+  addBtn:{ko:"추가",en:"Add",ja:"追加",zh:"新增"},
+  seedBtn:{ko:"발견한 코드 4개 한번에 등록",en:"Add the 4 found codes",ja:"見つけた4つのコードを登録",zh:"一次新增找到的4個兌換碼"},
+  delConfirm:{ko:"이 코드를 삭제할까요?",en:"Delete this code?",ja:"このコードを削除しますか？",zh:"要刪除這個兌換碼嗎？"},
+  bad:{ko:"코드는 영문·숫자만 (1~32자)",en:"Code must be letters/numbers (1-32)",ja:"コードは英数字のみ（1〜32文字）",zh:"兌換碼僅限英數字（1-32）"},
+  need:{ko:"⚙️ 서버 규칙(v17)이 아직 게시되지 않았습니다",en:"⚙️ Server rules (v17) not published yet",ja:"⚙️ サーバールール(v17)未公開です",zh:"⚙️ 伺服器規則(v17)尚未發布"},
+  fail:{ko:"처리 실패 — 잠시 후 다시 시도해주세요",en:"Failed — try again later",ja:"失敗しました — 後でもう一度",zh:"處理失敗 — 請稍後再試"},
+  added:{ko:"코드를 추가했습니다",en:"Code added",ja:"コードを追加しました",zh:"已新增兌換碼"},
+  deleted:{ko:"삭제되었습니다",en:"Deleted",ja:"削除しました",zh:"已刪除"}
+};
+const PML = k => (PROMO_L[k][LANG]||PROMO_L[k].ko);
+const PROMO_CODE_RE = /^[A-Za-z0-9]{1,32}$/;
+const PROMO_COPY_IC = '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
+let promoCache = [];
+function renderCodes(){
+  const head = document.getElementById("codesHead"), list = document.getElementById("codesList");
+  const adm = document.getElementById("codesAdmin"), note = document.getElementById("codesNote");
+  if(!list) return;
+  if(head) head.innerHTML = '<h2>'+PML("title")+' <small>'+esc(PML("sub"))+'</small></h2>'
+    + '<div class="growthnote" style="margin-top:6px">💡 '+esc(PML("how"))+'</div>';
+  const usingSeed = promoCache.length === 0;
+  const items = usingSeed ? PROMO_SEED.map(c=>({code:c.code, reward:c.reward, seed:true})) : promoCache;
+  list.innerHTML = items.length ? items.map(c=>
+    '<div class="promo"><div class="promoinfo"><code class="promocode">'+esc(c.code)+'</code>'
+    + (c.reward?'<span class="promoreward">'+esc(c.reward)+'</span>':'')
+    + '</div><div class="promoact">'
+    + '<button class="promocopy" data-copy="'+esc(c.code)+'">'+PROMO_COPY_IC+PML("copy")+'</button>'
+    + ((IS_ADMIN && !c.seed && c.id)?'<button class="promodel" data-del="'+esc(c.id)+'" title="✕">✕</button>':'')
+    + '</div></div>'
+  ).join("") : '<div class="cmtempty">'+PML("empty")+'</div>';
+  if(note) note.textContent = "ⓘ " + PML("src");
+  if(adm){
+    if(IS_ADMIN){
+      adm.style.display = "block";
+      adm.innerHTML = '<div class="cmtcard" style="margin-top:14px"><div class="cmtrow1" style="gap:8px;flex-wrap:wrap">'
+        + '<input id="promoCodeIn" class="cmtname" style="flex:1;min-width:120px" maxlength="32" placeholder="'+esc(PML("addCode"))+'" autocomplete="off">'
+        + '<input id="promoRewardIn" class="cmtname" style="flex:1;min-width:120px" maxlength="60" placeholder="'+esc(PML("addReward"))+'" autocomplete="off">'
+        + '<button class="cmtbtn" id="promoAddBtn">'+PML("addBtn")+'</button></div>'
+        + (usingSeed?'<button class="cmtbtn" id="promoSeedBtn" style="margin-top:8px;width:100%">'+PML("seedBtn")+'</button>':'')
+        + '</div>';
+    }else{ adm.style.display = "none"; adm.innerHTML = ""; }
+  }
+}
+window.rsCodesSync = renderCodes;
+document.getElementById("codesList").addEventListener("click", async e => {
+  const cp = e.target.closest("[data-copy]");
+  if(cp){ try{ await navigator.clipboard.writeText(cp.dataset.copy); toast(PML("copied")); }catch(_){ toast(cp.dataset.copy); } return; }
+  const dl = e.target.closest("[data-del]");
+  if(dl && IS_ADMIN){
+    if(!confirm(PML("delConfirm"))) return;
+    try{ await FB.remove(FB.ref(FB.db, "promocodes/"+dl.dataset.del)); toast(PML("deleted")); }
+    catch(err){ const perm=String(err&&err.message||err).toLowerCase().includes("permission"); toast(perm?PML("need"):PML("fail")); }
+  }
+});
+document.getElementById("codesAdmin").addEventListener("click", async e => {
+  if(!IS_ADMIN) return;
+  const addBtn = e.target.closest("#promoAddBtn"), seedBtn = e.target.closest("#promoSeedBtn");
+  const pushCode = (code, reward) => FB.set(FB.push(FB.ref(FB.db, "promocodes")), { code, reward: reward||"", ts: FB.serverTimestamp() });
+  if(addBtn){
+    const ci = document.getElementById("promoCodeIn"), ri = document.getElementById("promoRewardIn");
+    const code = (ci.value||"").trim(), reward = (ri.value||"").trim();
+    if(!PROMO_CODE_RE.test(code)){ toast(PML("bad")); return; }
+    try{ await pushCode(code, reward); ci.value=""; ri.value=""; toast(PML("added")); }
+    catch(err){ const perm=String(err&&err.message||err).toLowerCase().includes("permission"); toast(perm?PML("need"):PML("fail")); }
+  }
+  if(seedBtn){
+    try{ for(const c of PROMO_SEED) await pushCode(c.code, c.reward); toast(PML("added")); }
+    catch(err){ const perm=String(err&&err.message||err).toLowerCase().includes("permission"); toast(perm?PML("need"):PML("fail")); }
+  }
+});
+FB.onValue(FB.ref(FB.db, "promocodes"), snap => {
+  const v = snap.val() || {};
+  promoCache = Object.entries(v).map(([id,c])=>({ id, code:(c&&c.code), reward:(c&&c.reward)||"", ts:(c&&c.ts)||0 }))
+    .filter(c => typeof c.code === "string" && PROMO_CODE_RE.test(c.code))
+    .sort((a,b)=>(b.ts||0)-(a.ts||0));
+  renderCodes();
+}, () => { promoCache = []; renderCodes(); });
+renderCodes();
 
 /* ══════ 💬 실시간 라운지 채팅 ══════ */
 let chatStick = true;      // 바닥 고정 모드: 새 메시지 오면 자동 스크롤
@@ -4614,6 +4776,7 @@ FB.authReady.then(async uid => {
     document.getElementById("fbNotifLbl").textContent = FBNL("label");
     document.getElementById("fbNotif").checked = FB_NOTIF && ("Notification" in window) && Notification.permission === "granted";
     toast("🔑 " + T("관리자 모드"));
+    if(typeof renderCodes === "function") renderCodes();   // 관리자 코드 편집 패널 표시
     // 관리자만 피드백 구독 → 새 글 오면 알림 (첫 로드는 기준선만 잡고 알림 안 띄움)
     FB.onValue(FB.query(FB.ref(FB.db, "feedback"), FB.limitToLast(30)), snap => {
       const v = snap.val() || {};
