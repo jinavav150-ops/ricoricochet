@@ -1080,6 +1080,12 @@
       </div>
       <input type="file" id="fbPhotoFile" accept="image/*" multiple style="display:none">
       <div class="bdnote" id="fbPhotoNote" data-ko="오류 화면을 사진으로 첨부하면 더 정확히 확인할 수 있어요 (최대 3장 · 제작자만 열람)">오류 화면을 사진으로 첨부하면 더 정확히 확인할 수 있어요 (최대 3장 · 제작자만 열람)</div>
+      <div class="bdnote" id="fbPubNote" style="opacity:1;font-weight:700;color:var(--ricochet)"></div>
+    </div>
+    <!-- 💬 유저 제안 (공개 · 좋아요/싫어요) — renderPubFb가 4개 언어로 렌더 -->
+    <div id="pubFbWrap" style="margin-top:20px">
+      <h2 id="pubFbTitle" style="margin-top:0"></h2>
+      <div id="pubFbList" class="cmtlist"></div>
     </div>
     <!-- 내가 보낸 피드백 + 운영자 답장 (renderMyFb가 4개 언어로 렌더) -->
     <div id="myFbWrap" style="display:none">
@@ -1089,6 +1095,7 @@
     <div id="adminPanel" style="display:none">
       <label class="transtog" style="margin-bottom:8px"><input type="checkbox" id="fbNotif"> <span id="fbNotifLbl">🔔 새 피드백 알림 받기</span></label>
       <button class="cmtbtn" id="adminFbBtn" style="width:100%;margin-bottom:8px" data-ko="🔑 관리자: 피드백 열람">🔑 관리자: 피드백 열람</button>
+      <button class="cmtbtn" id="adminPubAllBtn" style="width:100%;margin-bottom:8px;background:none;border:1px solid var(--line);color:var(--sub)"></button>
       <div id="adminFbList" class="cmtlist"></div>
     </div>
     <div class="myuid" id="myUidRow"><span data-ko="내 ID:">내 ID:</span> <code id="myUidCode">…</code> <button id="myUidCopy" data-ko="복사">복사</button></div>
@@ -2748,6 +2755,8 @@ function applyStatic(){
   renderIssues();
   if(typeof rsTierNudgeSync==="function") rsTierNudgeSync();
   if(window.rsCodesSync) window.rsCodesSync();
+  if(typeof renderPubFb==="function") renderPubFb();
+  if(typeof fbCatSync==="function") fbCatSync();
   if(typeof renderBuilds==="function") renderBuilds();
   if(window.rsNavUpdate) window.rsNavUpdate();
   if(typeof instStatic === "function") instStatic();
@@ -2842,7 +2851,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.12-i";
+const SITE_VERSION = "2026.07.12-j";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -4337,6 +4346,86 @@ document.getElementById("fbPhotoFile").addEventListener("change", async e => {
   }
   fbRenderPrev();
 });
+/* ══════ 💬 공개 유저 제안 (pubfb) — 좋아요/싫어요, 규칙 v18 ══════
+   "💡 기능 제안"·"💬 기타"는 공개(pubfb, 전체 읽기+투표), 나머지(오류·버그·운영진 전달)는 비공개(feedback, 사진·제작자만). */
+const FB_PUBLIC_CATS = ["💡 기능 제안", "💬 기타"];
+const fbIsPublic = c => true;   // 전부 공개 (2026-07-12 MAMMON: 비공개 없이 모두 공유해 우선순위 파악). 일부 비공개로 되돌리려면 FB_PUBLIC_CATS.indexOf(c)>=0 로.
+const PUBFB_L = {
+  title:{ko:"💬 유저 제안 (공개)",en:"💬 Community suggestions",ja:"💬 みんなの提案",zh:"💬 社群建議"},
+  empty:{ko:"아직 공개된 제안이 없어요. 카테고리를 '기능 제안'으로 남겨보세요!",en:"No public suggestions yet — post one under 'Feature idea'!",ja:"まだ公開提案がありません。「機能提案」で投稿してみて！",zh:"還沒有公開建議 — 用「功能建議」發一則吧！"},
+  notePublic:{ko:"💬 이 제안은 다른 유저에게 공개돼요 — 함께 좋아요/싫어요로 골라요",en:"💬 This will be public — everyone can like/dislike it",ja:"💬 これはみんなに公開されます — いいね/よくないねで一緒に選ぶ",zh:"💬 這則會公開 — 大家一起按讚/倒讚挑選"},
+  notePrivate:{ko:"🔒 제작자에게 비공개로 전달돼요 (사진 첨부 가능)",en:"🔒 Sent privately to MAMMON (photos allowed)",ja:"🔒 運営者に非公開で届きます（写真添付可）",zh:"🔒 會私下傳給管理員（可附照片）"},
+  posted:{ko:"제안이 공개 게시판에 올라갔어요! 🙌",en:"Your suggestion is now public! 🙌",ja:"提案を公開しました！🙌",zh:"你的建議已公開！🙌"},
+  del:{ko:"이 공개 제안을 삭제할까요?",en:"Delete this public suggestion?",ja:"この公開提案を削除しますか？",zh:"要刪除這則公開建議嗎？"},
+  pubBtn:{ko:"🌐 공개",en:"🌐 Publish",ja:"🌐 公開",zh:"🌐 公開"},
+  unpubBtn:{ko:"공개 취소",en:"Unpublish",ja:"公開取消",zh:"取消公開"},
+  published:{ko:"공개 게시판에 올렸습니다",en:"Published to the public board",ja:"公開しました",zh:"已公開"},
+  unpublished:{ko:"공개를 취소했습니다",en:"Unpublished",ja:"公開を取り消しました",zh:"已取消公開"}
+};
+PUBFB_L.pubAll = {ko:"📢 옛 피드백 모두 공개",en:"📢 Publish all past feedback",ja:"📢 過去のフィードバックを全公開",zh:"📢 全部公開舊回饋"};
+PUBFB_L.pubAllConfirm = {ko:"기존에 받은 피드백을 전부 공개 게시판에 올릴까요? (개인적·민감한 내용이 있으면 공개 후 개별 삭제할 수 있어요)",en:"Publish ALL existing feedback to the public board? (You can delete sensitive ones individually afterward)",ja:"既存のフィードバックを全て公開しますか？（機微な内容は公開後に個別削除できます）",zh:"要把現有的回饋全部公開嗎？（敏感內容可在公開後個別刪除）"};
+PUBFB_L.pubAllDone = {ko:"{n}개를 공개했어요",en:"Published {n} item(s)",ja:"{n}件を公開しました",zh:"已公開 {n} 則"};
+PUBFB_L.pubAllNone = {ko:"새로 공개할 옛 피드백이 없어요",en:"No new past feedback to publish",ja:"新たに公開する過去の項目はありません",zh:"沒有可新公開的舊回饋"};
+const PUBFB = k => (PUBFB_L[k][LANG]||PUBFB_L[k].ko);
+let pubfbCache = [];
+function renderPubFb(){
+  const list=document.getElementById("pubFbList"); if(!list) return;
+  const ttl=document.getElementById("pubFbTitle"); if(ttl) ttl.textContent=PUBFB("title");
+  const items=pubfbCache.slice().sort((a,b)=>{
+    const sa=Object.keys(a.likes||{}).length-Object.keys(a.dislikes||{}).length;
+    const sb=Object.keys(b.likes||{}).length-Object.keys(b.dislikes||{}).length;
+    return sb-sa || (b.ts||0)-(a.ts||0);
+  });
+  if(!items.length){ list.innerHTML='<div class="cmtempty">'+PUBFB("empty")+'</div>'; return; }
+  list.innerHTML=items.map(f=>{
+    const likes=Object.keys(f.likes||{}).length, dislikes=Object.keys(f.dislikes||{}).length;
+    const iLike=MY_UID&&f.likes&&f.likes[MY_UID], iDis=MY_UID&&f.dislikes&&f.dislikes[MY_UID];
+    return '<div class="cmtitem"><div class="cmthead"><span class="chero">'+esc(f.cat||"")+'</span>'
+      +'<span class="cname" style="color:'+nameColor(f.uid)+'" data-uprof="'+esc(f.uid||"")+'" data-uname="'+esc(f.name||"")+'">'+esc(f.name||"")+'</span>'+staffBadge(f.uid)
+      +'<span class="ctime">'+relTime(f.ts||0)+'</span>'+(IS_ADMIN?'<button class="cdel" data-pfdel="'+f.id+'" title="'+T("삭제")+'">✕</button>':'')+'</div>'
+      +'<div class="cmtbody">'+esc(f.text||"")+'</div>'
+      +'<div class="cmtacts"><button class="cmtact '+(iLike?'like-on':'')+'" data-pflike="'+f.id+'">👍 <b>'+likes+'</b></button>'
+      +'<button class="cmtact '+(iDis?'dis-on':'')+'" data-pfdis="'+f.id+'">👎 <b>'+dislikes+'</b></button></div></div>';
+  }).join("");
+}
+window.rsPubFbSync = renderPubFb;
+FB.onValue(FB.ref(FB.db,"pubfb"), snap=>{
+  const v=snap.val()||{};
+  pubfbCache=Object.entries(v).map(([id,f])=>({id, cat:f.cat, name:f.name, text:f.text, uid:f.uid, ts:f.ts||0, likes:f.likes, dislikes:f.dislikes}))
+    .filter(f=>typeof f.text==="string");
+  renderPubFb();
+}, ()=>{ pubfbCache=[]; renderPubFb(); });
+document.getElementById("pubFbList").addEventListener("click", async e=>{
+  const del=e.target.closest("[data-pfdel]"), like=e.target.closest("[data-pflike]"), dis=e.target.closest("[data-pfdis]");
+  if(del && IS_ADMIN){
+    if(!confirm(PUBFB("del"))) return;
+    try{ await FB.remove(FB.ref(FB.db,"pubfb/"+del.dataset.pfdel)); toast(T("삭제되었습니다")); }
+    catch(err){ toast(T("삭제 실패")); }
+    return;
+  }
+  if(!MY_UID){ toast(T("연결 중입니다 — 잠시 후 다시 시도해주세요")); return; }
+  if(IS_BANNED){ toast(T("이용이 제한된 계정입니다")); return; }
+  try{
+    if(like){ const id=like.dataset.pflike, f=pubfbCache.find(x=>x.id===id); const on=f&&f.likes&&f.likes[MY_UID];
+      await FB.set(FB.ref(FB.db,"pubfb/"+id+"/likes/"+MY_UID), on?null:true);
+      if(!on && f&&f.dislikes&&f.dislikes[MY_UID]) await FB.set(FB.ref(FB.db,"pubfb/"+id+"/dislikes/"+MY_UID), null);
+    }
+    if(dis){ const id=dis.dataset.pfdis, f=pubfbCache.find(x=>x.id===id); const on=f&&f.dislikes&&f.dislikes[MY_UID];
+      await FB.set(FB.ref(FB.db,"pubfb/"+id+"/dislikes/"+MY_UID), on?null:true);
+      if(!on && f&&f.likes&&f.likes[MY_UID]) await FB.set(FB.ref(FB.db,"pubfb/"+id+"/likes/"+MY_UID), null);
+    }
+  }catch(err){ const perm=String(err&&err.message||err).toLowerCase().includes("permission"); toast(perm?T("⚙️ 서버 규칙이 아직 설정되지 않아 전송할 수 없습니다"):T("전송 실패 — 잠시 후 다시 시도해주세요")); }
+});
+function fbCatSync(){
+  const sel=document.getElementById("fbCat"); if(!sel) return;
+  const isPub=fbIsPublic(sel.value);
+  const pn=document.getElementById("fbPubNote"); if(pn) pn.textContent = isPub?PUBFB("notePublic"):PUBFB("notePrivate");
+  const pb=document.getElementById("fbPhotoBtn"), pnote=document.getElementById("fbPhotoNote");
+  if(pb) pb.style.display=isPub?"none":"";
+  if(pnote) pnote.style.display=isPub?"none":"";
+  if(isPub){ fbDraftPhotos=[]; const ff=document.getElementById("fbPhotoFile"); if(ff) ff.value=""; if(typeof fbRenderPrev==="function") fbRenderPrev(); }
+}
+document.getElementById("fbCat").addEventListener("change", fbCatSync);
 document.getElementById("fbSend").addEventListener("click", async () => {
   const cat = document.getElementById("fbCat").value;
   const name = getNick() || T("익명");
@@ -4348,27 +4437,34 @@ document.getElementById("fbSend").addEventListener("click", async () => {
   if(text && !checkText(text, 500, fbDraftPhotos.length ? 1 : 2)) return;
   if(!cooldownOK("fb")) return;
   if(hasBadWord(name)){ toast(T("🛡️ 사용할 수 없는 닉네임입니다")); return; }
+  const isPub = fbIsPublic(cat);
   const btn = document.getElementById("fbSend");
   btn.disabled = true;
   let ref = null;
   try{
-    ref = FB.push(FB.ref(FB.db, "feedback"));
-    await FB.set(ref, { cat, name, text, uid: MY_UID, ts: FB.serverTimestamp(), ph: fbDraftPhotos.length });
-    // 사진은 글 생성 후 별도 경로에 저장 (게시판 boardmedia와 동일 패턴 · 규칙 v15로 관리자+작성자만 열람)
-    if(fbDraftPhotos.length){
-      const ph = {}; fbDraftPhotos.forEach((p,i)=>{ ph[i] = p; });
-      await FB.set(FB.ref(FB.db, `feedbackmedia/${ref.key}/photos`), ph);
+    if(isPub){
+      // 공개 제안 (pubfb · 텍스트, 사진 없음)
+      ref = FB.push(FB.ref(FB.db, "pubfb"));
+      await FB.set(ref, { cat, name, text, uid: MY_UID, ts: FB.serverTimestamp() });
+      toast(PUBFB("posted"));
+    }else{
+      // 비공개 (feedback · 사진 첨부, 제작자만)
+      ref = FB.push(FB.ref(FB.db, "feedback"));
+      await FB.set(ref, { cat, name, text, uid: MY_UID, ts: FB.serverTimestamp(), ph: fbDraftPhotos.length });
+      if(fbDraftPhotos.length){
+        const ph = {}; fbDraftPhotos.forEach((p,i)=>{ ph[i] = p; });
+        await FB.set(FB.ref(FB.db, `feedbackmedia/${ref.key}/photos`), ph);
+      }
+      myFbAdd(ref.key);          // 내 피드백 목록에 기억 → 답장 오면 여기서 확인
+      toast(T("피드백이 전달되었습니다. 감사합니다! 📮"));
+      renderMyFb();
     }
-    myFbAdd(ref.key);          // 내 피드백 목록에 기억 → 답장 오면 여기서 확인
     stampCooldown("fb");
     fbText.value = ""; document.getElementById("fbCount").textContent = "0/500";
     fbDraftPhotos = []; document.getElementById("fbPhotoFile").value = ""; fbRenderPrev();
-    toast(T("피드백이 전달되었습니다. 감사합니다! 📮"));
-    renderMyFb();
   }catch(err){
     const perm = String(err&&err.message||err).toLowerCase().includes("permission");
-    // 사진 저장 실패 시 반쪽 글이 남지 않게 회수
-    if(ref){ try{ await FB.remove(FB.ref(FB.db, `feedbackmedia/${ref.key}`)); await FB.remove(ref); }catch(e2){} }
+    if(ref && !isPub){ try{ await FB.remove(FB.ref(FB.db, `feedbackmedia/${ref.key}`)); await FB.remove(ref); }catch(e2){} }
     toast(perm ? T("⚙️ 서버 규칙이 아직 설정되지 않아 전송할 수 없습니다") : T("전송 실패 — 잠시 후 다시 시도해주세요"));
   }
   btn.disabled = false;
@@ -4469,11 +4565,14 @@ document.getElementById("myUidCopy").addEventListener("click", () => {
   const code = document.getElementById("myUidCode").textContent;
   navigator.clipboard?.writeText(code).then(()=>toast(T("복사되었습니다"))).catch(()=>{});
 });
+let adminFbItems = [];
 async function loadAdminFeedback(){
+  const pab=document.getElementById("adminPubAllBtn"); if(pab) pab.textContent=PUBFB("pubAll");
   try{
     const snap = await FB.get(FB.ref(FB.db, "feedback"));
     const v = snap.val() || {};
     const items = Object.entries(v).map(([id,f])=>({id,...f})).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,100);
+    adminFbItems = items;
     await Promise.all(items.filter(f=>f.ph).map(f=>fbFetchPhotos(f.id)));   // 첨부 사진 미리 로드
     document.getElementById("adminFbList").innerHTML = items.length ? items.map(f=>`
       <div class="cmtitem">
@@ -4482,12 +4581,45 @@ async function loadAdminFeedback(){
         <div class="cmtbody">${esc(f.text||"")}</div>
         ${fbPhotosHtml(f.id)}
         ${f.reply?`<div class="bdtr"><b>${FBR("replyTag")}</b> · ${relTime(f.reply.ts||0)}<br>${esc(f.reply.text||"")}</div>`:""}
-        <div class="replyin"><input maxlength="500" placeholder="${FBR("replyPh")}" data-fb-rinput="${f.id}" value="${f.reply?esc(f.reply.text||""):""}"><button data-fb-rsend="${f.id}">${f.reply?FBR("replyEdit"):FBR("replyBtn")}</button>${f.reply?`<button class="replydel" data-fb-rdel="${f.id}">${FBR("replyDel")}</button>`:""}</div>
+        <div class="replyin"><input maxlength="500" placeholder="${FBR("replyPh")}" data-fb-rinput="${f.id}" value="${f.reply?esc(f.reply.text||""):""}"><button data-fb-rsend="${f.id}">${f.reply?FBR("replyEdit"):FBR("replyBtn")}</button>${f.reply?`<button class="replydel" data-fb-rdel="${f.id}">${FBR("replyDel")}</button>`:""}<button class="replydel" data-fb-pub="${f.id}" title="${T("공개 게시판")}">${pubfbCache.some(x=>x.id===f.id)?PUBFB("unpubBtn"):PUBFB("pubBtn")}</button></div>
       </div>`).join("") : `<div class="cmtempty">${T("아직 피드백이 없습니다")}</div>`;
   }catch(e){ toast(T("피드백을 불러올 수 없습니다 (관리자 전용)")); }
 }
 document.getElementById("adminFbBtn").addEventListener("click", loadAdminFeedback);
+async function adminPublishAll(){
+  if(!IS_ADMIN) return;
+  if(!confirm(PUBFB("pubAllConfirm"))) return;
+  try{
+    const snap = await FB.get(FB.ref(FB.db, "feedback"));
+    const v = snap.val() || {};
+    const pubIds = new Set(pubfbCache.map(x=>x.id));
+    let n=0;
+    for(const [id,f] of Object.entries(v)){
+      if(pubIds.has(id)) continue;                 // 이미 공개됨 → 투표 보존 위해 건너뜀
+      const text=((f&&f.text)||"").trim();
+      if(!text) continue;                           // 사진만 있는 빈 글은 텍스트 보드에 못 올림
+      await FB.set(FB.ref(FB.db, "pubfb/"+id), { cat:((f.cat||"💬 기타")+"").slice(0,30), name:((f.name||"익명")+"").slice(0,12), text:text.slice(0,500), uid:(f.uid||"unknown")+"", ts:f.ts||Date.now() });
+      n++;
+    }
+    toast(n? PUBFB("pubAllDone").replace("{n}", n) : PUBFB("pubAllNone"));
+    setTimeout(loadAdminFeedback, 400);
+  }catch(err){
+    const perm=String(err&&err.message||err).toLowerCase().includes("permission");
+    toast(perm? "⚙️ 규칙 v18 게시가 필요합니다 (공개 게시판)" : T("전송 실패 — 네트워크를 확인해주세요"));
+  }
+}
+document.getElementById("adminPubAllBtn").addEventListener("click", adminPublishAll);
 document.getElementById("adminFbList").addEventListener("click", async e => {
+  const pub = e.target.closest("[data-fb-pub]");
+  if(pub){   // 관리자: 비공개 피드백을 공개 게시판으로 (또는 취소)
+    const id=pub.dataset.fbPub, f=adminFbItems.find(x=>x.id===id), isPubd=pubfbCache.some(x=>x.id===id);
+    try{
+      if(isPubd){ await FB.remove(FB.ref(FB.db,"pubfb/"+id)); toast(PUBFB("unpublished")); }
+      else if(f){ await FB.set(FB.ref(FB.db,"pubfb/"+id), { cat:f.cat, name:f.name, text:f.text, uid:f.uid, ts:f.ts||Date.now() }); toast(PUBFB("published")); }
+      setTimeout(loadAdminFeedback, 300);
+    }catch(err){ const perm=String(err&&err.message||err).toLowerCase().includes("permission"); toast(perm?"⚙️ 규칙 v18 게시가 필요합니다 (공개 게시판)":T("전송 실패 — 네트워크를 확인해주세요")); }
+    return;
+  }
   const rd = e.target.closest("[data-fb-rdel]");
   if(rd){   // 운영자 답장 삭제
     if(!confirm(FBR("replyDelConfirm"))) return;
