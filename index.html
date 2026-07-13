@@ -85,6 +85,18 @@
   #tierNudge .tntxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #tierNudge .tnmore{flex-shrink:0;font-size:11px;color:var(--ricochet);font-weight:800}
   #tierNudge .tnx{flex-shrink:0;color:var(--sub);padding:2px 6px;font-size:12px}
+  /* 🎉 공식 디스코드 소개 축하 배너 */
+  #featBanner{display:flex;align-items:center;gap:8px;width:100%;border:none;background:linear-gradient(90deg,rgba(255,209,63,.22),rgba(255,176,46,.06));border-bottom:1px solid rgba(255,209,63,.4);color:var(--txt);font-family:inherit;font-size:12px;font-weight:700;padding:9px 14px;cursor:pointer;text-align:left}
+  #featBanner .fbtxt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #featBanner .fbmore{flex-shrink:0;font-size:11px;color:#e6a700;font-weight:800}
+  #featBanner .fbx{flex-shrink:0;color:var(--sub);padding:2px 6px;font-size:12px}
+  /* 🎉 공지 상단 축하 카드 (section이라 .ncard nth-of-type 색 배정에 영향 없음) */
+  .notice .nfeat{background:linear-gradient(180deg,rgba(255,209,63,.14),rgba(255,176,46,.03));border:1px solid rgba(255,209,63,.5);border-radius:12px;padding:14px 16px;margin:2px 0 13px}
+  .notice .nfeat h4{margin:0 0 8px;font-size:14px;color:#ffce4d;font-weight:800}
+  .notice .nfeat p{margin:0 0 8px;font-size:12.5px;color:var(--sub);line-height:1.65}
+  .notice .nfeat p:last-child{margin:0}
+  .notice .nfeat b{color:var(--txt);font-weight:600}
+  .notice .nfeat a{color:#ffce4d;font-weight:700}
   .issuecard{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc,#ffb02e);border-radius:12px;padding:13px 15px;margin-bottom:11px}
   .isshead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .isshead b{font-size:14px;color:var(--txt);flex:1;min-width:0}
@@ -814,6 +826,11 @@
 <button id="tierNudge" style="display:none" onclick="rsTierNudgeGo()">
   <span class="tntxt"></span><span class="tnmore"></span>
   <span class="tnx" onclick="rsTierNudgeClose(event)">✕</span>
+</button>
+<!-- 🎉 공식 디스코드 소개 축하 배너 (한 번만 · 닫으면 rs_feat_done 저장 · 누르면 공지로) -->
+<button id="featBanner" style="display:none" onclick="rsFeatBannerGo()">
+  <span class="fbtxt"></span><span class="fbmore"></span>
+  <span class="fbx" onclick="rsFeatBannerClose(event)">✕</span>
 </button>
 
 <main>
@@ -2048,6 +2065,7 @@ const NOTICE = {
   ko:{ label:"공지", title:"공지", desc:"사이트 소식 · 앞으로의 운영 방향",
     html:`<div class="notice">
       <p class="nlead">안녕하세요, 이 사이트를 만들고 운영하는 <b>MAMMON</b>입니다. RICOCHET SQUAD를 사랑하는 분들을 위한 <b>비공식 팬 사이트</b>예요. 게임을 더 재미있게 즐기실 수 있도록 정확한 정보와 커뮤니티를 계속 다듬고 있습니다.</p>
+      {{FEATURED}}
       <div class="ncard"><h4>✅ 지금까지 만든 것</h4><ul>
         <li>🎯 <b>카운터픽</b> — 적 조합에 맞는 상성 추천</li>
         <li>📖 <b>도감</b> — 13영웅 스탯·스킬·퍽을 게임 데이터에서 직접 추출·검증 (레벨 1~15)</li>
@@ -2069,6 +2087,7 @@ const NOTICE = {
   en:{ label:"Notice", title:"Notice", desc:"Site news · where we're headed",
     html:`<div class="notice">
       <p class="nlead">Hi, I'm <b>MAMMON</b>, the creator and operator of this site — an <b>unofficial fan site</b> for RICOCHET SQUAD lovers. I keep refining accurate info and the community so you can enjoy the game even more.</p>
+      {{FEATURED}}
       <div class="ncard"><h4>✅ What we've built</h4><ul>
         <li>🎯 <b>Counter-pick</b> — matchup picks for the enemy lineup</li>
         <li>📖 <b>Hero Dex</b> — 13 heroes' stats/skills/perks extracted & verified from game data (Lv 1–15)</li>
@@ -2090,6 +2109,7 @@ const NOTICE = {
   ja:{ label:"お知らせ", title:"お知らせ", desc:"サイトの最新情報 · 今後の方針",
     html:`<div class="notice">
       <p class="nlead">こんにちは、このサイトを制作・運営している <b>MAMMON</b> です。RICOCHET SQUAD を愛する皆さんのための<b>非公式ファンサイト</b>です。より楽しく遊べるよう、正確な情報とコミュニティを磨き続けています。</p>
+      {{FEATURED}}
       <div class="ncard"><h4>✅ これまで作ったもの</h4><ul>
         <li>🎯 <b>カウンターピック</b> — 敵の編成に合わせた相性おすすめ</li>
         <li>📖 <b>図鑑</b> — 13ヒーローのステータス・スキル・パークをゲームデータから直接抽出・検証（Lv1〜15）</li>
@@ -2111,6 +2131,7 @@ const NOTICE = {
   zh:{ label:"公告", title:"公告", desc:"網站消息 · 未來方向",
     html:`<div class="notice">
       <p class="nlead">您好，我是製作與營運本站的 <b>MAMMON</b>。這是為熱愛 RICOCHET SQUAD 的玩家打造的<b>非官方粉絲網站</b>。我持續打磨準確的資訊與社群，讓你更盡興地遊玩。</p>
+      {{FEATURED}}
       <div class="ncard"><h4>✅ 目前已完成</h4><ul>
         <li>🎯 <b>剋制選角</b> — 依敵方陣容推薦剋制英雄</li>
         <li>📖 <b>圖鑑</b> — 13 位英雄的數值·技能·天賦，直接從遊戲資料擷取並驗證（Lv1〜15）</li>
@@ -2179,6 +2200,11 @@ const GAME_ROADMAP = {
 };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-07-13",
+    ko:"🎉 리코셰 공식 디스코드에 이 사이트가 소개됐어요 — 개발사 운영자 Delta님이 공식 공지에서 직접 소개해 주셨습니다. 함께해 주신 여러분 덕분이에요, 감사합니다!",
+    en:"🎉 This site was featured on the official Ricochet Discord — studio operator Delta introduced it in the official announcements. All thanks to you. Thank you!",
+    ja:"🎉 このサイトがリコシェ公式Discordで紹介されました — 開発運営のDeltaさんが公式お知らせで直接紹介してくれました。皆さんのおかげです、ありがとうございます！",
+    zh:"🎉 本站獲官方 Ricochet Discord 介紹 — 開發營運 Delta 在官方公告親自介紹。都是大家的功勞，感謝！" },
   { date:"2026-07-12",
     ko:"🧭 메뉴 정리 — '게임정보'를 '공략'(카운터픽·빌드·티어표·팁)과 '정보'(도감·게임시스템·코드·이슈)로 나눴어요. 찾기 더 쉬워졌어요",
     en:"🧭 Menu cleanup — split 'Game Info' into 'Strategy' (counters·builds·tier·tips) and 'Info' (codex·systems·codes·issues) for easier navigation",
@@ -2317,6 +2343,24 @@ function ncardUpdates(){
   const rows=SITE_UPDATES.slice(0,8).map(u=>`<li><span class="udate">${u.date}</span>${u[L]||u.ko}</li>`).join("");
   return `<div class="ncard"><h4>${head}</h4><ul class="ulog">${rows}</ul></div>`;
 }
+/* 🎉 공식 디스코드 소개 축하 카드 (2026-07-13 · 개발사 운영자 Delta가 공식 announcements에서 사이트 직접 소개).
+   내리려면 NOTICE html의 {{FEATURED}}만 지우거나 이 함수가 ""를 반환하게 하면 됨. */
+const SITE_FEATURED = {
+  head:{ko:"🎉 공식 디스코드에 소개됐어요!",en:"🎉 Featured on the official Discord!",ja:"🎉 公式Discordで紹介されました！",zh:"🎉 獲官方 Discord 介紹！"},
+  body:{
+    ko:"개발사 운영자 <b>Delta</b>님이 리코셰 <b>공식 디스코드 공지</b>에서 이 사이트를 직접 소개해 주셨어요. 함께 채워주고 응원해 주신 여러분 덕분입니다 — 방명록 한 줄, 티어 투표 하나하나가 모여 여기까지 왔어요. 정말 감사합니다! 🙏",
+    en:"Studio operator <b>Delta</b> featured this site right in the <b>official Ricochet Discord announcements</b>. It's all thanks to you — every guestbook note and tier vote got us here. Truly grateful! 🙏",
+    ja:"開発運営の <b>Delta</b> さんが <b>リコシェ公式Discordのお知らせ</b> でこのサイトを直接紹介してくれました。皆さんが一緒に育て、応援してくれたおかげです — ゲストブックの一言、ティア投票の一票の積み重ねで今があります。本当にありがとうございます！🙏",
+    zh:"開發營運 <b>Delta</b> 在 <b>官方 Ricochet Discord 公告</b> 親自介紹了本站。這一切都要感謝大家 — 每一則訪客留言、每一票梯度投票成就了現在。真心感謝！🙏"
+  },
+  more:{ko:"공식 디스코드에서 보기 ↗",en:"See it on the official Discord ↗",ja:"公式Discordで見る ↗",zh:"在官方 Discord 查看 ↗"}
+};
+function ncardFeatured(){
+  const L=LANG, g=SITE_FEATURED;
+  return `<section class="nfeat"><h4>${g.head[L]||g.head.ko}</h4>`
+    +`<p>${g.body[L]||g.body.ko}</p>`
+    +`<p><a href="https://discord.gg/ricochetsquad" target="_blank" rel="noopener noreferrer">${g.more[L]||g.more.ko}</a></p></section>`;
+}
 
 /* ══════ 🚨 알려진 이슈 (게임 문제 현황판) ══════
    MAMMON이 직접 갱신: 항목 추가/수정 후 배포. status = "ok"(해결법 있음)·"sent"(개발사 전달됨)·"watch"(확인 중)·"fixed"(수정됨).
@@ -2402,6 +2446,22 @@ function rsTierNudgeSync(){
 function rsTierNudgeGo(){ try{ localStorage.setItem("rs_tiernudge_done","1"); }catch(e){} goSub("tier"); rsTierNudgeSync(); }
 function rsTierNudgeClose(ev){ ev.stopPropagation(); try{ localStorage.setItem("rs_tiernudge_done","1"); }catch(e){} rsTierNudgeSync(); }
 window.rsTierNudgeGo=rsTierNudgeGo; window.rsTierNudgeClose=rsTierNudgeClose;
+/* 🎉 공식 디스코드 소개 축하 배너 (한 번만 · 어느 탭에서도 보임 · 누르면 공지로 이동 · 공지 화면에선 자동 숨김) */
+const FEATBANNER_L = {
+  txt:{ko:"🎉 이 사이트가 리코셰 공식 디스코드에 소개됐어요!",en:"🎉 This site was featured on the official Ricochet Discord!",ja:"🎉 このサイトがリコシェ公式Discordで紹介されました！",zh:"🎉 本站獲官方 Ricochet Discord 介紹！"},
+  more:{ko:"보러가기",en:"See",ja:"見る",zh:"查看"}
+};
+function featDone(){ try{ return !!localStorage.getItem("rs_feat_done"); }catch(e){ return false; } }
+function rsFeatBannerSync(){
+  const b=document.getElementById("featBanner"); if(!b) return;
+  if(featDone() || CURVIEW==="notice"){ b.style.display="none"; return; }
+  b.querySelector(".fbtxt").textContent = FEATBANNER_L.txt[LANG]||FEATBANNER_L.txt.ko;
+  b.querySelector(".fbmore").textContent = (FEATBANNER_L.more[LANG]||FEATBANNER_L.more.ko)+" ›";
+  b.style.display="flex";
+}
+function rsFeatBannerGo(){ try{ localStorage.setItem("rs_feat_done","1"); }catch(e){} if(window.navGo) navGo("notice"); rsFeatBannerSync(); }
+function rsFeatBannerClose(ev){ ev.stopPropagation(); try{ localStorage.setItem("rs_feat_done","1"); }catch(e){} rsFeatBannerSync(); }
+window.rsFeatBannerGo=rsFeatBannerGo; window.rsFeatBannerClose=rsFeatBannerClose;
 function issBannerClose(ev){
   ev.stopPropagation();
   const ban = document.getElementById("issueBanner");
@@ -2430,7 +2490,7 @@ const EMO2IC = { "✅":IC.check, "🎮":IC.patch, "🆕":IC.spark, "🤝":IC.hea
 function iconize(html){ for(const k in EMO2IC) html=html.split(k).join(EMO2IC[k]); return html; }
 function renderNotice(){
   const el=document.getElementById("noticeBody"); if(!el) return;
-  el.innerHTML=iconize((NOTICE[LANG]||NOTICE.ko).html.replace("{{GAMEPATCH}}",ncardPatch()).replace("{{ROADMAP}}",ncardRoadmap()).replace("{{SITEUPDATES}}",ncardUpdates()));
+  el.innerHTML=iconize((NOTICE[LANG]||NOTICE.ko).html.replace("{{FEATURED}}",ncardFeatured()).replace("{{GAMEPATCH}}",ncardPatch()).replace("{{ROADMAP}}",ncardRoadmap()).replace("{{SITEUPDATES}}",ncardUpdates()));
 }
 /* ════════ ⚠ 권한 고지(모달)·하단 바 — 팬메이드 톤 · 4개 언어 ════════ */
 const AUTH = {
@@ -2579,6 +2639,7 @@ function goSub(sub){
   const gbtn=document.querySelector(`nav button[data-g="${CURGROUP}"]`);
   if(gbtn && window.rsNavReveal) window.rsNavReveal(gbtn);
   if(typeof rsTierNudgeSync==="function") rsTierNudgeSync();
+  if(typeof rsFeatBannerSync==="function") rsFeatBannerSync();
   window.scrollTo(0,0);
 }
 // 상단 대분류 클릭 → 그룹의 마지막(또는 첫) 서브로
@@ -2748,6 +2809,7 @@ function applyStatic(){
   renderNotice();
   renderIssues();
   if(typeof rsTierNudgeSync==="function") rsTierNudgeSync();
+  if(typeof rsFeatBannerSync==="function") rsFeatBannerSync();
   if(window.rsCodesSync) window.rsCodesSync();
   if(typeof renderPubFb==="function") renderPubFb();
   if(typeof fbCatSync==="function") fbCatSync();
@@ -2845,7 +2907,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.13-a";
+const SITE_VERSION = "2026.07.13-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -4962,6 +5024,8 @@ FB.authReady.then(async uid => {
     // 운영자 열람 공간 폐지 → 예전 비공개 피드백을 공개 목록으로 이전(모두 한 곳에서 답변)
     migrateFeedbackToPublic();
   }
+  // 공개 피드백 목록은 IS_ADMIN 확정 전에 이미 렌더됐을 수 있음 → 관리자 답변 입력·수정·삭제 버튼이 뜨도록 다시 렌더
+  if(typeof renderPubFb === "function") renderPubFb();
   // 👥 친구 데이터 구독 (규칙상 본인 것만 읽힘 — v13 미게시 시 조용히 무시)
   FB.onValue(FB.ref(FB.db, `friends/${uid}`), snap => {
     frCache = snap.val() || {};
