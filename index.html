@@ -89,6 +89,21 @@
   .meact .meicn{font-size:16px;flex-shrink:0}
   .meact b{margin-left:auto;color:var(--ricochet);font-weight:800;font-size:15px}
   .mesec{font-size:12px;color:var(--sub);font-weight:800;margin:4px 0 8px}
+  /* 📊 프로필 완성도 미터 + 유도 안내 */
+  .mecompl{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px 13px;margin-bottom:12px}
+  .mecompl .mchead{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;color:var(--txt);margin-bottom:8px}
+  .mecompl .mcpct{color:var(--ricochet)}
+  .mecompl .mcbar{height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .mecompl .mcfill{height:100%;border-radius:99px;background:linear-gradient(90deg,#ffb02e,#ffce4d);transition:width .4s ease}
+  .mecompl.done .mcfill{background:linear-gradient(90deg,#3ddc84,#5df0a0)}
+  .mecompl .mchint{font-size:11.5px;color:var(--sub);margin-top:9px;line-height:1.5;display:flex;align-items:center;gap:6px}
+  .mecompl .mchint b{color:var(--ricochet);font-weight:700}
+  /* 🎉 닉네임 직후 온보딩 배너 */
+  .meonboard{background:linear-gradient(180deg,rgba(255,209,63,.14),rgba(255,176,46,.03));border:1px solid rgba(255,209,63,.5);border-radius:13px;padding:12px 14px;margin-bottom:12px}
+  .meonboard b{display:block;font-size:13.5px;color:#ffce4d;font-weight:800;margin-bottom:3px}
+  .meonboard span{font-size:12px;color:var(--sub);line-height:1.55}
+  /* ⭐ 도감의 내 주력 영웅 표시 */
+  .hero .mymain{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:800;color:#ffce4d;background:rgba(255,209,63,.13);border:1px solid rgba(255,209,63,.45);border-radius:7px;padding:1px 6px;margin-top:3px}
   [data-uprof]{cursor:pointer}
   [data-uprof]:hover{text-decoration:underline}
   /* ── 🚨 알려진 이슈 ── */
@@ -112,11 +127,21 @@
   #mapBanner .mbmore{flex-shrink:0;font-size:11px;color:#5da9ff;font-weight:800}
   #mapBanner .mbx{flex-shrink:0;color:var(--sub);padding:2px 6px;font-size:12px}
   /* 👥 멤버(접속 현황) 플로팅 버튼 + 우측 드로어 */
-  #memBtn{position:fixed;right:14px;bottom:16px;z-index:60;display:none;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:999px;padding:8px 14px 8px 12px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+  /* 우하단 플로팅 멤버 버튼 — 골드 강조 + 접속 초록불 펄스로 눈에 띄게(사이트 톤 유지) */
+  #memBtn{position:fixed;right:14px;bottom:16px;z-index:60;display:none;align-items:center;gap:8px;
+    background:linear-gradient(180deg,rgba(255,176,46,.17),rgba(255,176,46,.04)),var(--panel2);
+    border:1px solid rgba(255,176,46,.55);color:var(--txt);border-radius:999px;padding:9px 15px 9px 13px;
+    font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;
+    box-shadow:0 4px 18px rgba(0,0,0,.4),0 0 0 4px rgba(255,176,46,.06)}
+  #memBtn:hover{border-color:var(--ricochet);box-shadow:0 6px 22px rgba(0,0,0,.45),0 0 16px rgba(255,176,46,.28)}
   #memBtn:active{transform:translateY(1px)}
-  #memBtn .mbico{font-size:14px;line-height:1}
-  #memBtn .mbon{display:inline-flex;align-items:center;gap:4px;color:#3ddc84}
-  #memBtn .mbon::before{content:"";width:7px;height:7px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 3px rgba(61,220,132,.18)}
+  #memBtn .mbico{font-size:15px;line-height:1}
+  #memBtn .mblbl{color:var(--txt)}
+  #memBtn .mbnum{color:var(--ricochet);font-weight:800}
+  #memBtn .mbon{display:inline-flex;align-items:center;gap:5px;color:#3ddc84;font-weight:800;padding-left:9px;border-left:1px solid rgba(255,255,255,.13)}
+  #memBtn .mbon::before{content:"";width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 0 rgba(61,220,132,.55);animation:mbpulse 1.9s ease-out infinite}
+  @keyframes mbpulse{0%{box-shadow:0 0 0 0 rgba(61,220,132,.55)}70%{box-shadow:0 0 0 7px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+  @media (prefers-reduced-motion:reduce){#memBtn .mbon::before{animation:none;box-shadow:0 0 0 3px rgba(61,220,132,.18)}}
   #memBack{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none}
   #memBack.open{display:block}
   #memPanel{position:fixed;top:0;right:0;height:100%;width:280px;max-width:82vw;z-index:201;background:var(--bg);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .22s ease;display:flex;flex-direction:column}
@@ -1845,6 +1870,8 @@ function renderDex(){
   const dexEl = document.getElementById("dex");
   const entries = Object.entries(HEROES).filter(([id,h])=>dexMatch(h));
   if(!entries.length){ dexEl.innerHTML = `<div class="cmtempty">🔍 ${DEX_NORESULT[LANG]||DEX_NORESULT.ko}</div>`; return; }
+  const mine = (typeof window.myMains === "function") ? window.myMains() : [];
+  const myMainTag = (typeof window.rsMyMainTag === "function") ? window.rsMyMainTag() : "";
   dexEl.innerHTML = entries.map(([id,h])=>{
     const g=h.growth, L=h._lv||15;
     const hp=statAt(g,L,"hp"), dps=statAt(g,L,"dps");
@@ -1854,7 +1881,7 @@ function renderDex(){
     <div class="hero">
       <div class="top">
         <div class="ic">${icon(id)}</div>
-        <div><div class="nm">${T(h.ko)}</div><div class="en">${h.en} · <span class="r-${h.role}">${T(ROLE_KO[h.role])}</span></div></div>
+        <div><div class="nm">${T(h.ko)}</div><div class="en">${h.en} · <span class="r-${h.role}">${T(ROLE_KO[h.role])}</span></div>${mine.includes(id)?`<div class="mymain">⭐ ${myMainTag}</div>`:""}</div>
         <div class="tier ${TIER_CLASS[tierShown]||'C'}"${commT?` title="${T("커뮤니티 투표 티어")}"`:``}>${tierShown}</div>
       </div>
       <div class="lvbar">
@@ -2439,6 +2466,16 @@ const GAME_ROADMAP = {
 };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-07-14",
+    ko:"👤 프로필을 채우기 쉬워졌어요 — 닉네임을 정하면 바로 '30초 프로필 완성' 안내가 뜨고, 완성도 %바가 뭘 더 채우면 좋은지 콕 집어줘요. 주력 영웅을 고르면 도감에 ⭐로 표시되고, 국가를 고르면 멤버 목록에 국기가 떠요 (강제 아님, 그냥 닫아도 OK)",
+    en:"👤 Filling out your profile is easier now — set a nickname and a '30-second profile' prompt appears, with a completeness bar that points to what to add next. Pick your mains to get a ⭐ in the Codex, set your country for a flag in the member list (never forced — just close it if you like)",
+    ja:"👤 プロフィール入力が簡単に — ニックネームを決めると「30秒プロフィール」案内が出て、完成度バーが次に何を足せばいいか教えてくれます。メインを選ぶと図鑑に⭐、国を選ぶとメンバー一覧に国旗（強制ではなく、閉じてもOK）",
+    zh:"👤 填寫檔案更簡單了 — 設定暱稱後會出現「30秒檔案」提示，完成度條會指出接下來要補什麼。選主力英雄會在圖鑑顯示⭐，設定國家會在成員列表顯示國旗（非強制，直接關閉也行）",
+    fr:"👤 Remplir ton profil est plus simple — définis un pseudo et une invite « profil en 30 s » apparaît, avec une barre de complétion qui indique quoi ajouter. Choisis tes mains pour une ⭐ dans le Codex, ton pays pour un drapeau dans la liste des membres (jamais forcé — ferme si tu veux)",
+    de:"👤 Das Profil auszufüllen ist jetzt leichter — nach dem Nickname erscheint ein „30-Sekunden-Profil“-Hinweis mit Fortschrittsbalken, der zeigt, was als Nächstes fehlt. Haupt-Helden bringen ein ⭐ im Kodex, das Land eine Flagge in der Mitgliederliste (nie erzwungen — einfach schließen)",
+    es:"👤 Rellenar tu perfil es más fácil — al poner apodo aparece un aviso de «perfil en 30 s» con una barra de completado que indica qué añadir. Elige tus mains para una ⭐ en el Códice y tu país para una bandera en la lista de miembros (nunca obligatorio — ciérralo si quieres)",
+    pt:"👤 Preencher o perfil ficou mais fácil — ao definir o apelido aparece um aviso de 'perfil em 30 s' com uma barra de conclusão que aponta o que falta. Escolha seus mains para uma ⭐ no Códex e seu país para uma bandeira na lista de membros (nunca forçado — pode fechar)",
+    ru:"👤 Заполнять профиль стало проще — после ника появляется подсказка «профиль за 30 секунд» с полосой заполнения, которая подсказывает, что добавить. Выбери основных героев ради ⭐ в Кодексе, укажи страну ради флага в списке участников (без принуждения — можно закрыть)" },
   { date:"2026-07-14",
     ko:"💌 친구끼리 귓속말(1:1 비공개 대화)이 생겼어요 — 친구 요청을 서로 수락하면 '내 정보 → 내 친구'의 💬 버튼으로 대화. 둘만 볼 수 있고, 메시지마다 🌐 번역도 돼요. 그리고 멤버 목록의 닉네임 옆에 프로필에 지정한 국기가 표시돼요",
     en:"💌 Direct messages between friends — once you both accept, tap 💬 in 'My Info → My friends' to chat. Only you two can see it, and every message has a 🌐 translate button. Also, member nicknames now show the flag set on their profile",
@@ -3293,7 +3330,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.14-g";
+const SITE_VERSION = "2026.07.14-i";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3404,11 +3441,41 @@ const ME_L = {
   fb:{ko:"내 피드백",en:"My feedback",ja:"マイ意見",zh:"我的意見",fr:"Mes feedbacks",de:"Mein Feedback",es:"Mi feedback",pt:"Meu feedback",ru:"Мои отзывы"},
   done:{ko:"완료",en:"done",ja:"済み",zh:"完成",fr:"fait",de:"erledigt",es:"hecho",pt:"feito",ru:"готово"},
   noProfile:{ko:"아직 프로필을 등록하지 않은 유저예요",en:"This user hasn't set up a profile yet",ja:"まだプロフィール未設定のユーザーです",zh:"此用戶尚未設定檔案",fr:"Cet utilisateur n'a pas encore configuré de profil",de:"Diese Person hat noch kein Profil eingerichtet",es:"Este usuario aún no ha configurado su perfil",pt:"Este usuário ainda não configurou o perfil",ru:"Этот пользователь ещё не настроил профиль"},
-  loading:{ko:"불러오는 중…",en:"Loading…",ja:"読み込み中…",zh:"載入中…",fr:"Chargement…",de:"Lade…",es:"Cargando…",pt:"Carregando…",ru:"Загрузка…"}
+  loading:{ko:"불러오는 중…",en:"Loading…",ja:"読み込み中…",zh:"載入中…",fr:"Chargement…",de:"Lade…",es:"Cargando…",pt:"Carregando…",ru:"Загрузка…"},
+  /* 📊 프로필 완성 유도 (온보딩·완성도 미터·힌트) */
+  complLabel:{ko:"프로필 완성도",en:"Profile completeness",ja:"プロフィール完成度",zh:"檔案完成度",fr:"Profil complété",de:"Profil-Vollständigkeit",es:"Perfil completado",pt:"Perfil completo",ru:"Заполненность профиля"},
+  complDone:{ko:"프로필을 다 채웠어요! 멋져요 🎉",en:"Your profile is complete — nice! 🎉",ja:"プロフィール完成！いいですね 🎉",zh:"檔案已完成，讚！🎉",fr:"Profil complet — bravo ! 🎉",de:"Profil vollständig — super! 🎉",es:"¡Perfil completo, genial! 🎉",pt:"Perfil completo — mandou bem! 🎉",ru:"Профиль заполнен — отлично! 🎉"},
+  hintMain:{ko:"주력 영웅을 고르면 <b>도감에서 ⭐로 표시</b>돼요",en:"Pick your main heroes — they get a <b>⭐ in the Codex</b>",ja:"メインヒーローを選ぶと<b>図鑑で⭐表示</b>されます",zh:"選擇主力英雄，會在<b>圖鑑中顯示⭐</b>",fr:"Choisis tes héros principaux — ils auront une <b>⭐ dans le Codex</b>",de:"Wähle deine Haupt-Helden — sie bekommen einen <b>⭐ im Kodex</b>",es:"Elige tus héroes principales — tendrán una <b>⭐ en el Códice</b>",pt:"Escolha seus heróis principais — eles ganham uma <b>⭐ no Códex</b>",ru:"Выбери основных героев — у них появится <b>⭐ в Кодексе</b>"},
+  hintCountry:{ko:"국가를 고르면 <b>멤버 목록에 국기</b>가 떠요",en:"Set your country — your <b>flag shows in the member list</b>",ja:"国を選ぶと<b>メンバー一覧に国旗</b>が出ます",zh:"設定國家，<b>成員列表會顯示國旗</b>",fr:"Choisis ton pays — ton <b>drapeau apparaît dans la liste des membres</b>",de:"Wähle dein Land — deine <b>Flagge erscheint in der Mitgliederliste</b>",es:"Elige tu país — tu <b>bandera aparece en la lista de miembros</b>",pt:"Defina seu país — sua <b>bandeira aparece na lista de membros</b>",ru:"Укажи страну — твой <b>флаг появится в списке участников</b>"},
+  hintBio:{ko:"<b>한 줄 소개</b>로 나를 표현해보세요",en:"Add a <b>one-line bio</b> to show who you are",ja:"<b>ひとこと紹介</b>で自分を表現しましょう",zh:"用<b>一句話介紹</b>表達自己",fr:"Ajoute une <b>bio en une ligne</b> pour te présenter",de:"Füge eine <b>Einzeiler-Bio</b> hinzu",es:"Añade una <b>bio de una línea</b>",pt:"Adicione uma <b>bio de uma linha</b>",ru:"Добавь <b>био одной строкой</b>"},
+  onboardT:{ko:"🎉 닉네임 완성! 30초만 더",en:"🎉 Nickname set! Just 30 more seconds",ja:"🎉 ニックネーム完成！あと30秒",zh:"🎉 暱稱完成！再30秒就好",fr:"🎉 Pseudo enregistré ! Encore 30 secondes",de:"🎉 Nickname gesetzt! Nur noch 30 Sekunden",es:"🎉 ¡Apodo listo! Solo 30 segundos más",pt:"🎉 Apelido pronto! Só mais 30 segundos",ru:"🎉 Ник готов! Ещё 30 секунд"},
+  onboardD:{ko:"주력 영웅과 국가를 고르면 멤버 목록에 국기가 뜨고 도감에 ⭐가 표시돼요. 원치 않으면 그냥 닫아도 돼요.",en:"Pick your mains & country — you'll get a flag in the member list and ⭐ in the Codex. Feel free to close if you'd rather not.",ja:"メインヒーローと国を選ぶと、メンバー一覧に国旗、図鑑に⭐が付きます。不要なら閉じてもOKです。",zh:"選擇主力英雄與國家，成員列表會顯示國旗、圖鑑會顯示⭐。不需要的話直接關閉也可以。",fr:"Choisis tes mains et ton pays — tu auras un drapeau dans la liste des membres et une ⭐ dans le Codex. Ferme si tu préfères.",de:"Wähle Haupt-Helden & Land — du bekommst eine Flagge in der Mitgliederliste und ⭐ im Kodex. Schließ es einfach, wenn du magst.",es:"Elige tus mains y país — tendrás bandera en la lista de miembros y ⭐ en el Códice. Ciérralo si prefieres.",pt:"Escolha seus mains e país — você terá bandeira na lista de membros e ⭐ no Códex. Pode fechar se preferir.",ru:"Выбери основных героев и страну — получишь флаг в списке участников и ⭐ в Кодексе. Можно и закрыть, если не хочешь."},
+  myMainTag:{ko:"내 주력",en:"My main",ja:"メイン",zh:"主力",fr:"Mon main",de:"Mein Main",es:"Mi main",pt:"Meu main",ru:"Мой мейн"}
 };
 const MEL = k => (ME_L[k][LANG]||ME_L[k].ko);
 function getProfile(){ try{ return JSON.parse(localStorage.getItem("rs_profile")||"{}"); }catch(e){ return {}; } }
 function profMains(p){ return [p.main1||p.main, p.main2, p.main3].filter(Boolean); }   // main(구버전) 호환
+/* 📊 프로필 완성 유도 — 핵심 4항목(닉네임·주력영웅·국가·소개) 기준 완성도 */
+function myMains(){ return profMains(getProfile()); }   // 도감 ⭐ 표시용
+// renderDex(클래식 스코프)에서 쓰도록 window로 노출 (모듈→클래식 직접참조 불가)
+window.myMains = myMains;
+window.rsMyMainTag = () => MEL("myMainTag");
+function profileParts(){
+  const p = getProfile();
+  return { nick:!!getNick(), mains:profMains(p).length>0, country:!!p.country, bio:!!(p.bio&&p.bio.trim()) };
+}
+function profilePct(){
+  const v = profileParts(); const keys = ["nick","mains","country","bio"];
+  return Math.round(keys.filter(k=>v[k]).length / keys.length * 100);
+}
+function profileNextHint(){   // 아직 안 채운 것 중 가장 매력적인 하나를 안내 (없으면 null)
+  const v = profileParts();
+  if(!v.mains) return MEL("hintMain");
+  if(!v.country) return MEL("hintCountry");
+  if(!v.bio) return MEL("hintBio");
+  return null;
+}
+let meOnboard = false;   // 닉네임 직후 온보딩으로 열렸는지
 /* 🌍 국가: 코드에서 국기 이모지 자동 생성 + 국가명은 브라우저 Intl.DisplayNames로 4개 언어 자동 번역 (하드코딩 없음) */
 const COUNTRY_CODES = [
   "AD","AE","AF","AG","AI","AL","AM","AO","AR","AT","AU","AW","AZ","BA","BB","BD","BE","BF",
@@ -3466,9 +3533,17 @@ function renderMe(){
     COUNTRY_CODES.map(cc=>({cc,nm:countryName(cc)})).sort((a,b)=>a.nm.localeCompare(b.nm,LANG))
       .map(o=>`<option value="${o.cc}"${p.country===o.cc?" selected":""}>${flagOf(o.cc)} ${esc(o.nm)}</option>`).join("");
   const c = myCounts();
+  const pct = profilePct(), nextHint = profileNextHint(), onboard = meOnboard; meOnboard = false;
+  const complHtml = `<div class="mecompl${pct>=100?" done":""}">
+      <div class="mchead"><span>${MEL("complLabel")}</span><span class="mcpct">${pct}%</span></div>
+      <div class="mcbar"><div class="mcfill" style="width:${pct}%"></div></div>
+      <div class="mchint">${nextHint ? "💡 "+nextHint : "✅ "+MEL("complDone")}</div>
+    </div>`;
+  const onboardHtml = onboard ? `<div class="meonboard"><b>${MEL("onboardT")}</b><span>${MEL("onboardD")}</span></div>` : "";
   body.innerHTML = `
     <h3>${MEL("title")}</h3>
     ${profileCardHtml({...p, gnick}, nick)}
+    ${onboardHtml}${complHtml}
     <div class="mesec">${MEL("edit")}</div>
     <div class="meform">
       <label>${MEL("gameNick")}</label>
@@ -3551,6 +3626,8 @@ document.getElementById("meBody").addEventListener("click", async e => {
     if(gn){ localStorage.setItem("rs_gamenick", gn); }
     try{ localStorage.setItem("rs_profile", JSON.stringify(prof)); }catch(e){}
     renderMe();
+    if(typeof renderDex === "function") renderDex();   // 도감 ⭐ 즉시 반영
+    if(typeof renderMembers === "function") renderMembers();   // 멤버 목록 국기 즉시 반영
     // 서버에도 저장 → 다른 유저가 볼 수 있게 (규칙 v14). 실패해도 로컬엔 저장됨.
     if(MY_UID){
       FB.set(FB.ref(FB.db, "profiles/" + MY_UID), { name: getNick()||"", gnick: gn, main1: prof.main1, main2: prof.main2, main3: prof.main3, country: prof.country, league: prof.league, bio: prof.bio, ts: FB.serverTimestamp() })
@@ -3858,12 +3935,18 @@ function closeNickModal(){ document.getElementById("nickModal").classList.remove
 function saveNick(){
   const v = document.getElementById("nickInput").value.trim();
   if(!checkName(v)) return;
+  const wasEdit = !!getNick();          // 이미 닉네임이 있었으면 "변경" → 온보딩 안 띄움
   localStorage.setItem("rs_nick", v);
   renderProfile();
   closeNickModal();
   toast(T("닉네임이 설정되었습니다"));
   document.dispatchEvent(new Event("rs-nick-changed"));
   if(typeof upsertMyProfileName === "function"){ upsertMyProfileName(); rsPresenceApply(); }   // 멤버 목록 즉시 반영
+  // 🎉 프로필이 아직 텅 비어 있으면(주력·국가 둘 다 없음) 닉네임 여세로 프로필 완성 유도 (강제 X, 그냥 닫아도 됨)
+  if(typeof openMe === "function" && !wasEdit){
+    const pp = (typeof profileParts === "function") ? profileParts() : null;
+    if(pp && !pp.mains && !pp.country){ meOnboard = true; setTimeout(openMe, 260); }
+  }
 }
 // 닉네임이 없으면 설정을 요구하고 false 반환 (액션 게이트)
 function requireNick(){
@@ -5292,6 +5375,7 @@ window.commView = v => {
    숨기기 = 내 접속 표시 안 함(presence 미기록). 규칙 미게시 시 목록은 뜨고 초록불만 안 켜짐. */
 const MEMBER_L = {
   title:{ko:"👥 멤버",en:"👥 Members",ja:"👥 メンバー",zh:"👥 成員",fr:"👥 Membres",de:"👥 Mitglieder",es:"👥 Miembros",pt:"👥 Membros",ru:"👥 Участники"},
+  short:{ko:"멤버",en:"Members",ja:"メンバー",zh:"成員",fr:"Membres",de:"Mitglieder",es:"Miembros",pt:"Membros",ru:"Участники"},
   sub:{ko:"접속 중 {on} · 전체 {all}",en:"{on} online · {all} total",ja:"オンライン {on} · 全体 {all}",zh:"線上 {on} · 共 {all}",fr:"{on} en ligne · {all} au total",de:"{on} online · {all} gesamt",es:"{on} en línea · {all} en total",pt:"{on} online · {all} no total",ru:"{on} онлайн · {all} всего"},
   hide:{ko:"내 접속 상태 숨기기",en:"Hide my online status",ja:"自分のオンライン状態を隠す",zh:"隱藏我的線上狀態",fr:"Masquer mon statut en ligne",de:"Meinen Online-Status verbergen",es:"Ocultar mi estado en línea",pt:"Ocultar meu status online",ru:"Скрыть мой онлайн-статус"},
   /* 🟢 상태 선택 라벨 */
@@ -5349,7 +5433,9 @@ function renderMembers(){
   const total = uids.length;
   // 버튼: 전체 멤버 수 + (접속중 있으면) 초록 배지
   btn.style.display = total ? "flex" : "none";
-  document.getElementById("memBtnTxt").innerHTML = total + (onlineCount ? ' <span class="mbon">'+onlineCount+'</span>' : '');
+  document.getElementById("memBtnTxt").innerHTML =
+    '<span class="mblbl">'+ML("short")+'</span> <span class="mbnum">'+total+'</span>'
+    + (onlineCount ? '<span class="mbon">'+onlineCount+'</span>' : '');
   // 라벨
   document.getElementById("memTitle").textContent = ML("title");
   document.getElementById("memSub").textContent = ML("sub").replace("{on}", onlineCount).replace("{all}", total);
