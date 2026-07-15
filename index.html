@@ -3330,7 +3330,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.14-i";
+const SITE_VERSION = "2026.07.14-j";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -3697,11 +3697,12 @@ function frActionHtml(uid, name){
     return `<div class="meacts" style="margin-top:10px"><button class="cmtbtn" data-fr-accept="${uid}">${FRL("accept")}</button><button class="meact" data-fr-decline="${uid}" style="justify-content:center">${FRL("decline")}</button></div>`;
   if(st === "outgoing")
     return `<div class="meacts" style="margin-top:10px"><button class="meact" data-fr-cancel="${uid}" style="justify-content:center">${FRL("sent")}</button></div>`;
-  return `<div class="meacts" style="margin-top:10px"><button class="cmtbtn" data-fr-send="${uid}" data-fr-name="${esc(name||"")}">${FRL("add")}</button></div>`;
+  return `<div class="meacts" style="margin-top:10px"><button class="meact" data-fr-send="${uid}" data-fr-name="${esc(name||"")}" style="justify-content:center">${FRL("add")}</button></div>`;
 }
 function frSectionsHtml(){
   const reqs = Object.entries(frInCache);
   const frs = Object.entries(frCache);
+  if(!reqs.length && !frs.length) return "";   // 친구·요청 0이면 섹션 자체를 숨김(파킹)
   let html = "";
   if(reqs.length){
     html += `<div class="mesec">📩 ${FRL("reqs")} (${reqs.length})</div><div class="meacts">` +
