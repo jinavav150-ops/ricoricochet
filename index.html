@@ -279,7 +279,7 @@
     box-shadow:0 5px 20px rgba(255,176,46,.35);transform:translateY(-1px)}
   nav button.on svg{stroke-width:1.85}
 
-  main{padding:16px;max-width:560px;margin:0 auto}
+  main{padding:16px 16px 76px;max-width:760px;margin:0 auto}
   .tab{display:none}.tab.on{display:block}
   h2{font-size:15px;margin:6px 0 10px;color:var(--txt)}
   h2 small{color:var(--sub);font-weight:400;font-size:11px;margin-left:6px}
@@ -390,10 +390,11 @@
   .promodel{background:none;border:1px solid var(--line);color:var(--sub);border-radius:8px;width:30px;height:30px;font-size:13px;cursor:pointer;flex-shrink:0}
   .promodel:hover{color:var(--bad,#ff5d5d);border-color:var(--bad,#ff5d5d)}
   /* ⚠️ 비공식 고지 바 — 최상단 고정 노출(구글 사기성 페이지 판정 대응). 눈에 띄되 사이트 톤은 해치지 않게 */
-  .unofbar{background:#1a1408;border-bottom:1px solid rgba(255,176,46,.35);color:#c9b489;font-size:11.5px;line-height:1.5;text-align:center;padding:7px 12px}
-  .unofbar b{color:var(--ricochet);font-weight:800}
-  .unofen{color:#8b7d5e;margin-left:8px}
-  @media(max-width:640px){ .unofen{display:block;margin-left:0} }
+  .unofbar{background:transparent;border-bottom:1px solid rgba(42,51,71,.7);color:#7f8ba1;font-size:10.5px;line-height:1.4;text-align:center;padding:4px 12px;letter-spacing:.1px}
+  .unofbar b{color:#9aa6bb;font-weight:700}
+  .unofen{color:#6b7688}
+  /* 모바일에서 한 줄에 들어가게 조금 더 작게 — 문구는 그대로(구글 고지 유효) */
+  @media(max-width:640px){ .unofbar{font-size:9.5px;padding:4px 8px} }
   /* 🎬 크리에이터 소개 — 카드는 .promo 재사용. 이름+링크만(남의 썸네일·프사 안 씀), 순위 없음 */
   .crename{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:14.5px;font-weight:800;color:var(--txt);word-break:break-word}
   .creplat{font-size:10.5px;font-weight:700;color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:1px 6px;letter-spacing:.3px}
@@ -917,8 +918,7 @@
      ① <body> 최상단 = 구글이 본문에서 가장 먼저 읽는 위치 ② JS 없이 HTML에 박아둠(스크립트 실행 전에도 보임)
      ③ 한/영 병기 = 분류기와 해외 유저 모두에게 "비공식"이 전달돼야 함. 언어 전환과 무관하게 항상 이 문구 유지. -->
 <div class="unofbar">
-  <b>비공식 팬사이트</b> · 팬이 만든 사이트로 개발사 Nice Plans Studio와 무관합니다
-  <span class="unofen"><b>Unofficial fan site</b> — fan-made, not affiliated with Nice Plans Studio</span>
+  <b>비공식 팬사이트</b> · <span class="unofen"><b>Unofficial fan site</b> — not affiliated with Nice Plans Studio</span>
 </div>
 
 <header>
@@ -2503,6 +2503,16 @@ const GAME_ROADMAP = {
 };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-07-16",
+    ko:"🔎 '비공식 팬사이트'라는 표시를 사이트 곳곳에 제대로 넣었어요 — 화면 맨 위, 페이지 제목, 링크 미리보기까지요. 그동안 이 사이트가 개발사와 무관한 팬 사이트라는 게 충분히 드러나 있지 않았거든요. 혹시 접속할 때 브라우저 경고를 보셨다면 이것 때문이었고, 지금은 해결됐습니다. 기다려주셔서 감사합니다 🙏",
+    en:"🔎 The site now says clearly that it's an unofficial fan site — at the top of every page, in the page title, and in link previews. It hadn't been stated clearly enough that this site is fan-made and unaffiliated with the studio. If you saw a browser warning when visiting, that was why — it's resolved now. Thanks for your patience 🙏",
+    ja:"🔎 「非公式ファンサイト」の表示をサイト全体にきちんと入れました — 画面の一番上、ページタイトル、リンクプレビューまで。このサイトが開発元とは無関係のファンサイトであることが十分に伝わっていませんでした。アクセス時にブラウザの警告が出ていた方、原因はこれで、現在は解決済みです。お待たせしました 🙏",
+    zh:"🔎 已在網站各處清楚標示「非官方粉絲網站」— 包括頁面最上方、頁面標題與連結預覽。先前沒有充分說明本站是粉絲製作、與開發商無關。若您造訪時看到瀏覽器警告，原因就在於此，現已解決。感謝您的耐心等候 🙏",
+    fr:"🔎 Le site indique désormais clairement qu'il s'agit d'un site de fans non officiel — en haut de chaque page, dans le titre et dans les aperçus de liens. Si tu as vu un avertissement du navigateur, c'était la raison — c'est résolu. Merci de ta patience 🙏",
+    de:"🔎 Die Seite weist jetzt überall klar darauf hin, dass sie eine inoffizielle Fanseite ist — ganz oben, im Seitentitel und in Link-Vorschauen. Falls du eine Browser-Warnung gesehen hast: das war der Grund, es ist behoben. Danke für deine Geduld 🙏",
+    es:"🔎 El sitio ahora indica claramente que es un sitio de fans no oficial — arriba de cada página, en el título y en las vistas previas de enlaces. Si viste un aviso del navegador, ese era el motivo — ya está resuelto. Gracias por tu paciencia 🙏",
+    pt:"🔎 O site agora deixa claro que é um site de fãs não oficial — no topo de cada página, no título e nas pré-visualizações de links. Se você viu um aviso do navegador, era por isso — já está resolvido. Obrigado pela paciência 🙏",
+    ru:"🔎 Теперь на сайте чётко указано, что это неофициальный фан-сайт — вверху страницы, в заголовке и в превью ссылок. Если ты видел предупреждение браузера — причина была в этом, всё уже исправлено. Спасибо за терпение 🙏" },
   { date:"2026-07-14",
     ko:"👤 프로필을 채우기 쉬워졌어요 — 닉네임을 정하면 바로 '30초 프로필 완성' 안내가 뜨고, 완성도 %바가 뭘 더 채우면 좋은지 콕 집어줘요. 주력 영웅을 고르면 도감에 ⭐로 표시되고, 국가를 고르면 멤버 목록에 국기가 떠요 (강제 아님, 그냥 닫아도 OK)",
     en:"👤 Filling out your profile is easier now — set a nickname and a '30-second profile' prompt appears, with a completeness bar that points to what to add next. Pick your mains to get a ⭐ in the Codex, set your country for a flag in the member list (never forced — just close it if you like)",
@@ -2768,11 +2778,12 @@ function renderIssues(){
     const act = GAME_ISSUES.find(i=>i.status!=="fixed" && !dis.includes(i.id));
     if(act){
       const c = act[LANG]||act.en||act.ko;
-      ban.style.display = "flex";
+      ban.dataset.want = "1";
       ban.querySelector(".ibtxt").textContent = "🚨 " + c.t;
       ban.querySelector(".ibmore").textContent = ISL("bannerMore") + " ›";
       ban.dataset.iid = act.id;
-    }else ban.style.display = "none";
+    }else ban.dataset.want = "0";
+    if(typeof rsBannerReflow==="function") rsBannerReflow();
   }
 }
 /* 이슈 화면 → 피드백으로 이동 + "📡 운영진 전달" 카테고리 미리 선택 */
@@ -2784,6 +2795,20 @@ window.rsGoRelay = function(){
     const t = document.getElementById("fbText"); if(t) t.focus();
   }, 120);
 };
+/* 🎗️ 상단 배너 조율: 한 번에 최대 2개만 노출(4개가 한꺼번에 쌓이면 '광고 띠'처럼 보임).
+   우선순위 = 이슈(게임 문제·유용) > 공식소개(신뢰) > 새 맵(콘텐츠) > 티어 넛지(참여 유도).
+   각 배너 sync는 자기 노출여부를 dataset.want("1"/"0")에 적고 rsBannerReflow()를 부르면,
+   여기서 우선순위대로 위 2개만 실제로 표시. 유저가 하나 닫으면 다음 우선순위가 자동 승격. */
+const BANNER_ORDER = ["issueBanner","featBanner","mapBanner","tierNudge"];
+const BANNER_MAX = 2;
+function rsBannerReflow(){
+  let shown = 0;
+  for(const id of BANNER_ORDER){
+    const b = document.getElementById(id); if(!b) continue;
+    if(b.dataset.want === "1" && shown < BANNER_MAX){ b.style.display = "flex"; shown++; }
+    else b.style.display = "none";
+  }
+}
 const TIERNUDGE_L = {
   txt:{ko:"🏆 이번 주 티어, 당신 생각은? 한 표가 판도를 바꿔요",en:"🏆 Your take on this week's tiers? One vote can flip the list",ja:"🏆 今週のティア、あなたの意見は？ 一票が流れを変えます",zh:"🏆 本週梯度，你怎麼看？一票就能改變排名",fr:"🏆 Ton avis sur les tiers de la semaine ? Un vote peut tout changer",de:"🏆 Deine Meinung zu den Tiers dieser Woche? Eine Stimme kann alles drehen",es:"🏆 ¿Tu opinión sobre los tiers de esta semana? Un voto puede darle la vuelta",pt:"🏆 Sua opinião sobre os tiers da semana? Um voto pode virar o jogo",ru:"🏆 Что думаешь о тирах этой недели? Один голос может всё изменить"},
   more:{ko:"투표하기",en:"Vote",ja:"投票する",zh:"去投票",fr:"Voter",de:"Abstimmen",es:"Votar",pt:"Votar",ru:"Голосовать"}
@@ -2791,10 +2816,10 @@ const TIERNUDGE_L = {
 function tnDone(){ try{ return !!localStorage.getItem("rs_tiernudge_done"); }catch(e){ return false; } }
 function rsTierNudgeSync(){
   const b=document.getElementById("tierNudge"); if(!b) return;
-  if(tnDone() || CURVIEW==="comm:tier"){ b.style.display="none"; return; }
+  if(tnDone() || CURVIEW==="comm:tier"){ b.dataset.want="0"; rsBannerReflow(); return; }
   b.querySelector(".tntxt").textContent = TIERNUDGE_L.txt[LANG]||TIERNUDGE_L.txt.ko;
   b.querySelector(".tnmore").textContent = (TIERNUDGE_L.more[LANG]||TIERNUDGE_L.more.ko)+" ›";
-  b.style.display="flex";
+  b.dataset.want="1"; rsBannerReflow();
 }
 function rsTierNudgeGo(){ try{ localStorage.setItem("rs_tiernudge_done","1"); }catch(e){} goSub("tier"); rsTierNudgeSync(); }
 function rsTierNudgeClose(ev){ ev.stopPropagation(); try{ localStorage.setItem("rs_tiernudge_done","1"); }catch(e){} rsTierNudgeSync(); }
@@ -2807,10 +2832,10 @@ const FEATBANNER_L = {
 function featDone(){ try{ return !!localStorage.getItem("rs_feat_done"); }catch(e){ return false; } }
 function rsFeatBannerSync(){
   const b=document.getElementById("featBanner"); if(!b) return;
-  if(featDone() || CURVIEW==="notice"){ b.style.display="none"; return; }
+  if(featDone() || CURVIEW==="notice"){ b.dataset.want="0"; rsBannerReflow(); return; }
   b.querySelector(".fbtxt").textContent = FEATBANNER_L.txt[LANG]||FEATBANNER_L.txt.ko;
   b.querySelector(".fbmore").textContent = (FEATBANNER_L.more[LANG]||FEATBANNER_L.more.ko)+" ›";
-  b.style.display="flex";
+  b.dataset.want="1"; rsBannerReflow();
 }
 function rsFeatBannerGo(){ try{ localStorage.setItem("rs_feat_done","1"); }catch(e){} if(window.navGo) navGo("notice"); rsFeatBannerSync(); }
 function rsFeatBannerClose(ev){ ev.stopPropagation(); try{ localStorage.setItem("rs_feat_done","1"); }catch(e){} rsFeatBannerSync(); }
@@ -2823,10 +2848,10 @@ const MAPBANNER_L = {
 function mapNewDone(){ try{ return !!localStorage.getItem("rs_mapnew_done"); }catch(e){ return false; } }
 function rsMapBannerSync(){
   const b=document.getElementById("mapBanner"); if(!b) return;
-  if(mapNewDone() || CURVIEW==="info"){ b.style.display="none"; return; }
+  if(mapNewDone() || CURVIEW==="info"){ b.dataset.want="0"; rsBannerReflow(); return; }
   b.querySelector(".mbtxt").textContent = MAPBANNER_L.txt[LANG]||MAPBANNER_L.txt.ko;
   b.querySelector(".mbmore").textContent = (MAPBANNER_L.more[LANG]||MAPBANNER_L.more.ko)+" ›";
-  b.style.display="flex";
+  b.dataset.want="1"; rsBannerReflow();
 }
 function rsMapBannerGo(){ try{ localStorage.setItem("rs_mapnew_done","1"); }catch(e){} if(window.goSub) goSub("info"); rsMapBannerSync(); }
 function rsMapBannerClose(ev){ ev.stopPropagation(); try{ localStorage.setItem("rs_mapnew_done","1"); }catch(e){} rsMapBannerSync(); }
@@ -3381,7 +3406,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.16-a";
+const SITE_VERSION = "2026.07.16-d";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
