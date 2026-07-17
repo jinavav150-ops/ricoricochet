@@ -420,6 +420,10 @@
   .bgrid{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 14px}
   .bgcell{display:flex;flex-direction:column;align-items:center;gap:3px;width:60px;padding:6px 2px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;cursor:pointer;font-family:inherit}
   .bgcell img{width:36px;height:36px;border-radius:8px;object-fit:cover}
+  /* 도감 "전체 보기" 칸 — 영웅 초상화 자리에 들어가는 격자 아이콘 (사이트 라인 아이콘 톤) */
+  .bgcell .dexallic{width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+  .bgcell .dexallic svg{width:21px;height:21px;stroke:var(--sub);fill:none;stroke-width:1.8}
+  .bgcell.on .dexallic svg{stroke:var(--ricochet)}
   .bgcell span{font-size:10px;color:var(--sub);text-align:center;line-height:1.1;word-break:keep-all}
   .bgcell.on{border-color:var(--ricochet);background:var(--panel)}
   .bgcell.on span{color:var(--txt)}
@@ -1093,6 +1097,10 @@
       <input id="dexSearch" type="text" placeholder="영웅 검색…" oninput="dexSearchInput(this.value)" autocomplete="off">
       <button id="dexClear" onclick="dexSearchClear()" style="display:none" aria-label="clear">✕</button>
     </div>
+    <!-- 🔎 영웅 선택 그리드 (유저 제안 2026-07-17: "그냥 나열 말고 캐릭터 선택하면 정보 보이게").
+         13명 전부 펼치면 14,000px(화면 19배)라 원하는 영웅까지 한참 스크롤해야 했음.
+         스타일은 빌드 탭의 .bgrid/.bgcell 재사용. -->
+    <div class="bgrid" id="dexGrid"></div>
     <div id="dex"></div>
   </section>
 
@@ -1871,8 +1879,33 @@ function dexMatch(h){
       || String(h.en||"").toLowerCase().includes(q)
       || String(T(h.ko||"")).toLowerCase().includes(q);
 }
+/* 🔎 영웅 선택 (유저 제안 2026-07-17). dexSel: undefined=첫 렌더(첫 영웅 자동 선택) / null=전체 보기 / "sejin"=선택됨
+   ⚠️ 검색과 선택은 둘 다 "원하는 영웅 찾기"라 동시에 켜지면 서로 상충 → 하나를 쓰면 다른 하나를 자동 해제 */
+let dexSel;
+const DEX_ALL_L = { ko:"전체", en:"All", ja:"すべて", zh:"全部", fr:"Tout", de:"Alle", es:"Todos", pt:"Todos", ru:"Все" };
+const DEX_ALL_IC = '<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>';
+function renderDexGrid(){
+  const g = document.getElementById("dexGrid"); if(!g) return;
+  if(dexQuery){ g.style.display = "none"; return; }   // 검색 중엔 그리드 숨김(검색 결과가 주인공)
+  g.style.display = "flex";
+  const allTxt = DEX_ALL_L[LANG] || DEX_ALL_L.en;
+  g.innerHTML = `<button class="bgcell${dexSel===null?" on":""}" onclick="dexSelect(null)"><span class="dexallic">${DEX_ALL_IC}</span><span>${allTxt}</span></button>`
+    // ⚠️ esc()는 모듈 스코프라 클래식인 여기선 못 씀(HANDOFF 스코프 규칙). 빌드 탭과 동일하게 T(HEROES[k].ko)를 그대로 사용 —
+    //    영웅 이름은 유저 입력이 아니라 게임 파일에서 추출한 우리 데이터라 이스케이프 불필요.
+    + Object.keys(HEROES).map(k=>`<button class="bgcell${k===dexSel?" on":""}" onclick="dexSelect('${k}')"><img src="${PIC[k]}" alt=""><span>${T(HEROES[k].ko)}</span></button>`).join("");
+}
+function dexSelect(id){
+  dexSel = id;
+  if(dexQuery){   // 선택했으면 검색은 해제
+    dexQuery = "";
+    const si = document.getElementById("dexSearch"); if(si) si.value = "";
+    const c = document.getElementById("dexClear"); if(c) c.style.display = "none";
+  }
+  renderDex();
+}
 function dexSearchInput(v){
   dexQuery = (v||"").trim();
+  if(dexQuery) dexSel = null;   // 검색하면 전체에서 찾도록 선택 해제
   const clr = document.getElementById("dexClear"); if(clr) clr.style.display = dexQuery ? "block" : "none";
   renderDex();
 }
@@ -1923,7 +1956,10 @@ window.buildSelect=buildSelect; window.buildToDex=buildToDex;
 function renderDex(){
   const si = document.getElementById("dexSearch"); if(si) si.placeholder = DEX_SEARCH_PH[LANG] || DEX_SEARCH_PH.ko;
   const dexEl = document.getElementById("dex");
-  const entries = Object.entries(HEROES).filter(([id,h])=>dexMatch(h));
+  if(dexSel === undefined) dexSel = Object.keys(HEROES)[0];   // 첫 방문: 첫 영웅 자동 선택(14,000px 나열 방지)
+  renderDexGrid();
+  // dexSel이 있으면 그 영웅만, null(전체 보기)이면 전부 — 검색어가 있으면 검색 결과가 우선
+  const entries = Object.entries(HEROES).filter(([id,h])=> (!dexSel || id===dexSel) && dexMatch(h));
   if(!entries.length){ dexEl.innerHTML = `<div class="cmtempty">🔍 ${DEX_NORESULT[LANG]||DEX_NORESULT.ko}</div>`; return; }
   const mine = (typeof window.myMains === "function") ? window.myMains() : [];
   const myMainTag = (typeof window.rsMyMainTag === "function") ? window.rsMyMainTag() : "";
@@ -3426,7 +3462,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.07.17-b";
+const SITE_VERSION = "2026.07.17-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
