@@ -63,6 +63,25 @@ details[open] .chev{transform:rotate(180deg)}
 .tools button{background:none;border:1px solid var(--hair);color:var(--muted);font:inherit;padding:5px 12px;border-radius:999px;cursor:pointer}
 .tools button:hover{color:var(--ink);border-color:var(--muted)}
 .tools button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* 📩 운영진 답변 (2026-09-11) — 유저 말과 구분되게 호박색 계열, 번호는 운영진이 매긴 순서 그대로 */
+.reply{border:1px solid var(--hair);border-radius:12px;padding:20px 22px;margin-top:6px;background:var(--surface)}
+.reply .stamp{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--hair)}
+.reply .stamp b{font-family:Archivo,"IBM Plex Sans KR",system-ui,sans-serif;font-stretch:110%;font-weight:800;font-size:17px;color:var(--accent-ink)}
+.reply .stamp span{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;color:var(--muted)}
+.reply .intro{margin:0 0 20px;font-size:14.5px;line-height:1.75}
+.reply h3{font-family:Archivo,"IBM Plex Sans KR",system-ui,sans-serif;font-stretch:110%;font-weight:800;font-size:15px;margin:22px 0 8px;display:flex;gap:9px;align-items:baseline}
+.reply h3:first-of-type{margin-top:0}
+.reply h3 i{font-style:normal;font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:500;font-size:13px;color:var(--accent);flex:none}
+.reply p{margin:0 0 9px;font-size:14.5px;line-height:1.75}
+.reply p:last-child{margin-bottom:0}
+.verdicts{display:grid;gap:8px;margin-top:26px;padding-top:20px;border-top:1px solid var(--hair)}
+.vd{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline;font-size:13.5px;line-height:1.6}
+.vd em{font-style:normal;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.05em;padding:2px 8px;border-radius:999px;white-space:nowrap;align-self:start}
+.vd.yes em{background:var(--jp-soft);color:var(--jp)}
+.vd.no em{background:var(--redact);color:var(--muted)}
+.vd.none em{background:var(--bar-soft);color:var(--bar)}
+.vd b{font-weight:600}
+.vd span{color:var(--muted)}
 footer{margin-top:64px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--hair);padding-top:16px}
 </style>
 </head>
@@ -71,8 +90,59 @@ footer{margin-top:64px;color:var(--muted);font-size:12.5px;border-top:1px solid 
 <h1>What Korean and Japanese players told me</h1>
 <div class="meta">Ricochet Squad · community feedback · September 2–5, 2026 · 13 players</div>
 <div class="lede">
-<p>You asked why Korean players are leaving. I put the question you suggested to five Korean KakaoTalk chats and the Japanese Discord. Thirteen players answered.</p>
+<p>You asked why Korean players are leaving. I put the question you suggested to five Korean KakaoTalk chats and the Japanese Discord. Thirteen players answered, and the studio replied on <b>September 11, 2026</b> — that reply is included below.</p>
 <p class="note">Everything quoted here is <b>verbatim, in the original language</b> — not edited, not softened. The one exception is 포메라니안: his points came out of a conversation with me rather than a written submission, so I condensed that conversation into a list. It is marked where it appears.</p>
+</div>
+
+<h2>The studio's reply</h2>
+<div class="reply">
+<div class="stamp"><b>Nice Plans Studio</b><span>September 11, 2026 · verbatim</span></div>
+<p class="intro">First of all, thank you to everyone who took the time to share feedback. Some of the problems mentioned are already part of our plans, while in other cases we agree with the problem but may choose a different solution.</p>
+
+<h3><i>1</i>Matchmaking, bots, and new players</h3>
+<p>Several of these issues are connected. When the number of players online is limited, matchmaking has fewer options. This can result in newer players meeting veterans, wider skill gaps, or more bots being used.</p>
+<p>A larger active player base gives the matchmaking system much more room to create fair and competitive games.</p>
+<p>Our plan is therefore to grow the player base. We need to make sure the game's economy can sustainably support that growth. This is the reason why our recent updates have focused on monetization and progression.</p>
+
+<h3><i>2</i>Progression and the economy</h3>
+<p>We know that highly engaged players can reach the end of the progression system quickly. Many long-term players have already upgraded most or all of their heroes and have nothing to spend their resources on.</p>
+<p>The technically easy solution would be simply adding more hero levels, for example, level 16 or 20. But we don't think adding more grind is an interesting solution for players.</p>
+<p>Adding new heroes is much more exciting, but it is also significantly more expensive and takes much longer to produce.</p>
+<p>So our goal is to add more long-term progression and things worth earning or purchasing, while being careful not to make the gap between new and veteran players even larger.</p>
+
+<h3><i>3</i>Updates, balance, and events</h3>
+<p>We agree on this. The meta should not remain unchanged for a long period. Smaller seasonal balance updates, events, and other changes are things we can deliver more regularly.</p>
+<p>Large content updates are different. Producing new heroes, maps, and major systems takes considerably more time and resources. For now, our priority is to improve the progression systems and grow the player base before increasing the pace of content updates.</p>
+
+<h3><i>4</i>Roadmap</h3>
+<p>We don't plan to publish a fixed 12-month roadmap.</p>
+<p>Ricochet changes frequently, and player feedback is one of the things that influences our priorities. Committing publicly to a detailed one-year plan and then refusing to change it would not be realistic.</p>
+
+<h3><i>5</i>Clans</h3>
+<p>Clans are currently in the design stage. We consider them a very important feature, and we want to design the system carefully.</p>
+<p>Clans will include their own communication features, including clan chat.</p>
+<p>We do not currently plan to add a global server-wide chat.</p>
+
+<h3><i>6</i>Player reports</h3>
+<p>We agree that a reporting system is needed, and it's easy to implement technically.</p>
+<p>The difficult part is making sure reports are reviewed quickly, abuse of the system is prevented, and there is a reliable moderation process behind it.</p>
+<p>As for now, we'll use in-game support chat to act.</p>
+
+<h3><i>7</i>Other requests</h3>
+<p>We currently do not plan to introduce separate regional leaderboards.</p>
+<p>Live match spectating already exists for training matches.</p>
+<p>Some other suggestions look good and we agree with the underlying problem even if we may choose a different solution from the one proposed.</p>
+<p>Thank you again for the feedback. Even when we don't implement a suggestion exactly as described, understanding why players are frustrated helps us decide what to improve next.</p>
+
+<div class="verdicts">
+<div class="vd yes"><em>PLANNED</em><div><b>Update cadence &amp; balance</b> <span>Smaller seasonal changes and events, more often (§3)</span></div></div>
+<div class="vd yes"><em>PLANNED</em><div><b>Somewhere to spend currency</b> <span>Long-term progression and things worth buying (§2)</span></div></div>
+<div class="vd yes"><em>PLANNED</em><div><b>Clans</b> <span>In design · includes clan chat (§5)</span></div></div>
+<div class="vd no"><em>NOT PLANNED</em><div><b>12-month roadmap</b> <span>A public one-year commitment isn't realistic (§4)</span></div></div>
+<div class="vd no"><em>NOT PLANNED</em><div><b>Server-wide chat</b> <span>Clan chat instead (§5)</span></div></div>
+<div class="vd no"><em>NOT PLANNED</em><div><b>Regional leaderboards</b> <span>(§7)</span></div></div>
+<div class="vd none"><em>NO ANSWER</em><div><b>1v1 / 2v2 modes · maxed hero in training · lag</b> <span>Likely folded into §7 — I'll ask about these separately</span></div></div>
+</div>
 </div>
 
 <h2>What came up most</h2>
