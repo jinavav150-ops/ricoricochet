@@ -1558,7 +1558,7 @@
       <b>📊 데이터 신뢰도 — 전원 완전 확정</b><br>
       · <span style="color:var(--good)">13명 전원 레벨 1~15 실측 확정</span> (오차 0)<br>
       · 레벨1(잠금화면) + 레벨15 두 지점으로 정확한 성장 곡선 산출<br>
-      · 체력 증가량이 전원 정수(▲13~21)로 검증됨
+      · 체력 증가량이 전원 정수(▲13~22)로 검증됨
     </div>
     <div class="dexsearch">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.2" y1="16.2" x2="21" y2="21"/></svg>
@@ -3408,6 +3408,16 @@ const ROADMAP_TEASER = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBAR
 const ROADMAP_TEASER_CAP = { ko:"8월 말 공개 예정인 동양풍 새 맵 — 이미지: 개발사 공식 디스코드 공지", en:"The new Asian-themed map coming late August — image: official dev Discord announcement", ja:"8月末公開予定の東洋風新マップ — 画像：開発公式Discordのお知らせ", zh:"預計8月底推出的東方風新地圖 — 圖片：開發團隊官方Discord公告", fr:"La nouvelle carte d'inspiration asiatique prévue fin août — image : annonce Discord officielle des devs", de:"Die neue asiatisch inspirierte Map, geplant für Ende August — Bild: offizielle Discord-Ankündigung der Devs", es:"El nuevo mapa de estilo asiático que llega a finales de agosto — imagen: anuncio oficial del Discord de los devs", pt:"O novo mapa de estilo asiático previsto para o fim de agosto — imagem: anúncio oficial do Discord dos devs", ru:"Новая карта в азиатском стиле, выход в конце августа — изображение: официальный анонс в Discord разработчиков" };
 /* 🆕 사이트 주요 업데이트 로그 (최신이 위) — 업데이트할 때마다 맨 위에 항목 하나만 추가 */
 const SITE_UPDATES = [
+  { date:"2026-09-15",
+    ko:"🏆 <b>Asia Community Cup #1은 취소됐어요.</b> 신청 팀이 적어 이번엔 열지 않고, 팀이 더 모일 때 다음 대회로 다시 준비할게요. 신청해 주신 분들 정말 감사합니다.",
+    en:"🏆 <b>Asia Community Cup #1 has been cancelled.</b> Too few teams signed up, so we'll hold off and set up the next cup once more teams can join. Thank you to everyone who entered.",
+    ja:"🏆 <b>Asia Community Cup #1 は中止になりました。</b>参加チームが少なかったため今回は開催せず、もっとチームが集まる時に次の大会を改めて準備します。エントリーしてくれた皆さん、本当にありがとうございました。",
+    zh:"🏆 <b>Asia Community Cup #1 已取消。</b>報名隊伍太少，這次先不舉辦，等更多隊伍能參加時再籌備下一屆。感謝所有報名的朋友。",
+    fr:"🏆 <b>L'Asia Community Cup #1 est annulée.</b> Trop peu d'équipes inscrites : on attendra d'en réunir davantage pour organiser la prochaine. Merci à tous ceux qui se sont inscrits.",
+    de:"🏆 <b>Der Asia Community Cup #1 ist abgesagt.</b> Es haben sich zu wenige Teams angemeldet – den nächsten Cup planen wir, sobald mehr Teams mitmachen können. Danke an alle, die sich angemeldet haben.",
+    es:"🏆 <b>La Asia Community Cup #1 se ha cancelado.</b> Se inscribieron muy pocos equipos, así que organizaremos la próxima cuando puedan participar más. Gracias a todos los que se inscribieron.",
+    pt:"🏆 <b>A Asia Community Cup #1 foi cancelada.</b> Poucas equipes se inscreveram, então vamos organizar a próxima quando mais equipes puderem participar. Obrigado a todos que se inscreveram.",
+    ru:"🏆 <b>Asia Community Cup #1 отменён.</b> Записалось слишком мало команд, поэтому следующий кубок подготовим, когда участвовать смогут больше команд. Спасибо всем, кто подал заявку." },
   { date:"2026-08-29",
     ko:"📊 새 메뉴 <b>프로 랭킹</b>이 생겼어요 (공략 > 프로 랭킹) — 프로 랭킹 상위 10명의 <b>최근 25경기</b>를 경기 단위로 확인해서 <b>영웅별 점수 증감</b>, <b>누구와 같은 팀일 때 이기는지</b>, <b>K/D</b>를 보여줍니다. 최근 경기에는 캐주얼이 섞여 있어 카드마다 실제 모드 구성도 함께 적었어요. 프로 <b>GG Qwaser</b> 님의 제안으로 만들었습니다",
     en:"📊 New menu: <b>Pro ranking</b> (Guides > Pro ranking) — a match-by-match look at the <b>last 25 matches</b> of the top 10 on the pro leaderboard: <b>score gained or lost per hero</b>, <b>who they win with</b>, and <b>K/D</b>. Those recent matches include Casual games, so every card shows its actual mode breakdown. Built from a suggestion by pro player <b>GG Qwaser</b>",
@@ -3428,46 +3438,6 @@ const SITE_UPDATES = [
     es:"🎮 El juego <b>2.2.0</b> ya está reflejado — las notas de parche de arriba muestran los <b>cambios de balance por héroe con cifras</b>. Las recompensas VIP no son automáticas — reclámalas en la pantalla VIP",
     pt:"🎮 O jogo <b>2.2.0</b> já está refletido — as notas de patch acima mostram as <b>mudanças de balanceamento por herói com números</b>. As recompensas VIP não são automáticas — resgate na tela VIP",
     ru:"🎮 Игра <b>2.2.0</b> учтена — в патч-новостях выше теперь видны <b>изменения баланса по героям с цифрами</b>. Награды VIP не начисляются автоматически — забирайте их на экране VIP" },
-  { date:"2026-08-26",
-    ko:"🛠️ 대회 신청의 문제들을 고쳤어요 — '닉네임을 정해주세요'로 신청이 막히던 문제, 팀 엠블럼이 엉뚱하게 보이던 문제, 그리고 <b>연락처(카톡·디스코드)가 저장되지 않던 문제</b>까지. 이미 신청한 팀은 <b>연락처만 한 번 다시 입력</b>해 주세요 🙏 팀 카드도 팀원이 또렷이 보이게 새로 디자인했습니다",
-    en:"🛠️ Fixed the Cup sign-up issues — the 'set your nickname first' block, wrong team emblems, and <b>contacts (Discord) not being saved</b>. If you already signed up, please <b>re-enter your contact once</b> 🙏 Team cards were also redesigned so members are easier to read",
-    ja:"🛠️ 大会申込の不具合を修正しました — 「ニックネームを設定してください」で申込が止まる問題、チームエンブレムの表示違い、そして<b>連絡先（Discord）が保存されない問題</b>。すでに申込済みのチームは<b>連絡先だけもう一度入力</b>をお願いします 🙏 チームカードもメンバーが見やすいよう新デザインに",
-    zh:"🛠️ 修正了盃賽報名的問題 — 「請先設定暱稱」擋住報名、隊徽顯示錯誤、以及<b>聯絡方式（Discord）沒有被儲存</b>的問題。已報名的隊伍請<b>再輸入一次聯絡方式</b> 🙏 隊伍卡片也重新設計，隊員一目了然",
-    fr:"🛠️ Corrections des inscriptions à la Cup — le blocage « définis ton pseudo », les mauvais emblèmes d'équipe, et <b>les contacts (Discord) qui n'étaient pas enregistrés</b>. Si tu es déjà inscrit, <b>ressaisis ton contact une fois</b> 🙏",
-    de:"🛠️ Cup-Anmeldeprobleme behoben — die 'Nickname festlegen'-Blockade, falsche Team-Embleme und <b>nicht gespeicherte Kontakte (Discord)</b>. Wer schon angemeldet ist: <b>Kontakt bitte einmal neu eintragen</b> 🙏",
-    es:"🛠️ Corregidos los problemas de inscripción de la Cup — el bloqueo de 'define tu apodo', emblemas de equipo equivocados y <b>contactos (Discord) que no se guardaban</b>. Si ya te inscribiste, <b>vuelve a introducir tu contacto una vez</b> 🙏",
-    pt:"🛠️ Corrigidos os problemas de inscrição da Cup — o bloqueio de 'defina seu apelido', emblemas errados e <b>contatos (Discord) que não eram salvos</b>. Se você já se inscreveu, <b>reinsira seu contato uma vez</b> 🙏",
-    ru:"🛠️ Исправлены проблемы записи на кубок — блокировка «сначала укажите ник», неверные эмблемы команд и <b>несохранявшиеся контакты (Discord)</b>. Если вы уже записались — <b>введите контакт ещё раз</b> 🙏" },
-  { date:"2026-08-25",
-    ko:"🏆 <b>Asia Community Cup #1 — 팀 접수가 열렸어요!</b> 9월 19일(토) 저녁 8시(한국 시간) · 접수 마감 9월 14일(월). 대회 메뉴에서 팀(3인+예비)으로 신청하세요 — 팀이 없으면 솔로 신청으로 매칭을 도와드립니다. <b>선착순이 아니에요</b>, 마감 전이면 모두 참가할 수 있습니다",
-    en:"🏆 <b>Asia Community Cup #1 — team sign-ups are open!</b> Saturday, Sept 19, 20:00 KST · deadline Sept 14 (Mon). Register your squad (3 + optional sub) in the Cup menu — no team? Sign up solo and we will match you. <b>Not first-come-first-served</b> — everyone who registers before the deadline is in",
-    ja:"🏆 <b>Asia Community Cup #1 — チーム受付開始！</b> 9月19日(土) 20時（韓国時間）・締切9月14日(月)。大会メニューからチーム（3人+補欠）で申込を — チームがない方はソロ申込でマッチングします。<b>先着順ではありません</b>、締切前ならどなたでも参加できます",
-    zh:"🏆 <b>Asia Community Cup #1 — 隊伍報名開始！</b> 9月19日(六) 20:00（韓國時間）・截止 9月14日(一)。請至盃賽選單以隊伍（3人+替補）報名 — 沒有隊伍可先個人報名，我們協助組隊。<b>並非先到先得</b>，截止前報名都能參加",
-    fr:"🏆 <b>Asia Community Cup #1 — inscriptions ouvertes !</b> Samedi 19 sept, 20 h KST · clôture le 14 sept (lun). Inscris ton équipe (3 + remplaçant) dans le menu Cup — pas d'équipe ? Inscris-toi en solo. <b>Pas de premier arrivé, premier servi</b>",
-    de:"🏆 <b>Asia Community Cup #1 — Team-Anmeldung offen!</b> Samstag, 19. Sept., 20:00 KST · Schluss am 14. Sept. (Mo). Melde dein Team (3 + Ersatz) im Cup-Menü an — ohne Team einfach solo anmelden. <b>Kein Windhundprinzip</b>",
-    es:"🏆 <b>Asia Community Cup #1 — ¡inscripciones abiertas!</b> Sábado 19 de sept, 20:00 KST · cierre el 14 de sept (lun). Inscribe a tu equipo (3 + suplente) en el menú Cup — ¿sin equipo? Inscríbete en solitario. <b>No es por orden de llegada</b>",
-    pt:"🏆 <b>Asia Community Cup #1 — inscrições abertas!</b> Sábado, 19 de set, 20:00 KST · prazo 14 de set (seg). Inscreva seu time (3 + reserva) no menu Cup — sem time? Inscreva-se solo. <b>Não é por ordem de chegada</b>",
-    ru:"🏆 <b>Asia Community Cup #1 — открыта запись команд!</b> Суббота 19 сентября, 20:00 KST · дедлайн 14 сентября (пн). Записывайте команду (3 + запасной) в меню кубка — нет команды? Запишитесь соло. <b>Не в порядке очереди</b>" },
-  { date:"2026-08-19",
-    ko:"🙋 <b>커뮤니티 컵 — 참가 의향 조사</b>를 시작했어요. 상단 <b>대회</b> 메뉴에서 닉네임과 팀 유무만 남기면 됩니다(30초, 아직 접수 아님). 누가 손 들었는지 다 보여요. 개발사가 말했어요 — <b>참가 팀이 많을수록 상품이 커집니다.</b>",
-    en:"🙋 <b>Community Cup — interest check</b> is open. In the new top-level <b>Cup</b> menu, just leave your nickname and whether you have a squad (30 seconds, not a sign-up yet). You can see who's in. The studio said it: <b>the more teams enter, the bigger the rewards.</b>",
-    ja:"🙋 <b>コミュニティカップ — 参加意向の調査</b>を始めました。上部の<b>大会</b>メニューでニックネームとチーム有無を残すだけ（30秒・まだ受付ではありません）。誰が手を挙げたか見えます。開発元いわく — <b>参加チームが多いほど賞品が大きくなります。</b>",
-    zh:"🙋 <b>社群盃 — 參賽意願調查</b>開始了。上方<b>賽事</b>選單留下暱稱和是否有隊伍即可（30 秒，還不是報名）。可以看到誰舉手了。開發商說：<b>參賽隊伍越多，獎品越大。</b>",
-    fr:"🙋 <b>Community Cup — sondage d'intérêt</b> ouvert. Onglet Tournoi : laisse ton pseudo et si tu as une équipe (30 s, pas encore une inscription). Plus il y a d'équipes, plus les récompenses sont grandes.",
-    de:"🙋 <b>Community Cup — Interessensabfrage</b> ist offen. Turnier-Tab: Nickname und ob du ein Team hast (30 s, noch keine Anmeldung). Je mehr Teams, desto größer die Preise.",
-    es:"🙋 <b>Community Cup — sondeo de interés</b> abierto. Pestaña Torneo: deja tu nick y si tienes equipo (30 s, aún no es inscripción). Cuantos más equipos, mayores los premios.",
-    pt:"🙋 <b>Community Cup — pesquisa de interesse</b> aberta. Aba Torneio: deixe seu nick e se tem equipe (30 s, ainda não é inscrição). Quanto mais equipes, maiores os prêmios.",
-    ru:"🙋 <b>Community Cup — опрос интереса</b> открыт. Вкладка Турнир: ник и есть ли команда (30 с, ещё не регистрация). Чем больше команд, тем больше награды." },
-  { date:"2026-08-18",
-    ko:"🏆 <b>커뮤니티 컵</b>이 열립니다! 상단에 <b>대회</b> 메뉴가 생겼어요 — 사이트에서 바로 참가 신청할 수 있습니다. 3v3이고 <b>아시아 시간대</b>에 열리지만 <b>지역 제한은 없어요</b>. 팀원이 없어도 신청하면 다른 분들과 묶어드립니다. 개발사에서 <b>상품(꾸미기 칭호 · 젬)</b>도 지원해 주기로 했어요. 연락처는 운영자만 볼 수 있습니다.",
-    en:"🏆 A <b>Community Cup</b> is happening! There's a new top-level <b>Cup</b> menu — you can enter straight from the site. It's 3v3, held in <b>Asian time zones</b>, but there's <b>no region restriction</b>. No team? Enter anyway and I'll match you with others. The developers are supporting it with <b>prizes (a cosmetic title and gems)</b>. Your contact details are visible only to the organiser.",
-    ja:"🏆 <b>コミュニティカップ</b>を開催します！上部に<b>大会</b>メニューができました — サイトから直接申し込めます。3v3、<b>アジアの時間帯</b>ですが<b>地域制限はありません</b>。チームがなくても申し込めば他の方と組ませます。開発元から<b>賞品（꾸미기称号・ジェム）</b>の支援もあります。連絡先は運営者だけが見られます。",
-    zh:"🏆 <b>社群盃</b>即將開賽！上方新增<b>賽事</b>選單 — 可直接在網站報名。3v3，於<b>亞洲時區</b>舉行，但<b>沒有地區限制</b>。沒有隊友也能報名，我會幫你配對。開發商也會提供<b>獎品（外觀稱號・寶石）</b>。聯絡方式僅主辦者可見。",
-    fr:"🏆 Une <b>Community Cup</b> arrive ! Un nouvel onglet <b>Tournoi</b> permet de s'inscrire directement depuis le site. 3v3, aux fuseaux horaires asiatiques, sans restriction de région. Pas d'équipe ? Inscris-toi quand même, je te trouverai des coéquipiers. Les développeurs offrent des récompenses (titre cosmétique et gemmes).",
-    de:"🏆 Ein <b>Community Cup</b> kommt! Ein neuer <b>Turnier</b>-Tab erlaubt die Anmeldung direkt auf der Seite. 3v3, in asiatischen Zeitzonen, ohne Regionsbeschränkung. Kein Team? Melde dich trotzdem an, ich bringe dich mit anderen zusammen. Die Entwickler steuern Preise bei (kosmetischer Titel und Gems).",
-    es:"🏆 ¡Llega una <b>Community Cup</b>! Hay una nueva pestaña <b>Torneo</b> para inscribirte desde el sitio. 3v3, en zonas horarias asiáticas, sin restricción de región. ¿Sin equipo? Inscríbete igual y te emparejo. Los desarrolladores aportan premios (título cosmético y gemas).",
-    pt:"🏆 Vem aí uma <b>Community Cup</b>! Há uma nova aba <b>Torneio</b> para se inscrever pelo site. 3v3, em fusos horários asiáticos, sem restrição de região. Sem equipe? Inscreva-se mesmo assim e eu monto uma. Os desenvolvedores vão dar prêmios (título cosmético e gemas).",
-    ru:"🏆 Скоро <b>Community Cup</b>! Появилась вкладка <b>Турнир</b> — заявку можно подать прямо на сайте. 3v3, в азиатских часовых поясах, без ограничений по региону. Нет команды? Подавайте заявку — подберу напарников. Разработчики поддержат призами (косметический титул и самоцветы)." },
   { date:"2026-08-10",
     ko:"🧩 경기 분석에 <b>‘왜 졌나’</b>가 생겼어요 — 이제 “혼자 죽었다” 같은 결과만이 아니라, <b>그렇게 되도록 만든 앞 상황</b>까지 이어서 말해 드립니다. 상대 궁이 몇 초째 차 있었는지, 그때 우리가 평소보다 얼마나 뭉쳐 있었는지, 정비 없이 다시 들어갔는지 — 판이 갈린 순간 1~2개를 문장으로 풀어 줘요. 픽 자체가 불리했으면 그것도 맨 앞에 알려 드립니다.",
     en:"🧩 Match Report now answers <b>“Why the loss”</b> — instead of just the outcome (“you died alone”), it traces back to <b>what set it up</b>: how long the enemy had been sitting on an ult, how tightly you were bunched compared to your usual spacing, whether you re-engaged with no time to regroup. One or two decisive moments, written out. If the draft itself was against you, that's called out first.",
@@ -4220,7 +4190,11 @@ function showView(view){
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
   if(view.indexOf("comm:")===0){
     document.getElementById("tab-vote").classList.add("on");
+    /* 공유 링크로 처음 들어오면 이 시점엔 commView 가 아직 정의되기 전이라(정의는 아래쪽)
+       조건이 거짓이 되어 상단 탭만 바뀌고 본문은 채팅에 머물렀다 (2026-09-08 감사에서 발견).
+       정의 전이면 예약해 두고, 정의된 직후에 적용한다. */
     if(window.commView) window.commView(view.slice(5));
+    else window.__pendingCommView = view.slice(5);
   }else{
     const el=document.getElementById("tab-"+view); if(el) el.classList.add("on");
     if(view === "prorank" && window.rsRenderProRank) window.rsRenderProRank();   /* 🏅 프로 랭킹 심층 지표 */
@@ -4651,7 +4625,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.09.06-a";
+const SITE_VERSION = "2026.09.15-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5280,9 +5254,12 @@ async function dmSend(){
   if(!requireNick()) return;
   if(!checkText(text, 300, 1) || !chatRateOK()) return;
   dmSending = true;
+  const sendRoom = dmOpenUid;      // 보내는 동안 방이 바뀔 수 있으므로 기억해 둔다
   try{
-    await FB.push(FB.ref(FB.db, "dm/"+dmPair(dmOpenUid)), { u: MY_UID, t: text, ts: FB.serverTimestamp() });
-    el.value = "";
+    await FB.push(FB.ref(FB.db, "dm/"+dmPair(sendRoom)), { u: MY_UID, t: text, ts: FB.serverTimestamp() });
+    /* 전송하는 사이에 다른 방으로 옮겨 새로 쓰고 있었다면 그 초안까지 지워졌다
+       (2026-09-08 감사에서 발견). 같은 방이고 내용이 그대로일 때만 비운다. */
+    if(dmOpenUid === sendRoom && el.value.trim() === text) el.value = "";
   }catch(err){
     toast(String(err&&err.message||err).toLowerCase().includes("permission") ? DML("needRules") : DML("failT"));
   }finally{ dmSending = false; }
@@ -5503,18 +5480,24 @@ document.getElementById("chatTrAll").addEventListener("click", async () => {
   btn.textContent = T("🌐 전체 번역");
   toast(done ? T("전체 번역 완료 🌐") : T("모두 같은 언어입니다"));
 });
-let trBusy = false;
+let trBusy = false, trPending = false;
+/* 번역이 도는 동안 도착한 메시지는 그냥 버려져서 영영 번역되지 않았다 (2026-09-08 감사에서 발견).
+   이제는 "다시 돌려야 함"만 표시해 두고, 한 바퀴가 끝나면 그 사이 새로 온 것까지 이어서 처리한다. */
 async function autoTranslateNew(){
-  if(!AUTO_TR || trBusy) return;
+  if(!AUTO_TR) return;
+  if(trBusy){ trPending = true; return; }
   trBusy = true;
   try{
-    const targets = chatCache.slice(-30).filter(m => m.uid !== MY_UID && transCache[m.id] === undefined);
-    for(const m of targets){
-      try{ transCache[m.id] = await translateText(m.text); }
-      catch(e){ transCache[m.id] = null; }
-    }
-    if(targets.length) renderChat();
-  } finally { trBusy = false; }
+    do{
+      trPending = false;
+      const targets = chatCache.slice(-30).filter(m => m.uid !== MY_UID && transCache[m.id] === undefined);
+      for(const m of targets){
+        try{ transCache[m.id] = await translateText(m.text); }
+        catch(e){ transCache[m.id] = null; }
+      }
+      if(targets.length) renderChat();
+    } while(trPending && AUTO_TR);
+  } finally { trBusy = false; trPending = false; }
 }
 
 /* ══════ 🏆 티어보드 ══════ */
@@ -5597,10 +5580,27 @@ function renderVoteGrid(){
       </div>
     </div>`).join("");
 }
+let voteBusy = false;
 document.getElementById("voteGrid").addEventListener("click", async e => {
   const b = e.target.closest("button[data-h]");
   if(!b || !MY_UID || IS_BANNED) return;
-  const hero = b.dataset.h, tier = b.dataset.t, prev = myVotes[hero];
+  if(voteBusy) return;                                   // 처리 중 연타 방지
+  voteBusy = true;
+  try{ await rsHandleVote(b); } finally { voteBusy = false; }
+});
+/* ⚠️ 집계를 올리고 내리는 기준은 "서버에 저장된 내 투표"여야 한다 (2026-09-08 감사에서 발견).
+   로컬 myVotes 만 믿으면, 다른 탭에서 이미 투표해 둔 경우 prev 를 모른 채 +1 을 또 해서
+   내 기록은 1표인데 집계는 2표가 된다. 그래서 매번 서버 값을 먼저 읽어 prev 를 맞춘다. */
+async function rsHandleVote(b){
+  const hero = b.dataset.h, tier = b.dataset.t;
+  let prev = myVotes[hero];
+  try{
+    const snap = await FB.get(FB.ref(FB.db, `tiervote/votes/${MY_UID}/${hero}`));
+    const sv = snap.val();
+    prev = (typeof sv === "string" && sv) ? sv : undefined;
+    if(prev) myVotes[hero] = prev; else delete myVotes[hero];
+    renderVoteGrid();
+  }catch(e){}                                            // 못 읽으면 로컬 값 그대로 진행
   // 집계는 개별 처리 — 일부 실패해도 투표 자체는 저장됨
   const bump = (t,d) => FB.runTransaction(FB.ref(FB.db, `tiervote/agg/${hero}/${t}`), c => Math.max(0,(c||0)+d)).catch(()=>{});
   /* ⚠️ 순서 주의 (규칙 v23) — 집계 칸을 내리려면 "서버에 저장된 내 투표"가 아직 그 티어여야 한다.
@@ -5635,7 +5635,7 @@ document.getElementById("voteGrid").addEventListener("click", async e => {
   }
   await bump(tier,+1);                                   // ③ 내 투표 = tier
   toast(`${hName(hero)} → ${tier} ${T("투표 완료!")}`);
-});
+}
 
 /* ── ⭐ 특전(퍽) 추천 투표 (도감) — 티어 투표와 동일 패턴, 규칙 v16 필요 ──
    렌더는 클래식 perkRowsHtml(PERK_VMAP), 여기서는 구독·클릭·집계만. 다시 누르면 취소. */
@@ -5826,7 +5826,9 @@ const CRE_L = {
   deleted:{ko:"목록에서 뺐습니다",en:"Removed",ja:"一覧から外しました",zh:"已移除",fr:"Retiré",de:"Entfernt",es:"Eliminado",pt:"Removido",ru:"Убрано"}
 };
 const CREL = k => (CRE_L[k][LANG]||CRE_L[k].ko);
-const CRE_URL_RE = /^https:\/\/[^\s"'<>]{4,200}$/;
+/* 예전엔 https 로 시작하기만 하면 무엇이든 통과했다 (2026-09-08 감사에서 발견).
+   최소한 점이 있는 정상 호스트명을 요구한다. 렌더는 esc() + rel="noopener noreferrer nofollow" 유지. */
+const CRE_URL_RE = /^https:\/\/[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+(?::\d{2,5})?(?:\/[^\s"'<>]*)?$/;
 let creCache = [];
 // 목록이 비면 서브탭을 숨김. 관리자는 채워 넣어야 하니 항상 보임. (renderSubnav=클래식 → window로 노출)
 window.rsCreVisible = () => creCache.length > 0 || !!IS_ADMIN;
@@ -6014,6 +6016,9 @@ const TR_L = {
   f_cancel_ask:{ko:"신청을 취소할까요?",en:"Withdraw your entry?",ja:"申込を取り消しますか？",zh:"要取消報名嗎？"},
   f_closed:{ko:"접수가 마감됐어요.",en:"Sign-ups are closed.",ja:"受付は終了しました。",zh:"報名已截止。"},
   f_fail:{ko:"저장하지 못했어요. 잠시 뒤 다시 시도해주세요.",en:"Could not save. Please try again shortly.",ja:"保存できませんでした。",zh:"儲存失敗，請稍後再試。"},
+  f_partial:{ko:"팀 정보만 저장됐어요 — {n}은(는) 저장하지 못했습니다. 다시 시도해주세요.",en:"Only the team was saved — {n} could not be saved. Please try again.",ja:"チーム情報のみ保存されました — {n}は保存できませんでした。もう一度お試しください。",zh:"僅儲存了隊伍資料 — {n} 未能儲存，請再試一次。"},
+  f_part_ids:{ko:"게임 ID",en:"game IDs",ja:"ゲームID",zh:"遊戲ID"},
+  f_part_contact:{ko:"연락처",en:"contact info",ja:"連絡先",zh:"聯絡方式"},
   f_need_rules:{ko:"⚠️ 아직 저장이 안 돼요 — Firebase 규칙 v31 게시가 필요합니다.",en:"⚠️ Cannot save yet — Firebase rules v31 need to be published.",ja:"⚠️ まだ保存できません — Firebaseルールv31の公開が必要です。",zh:"⚠️ 尚無法儲存 — 需要發布 Firebase 規則 v31。"},
   mine:{ko:"내 신청",en:"My entry",ja:"自分の申込",zh:"我的報名"},
   list:{ko:"신청한 팀",en:"Entries",ja:"申込チーム",zh:"報名隊伍"},
@@ -6859,13 +6864,18 @@ document.addEventListener("click", async e => {
       await FB.set(FB.ref(FB.db, "tourney/teams/" + MY_UID), {
         name, m1, m2, m3, sub, solo, emb, ts: FB.serverTimestamp()
       });
-      try{ await FB.set(FB.ref(FB.db, "tourney/ids/" + MY_UID), { i1, i2, i3, is: i4 }); }catch(eIds){}
+      /* ⚠️ 팀·ID·연락처를 각각 따로 저장하는데, 예전엔 뒤 두 개가 실패해도 조용히 넘기고
+         "접수 완료"를 띄웠다 → 신청이 반쪽만 저장된 채 신청자는 성공한 줄 알았다
+         (2026-09-08 감사에서 발견). 이제 실패한 항목을 모아 정직하게 알린다. */
+      const failedParts = [];
+      try{ await FB.set(FB.ref(FB.db, "tourney/ids/" + MY_UID), { i1, i2, i3, is: i4 }); }catch(eIds){ failedParts.push(TRL("f_part_ids")); }
       /* 둘 다 비우면 실제로 지운다 — 예전엔 건너뛰어서 본인이 자기 연락처를 지울 방법이 없었다. */
       try{
         await FB.set(FB.ref(FB.db, "tourney/contact/" + MY_UID), (kakao || discord) ? { kakao, discord } : null);
         trMyContact = (kakao || discord) ? { kakao, discord } : null;
-      }catch(e2){}
-      toast(had ? TRL("f_updated") : TRL("f_done"));
+      }catch(e2){ failedParts.push(TRL("f_part_contact")); }
+      toast(failedParts.length ? TRL("f_partial").replace("{n}", failedParts.join(", "))
+                               : (had ? TRL("f_updated") : TRL("f_done")));
     }catch(err){
       const perm = String(err && err.message || err).toLowerCase().includes("permission");
       toast(perm ? TRL("f_need_rules") : TRL("f_fail"));
@@ -7106,10 +7116,10 @@ function chatActHtml(m, mine){
   if(MY_UID) for(const [k, emo] of CHAT_RX)
     rx += `<button class="rxp${(r[k]||{})[MY_UID] ? " on" : ""}" data-rx="${m.id}|${k}" title="${esc(T("반응"))}">${emo}</button>`;
   return `<div class="chatact">${rx}
-    ${!mine&&MY_UID?`<button data-reply="${m.id}" data-reply-name="${esc(m.name)}">↩ ${T("답장")}</button>`:""}
-    ${!mine?`<button data-tr="${m.id}">🌐 ${T("번역")}</button>`:""}
-    ${!mine&&MY_UID?`<button data-rep="${m.id}">🚩 ${T("신고")}</button>`:""}
-    ${(mine||IS_ADMIN)?`<button class="dang" data-del-chat="${m.id}">✕ ${T("삭제")}</button>`:""}
+    ${!mine&&MY_UID?`<button data-reply="${esc(m.id)}" data-reply-name="${esc(m.name)}">↩ ${T("답장")}</button>`:""}
+    ${!mine?`<button data-tr="${esc(m.id)}">🌐 ${T("번역")}</button>`:""}
+    ${!mine&&MY_UID?`<button data-rep="${esc(m.id)}">🚩 ${T("신고")}</button>`:""}
+    ${(mine||IS_ADMIN)?`<button class="dang" data-del-chat="${esc(m.id)}">✕ ${T("삭제")}</button>`:""}
   </div>`;
 }
 function chatQuoteHtml(m){
@@ -7166,7 +7176,7 @@ function renderChat(){
     const cont = !!(p && p.uid === m.uid && !m.re && !men
                     && !(isHidden("chat", p.id) && !IS_ADMIN)
                     && Math.abs((m.ts||0) - (p.ts||0)) < 300000);
-    return `<div class="chatmsg${cont?" cont":""}${men?" mentioned":""}${open?" open":""}" data-mid="${m.id}">
+    return `<div class="chatmsg${cont?" cont":""}${men?" mentioned":""}${open?" open":""}" data-mid="${esc(m.id)}">
       ${m.re?chatQuoteHtml(m):""}
       <div class="mline">
         ${cont?"":`<span class="mnm" style="color:${nameColor(m.uid)}" data-uprof="${m.uid}" data-uname="${esc(m.name)}">${esc(m.name)}</span>${staffBadge(m.uid)}`}
@@ -7201,7 +7211,7 @@ document.getElementById("chatBox").addEventListener("click", async e => {
   if(rpt){ chatActOpen = null; rsReport("chat", rpt.dataset.rep); return; }
   const gt = e.target.closest("[data-goto]");                  // 인용 누르면 원본으로 이동
   if(gt){
-    const el = document.querySelector(`#chatBox [data-mid="${gt.dataset.goto}"]`);
+    const el = [...document.querySelectorAll("#chatBox [data-mid]")].find(x => x.dataset.mid === gt.dataset.goto);
     if(el){ el.scrollIntoView({block:"center", behavior:"smooth"}); el.classList.add("mentioned"); setTimeout(()=>{ renderChat(); }, 1200); }
     else toast(T("원본 메시지를 찾을 수 없어요"));
     return;
@@ -7531,13 +7541,32 @@ document.getElementById("bdSend").addEventListener("click", async () => {
   }
   btn.disabled = false; btn.textContent = BL("post");
 });
+/* 사진은 글보다 나중에 저장된다(글 생성 → boardmedia 저장). 그 틈에 누가 글을 열면 빈 결과가 오는데,
+   빈 배열도 참 값이라 위 가드(`if(bdMediaCache[pid])`)에 걸려 영영 다시 읽지 않았다.
+   → 올린 사진이 "없음"으로 굳어 새로고침으로도 안 고쳐졌다 (2026-09-08 감사에서 발견).
+   이제 빈 결과일 때만 시간 간격을 두고 몇 번 더 읽는다. */
+const bdMediaTry = {};
+const BD_MEDIA_MAX_TRY = 4;
 async function bdLoadPhotos(pid){
-  if(bdMediaCache[pid]) return;
+  const cur = bdMediaCache[pid];
+  if(cur === "loading") return;                                   // 읽는 중
+  if(Array.isArray(cur) && cur.length) return;                    // 이미 사진을 받아뒀다
+  if(Array.isArray(cur) && (bdMediaTry[pid]||0) >= BD_MEDIA_MAX_TRY) return;   // 정말 사진이 없는 글
   bdMediaCache[pid] = "loading";
   try{
     const snap = await FB.get(FB.ref(FB.db, `boardmedia/${pid}/photos`));
-    bdMediaCache[pid] = Object.values(snap.val()||{}).filter(s => typeof s === "string" && BD_IMG_RE.test(s));
-  }catch(e){ bdMediaCache[pid] = []; }
+    const arr = Object.values(snap.val()||{}).filter(s => typeof s === "string" && BD_IMG_RE.test(s));
+    bdMediaCache[pid] = arr;
+    if(arr.length) bdMediaTry[pid] = 0;
+    else {
+      bdMediaTry[pid] = (bdMediaTry[pid]||0) + 1;
+      if(bdMediaTry[pid] < BD_MEDIA_MAX_TRY) setTimeout(()=>bdLoadPhotos(pid), 1500 * bdMediaTry[pid]);   // 1.5s → 3s → 4.5s
+    }
+  }catch(e){
+    bdMediaCache[pid] = [];
+    bdMediaTry[pid] = (bdMediaTry[pid]||0) + 1;
+    if(bdMediaTry[pid] < BD_MEDIA_MAX_TRY) setTimeout(()=>bdLoadPhotos(pid), 1500 * bdMediaTry[pid]);
+  }
   renderBd();
 }
 async function bdPlayVideo(pid){
@@ -7609,7 +7638,8 @@ function renderBd(){
     let media = "";
     if(p.ph){   // 사진: 목록에서 바로 표시 (화면에 들어올 때 자동 로드 — bdObservePhotos)
       const m = bdMediaCache[p.id];
-      if(Array.isArray(m))
+      // 빈 배열이면 아직 저장 전일 수 있다 → 빈 사진칸 대신 "불러오는 중"을 유지한다 (재시도는 bdLoadPhotos가 예약)
+      if(Array.isArray(m) && m.length)
         media += `<div class="bdphotos">${m.map((s,i)=>`<img src="${s}" alt="" data-bd-photo="${p.id}|${i}">`).join("")}</div>`;
       else
         media += `<div class="bdloading"${m===undefined?` data-bd-lazy="${p.id}"`:""}>${BL("photoLoading")}</div>`;
@@ -8138,23 +8168,40 @@ document.getElementById("myUidCopy").addEventListener("click", () => {
 /* ── 예전 비공개 피드백 → 공개 게시판으로 자동 이전 (관리자 접속 시, 조용히) ──
    운영자 열람 공간을 없애고 모든 피드백을 '공개 목록' 한 곳에서 답변하도록 통합(2026-07-13).
    pubfb는 텍스트 전용이라 사진만 있는 옛 글은 옮기지 않음(DB엔 그대로 남음). 이미 공개된 글은 답변만 동기화. */
+/* ⚠️ 이 함수는 관리자가 접속할 때마다 돈다. 2026-09-08 감사에서 두 가지 되돌림 사고가 확인됐다.
+   ① 이미 공개된 글의 답변을 무조건 옛 내용으로 덮어써서, 공개 목록에서 고친 답변이 되돌아갔다.
+   ② 옮긴 뒤 운영자가 지운 글이 "아직 공개 안 됨"으로 보여 매번 되살아났다.
+   → ①은 옛 답변이 더 최신일 때만 동기화하고, ②는 옮긴 id를 기기에 기록해 다시 만들지 않는다.
+      (신고 카운터 이전에서 쓰는 rs_rc_migrated 와 같은 방식) */
+const FB_MIG_KEY = "rs_fb_migrated";
 async function migrateFeedbackToPublic(){
   if(!IS_ADMIN) return;
+  let moved;
+  try{ moved = new Set(JSON.parse(localStorage.getItem(FB_MIG_KEY) || "[]")); }
+  catch(e){ moved = new Set(); }
   try{
     const snap = await FB.get(FB.ref(FB.db, "feedback"));
     const v = snap.val() || {};
-    const pubIds = new Set(pubfbCache.map(x=>x.id));
+    const pubById = new Map(pubfbCache.map(x=>[x.id, x]));
     for(const [id,f] of Object.entries(v)){
       const text=((f&&f.text)||"").trim();
       if(!text) continue;                           // 사진만 있는 빈 글은 텍스트 보드에 못 올림
-      if(pubIds.has(id)){                            // 이미 공개됨 → 운영자 답변만 동기화
-        if(f.reply&&f.reply.text){ try{ await FB.set(FB.ref(FB.db, "pubfb/"+id+"/reply"), { text:(f.reply.text+"").slice(0,500), ts:f.reply.ts||Date.now() }); }catch(e){} }
+      const pub = pubById.get(id);
+      if(pub){                                       // 이미 공개됨 → 운영자 답변 동기화
+        const src = f.reply, dst = pub.reply;
+        // 공개 쪽 답변이 같거나 더 최신이면 건드리지 않는다 (운영자가 고친 답변 보존)
+        if(src && src.text && (!dst || (src.ts||0) > (dst.ts||0))){
+          try{ await FB.set(FB.ref(FB.db, "pubfb/"+id+"/reply"), { text:(src.text+"").slice(0,500), ts:src.ts||Date.now() }); }catch(e){}
+        }
+        moved.add(id);
         continue;
       }
+      if(moved.has(id)) continue;                    // 한 번 옮긴 뒤 운영자가 지운 글 — 되살리지 않는다
       const pobj={ cat:((f.cat||"💬 기타")+"").slice(0,30), name:((f.name||"익명")+"").slice(0,12), text:text.slice(0,500), uid:(f.uid||"unknown")+"", ts:f.ts||Date.now() };
       if(f.reply&&f.reply.text) pobj.reply={ text:(f.reply.text+"").slice(0,500), ts:f.reply.ts||Date.now() };
-      try{ await FB.set(FB.ref(FB.db, "pubfb/"+id), pobj); }catch(e){}
+      try{ await FB.set(FB.ref(FB.db, "pubfb/"+id), pobj); moved.add(id); }catch(e){}
     }
+    try{ localStorage.setItem(FB_MIG_KEY, JSON.stringify([...moved])); }catch(e){}
   }catch(e){}
 }
 
@@ -8228,6 +8275,8 @@ window.commView = v => {
   if(v === "fb") renderMyFb(true);   // 내 피드백 + 운영자 답장 (열람 = 새 답장 확인 처리)
   document.querySelectorAll("#commTabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
 };
+// 정의되기 전에 들어온 공유 링크가 있으면 지금 적용한다
+if(window.__pendingCommView){ const __pv = window.__pendingCommView; window.__pendingCommView = null; try{ window.commView(__pv); }catch(e){} }
 
 /* ══════ 👥 멤버(접속 현황) 패널 ══════
    레지스트리 = profiles(닉네임 설정자) · 접속중 = presence/<uid>(온라인 시 기록, 끊기면 자동 제거 — 규칙 v19 필요)
@@ -8384,6 +8433,14 @@ function rsPresenceInit(){
   // 연결 상태가 바뀔 때마다(재연결 포함) presence 다시 기록
   try{
     FB.onValue(FB.ref(FB.db, ".info/connected"), snap => { if(snap.val() === true) rsPresenceApply(); });
+  }catch(e){}
+  /* 탭을 여러 개 열어두면 그중 하나만 닫혀도 onDisconnect 가 presence/<uid> 를 통째로 지운다.
+     남은 탭은 여전히 접속 중인데 오프라인으로 보였다 (2026-09-08 감사에서 발견).
+     내 presence 가 사라졌는데 아직 온라인이어야 하는 상태면 다시 기록해 스스로 복구한다. */
+  try{
+    FB.onValue(FB.ref(FB.db, "presence/" + MY_UID), snap => {
+      if(!snap.exists() && MEM_ST !== "offline" && getNick()) rsPresenceApply();
+    });
   }catch(e){}
 }
 
