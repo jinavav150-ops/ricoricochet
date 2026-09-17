@@ -37,6 +37,9 @@
 <meta name="apple-mobile-web-app-title" content="RicoSquad">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<!-- 🔒 CSP (v2026.09.17-a) — 스크립트·연결 출처를 여기 적힌 곳으로만 제한. 인라인 핸들러가 남아 있어 'unsafe-inline'은 아직 필요.
+     새 외부 서비스를 붙이면 connect-src(또는 img-src)에 주소를 추가할 것. 빠지면 조용히 차단된다(콘솔에 CSP 오류). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.googleapis.com https://clients5.google.com https://ipapi.co https://rico-match-analyze.onrender.com https://www.gstatic.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -2372,8 +2375,8 @@ function renderRecs(){
       }
       const adv = MATCHUPS[id+">"+e];
       const dis = MATCHUPS[e+">"+id];
-      if(adv){ score+=adv[0]; reasons.push({t:`<b>vs ${T(HEROES[e].ko)}</b> ${T(adv[1])}`,neg:false}); }
-      if(dis){ score-=dis[0]; reasons.push({t:`<b>vs ${T(HEROES[e].ko)}</b> ${T(dis[1])} (${T("불리")})`,neg:true}); }
+      if(adv){ score+=adv[0]; reasons.push({t:`<b>vs ${T(HEROES[e].ko)}</b> ${t10esc(T(adv[1]))}`,neg:false}); }
+      if(dis){ score-=dis[0]; reasons.push({t:`<b>vs ${T(HEROES[e].ko)}</b> ${t10esc(T(dis[1]))} (${T("불리")})`,neg:true}); }
     });
     if(compBonus[id]){
       score+=compBonus[id];
@@ -3064,11 +3067,13 @@ function renderMlist(){
   document.getElementById("mlist").innerHTML = keys.map(k=>{
     const [a,b]=k.split(">"); const [v,r]=MATCHUPS[k];
     return `<div class="mrow">
-      <div class="vs"><b>${T(HEROES[a].ko)}</b> ▸ ${T(HEROES[b].ko)}<small>${T(r)}</small></div>
+      <div class="vs"><b>${T(HEROES[a].ko)}</b> ▸ ${T(HEROES[b].ko)}<small>${t10esc(T(r))}</small></div>
       <div class="v p">+${v}</div>
-      <button class="del" onclick="delMatchup('${k}')">✕</button>
+      <button class="del" data-del-mu="${t10esc(k)}">✕</button>
     </div>`;
   }).join("");
+  const ml = document.getElementById("mlist");   // 🔒 v09.17: 인라인 onclick 대신 위임(백업 파일 키가 HTML로 들어가던 자리)
+  if(ml && !ml.dataset.muBound){ ml.dataset.muBound = "1"; ml.addEventListener("click", e => { const b = e.target.closest("[data-del-mu]"); if(b) delMatchup(b.dataset.delMu); }); }
 }
 
 /* ════════ 백업 (household/saving 페이지와 동일 패턴) ════════ */
@@ -3085,8 +3090,16 @@ function importData(ev){
   const rd=new FileReader();
   rd.onload=()=>{ try{
     const d=JSON.parse(rd.result);
-    if(!d.matchups) throw 0;
-    MATCHUPS=d.matchups; store.set(MATCHUPS);
+    if(!d.matchups || typeof d.matchups !== "object") throw 0;
+    // 🔒 v09.17: 백업 파일은 남이 만든 것일 수 있다 — 아는 영웅 쌍만, 점수는 숫자로, 설명은 200자 문자열로 잘라 받는다
+    const clean = {};
+    for(const k of Object.keys(d.matchups)){
+      const [a,b] = k.split(">"); const v = d.matchups[k];
+      if(!HEROES[a] || !HEROES[b] || !Array.isArray(v)) continue;
+      clean[k] = [Number(v[0])||0, String(v[1]||"").slice(0,200)];
+    }
+    if(!Object.keys(clean).length) throw 0;
+    MATCHUPS=clean; store.set(MATCHUPS);
     renderMlist(); renderRecs(); toast(T("백업 불러오기 완료"));
   }catch(e){ toast(T("올바른 백업 파일이 아니에요")); } };
   rd.readAsText(f); ev.target.value="";
@@ -4625,7 +4638,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.09.15-a";
+const SITE_VERSION = "2026.09.17-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5066,13 +5079,13 @@ function frBadge(){
 function frActionHtml(uid, name){
   const st = frState(uid);
   if(st === "friend")
-    return `<div class="meacts" style="margin-top:10px"><button class="cmtbtn" data-dm-open="${uid}" data-dm-name="${esc(name||"")}">${DML("dm")}</button>
-      <button class="meact"><span class="meicn">👥</span>${FRL("isFriend")}<b data-fr-del="${uid}" style="color:var(--bad,#ff5d5d);cursor:pointer">✕ ${FRL("remove")}</b></button></div>`;
+    return `<div class="meacts" style="margin-top:10px"><button class="cmtbtn" data-dm-open="${esc(uid)}" data-dm-name="${esc(name||"")}">${DML("dm")}</button>
+      <button class="meact"><span class="meicn">👥</span>${FRL("isFriend")}<b data-fr-del="${esc(uid)}" style="color:var(--bad,#ff5d5d);cursor:pointer">✕ ${FRL("remove")}</b></button></div>`;
   if(st === "incoming")
-    return `<div class="meacts" style="margin-top:10px"><button class="cmtbtn" data-fr-accept="${uid}">${FRL("accept")}</button><button class="meact" data-fr-decline="${uid}" style="justify-content:center">${FRL("decline")}</button></div>`;
+    return `<div class="meacts" style="margin-top:10px"><button class="cmtbtn" data-fr-accept="${esc(uid)}">${FRL("accept")}</button><button class="meact" data-fr-decline="${esc(uid)}" style="justify-content:center">${FRL("decline")}</button></div>`;
   if(st === "outgoing")
-    return `<div class="meacts" style="margin-top:10px"><button class="meact" data-fr-cancel="${uid}" style="justify-content:center">${FRL("sent")}</button></div>`;
-  return `<div class="meacts" style="margin-top:10px"><button class="meact" data-fr-send="${uid}" data-fr-name="${esc(name||"")}" style="justify-content:center">${FRL("add")}</button></div>`;
+    return `<div class="meacts" style="margin-top:10px"><button class="meact" data-fr-cancel="${esc(uid)}" style="justify-content:center">${FRL("sent")}</button></div>`;
+  return `<div class="meacts" style="margin-top:10px"><button class="meact" data-fr-send="${esc(uid)}" data-fr-name="${esc(name||"")}" style="justify-content:center">${FRL("add")}</button></div>`;
 }
 function frSectionsHtml(){
   const reqs = Object.entries(frInCache);
@@ -5081,15 +5094,15 @@ function frSectionsHtml(){
   let html = "";
   if(reqs.length){
     html += `<div class="mesec">📩 ${FRL("reqs")} (${reqs.length})</div><div class="meacts">` +
-      reqs.map(([uid,r])=>`<div class="meact"><span class="meicn">👤</span><span data-uprof="${uid}" data-uname="${esc(r.name||"")}">${esc(r.name||"?")}</span>
-        <b data-fr-accept="${uid}" style="cursor:pointer">${FRL("accept")}</b>
-        <b data-fr-decline="${uid}" style="cursor:pointer;color:var(--sub);margin-left:8px">${FRL("decline")}</b></div>`).join("") + `</div>`;
+      reqs.map(([uid,r])=>`<div class="meact"><span class="meicn">👤</span><span data-uprof="${esc(uid)}" data-uname="${esc(r.name||"")}">${esc(r.name||"?")}</span>
+        <b data-fr-accept="${esc(uid)}" style="cursor:pointer">${FRL("accept")}</b>
+        <b data-fr-decline="${esc(uid)}" style="cursor:pointer;color:var(--sub);margin-left:8px">${FRL("decline")}</b></div>`).join("") + `</div>`;
   }
   html += `<div class="mesec">👥 ${FRL("friends")} (${frs.length})</div>`;
   html += frs.length
-    ? `<div class="meacts">` + frs.map(([uid,f])=>`<div class="meact"><span class="meicn">👤</span><span data-uprof="${uid}" data-uname="${esc(f.name||"")}">${esc(f.name||"?")}</span>
-        <button class="dmbtn${dmUnread(uid)?" unread":""}" data-dm-open="${uid}" data-dm-name="${esc(f.name||"")}" title="${esc(DML("title"))}">💬</button>
-        <b data-fr-del="${uid}" style="cursor:pointer;color:var(--sub)">✕</b></div>`).join("") + `</div>`
+    ? `<div class="meacts">` + frs.map(([uid,f])=>`<div class="meact"><span class="meicn">👤</span><span data-uprof="${esc(uid)}" data-uname="${esc(f.name||"")}">${esc(f.name||"?")}</span>
+        <button class="dmbtn${dmUnread(uid)?" unread":""}" data-dm-open="${esc(uid)}" data-dm-name="${esc(f.name||"")}" title="${esc(DML("title"))}">💬</button>
+        <b data-fr-del="${esc(uid)}" style="cursor:pointer;color:var(--sub)">✕</b></div>`).join("") + `</div>`
     : `<div class="bdnote" style="margin:0 0 6px">${FRL("empty")}</div>`;
   return html;
 }
@@ -6538,7 +6551,7 @@ async function trLoadMains(){
       if(!(uid in trProfCache)){ const snap = await FB.get(FB.ref(FB.db, "profiles/" + uid)); trProfCache[uid] = snap.val() || null; }
       const p = trProfCache[uid]; const mains = p ? [p.main1||p.main, p.main2, p.main3].filter(Boolean) : [];
       el.innerHTML = mains.length ? `<span>` + mains.map(k => (typeof PIC!=="undefined" && PIC[k] ? `<img src="${PIC[k]}" alt="">` : "") + esc(typeof hName==="function" ? hName(k) : k)).join(" · ") + `</span>` : "";
-      const av = document.querySelector(`[data-trpfav="${uid}"]`);
+      const av = document.querySelector(`[data-trpfav="${CSS.escape(uid)}"]`);
       if(av && mains.length && typeof PIC!=="undefined" && PIC[mains[0]]) av.innerHTML = `<img src="${PIC[mains[0]]}" alt="">`;
     }catch(e){ el.textContent = ""; }
   }
@@ -7102,7 +7115,7 @@ function chatRxHtml(mid){
     const users = r[k] || {};
     const n = Object.keys(users).length;
     if(!n) continue;
-    chips += `<button class="${MY_UID && users[MY_UID] ? "on" : ""}" data-rx="${mid}|${k}">${emo} ${n}</button>`;
+    chips += `<button class="${MY_UID && users[MY_UID] ? "on" : ""}" data-rx="${esc(mid)}|${k}">${emo} ${n}</button>`;
   }
   return chips ? `<div class="chatrx">${chips}</div>` : "";
 }
@@ -7114,7 +7127,7 @@ function chatActHtml(m, mine){
   const r = chatReactCache[m.id] || {};
   let rx = "";
   if(MY_UID) for(const [k, emo] of CHAT_RX)
-    rx += `<button class="rxp${(r[k]||{})[MY_UID] ? " on" : ""}" data-rx="${m.id}|${k}" title="${esc(T("반응"))}">${emo}</button>`;
+    rx += `<button class="rxp${(r[k]||{})[MY_UID] ? " on" : ""}" data-rx="${esc(m.id)}|${k}" title="${esc(T("반응"))}">${emo}</button>`;
   return `<div class="chatact">${rx}
     ${!mine&&MY_UID?`<button data-reply="${esc(m.id)}" data-reply-name="${esc(m.name)}">↩ ${T("답장")}</button>`:""}
     ${!mine?`<button data-tr="${esc(m.id)}">🌐 ${T("번역")}</button>`:""}
@@ -7309,20 +7322,20 @@ function renderCmts(){
       <div class="cmthead">
         ${c.hero!=="all"&&PIC[c.hero]?`<img src="${PIC[c.hero]}" alt="">`:""}
         <span class="chero">${c.hero==="all"?"🌐 "+T("공통"):esc(hName(c.hero))}</span>
-        <span class="cname" data-uprof="${c.uid}" data-uname="${esc(c.name)}">${esc(c.name)}</span>${staffBadge(c.uid)}
+        <span class="cname" data-uprof="${esc(c.uid)}" data-uname="${esc(c.name)}">${esc(c.name)}</span>${staffBadge(c.uid)}
         <span class="ctime">${relTime(c.ts||0)}</span>
-        ${!mine&&MY_UID?`<button class="cdel" onclick="rsReport('comments','${c.id}')" title="${T("신고")}">🚩</button>`:""}
-        ${(mine||IS_ADMIN)?`<button class="cdel" data-id="${c.id}" title="${T("삭제")}">✕</button>`:""}
+        ${!mine&&MY_UID?`<button class="cdel" data-cmt-rep="${esc(c.id)}" title="${T("신고")}">🚩</button>`:""}
+        ${(mine||IS_ADMIN)?`<button class="cdel" data-id="${esc(c.id)}" title="${T("삭제")}">✕</button>`:""}
       </div>
       <div class="cmtbody">${esc(c.text)}</div>
       <div class="cmtacts">
-        <button class="cmtact ${iLike?'like-on':''}" data-like="${c.id}">👍 <b>${likes}</b></button>
-        <button class="cmtact ${iDislike?'dis-on':''}" data-dislike="${c.id}">👎 <b>${dislikes}</b></button>
-        <button class="cmtact ${open?'rep-on':''}" data-reply-toggle="${c.id}">💬 ${T("댓글")}${replies.length?` <b>${replies.length}</b>`:''}</button>
+        <button class="cmtact ${iLike?'like-on':''}" data-like="${esc(c.id)}">👍 <b>${likes}</b></button>
+        <button class="cmtact ${iDislike?'dis-on':''}" data-dislike="${esc(c.id)}">👎 <b>${dislikes}</b></button>
+        <button class="cmtact ${open?'rep-on':''}" data-reply-toggle="${esc(c.id)}">💬 ${T("댓글")}${replies.length?` <b>${replies.length}</b>`:''}</button>
       </div>
       ${open ? `<div class="replywrap">
-        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}" data-uprof="${r.uid}" data-uname="${esc(r.name)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-reply-del="${c.id}|${r.id}" title="${T("삭제")}">✕</button>`:''}</div>`).join('') || `<div class="replyempty">${T("첫 댓글을 남겨보세요")}</div>`}
-        <div class="replyin"><input maxlength="150" placeholder="${T("댓글…")}" data-reply-input="${c.id}"><button data-reply-send="${c.id}">${T("등록")}</button></div>
+        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}" data-uprof="${esc(r.uid)}" data-uname="${esc(r.name)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-reply-del="${esc(c.id)}|${esc(r.id)}" title="${T("삭제")}">✕</button>`:''}</div>`).join('') || `<div class="replyempty">${T("첫 댓글을 남겨보세요")}</div>`}
+        <div class="replyin"><input maxlength="150" placeholder="${T("댓글…")}" data-reply-input="${esc(c.id)}"><button data-reply-send="${esc(c.id)}">${T("등록")}</button></div>
       </div>` : ''}
     </div>`;
   }).join("");
@@ -7347,6 +7360,7 @@ document.getElementById("cmtList").addEventListener("keydown", e => {
   if(inp && e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); sendReply(inp.dataset.replyInput, inp); }
 });
 document.getElementById("cmtList").addEventListener("click", async e => {
+  { const rep = e.target.closest("[data-cmt-rep]"); if(rep){ window.rsReport("comments", rep.dataset.cmtRep); return; } }   // 🔒 v09.17
   const del = e.target.closest(".cdel[data-id]"), like = e.target.closest("[data-like]"),
         dislike = e.target.closest("[data-dislike]"), rtoggle = e.target.closest("[data-reply-toggle]"),
         rsend = e.target.closest("[data-reply-send]"), rdel = e.target.closest("[data-reply-del]");
@@ -7372,7 +7386,7 @@ document.getElementById("cmtList").addEventListener("click", async e => {
       await FB.set(FB.ref(FB.db,`comments/${id}/dislikes/${MY_UID}`), on?null:true);
       if(!on && c&&c.likes&&c.likes[MY_UID]) await FB.set(FB.ref(FB.db,`comments/${id}/likes/${MY_UID}`), null);
     }
-    if(rsend){ const inp=e.currentTarget.querySelector(`[data-reply-input="${rsend.dataset.replySend}"]`); if(inp) sendReply(rsend.dataset.replySend, inp); }
+    if(rsend){ const inp=e.currentTarget.querySelector(`[data-reply-input="${CSS.escape(rsend.dataset.replySend)}"]`); if(inp) sendReply(rsend.dataset.replySend, inp); }
     if(rdel){ const [cid,rid]=rdel.dataset.replyDel.split('|'); if(confirm(T("이 댓글을 삭제할까요?"))) await FB.remove(FB.ref(FB.db,`comments/${cid}/replies/${rid}`)); }
   }catch(err){
     const perm = String(err&&err.message||err).toLowerCase().includes("permission");
@@ -7640,40 +7654,40 @@ function renderBd(){
       const m = bdMediaCache[p.id];
       // 빈 배열이면 아직 저장 전일 수 있다 → 빈 사진칸 대신 "불러오는 중"을 유지한다 (재시도는 bdLoadPhotos가 예약)
       if(Array.isArray(m) && m.length)
-        media += `<div class="bdphotos">${m.map((s,i)=>`<img src="${s}" alt="" data-bd-photo="${p.id}|${i}">`).join("")}</div>`;
+        media += `<div class="bdphotos">${m.map((s,i)=>`<img src="${s}" alt="" data-bd-photo="${esc(p.id)}|${i}">`).join("")}</div>`;
       else
-        media += `<div class="bdloading"${m===undefined?` data-bd-lazy="${p.id}"`:""}>${BL("photoLoading")}</div>`;
+        media += `<div class="bdloading"${m===undefined?` data-bd-lazy="${esc(p.id)}"`:""}>${BL("photoLoading")}</div>`;
     }
     if(p.vid){   // 영상: 재생 버튼 바로 표시, 누르면 그 자리에서 재생 (전송량 보호)
       const vs = bdVideoState[p.id];
       if(typeof vs === "string" && vs.startsWith("blob:"))
-        media += `<div class="bdvidbox"><video controls playsinline data-bd-vid="${p.id}" src="${vs}"></video></div>`;
+        media += `<div class="bdvidbox"><video controls playsinline data-bd-vid="${esc(p.id)}" src="${vs}"></video></div>`;
       else if(vs === "loading")
         media += `<div class="bdvidbox"><div class="bdloading">${BL("vidLoading")}</div></div>`;
       else
-        media += `<div class="bdvidbox"><button class="bdplay" data-bd-play="${p.id}">${BD_IC.play}${BL("play")}</button></div>`;
+        media += `<div class="bdvidbox"><button class="bdplay" data-bd-play="${esc(p.id)}">${BD_IC.play}${BL("play")}</button></div>`;
     }
     return `
     <div class="cmtitem bditem${open?" open":""}">
       <div class="cmthead">
-        <span class="cname" style="color:${nameColor(p.uid)}" data-uprof="${p.uid}" data-uname="${esc(p.name)}">${esc(p.name)}</span>${staffBadge(p.uid)}
+        <span class="cname" style="color:${nameColor(p.uid)}" data-uprof="${esc(p.uid)}" data-uname="${esc(p.name)}">${esc(p.name)}</span>${staffBadge(p.uid)}
         <span class="ctime">${relTime(p.ts||0)}</span>
-        ${!mine&&MY_UID?`<button class="cdel" onclick="rsReport('board','${p.id}')" title="${T("신고")}">🚩</button>`:""}
-        ${(mine||IS_ADMIN)?`<button class="cdel" data-bd-del="${p.id}" title="${T("삭제")}">✕</button>`:""}
+        ${!mine&&MY_UID?`<button class="cdel" data-bd-rep="${esc(p.id)}" title="${T("신고")}">🚩</button>`:""}
+        ${(mine||IS_ADMIN)?`<button class="cdel" data-bd-del="${esc(p.id)}" title="${T("삭제")}">✕</button>`:""}
       </div>
       <div class="bdtitlerow"><span class="bdtitle">${esc(p.title||"")}</span></div>
       ${p.text ? `<div class="bdbody">${esc(p.text)}</div>` : ""}
       ${bdTrCache["p:"+p.id]?`<div class="bdtr">↳ ${esc(bdTrCache["p:"+p.id])}</div>`:""}
       ${media}
       <div class="cmtacts">
-        <button class="cmtact ${iLike?'like-on':''}" data-bd-like="${p.id}">👍 <b>${likes}</b></button>
-        <button class="cmtact ${iDislike?'dis-on':''}" data-bd-dislike="${p.id}">👎 <b>${dislikes}</b></button>
-        <button class="cmtact ${open?'rep-on':''}" data-bd-open="${p.id}">💬 ${BL("comment")}${replies.length?` <b>${replies.length}</b>`:''}</button>
-        ${!mine?`<button class="cmtact ${bdTrCache["p:"+p.id]!==undefined?'rep-on':''}" data-bd-tr="${p.id}" title="${T("번역")}">🌐</button>`:""}
+        <button class="cmtact ${iLike?'like-on':''}" data-bd-like="${esc(p.id)}">👍 <b>${likes}</b></button>
+        <button class="cmtact ${iDislike?'dis-on':''}" data-bd-dislike="${esc(p.id)}">👎 <b>${dislikes}</b></button>
+        <button class="cmtact ${open?'rep-on':''}" data-bd-open="${esc(p.id)}">💬 ${BL("comment")}${replies.length?` <b>${replies.length}</b>`:''}</button>
+        ${!mine?`<button class="cmtact ${bdTrCache["p:"+p.id]!==undefined?'rep-on':''}" data-bd-tr="${esc(p.id)}" title="${T("번역")}">🌐</button>`:""}
       </div>
       ${open ? `<div class="replywrap">
-        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}" data-uprof="${r.uid}" data-uname="${esc(r.name)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${r.uid!==MY_UID?`<button class="rdel" data-bd-rtr="${p.id}|${r.id}" title="${T("번역")}">🌐</button>`:""}${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-bd-rdel="${p.id}|${r.id}" title="${T("삭제")}">✕</button>`:""}${bdTrCache["r:"+p.id+"|"+r.id]?`<span class="bdrtr">↳ ${esc(bdTrCache["r:"+p.id+"|"+r.id])}</span>`:""}</div>`).join("")}
-        <div class="replyin"><input maxlength="150" placeholder="${BL("commentPh")}" data-bd-rinput="${p.id}"><button data-bd-rsend="${p.id}">${BL("regBtn")}</button></div>
+        ${replies.map(r=>`<div class="replyitem"><span class="rnm" style="color:${nameColor(r.uid)}" data-uprof="${esc(r.uid)}" data-uname="${esc(r.name)}">${esc(r.name)}</span>${staffBadge(r.uid)}${esc(r.text)}<span class="rtime">${relTime(r.ts||0)}</span>${r.uid!==MY_UID?`<button class="rdel" data-bd-rtr="${esc(p.id)}|${esc(r.id)}" title="${T("번역")}">🌐</button>`:""}${(r.uid===MY_UID||IS_ADMIN)?`<button class="rdel" data-bd-rdel="${esc(p.id)}|${esc(r.id)}" title="${T("삭제")}">✕</button>`:""}${bdTrCache["r:"+p.id+"|"+r.id]?`<span class="bdrtr">↳ ${esc(bdTrCache["r:"+p.id+"|"+r.id])}</span>`:""}</div>`).join("")}
+        <div class="replyin"><input maxlength="150" placeholder="${BL("commentPh")}" data-bd-rinput="${esc(p.id)}"><button data-bd-rsend="${esc(p.id)}">${BL("regBtn")}</button></div>
       </div>` : ''}
     </div>`;
   }).join("");
@@ -7714,6 +7728,7 @@ document.getElementById("bdList").addEventListener("keydown", e => {
   if(inp && e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); bdSendReply(inp.dataset.bdRinput, inp); }
 });
 document.getElementById("bdList").addEventListener("click", async e => {
+  { const rep = e.target.closest("[data-bd-rep]"); if(rep){ window.rsReport("board", rep.dataset.bdRep); return; } }   // 🔒 v09.17: 인라인 onclick 제거(키 XSS)
   const openT = e.target.closest("[data-bd-open]"), del = e.target.closest("[data-bd-del]"),
         like = e.target.closest("[data-bd-like]"), dislike = e.target.closest("[data-bd-dislike]"),
         play = e.target.closest("[data-bd-play]"), photo = e.target.closest("[data-bd-photo]"),
@@ -7778,7 +7793,7 @@ document.getElementById("bdList").addEventListener("click", async e => {
       await FB.set(FB.ref(FB.db,`board/${id}/dislikes/${MY_UID}`), on?null:true);
       if(!on && p&&p.likes&&p.likes[MY_UID]) await FB.set(FB.ref(FB.db,`board/${id}/likes/${MY_UID}`), null);
     }
-    if(rsend){ const inp = e.currentTarget.querySelector(`[data-bd-rinput="${rsend.dataset.bdRsend}"]`); if(inp) bdSendReply(rsend.dataset.bdRsend, inp); }
+    if(rsend){ const inp = e.currentTarget.querySelector(`[data-bd-rinput="${CSS.escape(rsend.dataset.bdRsend)}"]`); if(inp) bdSendReply(rsend.dataset.bdRsend, inp); }
     if(rdel){ const [pid,rid] = rdel.dataset.bdRdel.split('|'); if(confirm(BL("delCmt"))) await FB.remove(FB.ref(FB.db,`board/${pid}/replies/${rid}`)); }
   }catch(err){
     const perm = String(err&&err.message||err).toLowerCase().includes("permission");
@@ -7836,12 +7851,12 @@ function renderGreets(){
     const tr = bdTrCache["g:"+g.id];
     return `<div class="gitem">
       <span class="gwv">👋</span>
-      <span class="gnm" style="color:${nameColor(g.uid)}" data-uprof="${g.uid}" data-uname="${esc(g.name)}">${esc(g.name)}</span>${staffBadge(g.uid)}
+      <span class="gnm" style="color:${nameColor(g.uid)}" data-uprof="${esc(g.uid)}" data-uname="${esc(g.name)}">${esc(g.name)}</span>${staffBadge(g.uid)}
       ${g.text?`<span class="gtx">${esc(g.text)}</span>`:""}
       <span class="gtm">${relTime(g.ts||0)}</span>
-      ${g.text&&!mine?`<button class="gact" data-g-tr="${g.id}" title="${T("번역")}">🌐</button>`:""}
-      ${g.text&&!mine&&MY_UID?`<button class="gact" onclick="rsReport('greets','${g.id}')" title="${T("신고")}">🚩</button>`:""}
-      ${(mine||IS_ADMIN)?`<button class="gact" data-g-del="${g.id}" title="${T("삭제")}">✕</button>`:""}
+      ${g.text&&!mine?`<button class="gact" data-g-tr="${esc(g.id)}" title="${T("번역")}">🌐</button>`:""}
+      ${g.text&&!mine&&MY_UID?`<button class="gact" data-g-rep="${esc(g.id)}" title="${T("신고")}">🚩</button>`:""}
+      ${(mine||IS_ADMIN)?`<button class="gact" data-g-del="${esc(g.id)}" title="${T("삭제")}">✕</button>`:""}
       ${tr?`<span class="gtr">↳ ${esc(tr)}</span>`:""}
     </div>`;
   }).join("") : `<div class="gempty">${GL("empty")}</div>`;
@@ -7873,6 +7888,7 @@ document.getElementById("gText").addEventListener("keydown", e => {
   if(e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); document.getElementById("gSend").click(); }
 });
 document.getElementById("gList").addEventListener("click", async e => {
+  { const rep = e.target.closest("[data-g-rep]"); if(rep){ window.rsReport("greets", rep.dataset.gRep); return; } }   // 🔒 v09.17
   const tr = e.target.closest("[data-g-tr]"), del = e.target.closest("[data-g-del]");
   if(tr){
     const key = "g:"+tr.dataset.gTr;
@@ -7958,19 +7974,19 @@ function renderPubFb(){
     const iLike=MY_UID&&f.likes&&f.likes[MY_UID], iDis=MY_UID&&f.dislikes&&f.dislikes[MY_UID];
     return '<div class="cmtitem"><div class="cmthead"><span class="chero">'+esc(f.cat||"")+'</span>'
       +'<span class="cname" style="color:'+nameColor(f.uid)+'" data-uprof="'+esc(f.uid||"")+'" data-uname="'+esc(f.name||"")+'">'+esc(f.name||"")+'</span>'+staffBadge(f.uid)
-      +'<span class="ctime">'+relTime(f.ts||0)+'</span>'+(IS_ADMIN?'<button class="cdel" data-pfdel="'+f.id+'" title="'+T("삭제")+'">✕</button>':'')+'</div>'
+      +'<span class="ctime">'+relTime(f.ts||0)+'</span>'+(IS_ADMIN?'<button class="cdel" data-pfdel="'+esc(f.id)+'" title="'+T("삭제")+'">✕</button>':'')+'</div>'
       +'<div class="cmtbody">'+esc(f.text||"")+'</div>'
-      +'<div class="cmtacts"><button class="cmtact '+(iLike?'like-on':'')+'" data-pflike="'+f.id+'">👍 <b>'+likes+'</b></button>'
-      +'<button class="cmtact '+(iDis?'dis-on':'')+'" data-pfdis="'+f.id+'">👎 <b>'+dislikes+'</b></button></div>'
+      +'<div class="cmtacts"><button class="cmtact '+(iLike?'like-on':'')+'" data-pflike="'+esc(f.id)+'">👍 <b>'+likes+'</b></button>'
+      +'<button class="cmtact '+(iDis?'dis-on':'')+'" data-pfdis="'+esc(f.id)+'">👎 <b>'+dislikes+'</b></button></div>'
       +(f.reply?'<div class="bdtr"><b>'+FBR("replyTag")+'</b> · '+relTime(f.reply.ts||0)+'<br>'+esc(f.reply.text||"")+'</div>':'')
-      +(IS_ADMIN?'<div class="replyin"><input maxlength="500" placeholder="'+FBR("replyPh")+'" data-pfrin="'+f.id+'" value="'+(f.reply?esc(f.reply.text||""):"")+'"><button data-pfrsend="'+f.id+'">'+(f.reply?FBR("replyEdit"):FBR("replyBtn"))+'</button>'+(f.reply?'<button class="replydel" data-pfrdel="'+f.id+'">'+FBR("replyDel")+'</button>':'')+'</div>':'')
+      +(IS_ADMIN?'<div class="replyin"><input maxlength="500" placeholder="'+FBR("replyPh")+'" data-pfrin="'+esc(f.id)+'" value="'+(f.reply?esc(f.reply.text||""):"")+'"><button data-pfrsend="'+esc(f.id)+'">'+(f.reply?FBR("replyEdit"):FBR("replyBtn"))+'</button>'+(f.reply?'<button class="replydel" data-pfrdel="'+esc(f.id)+'">'+FBR("replyDel")+'</button>':'')+'</div>':'')
       +'</div>';
   }).join("");
 }
 window.rsPubFbSync = renderPubFb;
 document.getElementById("pubFbList").addEventListener("keydown", e=>{
   const inp=e.target.closest("[data-pfrin]");
-  if(inp && e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); const b=document.querySelector('[data-pfrsend="'+inp.dataset.pfrin+'"]'); if(b) b.click(); }
+  if(inp && e.key==="Enter" && !e.isComposing && e.keyCode!==229){ e.preventDefault(); const b=document.querySelector('[data-pfrsend="'+CSS.escape(inp.dataset.pfrin)+'"]'); if(b) b.click(); }
 });
 FB.onValue(FB.ref(FB.db,"pubfb"), snap=>{
   const v=snap.val()||{};
@@ -7981,9 +7997,9 @@ FB.onValue(FB.ref(FB.db,"pubfb"), snap=>{
 document.getElementById("pubFbList").addEventListener("click", async e=>{
   const rsend=e.target.closest("[data-pfrsend]"), rdel=e.target.closest("[data-pfrdel]");
   if(rsend && IS_ADMIN){   // 관리자 공개 답변 전송/수정
-    const id=rsend.dataset.pfrsend, inp=document.querySelector('[data-pfrin="'+id+'"]');
+    const id=rsend.dataset.pfrsend, inp=document.querySelector('[data-pfrin="'+CSS.escape(id)+'"]');
     const text=(inp&&inp.value||"").trim(); if(!text||text.length>500) return;
-    const isEdit=!!document.querySelector('[data-pfrdel="'+id+'"]');
+    const isEdit=!!document.querySelector('[data-pfrdel="'+CSS.escape(id)+'"]');
     try{ await FB.set(FB.ref(FB.db,"pubfb/"+id+"/reply"), {text, ts:FB.serverTimestamp()}); toast(FBR(isEdit?"replyEdited":"replySent")); }
     catch(err){ const perm=String(err&&err.message||err).toLowerCase().includes("permission"); toast(perm?"⚙️ 규칙 v18 게시가 필요합니다 (공개 답변)":T("전송 실패 — 네트워크를 확인해주세요")); }
     return;
