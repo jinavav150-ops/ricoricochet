@@ -38,8 +38,9 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <!-- 🔒 CSP (v2026.09.17-a) — 스크립트·연결 출처를 여기 적힌 곳으로만 제한. 인라인 핸들러가 남아 있어 'unsafe-inline'은 아직 필요.
-     새 외부 서비스를 붙이면 connect-src(또는 img-src)에 주소를 추가할 것. 빠지면 조용히 차단된다(콘솔에 CSP 오류). -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.googleapis.com https://clients5.google.com https://ipapi.co https://rico-match-analyze.onrender.com https://www.gstatic.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+     새 외부 서비스를 붙이면 connect-src(또는 img-src)에 주소를 추가할 것. 빠지면 조용히 차단된다(콘솔에 CSP 오류).
+     ⚠️ script-src 의 *.firebasedatabase.app 는 지우지 말 것 — WebSocket 이 막힌 네트워크에서 Firebase 가 쓰는 롱폴링(JSONP .lp 스크립트)이 여기서 온다(v09.17-b 에서 발견). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.googleapis.com https://clients5.google.com https://ipapi.co https://rico-match-analyze.onrender.com https://www.gstatic.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -4638,7 +4639,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.09.17-a";
+const SITE_VERSION = "2026.09.17-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5164,6 +5165,7 @@ const DM_L = {
   needRules:{ko:"⚙️ 규칙 v21 게시가 필요합니다 (귓속말)",en:"⚙️ Rules v21 required (DM)",ja:"⚙️ ルールv21が必要です（DM）",zh:"⚙️ 需要規則v21（私訊）",fr:"⚙️ Règles v21 requises (MP)",de:"⚙️ Regeln v21 erforderlich (DM)",es:"⚙️ Se requieren reglas v21 (MD)",pt:"⚙️ Regras v21 necessárias (DM)",ru:"⚙️ Нужны правила v21 (ЛС)"},
   failT:{ko:"전송 실패 — 잠시 후 다시 시도해주세요",en:"Send failed — try again shortly",ja:"送信失敗 — 後でもう一度",zh:"傳送失敗 — 請稍後再試",fr:"Échec de l'envoi — réessaie dans un instant",de:"Senden fehlgeschlagen — gleich erneut versuchen",es:"Error al enviar — inténtalo en un momento",pt:"Falha ao enviar — tente em instantes",ru:"Не удалось отправить — попробуй позже"},
   newT:{ko:"💌 {n}님의 귓속말",en:"💌 New message from {n}",ja:"💌 {n}さんからのメッセージ",zh:"💌 {n} 傳來私訊",fr:"💌 Nouveau message de {n}",de:"💌 Neue Nachricht von {n}",es:"💌 Nuevo mensaje de {n}",pt:"💌 Nova mensagem de {n}",ru:"💌 Новое сообщение от {n}"},
+  trNote:{ko:"🌐 번역하면 이 메시지가 구글 번역으로 전송돼요 (처음 한 번만 안내)",en:"🌐 Translating sends this message to Google Translate (shown once)",ja:"🌐 翻訳するとこのメッセージはGoogle翻訳に送信されます（初回のみ表示）",zh:"🌐 翻譯時此訊息會傳送到 Google 翻譯（僅提示一次）",fr:"🌐 Traduire envoie ce message à Google Traduction (affiché une fois)",de:"🌐 Beim Übersetzen wird diese Nachricht an Google Übersetzer gesendet (einmaliger Hinweis)",es:"🌐 Al traducir, este mensaje se envía a Google Translate (aviso único)",pt:"🌐 Ao traduzir, esta mensagem é enviada ao Google Tradutor (aviso único)",ru:"🌐 При переводе сообщение отправляется в Google Переводчик (показывается один раз)"},
   del:{ko:"이 메시지를 삭제할까요?",en:"Delete this message?",ja:"このメッセージを削除しますか？",zh:"要刪除這則訊息嗎？",fr:"Supprimer ce message ?",de:"Diese Nachricht löschen?",es:"¿Eliminar este mensaje?",pt:"Excluir esta mensagem?",ru:"Удалить это сообщение?"}
 };
 const DML = k => (DM_L[k][LANG]||DM_L[k].ko);
@@ -5284,6 +5286,8 @@ async function dmDel(mid){
 async function dmTranslate(mid){
   const m = dmMsgs.find(x => x.id === mid); if(!m) return;
   if(dmTrCache[mid]){ delete dmTrCache[mid]; dmRender(); return; }   // 다시 누르면 접기
+  // 🔒 v09.17: 귓속말은 둘만 보는 대화라, 외부 번역으로 나간다는 걸 처음 한 번 알린다
+  try{ if(!localStorage.getItem("rs_dm_trnote")){ localStorage.setItem("rs_dm_trnote","1"); toast(DML("trNote")); } }catch(e){}
   try{
     const out = await translateText(m.t||"");
     if(!out){ toast(T("이미 같은 언어입니다")); return; }
@@ -5665,17 +5669,20 @@ document.getElementById("dex").addEventListener("click", async e => {
   const prev = window.RS_PERK_MINE[pair];
   const rollback = () => { if(prev) window.RS_PERK_MINE[pair] = prev; else delete window.RS_PERK_MINE[pair]; renderDex(); };
   const bump = (id,d) => FB.runTransaction(FB.ref(FB.db, `perkvote/agg/${hero}/${id}`), c => Math.max(0,(c||0)+d)).catch(()=>{});
+  /* ⚠️ 순서 주의 (규칙 v37, 2026-09-17) — 집계 칸은 "서버에 저장된 내 투표"와 같은 퍽만 움직일 수 있다.
+     그래서 티어 투표와 똑같이 ①이전 퍽 내리기(아직 내 투표=prev) → ②투표 기록 변경/삭제 → ③새 퍽 올리기.
+     중간에 실패해서 집계가 1 어긋나도 수집기가 30분마다 투표 기록으로 집계를 다시 계산해 바로잡는다. */
   try{
     if(prev === pid){                                   // 같은 퍽 재클릭 = 추천 취소
       delete window.RS_PERK_MINE[pair]; renderDex();
-      await FB.remove(FB.ref(FB.db, `perkvote/votes/${MY_UID}/${pair}`));
-      await bump(pid,-1);
+      await bump(pid,-1);                               // ① 아직 내 투표 = pid
+      await FB.remove(FB.ref(FB.db, `perkvote/votes/${MY_UID}/${pair}`));   // ②
       toast(PV("undone"));
     }else{                                              // 새 추천 or 반대편으로 변경
       window.RS_PERK_MINE[pair] = pid; renderDex();
-      await FB.set(FB.ref(FB.db, `perkvote/votes/${MY_UID}/${pair}`), pid);
-      if(prev) await bump(prev,-1);
-      await bump(pid,+1);
+      if(prev) await bump(prev,-1);                     // ① 아직 내 투표 = prev
+      await FB.set(FB.ref(FB.db, `perkvote/votes/${MY_UID}/${pair}`), pid);  // ②
+      await bump(pid,+1);                               // ③
       toast(PV("done"));
     }
   }catch(err){
