@@ -4956,7 +4956,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.09-a";
+const SITE_VERSION = "2026.10.10-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -9242,23 +9242,23 @@ function rptCoachLine(c, P, nameOf){
   }
   return line;
 }
-/* 🗺 공식 맵 렌더 보정값
-   ⚠️ 4개 맵(퍼시피카·항구·하늘공원·용광로)은 **사람이 눈대중으로 맞춘 값**이다. "실측"이 아니다.
-      2026-08-09 재검증에서 선수 좌표만으로 그림에 겹쳐 봤을 때 육안상 잘 맞아 그대로 두었다.
-   ✅ 균열 관측소만 **측정해서 고친 값**이다(2026-08-09). 맵 이미지의 밝기로 "밟을 수 없는 허공"
-      마스크를 만들고, 허공에 찍히는 선수 좌표 비율이 최소가 되도록 맞췄다: 3.53% → 1.34%.
-      사망 번호 #40·#41·#59·#60 이 허공에서 땅으로 돌아왔다. #64(협곡 최극단)는 아직 허공에 남는다.
-   🪤 좌표를 다시 잴 일이 있으면 **반드시 선수(hero_entity) 좌표만** 써라. d["pos"] 에는 차량·터렛·
-      소품이 다 들어 있어서, 그걸 섞어 재면 없는 문제를 쫓다가 보정을 더 망친다(실제로 한 번 그랬다).
-   🪤 항구의 사망 #41·#42·#43 은 건물 옥상에 찍히는데 **어떤 보정값으로도 안 바뀐다** —
-      축척 문제가 아니다. 게임에서 옥상에 올라갈 수 있는 것일 수도 있다(미확인).
-   변환: u=(x-x0)/(x1-x0), w=(z-z0)/(z1-z0) → swap이면 u↔w → fx/fy면 반전 → 이미지(1200×1200) 좌표 */
+/* 🗺 공식 맵 렌더 보정값 — **게임 3D 지형과 자동 정합으로 측정**(2026-10-10). 눈대중 아님.
+   방법: 맥 설치본의 맵 장면(control_city·roof 등)에서 메시를 게임 좌표 그대로 꺼내 위에서 본 높이 지도를 그리고,
+         그 윤곽을 Delta 지도(mapfull)에 뒤집기 8종 × 회전 × 크기 전수 탐색 + ECC(호모그래피) 미세 정합.
+         결과: 5개 맵 전부 회전 0°, **가로↔세로 축이 바뀐** 정사영(1칸=10px, 하늘공원 11px).
+   검증: 리플레이 19경기 선수 좌표 13.6만 개 — 지형 위에 떨어지는 비율 53~78% → 84~90%,
+         지형 윤곽 겹침(NCC) 예전 -0.02~0.09(무작위 수준) → 0.45~0.58. 예전 값은 지도 폭의 20~27%만큼 어긋나 있었다.
+   🪤 예전 기록의 "항구 #41~43이 옥상에 찍히는데 보정을 바꿔도 안 바뀐다"·"균열 #64는 어떤 보정으로도 안 들어온다"의
+      진짜 원인은 **축이 뒤바뀌어 있던 것**이었다(늘이기만 바꿔서는 못 고친다).
+   형식: h = [h11,h12,h13, h21,h22,h23, h31,h32] — 게임 좌표 (x,z) → 이미지(1200×1200) 픽셀
+         u = (h11·x + h12·z + h13) / (h31·x + h32·z + 1),  v = (h21·x + h22·z + h23) / (같은 분모)
+   다시 잴 때(새 맵·지도 이미지 교체): `리플레이분석/도구/맵보정_지형정합.py` 를 돌리면 이 표가 그대로 나온다. */
 const RPT_MAPCAL = {
-  "퍼시피카":     {img:"mapfull/pacifica.jpg", swap:0, fx:0, fy:1, x0:-55,   x1:52,   z0:-45,   z1:55},
-  "항구":         {img:"mapfull/harbor.jpg",   swap:0, fx:0, fy:1, x0:-69.3, x1:61.1, z0:-84.1, z1:48.3},
-  "하늘공원":     {img:"mapfull/skypark.jpg",  swap:1, fx:0, fy:1, x0:-47,   x1:49,   z0:-60,   z1:54},
-  "균열 관측소":  {img:"mapfull/rift.jpg",     swap:0, fx:0, fy:1, x0:-57.14, x1:58.00, z0:-36.72, z1:40.05},
-  "용광로":       {img:"mapfull/forge.jpg",    swap:0, fx:0, fy:1, x0:-35.3, x1:40,   z0:-51.8, z1:59.2}
+  "퍼시피카":   {img:"mapfull/pacifica.jpg", h:[0.0041524, -10.017586, 602.6249346, -10.0229855, 0.0073151, 670.3795935, 1.63e-05, 9.2e-06]},
+  "항구":     {img:"mapfull/harbor.jpg", h:[-0.0106253, -10.0164919, 602.4710764, -10.0339761, -0.0006454, 670.8463592, -4.2e-06, 1.19e-05]},
+  "하늘공원":   {img:"mapfull/skypark.jpg", h:[-0.023743, -11.0293023, 603.3475375, -11.0717516, 0.0072226, 616.4521473, -3.03e-05, 1.28e-05]},
+  "균열 관측소": {img:"mapfull/rift.jpg", h:[0.0234211, -10.0664892, 603.3187179, -10.0073764, -0.0225029, 670.4393536, 3.57e-05, -3.86e-05]},
+  "용광로":    {img:"mapfull/forge.jpg", h:[-0.0647566, -10.0345575, 602.3225726, -10.0480958, 0.0059345, 671.8030409, -6.88e-05, 3.9e-06]}
 };
 let rptCur = null;   // 지금 화면의 리포트 (URL 공유용)
 window.rsRptRender = r => rptRender(r);   // 🔬 점검용(정밀검사 스크립트가 부른다)
@@ -9682,17 +9682,17 @@ function rptRender(r){
       + `</div>`);
   }
   // ── 🗺 지도 — **공식 맵 렌더** 위에 사망 번호·팀 장악을 그린다 (2026-08-09) ──
-  //    보정값(RPT_MAPCAL)이 있는 맵은 실제 맵 위에 정확히, 없으면 예전 추상 지도로 폴백.
+  //    보정값(RPT_MAPCAL, 3D 지형 정합 측정값)이 있는 맵은 실제 맵 위에 정확히, 없으면 예전 추상 지도로 폴백.
   const deathNum = sp => {                          // 지도 번호 = 사망 심화의 # (tgt+시각으로 짝지음)
     const dl=r.deaths||[];
     const m=dl.find(dv=>dv.tgt===sp.tgt && Math.abs((dv.s||0)-(sp.s||0))<=2);
     return m ? (m.i || dl.indexOf(m)+1) : null;
   };
   const cal = RPT_MAPCAL[r.map];
-  if(cal && (r.spots||r.heat)){
+  if(cal && Array.isArray(cal.h) && cal.h.length===8 && (r.spots||r.heat)){
     const S=1200;
-    const uv=(x,z)=>{ let u=(x-cal.x0)/(cal.x1-cal.x0), w=(z-cal.z0)/(cal.z1-cal.z0);
-      if(cal.swap){ const t=u; u=w; w=t; } if(cal.fx)u=1-u; if(cal.fy)w=1-w; return [u*S, w*S]; };
+    const h=cal.h;
+    const uv=(x,z)=>{ const d=h[6]*x+h[7]*z+1; return [(h[0]*x+h[1]*z+h[2])/d, (h[3]*x+h[4]*z+h[5])/d]; };
     let sv=`<image href="${esc(cal.img)}" x="0" y="0" width="${S}" height="${S}"/>`;
     if(r.heat && r.heat.cells){                     // 팀 장악 색 — 공식 맵이 보이게 아주 옅게
       const b=r.heat.bounds, n=r.heat.n;
@@ -9700,13 +9700,12 @@ function rptRender(r){
       let peak=1; r.heat.cells.forEach(c=>{ peak=Math.max(peak,c[2],c[3]); });
       r.heat.cells.forEach(c=>{
         const wx=b[0]+(c[0]+0.5)*cx, wz=b[2]+(c[1]+0.5)*cz;
-        const q1=uv(wx-cx/2, wz-cz/2), q2=uv(wx+cx/2, wz+cz/2);
-        const rx=Math.min(q1[0],q2[0]), ry=Math.min(q1[1],q2[1]);
-        const rw=Math.abs(q2[0]-q1[0]), rh=Math.abs(q2[1]-q1[1]);
+        // 칸의 네 모서리를 각각 변환 — 축이 바뀌어도(정합 결과 5개 맵 전부 그렇다) 정확히 그 자리
+        const pts=[uv(wx-cx/2,wz-cz/2),uv(wx+cx/2,wz-cz/2),uv(wx+cx/2,wz+cz/2),uv(wx-cx/2,wz+cz/2)].map(q=>q[0].toFixed(0)+","+q[1].toFixed(0)).join(" ");
         [[c[2],"77,171,247"],[c[3],"255,107,107"]].forEach(([cnt,col])=>{
           if(!cnt) return;
           const op=Math.min(.28, Math.sqrt(cnt/peak)*.28);
-          sv+=`<rect x="${rx.toFixed(0)}" y="${ry.toFixed(0)}" width="${rw.toFixed(0)}" height="${rh.toFixed(0)}" fill="rgba(${col},${op.toFixed(2)})"/>`;
+          sv+=`<polygon points="${pts}" fill="rgba(${col},${op.toFixed(2)})"/>`;
         });
       });
     }
