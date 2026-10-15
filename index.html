@@ -4962,7 +4962,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.15-a";
+const SITE_VERSION = "2026.10.15-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -8806,10 +8806,6 @@ const RPT_L = {
   sub:{ko:"매치 코드만 넣으면 몇 초에 무슨 일이 있었는지 분석해 드려요",en:"Enter a match code to get a full breakdown",ja:"マッチコードを入れると試合を丸ごと分析します",zh:"輸入對局代碼即可獲得完整分析"},
   ph:{ko:"매치 코드 (예: BYDPH6ZM)",en:"Match code (e.g. BYDPH6ZM)",ja:"マッチコード (例: BYDPH6ZM)",zh:"對局代碼 (例: BYDPH6ZM)"},
   go:{ko:"분석",en:"Analyze",ja:"分析",zh:"分析"},
-  v23:{ko:"⚠️ 10/12 게임 2.3.0 업데이트 이후 경기는 아직 분석이 안 돼요. 리플레이 형식이 바뀌어 분석기를 새 버전에 맞춰야 해요. 그 전 경기는 그대로 분석돼요.",
-       en:"⚠️ Matches played after the 2.3.0 game update (Oct 12) can't be analyzed yet — the replay format changed and the analyzer needs updating. Older matches still work.",
-       ja:"⚠️ 10/12のゲーム2.3.0アップデート以降の試合はまだ分析できません。リプレイ形式が変わったため分析ツールの対応が必要です。それ以前の試合はこれまで通り分析できます。",
-       zh:"⚠️ 10/12 遊戲 2.3.0 更新後的對局暫時無法分析 — 回放格式改變，分析器需要更新。更新前的對局仍可分析。"},
   note:{ko:"매치 코드는 게임의 경기 기록 화면에서 복사할 수 있어요. 리플레이는 40일이 지나면 게임 서버에서 지워져 분석할 수 없습니다. 리포트에는 참가자 6명의 닉네임이 표시돼요 — 본인 닉네임을 가리고 싶으면 리포트 아래 [삭제 요청]을 눌러주세요.",
         en:"Copy the match code from the game's match history. Replays are deleted from the game server after ~40 days. Reports show all 6 nicknames — use [Removal request] below a report to ask for yours to be hidden.",
         ja:"マッチコードはゲームの対戦履歴からコピーできます。リプレイは約40日で削除されます。レポートには6人のニックネームが表示されます — 非表示を希望する場合はレポート下の[削除リクエスト]を押してください。",
@@ -9262,13 +9258,16 @@ function rptCoachLine(c, P, nameOf){
       진짜 원인은 **축이 뒤바뀌어 있던 것**이었다(늘이기만 바꿔서는 못 고친다).
    형식: h = [h11,h12,h13, h21,h22,h23, h31,h32] — 게임 좌표 (x,z) → 이미지(1200×1200) 픽셀
          u = (h11·x + h12·z + h13) / (h31·x + h32·z + 1),  v = (h21·x + h22·z + h23) / (같은 분모)
-   다시 잴 때(새 맵·지도 이미지 교체): `리플레이분석/도구/맵보정_지형정합.py` 를 돌리면 이 표가 그대로 나온다. */
+   다시 잴 때(새 맵·지도 이미지 교체): `리플레이분석/도구/맵보정_지형정합.py` 를 돌리면 이 표가 그대로 나온다.
+   공식 렌더가 없는 새 맵: `리플레이분석/도구/맵렌더_탑뷰.py` 가 그림(mapfull/*.jpg)과 h 를 같이 만든다(2026-10-15 스와이). */
 const RPT_MAPCAL = {
   "퍼시피카":   {img:"mapfull/pacifica.jpg", h:[0.0041524, -10.017586, 602.6249346, -10.0229855, 0.0073151, 670.3795935, 1.63e-05, 9.2e-06]},
   "항구":     {img:"mapfull/harbor.jpg", h:[-0.0106253, -10.0164919, 602.4710764, -10.0339761, -0.0006454, 670.8463592, -4.2e-06, 1.19e-05]},
   "하늘공원":   {img:"mapfull/skypark.jpg", h:[-0.023743, -11.0293023, 603.3475375, -11.0717516, 0.0072226, 616.4521473, -3.03e-05, 1.28e-05]},
   "균열 관측소": {img:"mapfull/rift.jpg", h:[0.0234211, -10.0664892, 603.3187179, -10.0073764, -0.0225029, 670.4393536, 3.57e-05, -3.86e-05]},
-  "용광로":    {img:"mapfull/forge.jpg", h:[-0.0647566, -10.0345575, 602.3225726, -10.0480958, 0.0059345, 671.8030409, -6.88e-05, 3.9e-06]}
+  "용광로":    {img:"mapfull/forge.jpg", h:[-0.0647566, -10.0345575, 602.3225726, -10.0480958, 0.0059345, 671.8030409, -6.88e-05, 3.9e-06]},
+  // 스와이(2.3.0)는 공식 렌더가 없어 3D 장면을 위에서 직접 렌더했다(`맵렌더_탑뷰.py`) — 보정값은 측정이 아니라 정의(1칸=9px).
+  "스와이":    {img:"mapfull/swai.jpg", h:[0, -9, 588, -9, 0, 553, 0, 0]}
 };
 let rptCur = null;   // 지금 화면의 리포트 (URL 공유용)
 window.rsRptRender = r => rptRender(r);   // 🔬 점검용(정밀검사 스크립트가 부른다)
@@ -9277,7 +9276,7 @@ window.rsReplayCode = () => (rptCur && rptCur.code) || "";
 
 function rptStatic(){
   const hd=document.getElementById("rptHead");
-  if(hd) hd.innerHTML = `<div class="bdnote" style="margin:0 0 10px;border-left:3px solid #f5a623;padding-left:8px">${esc(RPL("v23"))}</div>`;   // 제목은 페이지 헤더가 담당 · 여기엔 2.3.0 미지원 안내만 (분석기 갱신되면 지울 것)
+  if(hd) hd.innerHTML = "";   // 제목은 페이지 헤더(applyHeader)가 담당 — 중복 표기 안 함
   const inp=document.getElementById("rptCode"); if(inp) inp.placeholder = RPL("ph");
   const btn=document.getElementById("rptGoBtn"); if(btn) btn.textContent = RPL("go");
   const nt=document.getElementById("rptNote"); if(nt) nt.textContent = RPL("note");
