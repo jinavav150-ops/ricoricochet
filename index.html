@@ -3176,8 +3176,8 @@ const MAP_IMG={"퍼시피카": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABA
 /* 🗺️ 맵 전체도 — 별도 파일(mapfull/)로 분리(2026-07-25).
    이전엔 base64로 index.html에 박혀 있어 1.4MB(파일의 45%)를 차지 → 맵을 보지 않는 유저도 무조건 다운로드했음.
    이제 경로만 두고 실제 이미지는 클릭해서 펼칠 때 받음(img loading="lazy"와 결합).
-   ⚠️ 배포 시 mapfull/ 폴더 5개 파일을 함께 올릴 것. 원본은 maps/ 폴더. */
-const MAP_FULL={"퍼시피카":"mapfull/pacifica.jpg","항구":"mapfull/harbor.jpg","하늘공원":"mapfull/skypark.jpg","균열 관측소":"mapfull/rift.jpg","용광로":"mapfull/forge.jpg"};
+   ⚠️ 배포 시 mapfull/ 폴더 6개 파일을 함께 올릴 것. 원본은 maps/ 폴더(스와이는 게임 파일 추출 — 맵렌더_탑뷰.py). */
+const MAP_FULL={"퍼시피카":"mapfull/pacifica.jpg","항구":"mapfull/harbor.jpg","하늘공원":"mapfull/skypark.jpg","균열 관측소":"mapfull/rift.jpg","용광로":"mapfull/forge.jpg","스와이":"mapfull/swai.jpg?v=20261016"};   // ?v= — sw.js 가 이미지를 캐시 우선으로 영구 보관하므로 그림을 바꾸면 꼬리표도 바꿀 것(10.15-b 의 3D 렌더판이 캐시돼 있다)
 const MAP_MARKERS={"퍼시피카": {},"항구": {},"하늘공원": {},"균열 관측소": {},"용광로": {},"스와이": {}};
 const MODE_ICON={"점멸":"⚡","사수":"🔮","사냥":"💎","강타":"💥","장악":"🚩","밀기":"🚚"};
 /* 맵 "전체도" 펼치기 힌트 (4개 언어 · 눈에 띄는 알약 버튼) */
@@ -3192,6 +3192,8 @@ const MAP_CREDIT = {
   ja:"🗺️ 開発元 Nice Plans Studio から提供された公式マップレンダーです。共有してくれた開発チームに感謝します。",
   zh:"🗺️ 由開發商 Nice Plans Studio 提供的官方地圖渲染圖。感謝開發團隊分享這些資料。"
 ,fr:"🗺️ Rendus de cartes officiels fournis par le studio, Nice Plans Studio. Un grand merci à l'équipe de dev !",de:"🗺️ Offizielle Karten-Renderings vom Studio Nice Plans Studio bereitgestellt. Großer Dank ans Dev-Team!",es:"🗺️ Renders oficiales de mapas proporcionados por el estudio, Nice Plans Studio. ¡Mil gracias al equipo de desarrollo!",pt:"🗺️ Renders oficiais dos mapas fornecidos pelo estúdio, Nice Plans Studio. Valeu demais, equipe de dev!",ru:"🗺️ Официальные рендеры карт предоставлены студией Nice Plans Studio. Огромное спасибо команде разработчиков!"};
+/* 🗺️ 출처 문구 없이 그림만 보여 줄 맵 — 스와이(2.3.0)는 게임 파일 속 개발사 탑뷰라 Delta 제공 문구가 맞지 않고, MAMMON 결정으로 아무 문구도 달지 않는다(2026-10-16) */
+const MAP_NO_CREDIT = new Set(["스와이"]);
 const MAP_IC_EXPAND = '<svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
 const MAP_IC_COLLAPSE = '<svg viewBox="0 0 24 24"><path d="M8 4v3a1 1 0 0 1-1 1H4M16 4v3a1 1 0 0 0 1 1h3M4 16h3a1 1 0 0 1 1 1v3M20 16h-3a1 1 0 0 0-1 1v3"/></svg>';
 function mapHintHtml(open){
@@ -3263,7 +3265,7 @@ function renderInfo(){
         ${markerHtml(m)}
       </div>
       <div class="maplegend maptoggles" id="maptog${i}">${toggleHtml(m,i)}</div>
-      <div class="mapfullnote">${MAP_CREDIT[LANG]||MAP_CREDIT.ko}</div>
+      ${MAP_NO_CREDIT.has(m)?"":`<div class="mapfullnote">${MAP_CREDIT[LANG]||MAP_CREDIT.ko}</div>`}
     </div>`:""}`).join("");
   // 맵 수정자(모디파이어)
   const mod=document.getElementById("modifierList");
@@ -4962,7 +4964,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.15-b";
+const SITE_VERSION = "2026.10.16-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -9259,15 +9261,16 @@ function rptCoachLine(c, P, nameOf){
    형식: h = [h11,h12,h13, h21,h22,h23, h31,h32] — 게임 좌표 (x,z) → 이미지(1200×1200) 픽셀
          u = (h11·x + h12·z + h13) / (h31·x + h32·z + 1),  v = (h21·x + h22·z + h23) / (같은 분모)
    다시 잴 때(새 맵·지도 이미지 교체): `리플레이분석/도구/맵보정_지형정합.py` 를 돌리면 이 표가 그대로 나온다.
-   공식 렌더가 없는 새 맵: `리플레이분석/도구/맵렌더_탑뷰.py` 가 그림(mapfull/*.jpg)과 h 를 같이 만든다(2026-10-15 스와이). */
+   공식 렌더가 없는 새 맵: `리플레이분석/도구/맵렌더_탑뷰.py` 가 그림(mapfull/*.jpg)과 h 를 같이 만든다 —
+   장면 번들의 땅 색 지도(`T_*_Grass_PigmentMap_LM_D` = 개발사가 구운 탑뷰, 용광로 것은 Delta 렌더와 같은 그림)를 3D 렌더에 자동 정합. */
 const RPT_MAPCAL = {
   "퍼시피카":   {img:"mapfull/pacifica.jpg", h:[0.0041524, -10.017586, 602.6249346, -10.0229855, 0.0073151, 670.3795935, 1.63e-05, 9.2e-06]},
   "항구":     {img:"mapfull/harbor.jpg", h:[-0.0106253, -10.0164919, 602.4710764, -10.0339761, -0.0006454, 670.8463592, -4.2e-06, 1.19e-05]},
   "하늘공원":   {img:"mapfull/skypark.jpg", h:[-0.023743, -11.0293023, 603.3475375, -11.0717516, 0.0072226, 616.4521473, -3.03e-05, 1.28e-05]},
   "균열 관측소": {img:"mapfull/rift.jpg", h:[0.0234211, -10.0664892, 603.3187179, -10.0073764, -0.0225029, 670.4393536, 3.57e-05, -3.86e-05]},
   "용광로":    {img:"mapfull/forge.jpg", h:[-0.0647566, -10.0345575, 602.3225726, -10.0480958, 0.0059345, 671.8030409, -6.88e-05, 3.9e-06]},
-  // 스와이(2.3.0)는 공식 렌더가 없어 3D 장면을 위에서 직접 렌더했다(`맵렌더_탑뷰.py`) — 보정값은 측정이 아니라 정의(1칸=9px).
-  "스와이":    {img:"mapfull/swai.jpg", h:[0, -9, 588, -9, 0, 553, 0, 0]}
+  // 스와이(2.3.0): 게임 파일 속 개발사 탑뷰(땅 색 지도)를 3D 직접 렌더에 자동 정합(`맵렌더_탑뷰.py`, 90° 회전·ECC 0.36, 2026-10-16).
+  "스와이":    {img:"mapfull/swai.jpg?v=20261016", h:[0, -10.81198, 599.549, -10.80466, 0, 601.296, 0, 0]}
 };
 let rptCur = null;   // 지금 화면의 리포트 (URL 공유용)
 window.rsRptRender = r => rptRender(r);   // 🔬 점검용(정밀검사 스크립트가 부른다)
