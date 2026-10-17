@@ -531,6 +531,7 @@
   .instcard .instx{background:none;border:none;color:var(--sub);font-size:13px;cursor:pointer;padding:4px;flex-shrink:0}
   .authinst{margin:14px 0 0;text-align:left;background:var(--panel2)}
   /* 공식 운영진 배지 (uid 기준) */
+  .stfbdg.cup{color:#ffd257;background:rgba(255,176,46,.12);border-color:rgba(255,176,46,.45)}   /* 대회 운영자(금색) */
   .stfbdg{display:inline-flex;align-items:center;font-size:9.5px;font-weight:800;letter-spacing:.4px;color:#22d3ee;background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.4);border-radius:6px;padding:1px 6px;margin-left:5px;white-space:nowrap;flex-shrink:0;cursor:help}
   .weapon{background:var(--panel2);border-radius:9px;padding:8px 10px;margin-bottom:8px}
   .wtop{display:flex;align-items:center;gap:8px}
@@ -5016,7 +5017,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.17-b";
+const SITE_VERSION = "2026.10.17-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -5119,17 +5120,22 @@ const hName = k => T(HEROES[k]?.ko || k);
 
 /* ══════ 🛡️ 안전 시스템 ══════ */
 const BAD_WORDS = ["시발","씨발","씨빨","씨팔","시팔","ㅅㅂ","ㅆㅂ","병신","ㅂㅅ","븅신","지랄","ㅈㄹ","존나","ㅈㄴ","좆","니미","니애미","니엄마","엠창","애미","애비","느금","개새끼","개색","개세끼","새끼","색기","썅","등신","저능아","한남충","김치녀","보지","자지","꼬추","섹스","야동","창녀","창놈","걸레","강간","fuck","fucking","shit","bitch","asshole","nigger","sex","porn"];
-const RESERVED_NAMES = ["mammon","관리자","운영자","admin","administrator","제작자","운영진","gm","mod","pistoli"];
+const RESERVED_NAMES = ["mammon","관리자","운영자","admin","administrator","제작자","운영진","gm","mod","pistoli","magnus굳"];   /* magnus굳 = 대회 주최(2026-10-17) — 공백·점은 normTxt 가 지워서 "M A G N U S굳"·"MAGNUS.굳" 도 걸린다. 영웅 이름 magnus 만은 막지 않는다 */
 /* ── 공식 운영진 표시 ──
    uid 기준이라 사칭 불가(닉네임만 흉내내면 RESERVED_NAMES가 차단, 배지는 안 붙음).
    새 운영진이 방문하면 방명록 등에서 uid 확인 후 여기에 한 줄 추가. */
 const RS_STAFF = {
-  "THuJlJYHPiRJb0RjkpuU2QOAkCv1": { name:"PISTOLI", role:{ko:"리코셰 스쿼드 공식 디스코드 관리자",en:"Official RICOCHET SQUAD Discord server admin",ja:"RICOCHET SQUAD 公式Discordサーバー管理者",zh:"RICOCHET SQUAD 官方Discord伺服器管理員",fr:"Admin du serveur Discord officiel de RICOCHET SQUAD",de:"Admin des offiziellen RICOCHET-SQUAD-Discord-Servers",es:"Admin del servidor oficial de Discord de RICOCHET SQUAD",pt:"Admin do servidor oficial de Discord do RICOCHET SQUAD",ru:"Админ официального Discord-сервера RICOCHET SQUAD"} }
+  "THuJlJYHPiRJb0RjkpuU2QOAkCv1": { name:"PISTOLI", role:{ko:"리코셰 스쿼드 공식 디스코드 관리자",en:"Official RICOCHET SQUAD Discord server admin",ja:"RICOCHET SQUAD 公式Discordサーバー管理者",zh:"RICOCHET SQUAD 官方Discord伺服器管理員",fr:"Admin du serveur Discord officiel de RICOCHET SQUAD",de:"Admin des offiziellen RICOCHET-SQUAD-Discord-Servers",es:"Admin del servidor oficial de Discord de RICOCHET SQUAD",pt:"Admin do servidor oficial de Discord do RICOCHET SQUAD",ru:"Админ официального Discord-сервера RICOCHET SQUAD"} },
+  /* 🏆 2026-10-17 MAMMON: 아시아 커뮤니티 컵 주최 망굳. 배지 문구·색이 디스코드 관리자와 달라 badge·cls 를 따로 준다. */
+  "aHfWtv95wQVoOgaTdi0k0T6h74t1": { name:"M A G N U S굳", cls:"cup",
+    badge:{ko:"대회 운영자",en:"CUP ORGANIZER",ja:"大会運営",zh:"賽事主辦",fr:"ORGANISATEUR",de:"TURNIERLEITUNG",es:"ORGANIZADOR",pt:"ORGANIZADOR",ru:"ОРГАНИЗАТОР"},
+    role:{ko:"아시아 커뮤니티 컵 주최 · 대회 운영자",en:"Host and organizer of the Asia Community Cup",ja:"アジア・コミュニティカップ主催・大会運営",zh:"亞洲社群盃主辦・賽事營運",fr:"Hôte et organisateur de l’Asia Community Cup",de:"Gastgeber und Organisator des Asia Community Cup",es:"Anfitrión y organizador de la Asia Community Cup",pt:"Anfitrião e organizador da Asia Community Cup",ru:"Хост и организатор Asia Community Cup"} }
 };
 const STAFF_BADGE_L = {ko:"디스코드 관리자",en:"DISCORD ADMIN",ja:"Discord管理者",zh:"Discord管理員",fr:"ADMIN DISCORD",de:"DISCORD-ADMIN",es:"ADMIN DE DISCORD",pt:"ADMIN DO DISCORD",ru:"АДМИН DISCORD"};
 function staffBadge(uid){
   const s = RS_STAFF[uid]; if(!s) return "";
-  return `<span class="stfbdg" title="${(s.role[LANG]||s.role.ko)}">✓ ${STAFF_BADGE_L[LANG]||STAFF_BADGE_L.ko}</span>`;
+  const L = s.badge || STAFF_BADGE_L;
+  return `<span class="stfbdg${s.cls?" "+s.cls:""}" title="${(s.role[LANG]||s.role.ko)}">✓ ${L[LANG]||L.ko}</span>`;
 }
 const normTxt = s => String(s).toLowerCase().replace(/[\s\-_.,!?~^*+=/\\|()\[\]{}<>'"`:;@#$%&0-9]/g,"");
 function hasBadWord(s){ const n = normTxt(s); return BAD_WORDS.some(w => n.includes(normTxt(w))); }
