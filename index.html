@@ -5016,7 +5016,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.17-a";
+const SITE_VERSION = "2026.10.17-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7498,7 +7498,7 @@ function renderTrHall(){
   const hallEmbOf = n => { const t = (typeof trTeams!=="undefined"?trTeams:[]).find(x => x.name && n && String(n).indexOf(x.name)===0); return t ? t.emb : null; };
   if(!trHall.length){
     H.push(`<div class="cupHallPlq"><div class="cupHallIn">`
-      + `<div class="cupHallCup">COMMUNITY CUP · SEASON 1</div>`
+      + `<div class="cupHallCup">ASIA COMMUNITY CUP</div>`
       + `<div class="cupHallQ">? ? ?</div>`
       + `<div class="cupHallCup" style="color:#8b96ab">${CUPL("cp_win")}</div>`
       + `</div></div>`
