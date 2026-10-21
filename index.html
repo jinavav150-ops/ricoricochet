@@ -5017,7 +5017,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.19-b";
+const SITE_VERSION = "2026.10.21-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6630,7 +6630,12 @@ const CUP_R = {
   r_time:{ko:"출석 · 시간",en:"Attendance & timing",ja:"出席・時間",zh:"出席・時間"},
   r_time1:{ko:"집합 시각에서 15분이 지나도 3명이 안 모이면 몰수패예요. 대회 중에도 자기 경기 시작에 5분 넘게 늦으면 몰수패가 될 수 있어요.",en:"15 minutes after call time with fewer than 3 players = forfeit. During the day, being 5+ minutes late for your own match can also count as a forfeit.",ja:"集合時刻から15分過ぎて3人未満なら没収負け。大会中も自分の試合開始に5分以上遅れると没収負けになることがあります。",zh:"集合後15分鐘未滿3人即判負。當天若自己的比賽開始超過5分鐘未到，也可能被判負。"},
   r_time2:{ko:"대회는 하루에 끝나요 — 8팀 기준 약 3~4시간.",en:"The whole cup runs in one day — about 3–4 hours with 8 teams.",ja:"大会は1日で完結 — 8チームで約3〜4時間。",zh:"比賽一天內結束 — 8隊約3～4小時。"},
-  r_time3:{ko:"서버 문제로 경기가 끊기면 운영자가 재경기 또는 스코어 인정을 판단해요.",en:"If the server drops a match, the organiser decides: replay it or keep the score.",ja:"サーバー障害で中断した場合、再試合かスコアを認めるかは運営が判断。",zh:"若因伺服器中斷，由管理員決定重賽或承認比分。"},
+  r_bug:{ko:"버그 · 튕김",en:"Bugs & disconnects",ja:"バグ・切断",zh:"BUG・斷線"},
+  r_bug1:{ko:"게임 버그(스킬이 사라지거나 안 써지는 현상 등)는 게임의 일부로 보고, 버그 때문에 재경기를 하지 않아요.",en:"Game bugs (a skill vanishing or not firing, etc.) count as part of the game. Games are not replayed because of bugs.",ja:"ゲームのバグ（スキルが消える・発動しないなど）はゲームの一部とみなし、バグを理由にした再試合はしません。",zh:"遊戲 BUG（技能消失或放不出來等）視為遊戲的一部分，不會因為 BUG 重賽。"},
+  r_bug2:{ko:"캐릭터가 움직일 수 있게 된 뒤 <b>10초 안에</b> 한 명이라도 튕기면, 양 팀 모두 그 자리에서 멈추고 바로 운영자에게 알려 주세요. 그 판은 처음부터 다시 해요. 알리지 않고 계속 진행하면 재경기는 없어요.",en:"If anyone disconnects <b>within 10 seconds</b> of characters being able to move, both teams stop where they are and tell the organiser right away. That game is replayed from the start. If you keep playing without telling us, there is no replay.",ja:"キャラクターが動けるようになってから<b>10秒以内</b>に1人でも切断されたら、両チームともその場で止まり、すぐ運営に知らせてください。そのゲームは最初からやり直します。知らせずに続けた場合、再試合はありません。",zh:"角色可以移動後<b>10 秒內</b>只要有 1 人斷線，雙方都請原地停下並立刻通知管理員，該局從頭重打。若沒有通知而繼續進行，就不重賽。"},
+  r_bug3:{ko:"서버 장애로 게임 자체가 끊겨 결과가 남지 않으면 그 판을 다시 해요.",en:"If a server problem cuts off the game itself and no result is saved, that game is replayed.",ja:"サーバー障害でゲーム自体が切れて結果が残らなかった場合は、そのゲームをやり直します。",zh:"若因伺服器問題整局中斷、沒有留下結果，該局重打。"},
+  r_bug4:{ko:"판이 끝난 뒤에 튕겼다면, 게임 서버에 결과가 남아 있으면 그 결과를 인정해요.",en:"If someone disconnects after the game has ended, the result stands as long as the game server saved it.",ja:"ゲーム終了後に切断された場合、ゲームサーバーに結果が残っていればその結果を認めます。",zh:"一局結束後才斷線時，只要遊戲伺服器有留下結果，就承認該結果。"},
+  r_bug5:{ko:"10초가 지난 뒤 개인 문제로 튕긴 경우(발열 · 배터리 · 앱 튕김 · 와이파이나 데이터 끊김 등)에는 재경기 없이 게임을 계속해요. 다시 들어올 수 있으면 들어오고, 안 되면 남은 인원으로 끝까지 해요. <b>경기 전에 배터리, 와이파이, 데이터 연결을 한 번 더 확인해 주세요.</b>",en:"After those 10 seconds, a disconnect caused by a player's own issue (overheating, battery, app crash, Wi-Fi or mobile data dropping, etc.) means no replay and the game goes on. They rejoin if they can; otherwise the team plays it out with the players left. <b>Please double-check your battery, Wi-Fi and data connection before your match.</b>",ja:"10秒を過ぎてから個人の問題で切断された場合（発熱・バッテリー・アプリ落ち・Wi-Fiやデータ通信の切断など）は、再試合なしでゲームを続行します。再接続できれば戻り、できなければ残りの人数で最後までプレイします。<b>試合前にバッテリー、Wi-Fi、データ通信をもう一度確認してください。</b>",zh:"10 秒過後因個人問題斷線（發熱、電量、App 閃退、Wi-Fi 或行動數據中斷等），不重賽，繼續進行。能重新連線就回來，不能就由剩下的人打完。<b>比賽前請再確認一次電量、Wi-Fi 和行動數據連線。</b>"},
   r_dq:{ko:"매너 · 실격",en:"Conduct & DQ",ja:"マナー・失格",zh:"行為・取消資格"},
   r_dq_sum:{ko:"아래 행동은 실격이에요 — 실격 팀은 상품을 받을 수 없어요:",en:"These get a team disqualified — no prizes for DQ'd teams:",ja:"以下の行為は失格 — 失格チームは賞品対象外：",zh:"以下行為將被取消資格 — 取消資格的隊伍無法獲獎："},
   r_dq1:{ko:"노쇼 (지각은 출석 규정에 따라 몰수패)",en:"No-show (lateness is a forfeit under the attendance rules)",ja:"無断欠席（遅刻は出席ルールにより不戦敗）",zh:"缺席（遲到依出席規定判負）"},
@@ -7333,7 +7338,8 @@ function renderTrRules(){
       + `</div>` + li(["r_tie"]))
     + sec('<circle cx="9" cy="8" r="3.5"></circle><path d="M3.5 20c.5-3.5 2.7-5.5 5.5-5.5S14 16.5 14.5 20"></path><path d="M16 8h5M18.5 5.5v5"></path>', CUPR("r_reg"), li(["r_reg2","r_reg3","r_reg4"])   /* r_reg1("혼자여도 괜찮아요 — 묶어드려요")은 2026-10-17 MAMMON 요청으로 뺌 */)
     + sec('<path d="M8 5h8v4a4 4 0 0 1-8 0z"></path><path d="M12 12v3M9 20h6M10 17h4v3h-4z"></path>', CUPR("r_set"), li(["r_set1","r_set1b","r_set2","r_set2b","r_set2c","r_set3"]))
-    + sec('<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path>', CUPR("r_time"), li(["r_time1","r_time2","r_time3"]))
+    + sec('<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path>', CUPR("r_time"), li(["r_time1","r_time2"]))
+    + sec('<path d="M12 3l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path>', CUPR("r_bug"), li(["r_bug1","r_bug2","r_bug3","r_bug4","r_bug5"]))
     + sec('<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path>', CUPR("r_dq"),
         `<div class="cupRuleTx">${CUPR("r_dq_sum")}</div>` + li(["r_dq1","r_dq2","r_dq3","r_dq4","r_dq5"])
       + `<div class="cupRuleTx" style="margin-top:8px;color:#ffd257">${CUPR("r_dq_j")}</div>`)
