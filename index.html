@@ -1140,7 +1140,8 @@
 .mvBar3>div+div:before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;background:rgba(42,26,0,.25);transform:skewX(-14deg)}
 .mvBar3 b{font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-weight:400;font-size:24px;font-variant-numeric:tabular-nums}
 .mvBar3 b small{font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:800;margin-left:2px}
-.mvBar3 span{font-size:11px;font-weight:800;opacity:.75}
+.mvBar3 span{font-size:11px;font-weight:800;opacity:.75;text-align:center;padding:0 4px}
+.mvBar3 b i{font-style:normal}
 .mvBar3>div.k{background:#2a1a00;color:#ffd364;flex:1.15}
 .mvBar3>div.k span{opacity:.85}
 .mvCard{background:#0d111b;border:1px solid #232c40;border-radius:14px;padding:14px;margin-bottom:12px}
@@ -5223,7 +5224,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.23-k";
+const SITE_VERSION = "2026.10.23-l";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7022,9 +7023,11 @@ const MVL = {
   pre:{ko:"잠정 결과 · 이의 제기 마감 {d} · 문제가 없으면 그대로 확정돼요",en:"Provisional result · objections until {d} · if nothing comes up, it becomes final",ja:"暫定結果・異議申し立ては {d} まで・問題がなければそのまま確定します",zh:"暫定結果・異議受理至 {d}・若無問題即確定"},
   pre2:{ko:"잠정 결과 · 공개 후 24시간 동안 이의 제기를 받아요",en:"Provisional result · objections are open for 24 hours",ja:"暫定結果・公開後24時間、異議を受け付けます",zh:"暫定結果・公開後 24 小時內受理異議"},
   fin:{ko:"확정 결과",en:"Final result",ja:"確定結果",zh:"最終結果"},
+  low:{ko:"작을수록 위",en:"lower is better",ja:"小さいほど上位",zh:"越小越好"},
+  pl:{ko:"{n}위",en:"#{n}",ja:"{n}位",zh:"第{n}名"},
   tag:{ko:"대회 MVP",en:"Cup MVP",ja:"大会MVP",zh:"賽事 MVP"},
-  run_h:{ko:"판별 등수",en:"Rank in each game",ja:"ゲームごとの順位",zh:"各局名次"},
-  run_t:{ko:"매 판 같이 뛴 6명 중 몇 등이었는지예요. 이 등수로 MVP 등수를 계산해요.",en:"Where they placed among the 6 players in each game — the MVP rank is built from these.",ja:"毎ゲーム、6人の中で何位だったか。この順位からMVP順位を計算します。",zh:"每局在 6 名選手中的名次，MVP 名次由此計算。"},
+  run_h:{ko:"MVP 등수는 이렇게 계산해요",en:"How the MVP rank works",ja:"MVP順位の計算方法",zh:"MVP 名次的計算方式"},
+  run_t:{ko:"① 매 판 같이 뛴 6명 중 몇 등이었는지 보고 ② 그 등수들을 평균 내요. ③ 판을 적게 뛴 선수가 운으로 앞서지 않도록, 중간 등수(3.5등) 3판을 더해서 평균을 내요. 그래서 모든 판 1등이어도 1.00은 안 되고, 잘한 판이 많을수록 1에 가까워져요. <b>숫자가 작을수록 위</b>예요.",en:"① Take their placing among the 6 players in each game, ② average those placings, ③ but first add three middle placings (3.5) so a player with only a couple of lucky games can't jump ahead. Even all 1st places won't give exactly 1.00 — the more strong games, the closer to 1. <b>Lower is better.</b>",ja:"① 毎ゲーム、6人の中で何位だったかを見て ② その順位を平均します。③ 少ないゲームで運よく上位にならないよう、中間の順位(3.5位)を3ゲーム分足して平均します。全ゲーム1位でも1.00にはならず、良いゲームが多いほど1に近づきます。<b>数字が小さいほど上位</b>です。",zh:"① 看每局在 6 名選手中的名次，② 取平均。③ 為避免只打幾局靠運氣領先，先加上 3 局中間名次(3.5)再平均。所以就算每局第一也不會是 1.00，好表現的局越多越接近 1。<b>數字越小越好</b>。"},
   kk:{ko:"ASIA COMMUNITY CUP · 데이터 MVP",en:"ASIA COMMUNITY CUP · DATA MVP",ja:"ASIA COMMUNITY CUP・データMVP",zh:"ASIA COMMUNITY CUP・數據 MVP"},
   main:{ko:"주로 {h}",en:"Main: {h}",ja:"メイン：{h}",zh:"主玩：{h}"},
   s_mvp:{ko:"MVP 등수",en:"MVP rank",ja:"MVP順位",zh:"MVP 名次"}, u_rank:{ko:"등",en:"",ja:"位",zh:"名"},
@@ -7039,11 +7042,11 @@ const MVL = {
   u_s:{ko:"초",en:"s",ja:"秒",zh:"秒"},
   why_n:{ko:"사망은 적을수록 좋아요. 판 점수 = 처치 ×100 · 사망 ×−100 · (적 영웅 피해 + 회복·실드 + 이상현상 피해) 817당 +100 · 목표 시간 1초당 +10",en:"Fewer deaths is better. Game score = kills ×100 · deaths ×−100 · +100 per 817 of (hero damage + healing/shield + anomaly damage) · +10 per objective second",ja:"デスは少ないほど良い。ゲームスコア＝キル×100・デス×−100・（敵ヒーローダメージ＋回復・シールド＋アノマリーダメージ）817ごとに+100・目標時間1秒+10",zh:"死亡越少越好。單局分數＝擊殺×100・死亡×−100・（英雄傷害＋治療護盾＋異常現象傷害）每 817 加 100・目標時間每秒 +10"},
   rank_h:{ko:"MVP 순위",en:"MVP ranking",ja:"MVP順位",zh:"MVP 排名"},
-  rank_t:{ko:"매 판 같이 뛴 6명 중 등수에 3.5등 3개를 더해 평균을 낸 MVP 등수가 작을수록 위예요. 2판 이상 뛴 선수가 후보예요.",en:"Each game ranks its 6 players; MVP rank = average of your ranks plus three 3.5s — lower is better. Players with 2+ games are eligible.",ja:"毎ゲーム6人の中の順位に3.5位を3つ加えて平均したMVP順位が小さいほど上位です。2ゲーム以上出場した選手が候補です。",zh:"每局 6 人排名，加上三個 3.5 後取平均即 MVP 名次，越小越好。出賽 2 局以上者為候選。"},
+  rank_t:{ko:"MVP 등수(숫자)가 작을수록 위예요. 2판 이상 뛴 선수가 후보이고, 작은 표는 판마다의 등수예요.",en:"Lower MVP rank (the number) is better. Players with 2+ games are eligible; the small tags are their placing in each game.",ja:"MVP順位(数字)が小さいほど上位です。2ゲーム以上出場した選手が候補で、小さな札はゲームごとの順位です。",zh:"MVP 名次(數字)越小越前面。出賽 2 局以上者為候選，小標籤是各局名次。"},
   row_s:{ko:"{n}판 · 판 1등 {f}번",en:"{n} games · {f}× game #1",ja:"{n}ゲーム・1位 {f}回",zh:"{n} 局・單局第1 {f} 次"},
-  t_first:{ko:"MVP 등수가 같아 판 1등 횟수로 갈림 ({a}번 vs {b}번)",en:"Tied MVP rank — decided by game #1s ({a} vs {b})",ja:"MVP順位が同じため1位回数で決定（{a}回 vs {b}回）",zh:"MVP 名次相同，以單局第1次數決定（{a} vs {b}）"},
-  t_place:{ko:"MVP 등수·1등 횟수가 같아 팀 최종 순위로 갈림 (팀 {a}위 vs {b}위)",en:"Tied — decided by team final placing ({a} vs {b})",ja:"MVP順位・1位回数が同じためチーム最終順位で決定（{a}位 vs {b}位）",zh:"相同，以隊伍最終名次決定（第{a} vs 第{b}）"},
-  t_ratio:{ko:"MVP 등수·1등 횟수가 같아 판 평균 대비 점수로 갈림 ({a}배 vs {b}배 · {o})",en:"Tied — decided by score vs game average ({a}× vs {b}× · {o})",ja:"同順位のためゲーム平均比スコアで決定（{a}倍 vs {b}倍・{o}）",zh:"相同，以相對單局平均分數決定（{a} 倍 vs {b} 倍・{o}）"},
+  t_first:{ko:"MVP 등수가 같아서, 판 1등을 더 많이 한 쪽이 위예요 ({a}번 vs {b}번)",en:"Same MVP rank — the one with more game #1s is ahead ({a} vs {b})",ja:"MVP順位が同じため、ゲーム1位が多い方が上位です（{a}回 vs {b}回）",zh:"MVP 名次相同，單局第一較多者在前（{a} 次 vs {b} 次）"},
+  t_place:{ko:"MVP 등수와 판 1등 횟수가 같아서, 팀 최종 순위가 높은 쪽이 위예요 (팀 {a}위 vs {b}위)",en:"Same MVP rank and #1s — the higher team placing is ahead ({a} vs {b})",ja:"MVP順位と1位回数が同じため、チーム最終順位が高い方が上位です（{a}位 vs {b}位）",zh:"MVP 名次與第一次數相同，隊伍最終名次較高者在前（第{a} vs 第{b}）"},
+  t_ratio:{ko:"MVP 등수와 판 1등 횟수가 같아서, 판 점수가 그 판 평균의 몇 배였는지로 정했어요 ({a}배 vs {o} {b}배)",en:"Same MVP rank and #1s — decided by how many times the game average their score was ({a}× vs {o} {b}×)",ja:"MVP順位と1位回数が同じため、スコアがそのゲーム平均の何倍だったかで決めました（{a}倍 vs {o} {b}倍）",zh:"MVP 名次與第一次數相同，以分數是該局平均的幾倍決定（{a} 倍 vs {o} {b} 倍）"},
   non_h:{ko:"후보가 아닌 선수",en:"Not eligible",ja:"候補外の選手",zh:"非候選選手"},
   non_r:{ko:"{n}판 출전 · 2판 이상이어야 후보",en:"{n} game(s) · needs 2+ games",ja:"{n}ゲーム出場・2ゲーム以上で候補",zh:"出賽 {n} 局・需 2 局以上"},
   g_h:{ko:"판별 점수표",en:"Game-by-game scores",ja:"ゲーム別スコア",zh:"各局分數"},
@@ -7083,7 +7086,6 @@ function renderTrMvp(){
   if(box.dataset.k === key && box.firstChild) return;
   box.dataset.k = key;
   const top = d.players[0], H = [];
-  const rk2 = v => Number(v.toFixed(2));
   if(d.sample) H.push(`<div class="mvSample">${esc(d.sample)}</div>`);
   H.push(d.status === "final" ? `<div class="mvStatus ok">${MV("fin")}</div>`
     : `<div class="mvStatus">${d.deadline && mvDeadline(d.deadline) ? MV("pre", { d: esc(mvDeadline(d.deadline)) }) : MV("pre2")}</div>`);
@@ -7093,12 +7095,13 @@ function renderTrMvp(){
   const bust = top.img ? `<img class="mvBust" src="${esc(top.img)}" alt="">` : (top.emb !== null && top.emb !== undefined ? `<div class="mvBust mvBustE">${mvEmb(top.emb, 104)}</div>` : "");
   H.push(`<section class="mvPlate"><div class="mvSlab" aria-hidden="true"><div class="cupRaysEl"></div></div>${bust}`
     + `<div class="mvTxt"><span class="mvTag"><span>★ ${esc(MV("tag"))}</span></span><h2 class="mvName${ncls}">${esc(top.name)}</h2>${who ? `<div class="mvWho">${mvEmb(top.emb, 22)}<span>${who}</span></div>` : ""}</div>`
-    + `<div class="mvBar3"><div class="k"><b data-mvto="${top.mvp}" data-mvd="2">${top.mvp.toFixed(2)}</b><span>${MV("s_mvp")}</span></div>`
-    + `<div><b data-mvto="${top.first}" data-mvd="0">${top.first}</b><span>${MV("s_first")}</span></div>`
-    + `<div><b data-mvto="${top.n}" data-mvd="0">${top.n}</b><span>${MV("s_n")}</span></div></div></section>`);
+    + `<div class="mvBar3"><div class="k"><b><i data-mvto="${top.mvp}" data-mvd="2">${top.mvp.toFixed(2)}</i></b><span>${MV("s_mvp")} · ${MV("low")}</span></div>`
+    + `<div><b><i data-mvto="${top.first}" data-mvd="0">${top.first}</i><small>${MV("u_cnt")}</small></b><span>${MV("s_first")}</span></div>`
+    + `<div><b><i data-mvto="${top.n}" data-mvd="0">${top.n}</i><small>${MV("u_g")}</small></b><span>${MV("s_n")}</span></div></div></section>`);
   /* ② 판별 등수 — 판마다 표 한 장 */
   const gl = top.gl && top.gl.length ? top.gl : top.ranks.map(r => ({ rank: r }));
-  const formula = `(${top.ranks.map(k => (k % 1 ? k.toFixed(1) : k)).join(" + ")} + 3.5×3) ÷ (${top.n} + 3) = <b>${mvRk(rk2(top.mvp))}</b>`;
+  /* 계산식은 3.5를 세 번 그대로 적는다(“×3”·“+3”보다 바로 읽힌다) */
+  const formula = `${MV("s_mvp")} = (${top.ranks.map(k => (k % 1 ? k.toFixed(1) : k)).join(" + ")} + 3.5 + 3.5 + 3.5) ÷ ${top.n + 3} = <b>${top.mvp.toFixed(2)}</b>`;
   H.push(`<section class="mvCard"><h3>${MV("run_h")}</h3><p class="mvTx">${MV("run_t")}</p><div class="mvRun">`
     + gl.map(g => `<div class="mvTk ${g.rank === 1 ? "g" : g.rank <= 3 ? "s" : ""}"><b>${g.rank % 1 ? g.rank.toFixed(1) : g.rank}<small>${MV("u_rank")}</small></b>${g.mode ? `<span>${esc(T(g.mode))}${g.map ? "<br>" + esc(T(g.map)) : ""}</span>` : ""}${g.won ? `<i>${MV("won")}</i>` : ""}</div>`).join("")
     + `</div><div class="mvF">${formula}</div>${top.tie ? `<div class="mvTie">${mvTie(top)}</div>` : ""}</section>`);
@@ -7113,7 +7116,7 @@ function renderTrMvp(){
   }
   /* ④ 2·3위 — 작은 방송 자막 카드 */
   if(d.players.length >= 3){
-    const lt = (p, n) => `<div class="mvLt p${n}"><span class="n">${n}</span>${p.img ? `<img class="p" src="${esc(p.img)}" alt="">` : `<span class="e">${mvEmb(p.emb, 40)}</span>`}<b>${esc(p.name)}</b><small>${[p.team ? esc(p.team) : "", p.hero ? esc(T(p.hero)) : ""].filter(Boolean).join(" · ") || "&nbsp;"}</small><em>${MV("s_mvp")} ${mvRk(rk2(p.mvp))}</em></div>`;
+    const lt = (p, n) => `<div class="mvLt p${n}"><span class="n">${n}</span>${p.img ? `<img class="p" src="${esc(p.img)}" alt="">` : `<span class="e">${mvEmb(p.emb, 40)}</span>`}<b>${esc(p.name)}</b><small>${[p.team ? esc(p.team) : "", p.hero ? esc(T(p.hero)) : ""].filter(Boolean).join(" · ") || "&nbsp;"}</small><em>${MV("pl", { n })} · ${MV("s_mvp")} ${p.mvp.toFixed(2)}</em></div>`;
     H.push(`<section class="mvLow">${lt(d.players[1], 2)}${lt(d.players[2], 3)}</section>`);
   }
   H.push(`<section class="mvCard"><h3>${MV("rank_h")}</h3><p class="mvTx">${MV("rank_t")}</p>` + d.players.map((p, i) =>
@@ -7936,7 +7939,6 @@ const HLL = {
   fin:{ko:"결승 {a} : {b}",en:"Final {a} : {b}",ja:"決勝 {a} : {b}",zh:"決賽 {a} : {b}"},
   sub:{ko:"예비",en:"sub",ja:"控え",zh:"替補"},
   mvp:{ko:"대회 MVP",en:"Cup MVP",ja:"大会MVP",zh:"賽事 MVP"},
-  mvp_r:{ko:"MVP 등수 {r} · {n}판",en:"MVP rank {r} · {n} games",ja:"MVP順位 {r}・{n}ゲーム",zh:"MVP 名次 {r}・{n} 局"},
   why:{ko:"MVP 근거 보기",en:"See why",ja:"MVPの根拠を見る",zh:"查看 MVP 依據"},
   empty:{ko:"첫 우승팀의 배너가 여기 걸려요",en:"The first champions' banner will hang here",ja:"最初の優勝チームのバナーがここに掛かります",zh:"第一支冠軍隊伍的旗幟會掛在這裡"}
 };
@@ -7971,7 +7973,6 @@ function renderTrHall(){
           + (th.name ? hlBanner("third", `<div class="hlEmb s">${hlEmb(th.emb, 40)}</div><div class="hlTeam s">${esc(th.name)}</div><div class="hlWin s">${HL("third")}</div>`) : "")
         + `</div>` : "")
       + (mv && mv.name ? `<div class="hlMvp"><div class="hlMedal" aria-hidden="true"><span>MVP</span></div><div class="hlMvpT"><small>${HL("mvp")}</small><b>${esc(mv.name)}</b><span>${[mv.team ? esc(mv.team) : "", mv.hero ? esc(T(mv.hero)) : ""].filter(Boolean).join(" · ")}</span>`
-          + (mv.rank ? `<span>${HL("mvp_r", { r: Number(mv.rank).toFixed(2), n: mv.n || "" })}</span>` : "")
           + (window.rsTrMvpVisible && window.rsTrMvpVisible() ? `<button type="button" class="hlWhy" data-hlwhy="1">${HL("why")}</button>` : "")
           + `</div></div>` : "")
       + `</section>`);
