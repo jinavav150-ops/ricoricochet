@@ -1115,67 +1115,79 @@
 .trLiveLink{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:12px;padding:11px 14px;border-radius:12px;background:linear-gradient(180deg,#3a0d10,#22090b);border:1px solid #ff4b4b;color:#ffd9d9;font-size:13.5px;font-weight:800;text-decoration:none;text-align:center;line-height:1.4}
 .trLiveLink i{flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:#ff4b4b;box-shadow:0 0 8px #ff4b4b;animation:trLiveDot 1.4s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.trLiveLink i{animation:none}}
-/* 🏅 대회 MVP 탭 (2026-10-23) — 참가 탭 맨 위 트로피 화면과 같은 빛살·광채에 왕관·반짝이·이름 광택·숫자 올라가기를 더했다 */
-@keyframes mvFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
-@keyframes mvTwinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
-@keyframes mvPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,194,61,.45),0 0 22px rgba(255,176,46,.18)}50%{box-shadow:0 0 0 1px rgba(255,194,61,.7),0 0 34px rgba(255,176,46,.34)}}
-@keyframes mvRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* 🏅 대회 MVP 탭 v2 (2026-10-23) — e스포츠 방송의 "대회 MVP" 화면 문법(대진표의 온에어 스코어 띠와 같은 결).
+   붉은 사선 무대 + 빛살 위에 MVP의 주 영웅(게임 원본 초상화) · 금색 하단 자막 띠에 기록. 움직임은 처음 열 때 한 번의 등장(닦아내기 → 영웅 → 이름 광택 → 숫자·막대) + 빛살 회전만. */
+@keyframes mvWipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes mvRiseIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes mvShine{from{background-position:0 0}to{background-position:100% 0}}
 #trMvp{padding-bottom:8px}
-#trMvp section{animation:mvRise .5s ease both}
-#trMvp section.mvHero{animation:mvPulse 4s ease-in-out infinite,mvRise .5s ease both}
-#trMvp section:nth-of-type(2){animation-delay:.08s}#trMvp section:nth-of-type(3){animation-delay:.16s}#trMvp section:nth-of-type(4){animation-delay:.24s}
 .mvSample{background:#3a1d00;border:1px dashed #ffb02e;color:#ffd27a;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;margin-bottom:8px;text-align:center}
 .mvStatus{border-radius:10px;padding:9px 12px;font-size:13px;font-weight:700;text-align:center;margin-bottom:10px;background:rgba(255,176,46,.1);border:1px solid rgba(255,176,46,.45);color:#ffd890}
 .mvStatus.ok{background:rgba(70,200,120,.12);border-color:rgba(70,200,120,.5);color:#9ff0bd}
-.mvHero{position:relative;overflow:hidden;text-align:center;padding:24px 14px 18px;border-radius:16px;background:radial-gradient(120% 80% at 50% 0%,#2a1a04,#0a0c14 62%);margin-bottom:12px;animation:mvPulse 4s ease-in-out infinite,mvRise .5s ease both}
-.mvHero>*{position:relative}
-.mvHero .cupRaysEl,.mvHero .cupGlow,.mvHero .mvSpark{position:absolute}
-.mvSpark{width:13px;height:13px;pointer-events:none;animation:mvTwinkle 2.6s ease-in-out infinite;background:radial-gradient(circle,#fff6d6 0 18%,transparent 20%),linear-gradient(0deg,transparent 44%,#ffe39a 44% 56%,transparent 56%),linear-gradient(90deg,transparent 44%,#ffe39a 44% 56%,transparent 56%)}
-.mvKk{font-size:11px;letter-spacing:.24em;color:#ffb02e;font-weight:700}
-.mvCrown{display:block;margin:12px auto 0;filter:drop-shadow(0 4px 10px rgba(255,176,46,.45));animation:mvFloat 3.2s ease-in-out infinite}
-.mvName{font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-weight:400;font-size:40px;line-height:1.05;margin:6px 0 0;word-break:break-all;background:linear-gradient(100deg,#ffb02e 30%,#fff4cc 45%,#ffb02e 60%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:cupShine 4s ease-in-out infinite}
-.mvWho{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;font-size:13.5px;color:#d6dcea;font-weight:700}
-.mvStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px auto 0;max-width:420px}
-.mvStats>div{background:rgba(10,12,20,.72);border:1px solid #2f3a52;border-radius:12px;padding:10px 4px 8px}
-.mvStats>div.g{border-color:rgba(255,194,61,.6);background:rgba(40,26,4,.75)}
-.mvStats b{font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-weight:400;font-size:28px;color:#fff;font-variant-numeric:tabular-nums}
-.mvStats .g b{color:#ffd364}
-.mvStats small{font-size:12px;color:#c8d0de;margin-left:2px}
-.mvStats span{display:block;font-size:11.5px;color:#9aa6bd;margin-top:2px}
+.mvPlate{position:relative;overflow:hidden;min-height:318px;margin-bottom:12px;border-radius:14px;background:linear-gradient(180deg,#0f1730,#0a0f1f);border:1px solid #26314d;animation:mvWipe .75s cubic-bezier(.7,0,.2,1) both}
+.mvSlab{position:absolute;top:0;bottom:0;right:-18%;width:68%;transform:skewX(-14deg);transform-origin:0 100%;overflow:hidden;background:linear-gradient(165deg,#c21e25,#7a0f16 60%,#4a0910);box-shadow:-3px 0 0 #ffc23d,-9px 0 0 rgba(255,194,61,.25)}
+.mvSlab .cupRaysEl{top:50%;left:42%;margin:-330px 0 0 -330px;transform-origin:50% 50%;opacity:.9}
+.mvBust{position:absolute;right:-4px;bottom:54px;height:262px;width:auto;z-index:1;pointer-events:none;filter:drop-shadow(-10px 10px 18px rgba(0,0,0,.55));-webkit-mask-image:linear-gradient(180deg,#000 82%,transparent);mask-image:linear-gradient(180deg,#000 82%,transparent);animation:mvRiseIn .7s cubic-bezier(.2,.8,.2,1) .35s both}
+.mvBustE{right:7%;bottom:96px;height:auto;display:grid;place-items:center;filter:drop-shadow(0 10px 20px rgba(0,0,0,.6))}
+.mvTxt{position:relative;z-index:2;max-width:64%;padding:20px 0 70px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.mvTag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 8px;background:#ffc23d;color:#2a1a00;font-size:12.5px;font-weight:900;border-radius:3px;transform:skewX(-10deg)}
+.mvTag>*{transform:skewX(10deg)}
+.mvName{margin:2px 0 0;font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-weight:400;font-size:40px;line-height:1.04;word-break:break-all;color:#fff;text-shadow:0 3px 12px rgba(0,0,0,.6);background:linear-gradient(100deg,#fff 40%,#ffe7a3 50%,#fff 60%) no-repeat;background-size:260% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:mvShine 1.3s ease .9s both}
+.mvName.m{font-size:31px}.mvName.l{font-size:25px}
+.mvWho{display:flex;align-items:center;gap:7px;font-size:13px;color:#d6dcea;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.mvBar3{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:stretch;height:54px;background:linear-gradient(90deg,#ffc23d,#ffdc7e);color:#2a1a00}
+.mvBar3>div{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;line-height:1.1;position:relative}
+.mvBar3>div+div:before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;background:rgba(42,26,0,.25);transform:skewX(-14deg)}
+.mvBar3 b{font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-weight:400;font-size:24px;font-variant-numeric:tabular-nums}
+.mvBar3 b small{font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:800;margin-left:2px}
+.mvBar3 span{font-size:11px;font-weight:800;opacity:.75}
+.mvBar3>div.k{background:#2a1a00;color:#ffd364;flex:1.15}
+.mvBar3>div.k span{opacity:.85}
+.mvCard{background:#0d111b;border:1px solid #232c40;border-radius:14px;padding:14px;margin-bottom:12px}
+.mvCard h3{margin:0 0 4px;font-size:16px;color:#ffd364}
+.mvTx{font-size:12.5px;color:#9aa6bd;line-height:1.55;margin:0 0 10px}
+.mvNote{font-size:11.5px;color:#7d89a3;line-height:1.5;margin:10px 0 0}
+.mvTie{margin-top:8px;font-size:12px;color:#ffcf7a;line-height:1.5}
+.mvRun{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.mvTk{flex:0 0 86px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 6px 8px;border-radius:10px;background:#141a28;border:1px solid #2a3347;text-align:center}
+.mvTk b{font-family:'Black Han Sans',sans-serif;font-weight:400;font-size:28px;line-height:1;color:#c8d0de}
+.mvTk b small{font-family:'Noto Sans KR',sans-serif;font-size:11px;font-weight:800;margin-left:1px}
+.mvTk.g{background:linear-gradient(180deg,#3a2a07,#1a1406);border-color:#ffc23d}
+.mvTk.g b{color:#ffd364}
+.mvTk.s b{color:#eef2f8}
+.mvTk span{font-size:11px;color:#9aa6bd;line-height:1.3}
+.mvTk i{font-style:normal;font-size:10px;font-weight:800;padding:0 5px;border-radius:3px;background:#5fd38d;color:#0b2a17}
+.mvF{margin-top:10px;padding:8px 10px;border-radius:8px;background:#141a28;font-size:12.5px;color:#c8d0de;font-variant-numeric:tabular-nums}
+.mvF b{color:#ffd364}
+.mvVsHead{display:grid;grid-template-columns:1fr 84px 1fr;gap:6px;font-size:11.5px;font-weight:800;margin-bottom:6px}
+.mvVsHead span:first-child{color:#ffd364;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mvVsHead span:last-child{color:#8fa0bf}
+.mvVs{display:grid;grid-template-columns:1fr 84px 1fr;gap:6px;align-items:center;margin-bottom:8px}
+.mvVs .k{text-align:center;font-size:12px;font-weight:800;color:#c8d0de}
+.mvVs .l,.mvVs .r{display:flex;align-items:center;gap:6px;min-width:0}
+.mvVs .l{flex-direction:row-reverse}
+.mvVs .t{flex:1;height:10px;display:flex}
+.mvVs .l .t{justify-content:flex-end}
+.mvVs i{display:block;height:100%;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1) .2s}
+.mvVs .l i{background:linear-gradient(270deg,#ffc23d,#e39a17);border-radius:5px 0 0 5px}
+.mvVs .r i{background:#4a5672;border-radius:0 5px 5px 0}
+.mvVs b{font-size:12.5px;font-variant-numeric:tabular-nums;min-width:44px}
+.mvVs .l b{text-align:right;color:#fff}.mvVs .r b{color:#8fa0bf}
+.mvVs b.up{color:#ffd364}
+.mvLow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.mvLt{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;min-height:132px;padding:10px 10px 0;border-radius:12px;background:linear-gradient(180deg,#141b2e,#0d1220);border:1px solid #2a3347}
+.mvLt img.p{position:absolute;right:-8px;bottom:30px;height:108px;opacity:.95;-webkit-mask-image:linear-gradient(180deg,#000 75%,transparent);mask-image:linear-gradient(180deg,#000 75%,transparent)}
+.mvLt .e{position:absolute;right:10px;top:12px;opacity:.9}
+.mvLt .n{position:absolute;left:10px;top:6px;font-family:'Black Han Sans',sans-serif;font-size:30px;line-height:1;color:#c8d0de}
+.mvLt.p3 .n{color:#e0a26a}
+.mvLt b{position:relative;z-index:1;font-size:14px;color:#fff;word-break:break-all;text-shadow:0 1px 6px rgba(0,0,0,.7)}
+.mvLt small{position:relative;z-index:1;font-size:11.5px;color:#aab4c8;text-shadow:0 1px 6px rgba(0,0,0,.7)}
+.mvLt em{position:relative;z-index:1;display:block;margin:6px -10px 0;padding:5px 10px;font-style:normal;font-size:12px;font-weight:800;background:#c8d0de;color:#1c2639}
+.mvLt.p3 em{background:#d08a4a;color:#2e1706}
 .mvRks{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:10px}
 .mvRk{display:inline-block;min-width:30px;padding:2px 6px;border-radius:6px;font-size:11.5px;font-weight:800;text-align:center;background:#1a2030;color:#aab4c8;border:1px solid #2a3347}
 .mvRk.g{background:linear-gradient(180deg,#ffe08a,#e9a415);color:#3a2400;border-color:#ffd364}
 .mvRk.s{background:#283247;color:#e6ebf5;border-color:#3d4a66}
-.mvF{margin-top:10px;font-size:12.5px;color:#c8d0de;font-variant-numeric:tabular-nums}
-.mvF b{color:#ffd364}
-.mvTie{margin-top:6px;font-size:11.5px;color:#ffcf7a;line-height:1.45}
-.mvCard{background:#0d111b;border:1px solid #232c40;border-radius:14px;padding:14px;margin-bottom:12px}
-.mvCard h3{margin:0 0 4px;font-size:16px;color:#ffd364}
-.mvTx{font-size:12.5px;color:#9aa6bd;line-height:1.55;margin:0 0 10px}
-.mvLg{display:inline-flex;align-items:center;gap:4px;margin-left:6px;color:#c8d0de;white-space:nowrap}
-.mvLg i{width:10px;height:10px;border-radius:3px;display:inline-block}
-.mvLg i.me,.mvBar i.me{background:linear-gradient(90deg,#e9a415,#ffd364)}
-.mvLg i.av,.mvBar i.av{background:#4a5672}
-.mvBars{display:flex;flex-direction:column;gap:9px}
-.mvBar{display:grid;grid-template-columns:auto 1fr 58px 50px;align-items:center;gap:8px;font-size:12.5px}
-.mvBar .l{color:#c8d0de;font-weight:700;white-space:nowrap;min-width:64px}
-.mvBar .t{display:flex;flex-direction:column;gap:3px}
-.mvBar i{display:block;height:8px;border-radius:4px;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
-.mvBar i.av{height:5px}
-.mvBar .v{text-align:right;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
-.mvBar .v.up{color:#ffd364}
-.mvBar .a{text-align:right;color:#7d89a3;font-variant-numeric:tabular-nums}
-.mvNote{font-size:11.5px;color:#7d89a3;line-height:1.5;margin:10px 0 0}
-.mvPodium{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.mvPd{position:relative;text-align:center;background:#0d111b;border:1px solid #2f3a52;border-radius:14px;padding:36px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
-.mvPd.p2{border-color:#8f9bb3;background:linear-gradient(180deg,rgba(200,210,230,.1),#0d111b 60%)}
-.mvPd.p3{border-color:#b9773d;background:linear-gradient(180deg,rgba(205,127,50,.13),#0d111b 60%)}
-.mvPd .n{position:absolute;top:8px;left:10px;font-family:'Black Han Sans',sans-serif;font-size:22px;color:#c8d0de}
-.mvPd.p3 .n{color:#e0a26a}
-.mvPd b{font-size:15px;color:#fff;word-break:break-all}
-.mvPd small{font-size:11.5px;color:#9aa6bd}
-.mvPd em{font-style:normal;font-size:12.5px;color:#ffd364;font-weight:800}
-.mvPd .mvRks{margin-top:4px}
 .mvRow{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:start;padding:10px 4px;border-top:1px solid #1c2334}
 .mvRow:first-of-type{border-top:0}
 .mvRow.me{background:linear-gradient(90deg,rgba(255,176,46,.12),transparent);border-radius:10px}
@@ -1185,6 +1197,7 @@
 .mvRow .pl em{font-style:normal;font-size:11.5px;color:#9aa6bd;margin-left:6px}
 .mvRow .pl small{display:block;font-size:11.5px;color:#8792aa;margin-top:2px}
 .mvRow .mvRks{justify-content:flex-start;margin-top:6px}
+.mvRow .mvTie{font-size:11.5px;margin-top:6px}
 .mvRow .sc{text-align:right;font-family:'Black Han Sans',sans-serif;font-size:20px;color:#fff;font-variant-numeric:tabular-nums}
 .mvRow.me .sc{color:#ffd364}
 .mvRow .sc small{display:block;font-family:'Noto Sans KR',sans-serif;font-size:10.5px;color:#7d89a3}
@@ -1210,8 +1223,9 @@
 .mvSrc b{color:#e6ebf5}
 .mvSrc ul{margin:4px 0 0;padding-left:18px}
 .mvEmb{vertical-align:middle}
-@media (max-width:380px){.mvName{font-size:34px}.mvBar{grid-template-columns:auto 1fr 52px 44px;gap:6px}}
-@media (prefers-reduced-motion:reduce){.mvHero,.mvCrown,.mvName,.mvSpark,#trMvp section{animation:none}.mvSpark{opacity:.8}.mvBar i{transition:none}}
+@media (min-width:700px){.mvPlate{min-height:360px}.mvBust{height:310px}.mvName{font-size:50px}.mvName.m{font-size:38px}.mvName.l{font-size:30px}.mvTxt{padding-top:28px}}
+@media (max-width:360px){.mvName{font-size:34px}.mvName.m{font-size:27px}.mvName.l{font-size:22px}.mvBust{height:230px}.mvVs,.mvVsHead{grid-template-columns:1fr 70px 1fr}}
+@media (prefers-reduced-motion:reduce){.mvPlate,.mvBust,.mvName,.mvSlab .cupRaysEl{animation:none}.mvName{background-position:100% 0}.mvVs i{transition:none}}
 .cupSub{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:13px;color:#c8d0de}
 .cupSub i{height:1px;width:24px;background:rgba(255,176,46,.5);display:inline-block}
 .cupOpen{position:relative;display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:7px 14px;border-radius:999px;background:rgba(255,176,46,.1);border:1px solid rgba(255,176,46,.4);font-size:13px;font-weight:700;color:#ffd257}
@@ -5209,7 +5223,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.23-i";
+const SITE_VERSION = "2026.10.23-j";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7008,6 +7022,9 @@ const MVL = {
   pre:{ko:"잠정 결과 · 이의 제기 마감 {d} · 문제가 없으면 그대로 확정돼요",en:"Provisional result · objections until {d} · if nothing comes up, it becomes final",ja:"暫定結果・異議申し立ては {d} まで・問題がなければそのまま確定します",zh:"暫定結果・異議受理至 {d}・若無問題即確定"},
   pre2:{ko:"잠정 결과 · 공개 후 24시간 동안 이의 제기를 받아요",en:"Provisional result · objections are open for 24 hours",ja:"暫定結果・公開後24時間、異議を受け付けます",zh:"暫定結果・公開後 24 小時內受理異議"},
   fin:{ko:"확정 결과",en:"Final result",ja:"確定結果",zh:"最終結果"},
+  tag:{ko:"대회 MVP",en:"Cup MVP",ja:"大会MVP",zh:"賽事 MVP"},
+  run_h:{ko:"판별 등수",en:"Rank in each game",ja:"ゲームごとの順位",zh:"各局名次"},
+  run_t:{ko:"매 판 같이 뛴 6명 중 몇 등이었는지예요. 이 등수로 MVP 등수를 계산해요.",en:"Where they placed among the 6 players in each game — the MVP rank is built from these.",ja:"毎ゲーム、6人の中で何位だったか。この順位からMVP順位を計算します。",zh:"每局在 6 名選手中的名次，MVP 名次由此計算。"},
   kk:{ko:"ASIA COMMUNITY CUP · 데이터 MVP",en:"ASIA COMMUNITY CUP · DATA MVP",ja:"ASIA COMMUNITY CUP・データMVP",zh:"ASIA COMMUNITY CUP・數據 MVP"},
   main:{ko:"주로 {h}",en:"Main: {h}",ja:"メイン：{h}",zh:"主玩：{h}"},
   s_mvp:{ko:"MVP 등수",en:"MVP rank",ja:"MVP順位",zh:"MVP 名次"}, u_rank:{ko:"등",en:"",ja:"位",zh:"名"},
@@ -7060,37 +7077,43 @@ function mvTie(p){
 function renderTrMvp(){
   const box = document.getElementById("trMvp"); if(!box) return;
   const d = trMvp; if(!d || !d.players || !d.players.length){ box.innerHTML = ""; box.dataset.k = ""; return; }
-  /* renderTourney 는 대회 DB가 바뀔 때마다 불린다 — 내용·언어가 그대로면 다시 그리지 않는다(애니메이션이 매번 처음부터 도는 것 방지) */
+  /* renderTourney 는 대회 DB가 바뀔 때마다 불린다 — 내용·언어가 그대로면 다시 그리지 않는다(등장 움직임이 매번 처음부터 도는 것 방지) */
   const key = LANG + "|" + d.computed + "|" + d.status + "|" + d.deadline + "|" + d.players.length;
   if(box.dataset.k === key && box.firstChild) return;
   box.dataset.k = key;
   const top = d.players[0], H = [];
+  const rk2 = v => Number(v.toFixed(2));
   if(d.sample) H.push(`<div class="mvSample">${esc(d.sample)}</div>`);
   H.push(d.status === "final" ? `<div class="mvStatus ok">${MV("fin")}</div>`
     : `<div class="mvStatus">${d.deadline && mvDeadline(d.deadline) ? MV("pre", { d: esc(mvDeadline(d.deadline)) }) : MV("pre2")}</div>`);
-  const sparks = Array.from({length: 12}, (_, i) => `<i class="mvSpark" style="left:${(7 + i * 7.9) % 96}%;top:${(12 + (i * 37) % 70)}%;animation-delay:${(i * 0.37).toFixed(2)}s"></i>`).join("");
-  const sub = [top.team ? esc(top.team) : "", top.hero ? MV("main", { h: esc(T(top.hero)) }) : ""].filter(Boolean).join(" · ");
-  const formula = `(${top.ranks.map(k => (k % 1 ? k.toFixed(1) : k)).join(" + ")} + 3.5×3) ÷ (${top.n} + 3) = <b>${mvRk(Number(top.mvp.toFixed(2)))}</b>`;
-  H.push(`<section class="mvHero"><div class="cupRaysEl"></div><div class="cupGlow"></div>${sparks}
-    <div class="mvKk">${esc(MV("kk"))}</div>
-    <svg class="mvCrown" viewBox="0 0 64 40" width="64" height="40" aria-hidden="true"><defs><linearGradient id="mvCg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset=".55" stop-color="#ffc23d"/><stop offset="1" stop-color="#b77a10"/></linearGradient></defs><path d="M4 34 L10 8 L22 22 L32 4 L42 22 L54 8 L60 34 Z" fill="url(#mvCg)" stroke="#7a4f08" stroke-width="1.5"/><circle cx="10" cy="8" r="2.6" fill="#fff3c4"/><circle cx="32" cy="4" r="2.6" fill="#fff3c4"/><circle cx="54" cy="8" r="2.6" fill="#fff3c4"/></svg>
-    <h2 class="mvName">${esc(top.name)}</h2>
-    <div class="mvWho">${mvEmb(top.emb, 26)}<span>${sub}</span></div>
-    <div class="mvStats"><div class="g"><b data-mvto="${top.mvp}" data-mvd="2">${top.mvp.toFixed(2)}</b><small>${MV("u_rank")}</small><span>${MV("s_mvp")}</span></div>
-      <div><b data-mvto="${top.first}" data-mvd="0">${top.first}</b><small>${MV("u_cnt")}</small><span>${MV("s_first")}</span></div>
-      <div><b data-mvto="${top.n}" data-mvd="0">${top.n}</b><small>${MV("u_g")}</small><span>${MV("s_n")}</span></div></div>
-    <div class="mvRks">${top.ranks.map(mvChip).join("")}</div>
-    <div class="mvF">${formula}</div>${top.tie ? `<div class="mvTie">${mvTie(top)}</div>` : ""}</section>`);
+  /* ① 방송 MVP 판: 붉은 사선 무대 + 빛살 + 주 영웅 초상화(없으면 팀 엠블럼) · 금색 하단 띠 */
+  const nl = [...String(top.name)].length, ncls = nl > 14 ? " l" : nl > 8 ? " m" : "";
+  const who = [top.team ? esc(top.team) : "", top.hero ? esc(T(top.hero)) : ""].filter(Boolean).join(" · ");
+  const bust = top.img ? `<img class="mvBust" src="${esc(top.img)}" alt="">` : (top.emb !== null && top.emb !== undefined ? `<div class="mvBust mvBustE">${mvEmb(top.emb, 104)}</div>` : "");
+  H.push(`<section class="mvPlate"><div class="mvSlab" aria-hidden="true"><div class="cupRaysEl"></div></div>${bust}`
+    + `<div class="mvTxt"><span class="mvTag"><span>★ ${esc(MV("tag"))}</span></span><h2 class="mvName${ncls}">${esc(top.name)}</h2>${who ? `<div class="mvWho">${mvEmb(top.emb, 22)}<span>${who}</span></div>` : ""}</div>`
+    + `<div class="mvBar3"><div class="k"><b data-mvto="${top.mvp}" data-mvd="2">${top.mvp.toFixed(2)}</b><span>${MV("s_mvp")}</span></div>`
+    + `<div><b data-mvto="${top.first}" data-mvd="0">${top.first}</b><span>${MV("s_first")}</span></div>`
+    + `<div><b data-mvto="${top.n}" data-mvd="0">${top.n}</b><span>${MV("s_n")}</span></div></div></section>`);
+  /* ② 판별 등수 — 판마다 표 한 장 */
+  const gl = top.gl && top.gl.length ? top.gl : top.ranks.map(r => ({ rank: r }));
+  const formula = `(${top.ranks.map(k => (k % 1 ? k.toFixed(1) : k)).join(" + ")} + 3.5×3) ÷ (${top.n} + 3) = <b>${mvRk(rk2(top.mvp))}</b>`;
+  H.push(`<section class="mvCard"><h3>${MV("run_h")}</h3><p class="mvTx">${MV("run_t")}</p><div class="mvRun">`
+    + gl.map(g => `<div class="mvTk ${g.rank === 1 ? "g" : g.rank <= 3 ? "s" : ""}"><b>${g.rank % 1 ? g.rank.toFixed(1) : g.rank}<small>${MV("u_rank")}</small></b>${g.mode ? `<span>${esc(T(g.mode))}${g.map ? "<br>" + esc(T(g.map)) : ""}</span>` : ""}${g.won ? `<i>${MV("won")}</i>` : ""}</div>`).join("")
+    + `</div><div class="mvF">${formula}</div>${top.tie ? `<div class="mvTie">${mvTie(top)}</div>` : ""}</section>`);
+  /* ③ 왜 MVP인가 — 방송 기록 비교처럼 양쪽 막대(왼쪽 MVP, 오른쪽 같은 판 다른 선수 평균) */
   if(d.why && d.why.length){
     const fmt = (k, v) => k === "obj" ? mvNum(v, 1) + MV("u_s") : (k === "K" || k === "D") ? mvNum(v, 1) : mvNum(v, 0);
-    H.push(`<section class="mvCard"><h3>${MV("why_h")}</h3><p class="mvTx">${MV("why_t")} <span class="mvLg"><i class="me"></i>${esc(top.name)}</span> <span class="mvLg"><i class="av"></i>${MV("lg_avg")}</span></p><div class="mvBars">`
+    H.push(`<section class="mvCard"><h3>${MV("why_h")}</h3><p class="mvTx">${MV("why_t")}</p>`
+      + `<div class="mvVsHead"><span>${esc(top.name)}</span><span></span><span>${MV("lg_avg")}</span></div>`
       + d.why.map(w => { const mx = Math.max(w.me, w.avg, 1e-9), up = w.k === "D" ? w.me < w.avg : w.me > w.avg;
-          return `<div class="mvBar"><span class="l">${MV("w_" + w.k)}</span><div class="t"><i class="me" style="--w:${(w.me / mx * 100).toFixed(0)}%"></i><i class="av" style="--w:${(w.avg / mx * 100).toFixed(0)}%"></i></div><span class="v${up ? " up" : ""}">${fmt(w.k, w.me)}</span><span class="a">${fmt(w.k, w.avg)}</span></div>`; }).join("")
-      + `</div><p class="mvNote">${MV("why_n")}</p></section>`);
+          return `<div class="mvVs"><div class="l"><div class="t"><i style="--w:${(w.me / mx * 100).toFixed(0)}%"></i></div><b class="${up ? "up" : ""}">${fmt(w.k, w.me)}</b></div><span class="k">${MV("w_" + w.k)}</span><div class="r"><div class="t"><i style="--w:${(w.avg / mx * 100).toFixed(0)}%"></i></div><b>${fmt(w.k, w.avg)}</b></div></div>`; }).join("")
+      + `<p class="mvNote">${MV("why_n")}</p></section>`);
   }
+  /* ④ 2·3위 — 작은 방송 자막 카드 */
   if(d.players.length >= 3){
-    const pc = (p, n) => `<div class="mvPd p${n}"><span class="n">${n}</span>${mvEmb(p.emb, 34)}<b>${esc(p.name)}</b><small>${esc(p.team || "")}</small><em>${mvRk(Number(p.mvp.toFixed(2)))}</em><div class="mvRks">${p.ranks.map(mvChip).join("")}</div></div>`;
-    H.push(`<section class="mvPodium">${pc(d.players[1], 2)}${pc(d.players[2], 3)}</section>`);
+    const lt = (p, n) => `<div class="mvLt p${n}"><span class="n">${n}</span>${p.img ? `<img class="p" src="${esc(p.img)}" alt="">` : `<span class="e">${mvEmb(p.emb, 40)}</span>`}<b>${esc(p.name)}</b><small>${[p.team ? esc(p.team) : "", p.hero ? esc(T(p.hero)) : ""].filter(Boolean).join(" · ") || "&nbsp;"}</small><em>${MV("s_mvp")} ${mvRk(rk2(p.mvp))}</em></div>`;
+    H.push(`<section class="mvLow">${lt(d.players[1], 2)}${lt(d.players[2], 3)}</section>`);
   }
   H.push(`<section class="mvCard"><h3>${MV("rank_h")}</h3><p class="mvTx">${MV("rank_t")}</p>` + d.players.map((p, i) =>
     `<div class="mvRow${i === 0 ? " me" : ""}"><div class="no">${i + 1}</div><div class="pl"><b>${esc(p.name)}</b>${p.team ? `<em>${esc(p.team)}</em>` : ""}<small>${p.hero ? esc(T(p.hero)) + " · " : ""}${MV("row_s", { n: p.n, f: p.first })}</small><div class="mvRks">${p.ranks.map(mvChip).join("")}</div>${p.tie ? `<div class="mvTie">${mvTie(p)}</div>` : ""}</div><div class="sc">${p.mvp.toFixed(2)}<small>${MV("s_mvp")}</small></div></div>`).join("") + `</section>`);
@@ -7101,12 +7124,13 @@ function renderTrMvp(){
     + `</tbody></table></div></details>`).join("") + `</section>`);
   H.push(`<section class="mvCard"><h3>${MV("src_h")}</h3><div class="mvSrc"><div>${MV("src_m")}</div><div>${MV("src_d", { g: d.games_n || (d.games || []).length, c: d.players.length, t: esc(d.computed || "") })}</div><div>${MV("src_x")}<ul>${(d.excl && d.excl.length) ? d.excl.map(x => `<li><b>${esc(x.code)}</b> — ${esc(x.why)}</li>`).join("") : `<li>${MV("src_x0")}</li>`}</ul></div><div>${MV("src_v")}</div></div></section>`);
   box.innerHTML = H.join("");
-  /* 움직임: 숫자 올라가기 · 막대 차오르기 (동작 줄이기 설정이면 바로 최종값) */
+  /* 등장 뒤 숫자 올라가기 · 막대 차오르기 (동작 줄이기 설정이면 바로 최종값) */
   const still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  requestAnimationFrame(() => box.querySelectorAll(".mvBar i").forEach(el => el.style.width = el.style.getPropertyValue("--w")));
+  requestAnimationFrame(() => box.querySelectorAll(".mvVs i").forEach(el => el.style.width = el.style.getPropertyValue("--w")));
   if(!still) box.querySelectorAll("[data-mvto]").forEach(el => {
-    const to = +el.dataset.mvto, dg = +el.dataset.mvd, from = dg ? Math.min(6, to + 3) : 0, t0 = performance.now(), dur = 1100;
-    const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = (from + (to - from) * e).toFixed(dg); if(k < 1) requestAnimationFrame(step); };
+    const to = +el.dataset.mvto, dg = +el.dataset.mvd, from = dg ? Math.min(6, to + 3) : 0, t0 = performance.now() + 700, dur = 1000;
+    el.textContent = from.toFixed(dg);
+    const step = t => { const k = Math.max(0, Math.min(1, (t - t0) / dur)), e = 1 - Math.pow(1 - k, 3); el.textContent = (from + (to - from) * e).toFixed(dg); if(k < 1) requestAnimationFrame(step); };
     requestAnimationFrame(step);
   });
 }
