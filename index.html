@@ -4337,6 +4337,10 @@ const CUPBANNER_L = {
   /* 핵심 말을 앞에, 대회 이름은 뒤에 — 좁은 화면에서 잘리는 쪽이 이름이 되게 */
   interest:{ko:"🏆 의향 조사 중! 30초면 돼요 · {t}",en:"🏆 Interest check is open — raise your hand (30s) · {t}",ja:"🏆 参加意向を調査中！30秒でOK · {t}",zh:"🏆 意願調查中！30 秒就好 · {t}",fr:"🏆 Sondage d'intérêt ouvert — lève la main (30 s) · {t}",de:"🏆 Interessensabfrage läuft — Hand heben (30 s) · {t}",es:"🏆 Sondeo de interés abierto — levanta la mano (30 s) · {t}",pt:"🏆 Pesquisa de interesse aberta — levante a mão (30 s) · {t}",ru:"🏆 Опрос интереса открыт — поднимите руку (30 с) · {t}"},
   signup:{ko:"🏆 접수 중! 팀 등록하세요 · {t}",en:"🏆 Sign-ups are open — enter your team · {t}",ja:"🏆 受付中！チーム登録を · {t}",zh:"🏆 報名中！快來登記隊伍 · {t}",fr:"🏆 Inscriptions ouvertes — inscris ton équipe · {t}",de:"🏆 Anmeldung offen — Team eintragen · {t}",es:"🏆 Inscripciones abiertas — apunta a tu equipo · {t}",pt:"🏆 Inscrições abertas — cadastre sua equipe · {t}",ru:"🏆 Регистрация открыта — заявите команду · {t}"},
+  live:{ko:"🔴 대회 진행 중! 실시간 대진표·순위 · {t}",en:"🔴 The cup is live — bracket & standings · {t}",ja:"🔴 大会進行中！リアルタイム対戦表・順位 · {t}",zh:"🔴 賽事進行中！即時對戰表・排名 · {t}"},
+  done:{ko:"🏆 대회가 끝났어요! 결과 보기 · {t}",en:"🏆 The cup is over — see the results · {t}",ja:"🏆 大会終了！結果を見る · {t}",zh:"🏆 賽事結束！查看結果 · {t}"},
+  more_live:{ko:"대진표",en:"Bracket",ja:"対戦表",zh:"對戰表"},
+  more_done:{ko:"결과",en:"Results",ja:"結果",zh:"結果"},
   more_interest:{ko:"손 들기",en:"Count me in",ja:"手を挙げる",zh:"我要參加",fr:"Je participe",de:"Ich bin dabei",es:"Me apunto",pt:"Eu topo",ru:"Участвую"},
   more_signup:{ko:"신청하기",en:"Enter",ja:"申し込む",zh:"報名",fr:"S'inscrire",de:"Anmelden",es:"Inscribirse",pt:"Inscrever",ru:"Заявиться"}
 };
@@ -4346,14 +4350,14 @@ function rsCupBannerSync(){
   const st = window.rsTrBannerState ? window.rsTrBannerState() : null;   // {on,state,title} — 모듈 쪽 브리지
   const onView = /^(tourney|trrules|trbracket|trhall)$/.test(CURVIEW);
   let done=false; try{ done = !!(st && localStorage.getItem(cupBannerKey(st.state))); }catch(e){}
-  if(!st || !st.on || !(st.state==="interest" || st.state==="signup") || onView || done){ b.dataset.want="0"; rsBannerReflow(); return; }
+  if(!st || !st.on || !(st.state==="interest" || st.state==="signup" || st.state==="live" || st.state==="done") || onView || done){ b.dataset.want="0"; rsBannerReflow(); return; }   /* 2026-10-23: 대회 진행 중·종료에도 띄워 대진표로 */
   const L=LANG, t=st.title||"Community Cup";
   const txt=(CUPBANNER_L[st.state][L]||CUPBANNER_L[st.state].en).replace("{t}", t);
   b.querySelector(".cbtxt").textContent = txt;
   const mk="more_"+st.state; b.querySelector(".cbmore").textContent = (CUPBANNER_L[mk][L]||CUPBANNER_L[mk].en)+" ›";
   b.dataset.want="1"; rsBannerReflow();
 }
-function rsCupBannerGo(){ if(window.goSub) goSub("tourney"); rsCupBannerSync(); }
+function rsCupBannerGo(){ const st = window.rsTrBannerState ? window.rsTrBannerState() : null; if(window.goSub) goSub(st && (st.state==="live" || st.state==="done") ? "trbracket" : "tourney"); rsCupBannerSync(); }
 function rsCupBannerClose(ev){ ev.stopPropagation(); const st = window.rsTrBannerState ? window.rsTrBannerState() : null; try{ if(st) localStorage.setItem(cupBannerKey(st.state),"1"); }catch(e){} rsCupBannerSync(); }
 window.rsCupBannerGo=rsCupBannerGo; window.rsCupBannerClose=rsCupBannerClose; window.rsCupBannerSync=rsCupBannerSync;
 const TIERNUDGE_L = {
@@ -4657,7 +4661,8 @@ function navGo(group){
   const grp=NAV_GROUPS[group]; if(!grp) return;
   if(grp.solo){ goSub(grp.subs[0]); return; }
   // 기억한 서브탭이 지금 숨겨져 있으면(예: 대회 꺼짐 → 참가 탭 숨김) 보이는 첫 서브로
-  const want = groupLast[group] || grp.subs[0];
+  const trLive = group === "tourney" && window.rsTrBannerState && (s => s && (s.state === "live" || s.state === "done"))(window.rsTrBannerState());
+  const want = groupLast[group] || (trLive ? "trbracket" : grp.subs[0]);   /* 2026-10-23: 대회 진행 중·종료엔 대회 메뉴가 대진표부터 */
   goSub(subShown(want) ? want : (grp.subs.find(subShown) || grp.subs[0]));
 }
 window.navGo=navGo; window.goSub=goSub;
@@ -5032,7 +5037,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.23-d";
+const SITE_VERSION = "2026.10.23-f";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6541,8 +6546,8 @@ const TR_L = {
   rp_open_btn:{ko:"＋ 경기 보고하기 (코드 한 번에)",en:"＋ Report a match (all codes at once)",ja:"＋ 試合を報告（コードまとめて）",zh:"＋ 回報比賽（代碼一次上傳）"},
   rp_code:{ko:"{n}판 매치 코드",en:"Game {n} match code",ja:"{n}試合目のマッチコード",zh:"第 {n} 局比賽代碼"},
   rp_stage:{ko:"경기 구분 고르기",en:"Choose stage",ja:"区分を選択",zh:"選擇階段"},
-  rp_st_ga:{ko:"A조",en:"Group A",ja:"Aグループ",zh:"A 組"},
-  rp_st_gb:{ko:"B조",en:"Group B",ja:"Bグループ",zh:"B 組"},
+  rp_st_ga:{ko:"1조",en:"Group 1",ja:"1組",zh:"1組"},
+  rp_st_gb:{ko:"2조",en:"Group 2",ja:"2組",zh:"2組"},
   rp_st_sf:{ko:"4강",en:"Semi-final",ja:"準決勝",zh:"四強"},
   rp_st_p3:{ko:"3·4위전",en:"3rd-place match",ja:"3位決定戦",zh:"季軍戰"},
   rp_st_f:{ko:"결승",en:"Final",ja:"決勝",zh:"決賽"},
@@ -6613,6 +6618,7 @@ const TR_CUP = {
   cp_emb:{ko:"팀 엠블럼 — 74가지 중 선택",en:"Team emblem — pick one of 74",ja:"チームエンブレム — 74種から選択",zh:"隊徽 — 74款任選"},
   cp_edit_note:{ko:"수정·취소는 접수 마감 전까지만 가능해요 — 마감 후 변경은 운영자에게 문의해 주세요.",en:"You can edit or cancel your entry until sign-ups close — after that, contact the organiser.",ja:"登録の修正・キャンセルは受付締切まで可能です。締切後の変更は運営者にお問い合わせください。",zh:"報名截止前可修改或取消；截止後如需變更，請聯絡管理員。"},
   cp_adv:{ko:"결승 진출",en:"To the final",ja:"決勝進出",zh:"晉級決賽"},
+  cp_third:{ko:"3위",en:"3rd place",ja:"3位",zh:"季軍"},
   cp_win:{ko:"우승",en:"CHAMPIONS",ja:"優勝",zh:"冠軍"},
   cp_id_bad:{ko:"게임 ID를 다시 확인해 주세요 — 영문과 숫자만이에요. (예: RZ1RA4U8) 게임 → 친구 탭 → 왼쪽 아래 내 ID에서 복사할 수 있어요.",en:"Please check the game ID — letters and numbers only (e.g. RZ1RA4U8). In game: Friends tab → bottom-left My ID.",ja:"ゲームIDをご確認ください — 英数字のみです（例: RZ1RA4U8）。ゲーム → フレンドタブ → 左下のマイIDでコピーできます。",zh:"請再確認遊戲ID — 僅限英文與數字（例: RZ1RA4U8）。遊戲 → 好友頁籤 → 左下角我的ID可複製。"},
   ch_empty:{ko:"이 명패는 아직 비어 있습니다 — 첫 주인을 찾는 중",en:"This plaque is still empty — waiting for its first owners.",ja:"この銘板はまだ空です — 最初の主を探しています。",zh:"這塊銘牌仍然空著 — 正在等待第一位主人。"},
@@ -7445,13 +7451,13 @@ function renderTrBracket(){
     const boAdm = m => TR_MGR() ? `<div class="bo-adm"><button type="button" class="bo-edit" data-trmedit="${esc(m.id)}">${TRL("b_a_edit")}</button><button type="button" class="bo-del" data-trmdel="${esc(m.id)}" aria-label="${TRL("a_del")}">${TRL("a_del")}</button></div>` : "";
     const boScore = (sc, m) => (sc ? `${+sc[1]>+sc[2]?`<b>${sc[1]}</b>`:sc[1]} : ${+sc[2]>+sc[1]?`<b>${sc[2]}</b>`:sc[2]}` : (m.score?esc(m.score):"VS"))
       + (sc && isFF(m) ? `<small class="bo-ff">${TRL("b_ff")}</small>` : "");
-    const band = (m, tag) => {
+    const band = (m, tag, tk) => {   /* tk = 이긴 쪽 띠 글자(기본 "결승 진출", 3·4위전은 "3위") */
       const sc = parseSc(m); const wA = sc&&+sc[1]>+sc[2], wB = sc&&+sc[2]>+sc[1];
       const st = sc ? `is-done ${wA?"is-win-l":wB?"is-win-r":""}` : "is-upcoming";
       return `<article class="bo-match ${st}" aria-label="${esc(m.round||"")}: ${esc(m.a)} ${sc?sc[1]+" : "+sc[2]:"vs"} ${esc(m.b)}">`
         + `<span class="bo-tag">${tag}</span>`
-        + `<div class="bo-side bo-side--l">${boEmb(m.a)}<span class="bo-name">${esc(m.a)}</span><i class="bo-ticket">${CUPL("cp_adv")}</i></div>`
-        + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span><i class="bo-ticket">${CUPL("cp_adv")}</i></div>`
+        + `<div class="bo-side bo-side--l">${boEmb(m.a)}<span class="bo-name">${esc(m.a)}</span><i class="bo-ticket">${CUPL(tk||"cp_adv")}</i></div>`
+        + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span><i class="bo-ticket">${CUPL(tk||"cp_adv")}</i></div>`
         + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
         + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
         + boChips(m) + `</article>` + boAdm(m);
@@ -7493,7 +7499,7 @@ function renderTrBracket(){
       f.semi.slice(0,2).forEach((m,i)=>{
         S.push(band(m, `${esc(m.round)}${f.semi.length>1?` · ${i+1}`:""}`));
       });
-      for(const m of f.third) S.push(band(m, esc(m.round || TRL("b_third"))));
+      for(const m of f.third) S.push(band(m, esc(m.round || TRL("b_third")), "cp_third"));
       if(f.fin.length){ for(const m of f.fin) S.push(finalBand(m)); }
       else if(f.semi.length) S.push(finalTbd);
       S.push(`</section>`);
