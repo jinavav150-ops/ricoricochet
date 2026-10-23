@@ -1044,6 +1044,10 @@
 .cupEyebrow{position:relative;font-size:11px;letter-spacing:.28em;color:#ffb02e;font-weight:700}
 .cupTitle{position:relative;font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-size:38px;line-height:.98;margin-top:10px;background:linear-gradient(100deg,#ffb02e 30%,#ffe9b0 45%,#ffb02e 60%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:cupShine 5s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.cupRaysEl,.cupTitle{animation:none}}
+@keyframes trLiveDot{0%,100%{opacity:1}50%{opacity:.25}}
+.trLiveLink{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:12px;padding:11px 14px;border-radius:12px;background:linear-gradient(180deg,#3a0d10,#22090b);border:1px solid #ff4b4b;color:#ffd9d9;font-size:13.5px;font-weight:800;text-decoration:none;text-align:center;line-height:1.4}
+.trLiveLink i{flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:#ff4b4b;box-shadow:0 0 8px #ff4b4b;animation:trLiveDot 1.4s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.trLiveLink i{animation:none}}
 /* 🏅 대회 MVP 탭 (2026-10-23) — 참가 탭 맨 위 트로피 화면과 같은 빛살·광채에 왕관·반짝이·이름 광택·숫자 올라가기를 더했다 */
 @keyframes mvFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
 @keyframes mvTwinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
@@ -5138,7 +5142,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.23-g";
+const SITE_VERSION = "2026.10.23-h";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7635,6 +7639,9 @@ function renderTrBracket(){
   const box=document.getElementById("trBracket"); if(!box) return;
   /* 🏆 대진표 v4 — 한 가지 카드 문법(가로 VS), 위계는 크기·금색 강도로. 순서: 결선 → 순위 → 예선. */
   const H=[trReportCard()];
+  /* 2026-10-23: 대회 당일엔 대회 메뉴가 대진표부터 열려서 「참가 팀」 맨 위의 방송 링크를 못 본다 → 마감·진행 중엔 대진표 맨 위에도 */
+  const stNow = trMeta && trMeta.state;
+  if(TR_STREAM_URL && (stNow === "closed" || stNow === "live")) H.unshift(`<a class="trLiveLink" href="${esc(TR_STREAM_URL)}" target="_blank" rel="noopener"><i></i><span>${CUPL("cp_stream")}</span></a>`);
   if(!trMatches.length){ H.push(`<div class="rptcard"><h3>${TRL("b_head")}</h3><div class="rnote">${TRL("b_none")}</div></div>`); }
   else{
     const embOf = n => { const k = String(n||"").replace(/[\s\u1160\u3164]+/g," ").trim().toLowerCase(); const t = trTeams.find(x => String(x.name||"").replace(/[\s\u1160\u3164]+/g," ").trim().toLowerCase()===k || (x.solo && x.m1===n)); return t ? t.emb : null; };
