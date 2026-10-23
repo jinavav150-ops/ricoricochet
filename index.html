@@ -5223,7 +5223,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.23-j";
+const SITE_VERSION = "2026.10.23-k";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7060,6 +7060,7 @@ const MVL = {
 };
 const MV = (k, v) => { const o = MVL[k]; let s = (o && (o[LANG] || o.en || o.ko)) || ""; if(v) for(const x in v) s = s.split("{"+x+"}").join(v[x]); return s; };
 const mvNum = (x, d) => Number(x).toLocaleString(LANG === "ko" ? "ko-KR" : LANG, { minimumFractionDigits: d||0, maximumFractionDigits: d||0 });
+const mvH = h => String(h || "").split("/").map(x => T(x)).join("/");   // 판 중 영웅을 바꾸면 "레오/칼리브리"
 const mvRk = k => MV("rk", { n: (k % 1 ? k.toFixed(1) : String(k)) });
 const mvChip = k => `<span class="mvRk ${k===1?"g":(k<=3?"s":"n")}">${mvRk(k)}</span>`;
 const mvEmb = (e, sz) => (e !== null && e !== undefined && e !== "") ? cupEmbImg(e, sz, "mvEmb") : "";   // 팀 엠블럼(움직이는 엠블럼 포함) — 참가 탭과 같은 그림
@@ -7120,7 +7121,7 @@ function renderTrMvp(){
   if(d.nonc && d.nonc.length) H.push(`<section class="mvCard"><h3>${MV("non_h")}</h3>` + d.nonc.map(p => `<div class="mvRow off"><div class="no">–</div><div class="pl"><b>${esc(p.name)}</b>${p.team ? `<em>${esc(p.team)}</em>` : ""}<small>${MV("non_r", { n: p.n })}</small></div><div class="sc">${p.mvp.toFixed(2)}<small>${MV("s_mvp")}</small></div></div>`).join("") + `</section>`);
   const th = (MVL.th[LANG] || MVL.th.en);
   H.push(`<section class="mvCard"><h3>${MV("g_h")}</h3><p class="mvTx">${MV("g_t")}</p>` + (d.games || []).map(g => `<details class="mvGm"><summary><span class="code">${esc(g.code)}</span><span class="md">${esc(T(g.mode || ""))}${g.map ? " · " + esc(T(g.map)) : ""}</span><span class="g1">${MV("g_first", { n: esc(g.rows[0] ? g.rows[0].name : "") })}</span></summary><div class="mvTw"><table><thead><tr>${th.map(x => `<th>${esc(x)}</th>`).join("")}</tr></thead><tbody>`
-    + g.rows.map(r => `<tr><td>${mvChip(r.rank)}</td><td class="pn"><b>${esc(r.name)}</b>${r.won ? ` <span class="w">${MV("won")}</span>` : ""}<small>${esc(T(r.hero || ""))}</small></td><td>${r.K}<small>+${mvNum(r.pK)}</small></td><td>${r.D}<small>${mvNum(r.pD)}</small></td><td>${mvNum(r.hp)}<small>+${mvNum(r.pHP)}</small></td><td>${mvNum(r.obj, 1)}${MV("u_s")}<small>+${mvNum(r.pO)}</small></td><td class="tot">${mvNum(r.S)}</td></tr>`).join("")
+    + g.rows.map(r => `<tr><td>${mvChip(r.rank)}</td><td class="pn"><b>${esc(r.name)}</b>${r.won ? ` <span class="w">${MV("won")}</span>` : ""}<small>${esc(mvH(r.hero))}</small></td><td>${r.K}<small>+${mvNum(r.pK)}</small></td><td>${r.D}<small>${mvNum(r.pD)}</small></td><td>${mvNum(r.hp)}<small>+${mvNum(r.pHP)}</small></td><td>${mvNum(r.obj, 1)}${MV("u_s")}<small>+${mvNum(r.pO)}</small></td><td class="tot">${mvNum(r.S)}</td></tr>`).join("")
     + `</tbody></table></div></details>`).join("") + `</section>`);
   H.push(`<section class="mvCard"><h3>${MV("src_h")}</h3><div class="mvSrc"><div>${MV("src_m")}</div><div>${MV("src_d", { g: d.games_n || (d.games || []).length, c: d.players.length, t: esc(d.computed || "") })}</div><div>${MV("src_x")}<ul>${(d.excl && d.excl.length) ? d.excl.map(x => `<li><b>${esc(x.code)}</b> — ${esc(x.why)}</li>`).join("") : `<li>${MV("src_x0")}</li>`}</ul></div><div>${MV("src_v")}</div></div></section>`);
   box.innerHTML = H.join("");
