@@ -1316,6 +1316,11 @@
 .bo-name{font:14px/1.15 'Black Han Sans',sans-serif;font-size:clamp(12px,3.6vw,14px);color:#c8d0de;word-break:normal;overflow-wrap:anywhere;min-width:0;font-weight:400}
 .bo-plate{position:absolute;z-index:2;top:50%;left:var(--split);transform:translate(-50%,-50%) skewX(-12deg);min-width:74px;padding:6px 12px;text-align:center;background:var(--ink);border:1px solid #2a3347;transition:left .6s cubic-bezier(.22,.9,.24,1)}
 .bo-score{display:inline-block;transform:skewX(12deg);white-space:nowrap;font:26px/1 'Black Han Sans',sans-serif;color:#fff;font-weight:400}
+.bo-ff{display:block;font:700 10px/1.2 inherit;font-family:inherit;color:#ff8a8a;letter-spacing:.04em;margin-top:2px;transform:skewX(12deg)}
+.bo-sttie{font-size:10px;color:#ffd257;font-weight:700;margin-left:4px;white-space:nowrap}
+.bo-stwl small{color:#8b96ab;font-weight:600;margin-left:4px}
+.bo-edit{position:absolute;z-index:3;top:6px;right:70px;height:22px;font-size:11px;padding:0 8px;border-radius:6px;border:1px solid #3a4660;background:rgba(14,17,24,.75);color:#cfd6e4;cursor:pointer}
+.bo-final .bo-edit{top:8px;right:72px}
 .bo-score b{font-weight:400;color:var(--acc2)}
 .bo-tag{position:absolute;z-index:3;top:0;left:20px;padding:3px 10px 4px;font:700 10px/1 'Noto Sans KR',sans-serif;letter-spacing:.12em;color:var(--ink);background:var(--acc);clip-path:polygon(0 0,100% 0,calc(100% - 6px) 100%,6px 100%)}
 .bo-match.is-upcoming .bo-score{font-size:15px;color:#8b96ab;letter-spacing:.2em}
@@ -5018,7 +5023,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.23-a";
+const SITE_VERSION = "2026.10.23-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6444,13 +6449,24 @@ const TR_L = {
   b_head:{ko:"대진표 · 결과",en:"Bracket · Results",ja:"対戦表・結果",zh:"對戰表・結果"},
   b_none:{ko:"대진표는 조 추첨이 끝나면 공개됩니다.",en:"The bracket will be posted after the group draw.",ja:"対戦表は組み分け抽選の後に公開します。",zh:"對戰表將於分組抽籤後公布。"},
   b_code:{ko:"매치 코드",en:"Match code",ja:"マッチコード",zh:"對戰代碼"},
-  b_a_head:{ko:"경기 추가 (관리자만 보임)",en:"Add a match (admin only)",ja:"試合を追加（管理者のみ）",zh:"新增比賽（僅管理員）"},
-  b_a_round:{ko:"라운드 (예: 스위스 1R / 컵 4강 / 플레이트 결승)",en:"Round (e.g. Swiss R1 / Cup SF / Plate Final)",ja:"ラウンド（例：スイス1R / カップ準決勝）",zh:"輪次（例：瑞士制 R1 / 盃賽四強）"},
+  b_a_head:{ko:"경기 추가 · 수정 (운영진만 보임)",en:"Add / edit a match (organisers only)",ja:"試合の追加・修正（運営のみ）",zh:"新增・修改比賽（僅管理員）"},
+  b_a_round:{ko:"라운드 (예: 1조 · 20:00 / 2조 · 20:30 / 4강 / 3·4위전 / 결승)",en:"Round (e.g. 1조 · 20:00 / 2조 / 4강 / 3·4위전 / 결승)",ja:"ラウンド（例：1조 · 20:00 / 2조 / 4강 / 3·4위전 / 결승）",zh:"輪次（例：1조 · 20:00 / 2조 / 4강 / 3·4위전 / 결승）"},
   b_a_a:{ko:"팀 A",en:"Team A",ja:"チームA",zh:"隊伍 A"},
   b_a_b:{ko:"팀 B",en:"Team B",ja:"チームB",zh:"隊伍 B"},
-  b_a_score:{ko:"결과 (예: 2-1, 비면 예정)",en:"Result (e.g. 2-1; blank = upcoming)",ja:"結果（例：2-1、空欄=予定）",zh:"結果（例：2-1，空白＝待賽）"},
+  b_a_score:{ko:"결과 (예: 2-1 · 몰수는 0-2 몰수 · 비면 예정)",en:"Result (e.g. 2-1 · forfeit: 0-2 몰수 · blank = upcoming)",ja:"結果（例：2-1・没収は 0-2 몰수・空欄=予定）",zh:"結果（例：2-1・棄權 0-2 몰수・空白＝待賽）"},
   b_a_code:{ko:"매치 코드 (선택, 여러 개면 쉼표)",en:"Match code(s) (optional, comma-separated)",ja:"マッチコード（任意）",zh:"對戰代碼（選填）"},
   b_a_add:{ko:"추가",en:"Add",ja:"追加",zh:"新增"},
+  b_a_save:{ko:"수정 저장",en:"Save changes",ja:"修正を保存",zh:"儲存修改"},
+  b_a_cancel:{ko:"수정 취소",en:"Cancel edit",ja:"修正をやめる",zh:"取消修改"},
+  b_a_edit:{ko:"수정",en:"Edit",ja:"修正",zh:"修改"},
+  b_a_editing:{ko:"이 경기를 수정하는 중이에요",en:"Editing this match",ja:"この試合を修正中",zh:"正在修改此比賽"},
+  b_a_bad:{ko:"결과는 2-1처럼 숫자로 적고, 같은 점수(1-1)는 안 돼요.",en:"Write the result like 2-1; a tie (1-1) is not allowed.",ja:"結果は 2-1 のように数字で。同点（1-1）は不可です。",zh:"結果請寫成 2-1，不能同分（1-1）。"},
+  b_a_mdel_ask:{ko:"이 경기를 대진표에서 지울까요?",en:"Remove this match from the bracket?",ja:"この試合を対戦表から削除しますか？",zh:"要從對戰表刪除此比賽嗎？"},
+  b_ff:{ko:"몰수",en:"forfeit",ja:"没収",zh:"棄權"},
+  b_grp:{ko:"{g}조",en:"Group {g}",ja:"{g}組",zh:"{g}組"},
+  b_gd:{ko:"판 득실",en:"Game diff",ja:"ゲーム得失",zh:"局數差"},
+  b_tie:{ko:"동률 · 추첨",en:"tied · draw",ja:"同率・抽選",zh:"同分・抽籤"},
+  b_third:{ko:"3·4위전",en:"3rd place",ja:"3位決定戦",zh:"季軍賽"},
   b_a_need:{ko:"라운드와 두 팀 이름은 꼭 적어주세요.",en:"Round and both team names are required.",ja:"ラウンドと両チーム名は必須です。",zh:"輪次與兩隊名稱為必填。"},
   b_upcoming:{ko:"예정",en:"upcoming",ja:"予定",zh:"待賽"},
   /* ── 명예의 전당 탭 ── */
@@ -6512,7 +6528,7 @@ const TR_L = {
     en:"When a match (best of 3; the final best of 5) is over, the room host posts its match codes here in one go. Every game has its own match code — enter <b>every game of the match, won or lost</b>, each as 「code + the team that won that game」 (2 games for a 2–0, 3 for a 2–1 · final: 3 for a 3–0, 4 for a 3–1, 5 for a 3–2). No need to leave the game mid-match; at the latest, report right after the day's last match ends. Unreported games don't count, and the codes are used for the Data MVP.",
     ja:"試合（2本先取・BO3、決勝は3本先取・BO5）が終わったら、ホストがその試合のマッチコードをここにまとめて登録します。1ゲームごとにマッチコードが別々に出ます — <b>勝ち負けに関係なくその試合の全ゲーム</b>を、1ゲームずつ「コード＋そのゲームの勝者」で入力してください（2–0なら2つ、2–1なら3つ・決勝は3–0なら3つ、3–1なら4つ、3–2なら5つ）。途中でゲームを抜ける必要はなく、遅くともその日の最終試合が終わったらすぐに登録してください。未報告の試合は無効で、コードはデータMVPの計算に使われます。",
     zh:"一場比賽（三戰兩勝，決賽五戰三勝）結束後，房主在這裡一次上傳該場的對局代碼。每局都有各自的對局代碼 — 請把<b>該場所有局（不論輸贏）</b>都填上，每局填「代碼＋該局獲勝隊伍」（2:0 填 2 局，2:1 填 3 局・決賽 3:0 填 3 局，3:1 填 4 局，3:2 填 5 局）。比賽中不必退出遊戲，最晚請在當天最後一場比賽結束後立即回報。未回報的比賽不計成績，代碼會用於數據 MVP 計算。"},
-  rp_wait:{ko:"경기 보고는 접수가 마감되고 대회가 시작되면 열려요.",en:"Game reports open once sign-ups close.",ja:"試合報告は受付終了後に開きます。",zh:"報名截止後開放回報。"},
+  rp_wait:{ko:"경기 보고는 대회가 시작되면(10월 24일 저녁 8시) 열리고, 대회가 끝나면 닫혀요.",en:"Match reports open when the cup starts (Oct 24, 20:00 KST) and close when it ends.",ja:"試合報告は大会開始時（10月24日20時）に開き、大会終了で閉じます。",zh:"比賽回報將於賽事開始時（10月24日 20:00）開放，賽事結束後關閉。"},
   rp_open_btn:{ko:"＋ 경기 보고하기 (코드 한 번에)",en:"＋ Report a match (all codes at once)",ja:"＋ 試合を報告（コードまとめて）",zh:"＋ 回報比賽（代碼一次上傳）"},
   rp_code:{ko:"{n}판 매치 코드",en:"Game {n} match code",ja:"{n}試合目のマッチコード",zh:"第 {n} 局比賽代碼"},
   rp_stage:{ko:"경기 구분 고르기",en:"Choose stage",ja:"区分を選択",zh:"選擇階段"},
@@ -6564,10 +6580,10 @@ const TR_CUP = {
   cp_subtag:{ko:"예비",en:"SUB",ja:"補欠",zh:"替補"},
   /* ♿ 화면을 못 보는 사용자용 엠블럼 버튼 이름 — 엠블럼에 고유 이름 데이터가 없어 순번으로 구분한다 */
   cp_emb_n:{ko:"엠블럼 {n}번",en:"Emblem {n}",ja:"エンブレム {n}",zh:"隊徽 {n}"},
-  cp_deadline:{ko:"⏳ 접수 마감 10월 22일 (목)",en:"⏳ Sign-ups close October 22 (Thu)",ja:"⏳ 受付締切 10月22日 (木)",zh:"⏳ 報名截止 10月22日 (四)"},
+  cp_deadline:{ko:"⏳ 접수 마감됨 (10월 22일)",en:"⏳ Sign-ups closed (October 22)",ja:"⏳ 受付終了（10月22日）",zh:"⏳ 報名已截止（10月22日）"},
   /* 🏆 2026-10-17 아시아 컵(10/24) — 조 추첨 라이브·중계 줄. 방송 링크는 TR_STREAM_URL 에 넣으면 버튼으로 바뀐다 */
-  cp_draw:{ko:"🎲 조 추첨: 접수가 끝난 뒤 10월 23일 (금) 저녁 6~7시 라이브 · 녹화본도 올려요 · 시간은 바뀔 수 있어요",en:"🎲 Group draw: after sign-ups close, live on October 23 (Fri), 18:00–19:00 KST · a recording will be shared · time may change",ja:"🎲 組み合わせ抽選：受付終了後、10月23日 (金) 18〜19時にライブ・録画も公開・時間は変わる場合があります",zh:"🎲 分組抽籤：報名截止後，10月23日 (五) 18:00–19:00 直播・會提供錄影・時間可能調整"},
-  cp_stream:{ko:"📺 유튜브 생중계 · 민트K",en:"📺 Live on YouTube · MintK",ja:"📺 YouTube生配信・MintK",zh:"📺 YouTube 直播・MintK"},
+  cp_draw:{ko:"🎲 조 추첨: 10월 23일 (금) 라이브 · 결과는 「대진표」 탭에서",en:"🎲 Group draw: live on October 23 (Fri) · results in the 「Bracket」 tab",ja:"🎲 組み合わせ抽選：10月23日（金）ライブ・結果は「対戦表」タブで",zh:"🎲 分組抽籤：10月23日（五）直播・結果請看「對戰表」分頁"},
+  cp_stream:{ko:"📺 유튜브 생중계 · 민트K (조별 4경기 · 4강 · 결승)",en:"📺 Live on YouTube · MintK (4 group matches · semis · final)",ja:"📺 YouTube生配信・MintK（グループ4試合・準決勝・決勝）",zh:"📺 YouTube 直播・MintK（小組4場・四強・決賽）"},
   cp_when:{ko:"10월 24일 (토) 저녁 8시",en:"Saturday, October 24 · 20:00",ja:"10月24日 (土) 20時",zh:"10月24日 (六) 20:00"},
   cp_prz_head:{ko:"1~3위 상품",en:"Top 3 prizes",ja:"1〜3位の賞品",zh:"前三名獎品"},
   cp_prz_sure:{ko:"개발사 확정",en:"Confirmed by the devs",ja:"開発元公認",zh:"開發商確認"},
@@ -6602,7 +6618,7 @@ const TR_STREAM_URL = "https://youtube.com/live/UP4v7tgq0JU";   // 민트K (2026
 const CUPL = k => { const o=TR_CUP[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
 /* ── 규칙 탭 문구 — 4개 언어 (대회규칙서_초안_v1 요약 · 2026-08-24) ── */
 const CUP_R = {
-  r_date:{ko:"10월 24일 (토) 저녁 8시 (한국 시간) — 하루에 끝나요. 접수 마감은 10월 22일 (목), 조 추첨은 접수가 끝난 뒤 10월 23일 (금) 저녁 6~7시에 랜덤으로 라이브 진행해요(녹화본도 올리고, 시간은 바뀔 수 있어요).",en:"Saturday, October 24 · 20:00 KST (13:00 CEST) — one-day event. Sign-ups close October 22 (Thu); after that, groups are drawn at random live on October 23 (Fri), 18:00–19:00 KST (a recording will be shared; time may change).",ja:"10月24日(土) 20時（韓国時間）— 1日で完結。受付締切は10月22日(木)、組み合わせは受付終了後の10月23日(金) 18〜19時にライブでランダム抽選（録画も公開、時間は変わる場合があります）。",zh:"10月24日 (六) 20:00（韓國時間）— 一日完賽。報名截止 10月22日 (四)，截止後於 10月23日 (五) 18:00–19:00 直播隨機分組（會提供錄影，時間可能調整）。"},
+  r_date:{ko:"10월 24일 (토) 저녁 8시 (한국·일본 시간) — 하루에 끝나요. 접수는 10월 22일 (목)에 마감됐고, 조 추첨은 10월 23일 (금)에 라이브로 해요(녹화본도 올려요).",en:"Saturday, October 24 · 20:00 KST/JST (13:00 CEST) — one-day event. Sign-ups closed on October 22 (Thu); groups are drawn live on October 23 (Fri) (a recording will be shared).",ja:"10月24日(土) 20時（日本・韓国時間）— 1日で完結。受付は10月22日(木)に締め切りました。組み合わせは10月23日(金)にライブで抽選します（録画も公開）。",zh:"10月24日 (六) 20:00（韓國・日本時間，台灣 19:00）— 一日完賽。報名已於 10月22日 (四) 截止，10月23日 (五) 直播分組抽籤（會提供錄影）。"},
   r_chip1:{ko:"3v3 + 예비 1명",en:"3v3 + 1 sub",ja:"3v3＋補欠1名",zh:"3v3＋替補1人"},
   r_chip2:{ko:"하루 완결",en:"One-day event",ja:"1日で完結",zh:"一日完賽"},
   r_chip3:{ko:"온라인",en:"Online",ja:"オンライン",zh:"線上"},
@@ -6611,16 +6627,16 @@ const CUP_R = {
   r_how:{ko:"진행 방식",en:"How it works",ja:"進行方式",zh:"賽制"},
   r_how_sum:{ko:"조별 리그를 치른 뒤 4강 토너먼트로 우승을 가려요. 결승만 5판 3선승이고, 나머지 경기는 모두 3판 2선승이에요. 준결승에서 진 두 팀은 3·4위전을 해요.",en:"Group stage first, then a 4-team knockout for the title. The final is best of 5; every other match is best of 3. The two semi-final losers play for 3rd place.",ja:"グループリーグの後、4チームのトーナメントで優勝を決めます。決勝のみ3本先取（BO5）、それ以外の試合はすべて2本先取（BO3）です。準決勝で敗れた2チームは3位決定戦を行います。",zh:"先進行分組循環賽，再以四強淘汰賽決出冠軍。僅決賽為五戰三勝，其餘對戰皆為三戰兩勝。準決賽落敗的兩隊進行季軍戰。"},
   r_sw:{ko:"조별 리그 · 3판 2선승",en:"Group stage · best of 3",ja:"グループリーグ・2本先取（BO3）",zh:"分組循環賽・三戰兩勝"},
-  r_sw2:{ko:"6팀 3·3 · 7팀 4·3 · 8팀 4·4로 2개 조 — 팀 수가 달라지면 조 추첨 때 안내",en:"Two groups: 3+3 for 6 teams · 4+3 for 7 · 4+4 for 8 — other team counts are announced at the draw",ja:"2組：6チーム3・3、7チーム4・3、8チーム4・4 — チーム数が変わる場合は抽選時に案内",zh:"分2組：6隊3+3・7隊4+3・8隊4+4 — 隊數不同時於抽籤時公布"},
-  r_split:{ko:"각 조 상위 2팀이 4강 토너먼트로",en:"Top 2 of each group go to the knockout",ja:"各組上位2チームがトーナメントへ",zh:"各組前兩名晉級淘汰賽"},
+  r_sw2:{ko:"8팀 · 4팀씩 2개 조 · 같은 조의 모든 팀과 한 번씩",en:"8 teams · 2 groups of 4 · play every team in your group once",ja:"8チーム・4チームずつ2組・同じ組の全チームと1回ずつ",zh:"8隊・每組4隊共2組・與同組每隊各打一場"},
+  r_split:{ko:"각 조 상위 2팀이 4강에 올라 엇갈려 붙어요: 1조 1위 vs 2조 2위 · 2조 1위 vs 1조 2위",en:"Top 2 of each group reach the semi-finals, crossed: Group 1 #1 vs Group 2 #2 · Group 2 #1 vs Group 1 #2",ja:"各組上位2チームが準決勝へ（たすき掛け）：1組1位 vs 2組2位・2組1位 vs 1組2位",zh:"各組前兩名晉級四強並交叉對戰：1組第1 vs 2組第2・2組第1 vs 1組第2"},
   r_tie:{ko:"<b>조 순위가 같으면</b> ① 이긴 경기 수 → ② 판 득실(이긴 판 − 진 판) → ③ 이긴 판 수 → ④ 두 팀만 같으면 서로 붙은 경기 결과 → ⑤ 그래도 같으면 라이브로 추첨해요.",en:"<b>Group ties</b> are broken by ① matches won → ② game difference (games won − games lost) → ③ games won → ④ if only two teams are tied, their head-to-head match → ⑤ if still tied, a live draw.",ja:"<b>グループ順位が並んだら</b> ① 勝った試合数 → ② ゲーム得失（勝ちゲーム − 負けゲーム） → ③ 勝ちゲーム数 → ④ 2チームだけが並んだら直接対決の結果 → ⑤ それでも並んだらライブで抽選します。",zh:"<b>小組名次相同時</b>依序比較：① 勝場數 → ② 局數差（勝局 − 敗局） → ③ 勝局數 → ④ 只有兩隊同分時看兩隊交手結果 → ⑤ 仍相同則直播抽籤。"},
   r_cup:{ko:"4강 토너먼트",en:"4-team knockout",ja:"4強トーナメント",zh:"四強淘汰賽"},
   r_plate:{ko:"플레이트 결선",en:"Plate finals",ja:"プレート決勝",zh:"Plate 決賽"},
-  r_bo3:{ko:"준결승·3·4위전 3판 2선승 · 결승 5판 3선승 · 결승과 3·4위전은 동시에 진행 (라이브는 결승)",en:"Semi-finals and 3rd-place match best of 3 · final best of 5 · the final and 3rd-place match run at the same time (the final is streamed)",ja:"準決勝・3位決定戦は2本先取（BO3）・決勝は3本先取（BO5）・決勝と3位決定戦は同時進行（配信は決勝）",zh:"準決賽與季軍戰三戰兩勝・決賽五戰三勝・決賽與季軍戰同時進行（直播決賽）"},
+  r_bo3:{ko:"준결승·3·4위전 3판 2선승 · 결승 5판 3선승 · 결승과 3·4위전은 동시에 진행 (라이브는 결승, 4강은 가능하면)",en:"Semi-finals and 3rd-place match best of 3 · final best of 5 · the final and 3rd-place match run at the same time (the final is streamed; semi-finals when possible)",ja:"準決勝・3位決定戦は2本先取（BO3）・決勝は3本先取（BO5）・決勝と3位決定戦は同時進行（配信は決勝、準決勝は可能なら）",zh:"準決賽與季軍戰三戰兩勝・決賽五戰三勝・決賽與季軍戰同時進行（直播決賽，四強視情況直播）"},
   r_reg:{ko:"팀 등록",en:"Entering",ja:"チーム登録",zh:"報名"},
   r_reg1:{ko:"팀 3명 + 예비 1명(선택)으로 신청해요. 혼자여도 괜찮아요 — 운영자가 시간대를 맞춰 팀을 묶어드립니다.",en:"Enter with 3 players + 1 optional sub. Solo? That's fine — the organiser will match you into a team.",ja:"3人＋補欠1名（任意）で登録。1人でもOK — 運営が時間帯を合わせてチームを組みます。",zh:"以3人＋替補1人（選填）報名。單人也可以 — 管理員會依時段幫你組隊。"},
   r_reg2:{ko:"닉네임은 게임 안 실제 닉네임으로 적어주세요. 게임 ID는 상품 지급용이라 꼭 필요하고, 운영자만 봅니다.",en:"Use your real in-game nicknames. Game IDs are required for prize delivery and are visible to the organiser only.",ja:"ニックネームはゲーム内で使っている名前そのままで。ゲームIDは賞品支給に必須で、運営者のみ確認できます。",zh:"請填寫遊戲內實際暱稱。遊戲ID為發獎必需，僅管理員可見。"},
-  r_reg3:{ko:"접수 마감 후에는 명단을 바꿀 수 없어요 (부득이한 경우만 운영자 승인).",en:"Rosters lock when sign-ups close (changes only with organiser approval).",ja:"受付締切後は名簿の変更不可（やむを得ない場合のみ運営承認）。",zh:"報名截止後名單鎖定（特殊情況需管理員同意）。"},
+  r_reg3:{ko:"접수 마감 후에는 명단을 바꿀 수 없어요. 등록한 선수가 대회 날 출전할 수 없게 된 부득이한 경우만 운영자 승인으로 바꿀 수 있고, 바뀌면 바로 공지해요.",en:"Rosters lock when sign-ups close. Changes are allowed only in unavoidable cases (a registered player can't play on the day) with organiser approval, and any change is announced right away.",ja:"受付締切後は名簿を変更できません。登録選手が当日出場できなくなったやむを得ない場合のみ運営の承認で変更でき、変更はすぐに告知します。",zh:"報名截止後名單鎖定。只有在登記選手當天無法出賽的特殊情況下，經管理員同意才能更換，更換後會立即公告。"},
   r_reg4:{ko:"예비 선수는 <b>어느 경기에든 자유롭게</b> 나올 수 있어요. 판 도중에는 바꿀 수 없고, 판이 끝나면 다음 판 전에 바꿀 수 있어요.",en:"Substitutes can play <b>in any match</b>. They can't come in during a game, but can swap in after a game ends, before the next one.",ja:"補欠は<b>どの試合にも自由に</b>出られます。ゲームの途中では交代できませんが、ゲームが終わったら次のゲームの前に交代できます。",zh:"替補可<b>自由參加任何一場比賽</b>。一局進行中不能更換，一局結束後、下一局開始前即可更換。"},
   r_set:{ko:"경기 설정",en:"Match setup",ja:"試合設定",zh:"比賽設定"},
   r_set1:{ko:"게임의 「훈련 → 대결(Versus)」 탭에서 방을 만들어 진행해요.",en:"Rooms are created in-game under Training → Versus.",ja:"ゲーム内の「トレーニング → Versus」タブでルームを作って進行します。",zh:"在遊戲內「訓練 → Versus」分頁建立房間進行。"},
@@ -6629,20 +6645,20 @@ const CUP_R = {
   /* 🎮 2026-10-17 아시아 컵: 9월의 "사수·사냥·장악만(점멸·강타 제외)" 규정은 없애고 올랜덤(망굳 결정).
      영웅 밴은 팀 리더 투표에서 한 팀이 반대해 넣지 않기로 했다(밴은 만장일치일 때만 넣기로 했었음). */
   r_set2b:{ko:"영웅 밴은 없어요 — 팀 리더 투표로 정했어요.",en:"No hero bans — decided by a team-leader vote.",ja:"ヒーローBANはありません — チームリーダーの投票で決まりました。",zh:"不設英雄禁用 — 由各隊隊長投票決定。"},
-  r_set2c:{ko:"어느 쪽이 방을 만들지는 <b>대진표와 함께 안내</b>할게요.",en:"Who hosts the room will be announced with the bracket.",ja:"どちらが部屋を作るかは<b>対戦表と一緒に案内</b>します。",zh:"由哪一方開房，將<b>隨賽程表一併公布</b>。"},
-  r_set3:{ko:"경기(3판 2선승, 결승은 5판 3선승)가 끝나면 방장이 이 사이트 「대회 → 대진표」 맨 위 「경기 보고」에 그 경기의 매치 코드를 한 번에 올려요. 이긴 판·진 판 상관없이 그 경기의 모든 판을, 판마다 「코드 + 그 판에서 이긴 팀」으로 올려요(판 사이에 게임을 나올 필요 없어요). 늦어도 그날 마지막 경기가 끝나면 바로 올려 주세요 — 보고 없는 경기는 인정되지 않아요.",en:"When a match (best of 3; the final best of 5) is over, the room host posts all of its match codes at once under 「Cup → Bracket → Report a match」 on this site — every game of that match, won or lost, each as 「code + the team that won that game」 (no need to leave the game in between). At the latest, post them right after the day's last match ends — unreported matches don't count.",ja:"試合（2本先取・BO3、決勝は3本先取・BO5）が終わったら、ホストがこのサイトの「大会 → 対戦表」上部「試合報告」にその試合のマッチコードをまとめて登録します。勝ち負けに関係なくその試合の全ゲームを、1ゲームずつ「コード＋そのゲームの勝者」で（途中でゲームを抜ける必要はありません）。遅くともその日の最終試合が終わったらすぐに登録してください — 未報告の試合は無効です。",zh:"一場比賽（三戰兩勝，決賽五戰三勝）結束後，房主在本站「賽事 → 對戰表」最上方的「回報比賽」一次上傳該場所有對局代碼 — 不論輸贏，該場每一局都要填，每局「代碼＋該局獲勝隊伍」（中途不必退出遊戲）。最晚請在當天最後一場比賽結束後立即回報 — 未回報的比賽不計成績。"},
+  r_set2c:{ko:"방 만들기: 라이브 경기는 중계자(민트K)가, 유럽 팀 경기는 운영자 MAMMON이 관전으로 방을 만들어 양 팀을 초대해요. 나머지 경기는 <b>대진표에 먼저(왼쪽) 적힌 팀</b>이 방을 만들고 상대 팀을 초대해요. 초대하려면 친구 추가가 필요하니, 경기 전에 상대 팀 선수와 친구를 맺어 두세요.",en:"Rooms: streamed matches are hosted by the caster (MintK) and EU-team matches by organiser MAMMON, both joining as spectators and inviting the two teams. For every other match, <b>the team listed first (left) in the bracket</b> creates the room and invites the other team. Inviting needs a friend request, so add the other team's players before your match.",ja:"部屋の作り方：配信試合は配信者（MintK）、ヨーロッパチームの試合は運営のMAMMONが観戦者として部屋を作り、両チームを招待します。それ以外の試合は<b>対戦表で先に（左に）書かれたチーム</b>が部屋を作り、相手チームを招待します。招待にはフレンド登録が必要なので、試合前に相手チームの選手とフレンドになっておいてください。",zh:"開房方式：直播場由主播（MintK）、歐洲隊伍的比賽由管理員 MAMMON 以觀戰身分開房並邀請雙方。其餘比賽由<b>對戰表上先列出（左邊）的隊伍</b>開房並邀請對手。邀請需要先加好友，請在比賽前與對手隊伍的選手互加好友。"},
+  r_set3:{ko:"경기(3판 2선승, 결승은 5판 3선승)가 끝나면 바로 방을 만든 팀이 이 사이트 「대회 → 대진표」 맨 위 「경기 보고」에 그 경기의 매치 코드를 한 번에 올려요. 이긴 판·진 판 상관없이 모든 판을, 판마다 「코드 + 그 판에서 이긴 팀」으로 올려요(판 사이에 게임을 나올 필요 없어요). 방을 만든 팀이 못 올리면 상대 팀이 올려도 되고, 라이브·유럽 팀 경기는 운영진이 올려요. 보고 없는 경기는 인정되지 않아요.",en:"Right after a match (best of 3; the final best of 5), the team that created the room posts all of its match codes at once under 「Cup → Bracket → Report a match」 on this site — every game of that match, won or lost, each as 「code + the team that won that game」 (no need to leave the game in between). If the host team can't, the other team may post; organisers post streamed and EU-team matches. Unreported matches don't count.",ja:"試合（2本先取・BO3、決勝は3本先取・BO5）が終わったらすぐに、部屋を作ったチームがこのサイトの「大会 → 対戦表」上部「試合報告」にその試合のマッチコードをまとめて登録します。勝ち負けに関係なく全ゲームを、1ゲームずつ「コード＋そのゲームの勝者」で（途中でゲームを抜ける必要はありません）。部屋を作ったチームが登録できない場合は相手チームが登録してもよく、配信試合とヨーロッパチームの試合は運営が登録します。未報告の試合は無効です。",zh:"一場比賽（三戰兩勝，決賽五戰三勝）結束後，由開房的隊伍立即在本站「賽事 → 對戰表」最上方的「回報比賽」一次上傳該場所有對局代碼 — 不論輸贏，每一局都要填，每局「代碼＋該局獲勝隊伍」（中途不必退出遊戲）。開房隊伍無法回報時可由對手回報，直播場與歐洲隊伍的比賽由管理員回報。未回報的比賽不計成績。"},
   r_time:{ko:"출석 · 시간",en:"Attendance & timing",ja:"出席・時間",zh:"出席・時間"},
   r_time1:{ko:"집합 시각에서 15분이 지나도 3명이 안 모이면 몰수패예요. 대회 중에도 자기 경기 시작에 5분 넘게 늦으면 몰수패가 될 수 있어요.",en:"15 minutes after call time with fewer than 3 players = forfeit. During the day, being 5+ minutes late for your own match can also count as a forfeit.",ja:"集合時刻から15分過ぎて3人未満なら没収負け。大会中も自分の試合開始に5分以上遅れると没収負けになることがあります。",zh:"集合後15分鐘未滿3人即判負。當天若自己的比賽開始超過5分鐘未到，也可能被判負。"},
   r_time2:{ko:"대회는 하루에 끝나요 — 8팀 기준 약 3~4시간.",en:"The whole cup runs in one day — about 3–4 hours with 8 teams.",ja:"大会は1日で完結 — 8チームで約3〜4時間。",zh:"比賽一天內結束 — 8隊約3～4小時。"},
   r_bug:{ko:"버그 · 튕김",en:"Bugs & disconnects",ja:"バグ・切断",zh:"BUG・斷線"},
   r_bug1:{ko:"게임 버그(스킬이 사라지거나 안 써지는 현상 등)는 게임의 일부로 보고, 버그 때문에 재경기를 하지 않아요.",en:"Game bugs (a skill vanishing or not firing, etc.) count as part of the game. Games are not replayed because of bugs.",ja:"ゲームのバグ（スキルが消える・発動しないなど）はゲームの一部とみなし、バグを理由にした再試合はしません。",zh:"遊戲 BUG（技能消失或放不出來等）視為遊戲的一部分，不會因為 BUG 重賽。"},
-  r_bug2:{ko:"캐릭터가 움직일 수 있게 된 뒤 <b>10초 안에</b> 한 명이라도 튕기면, 양 팀 모두 그 자리에서 멈추고 바로 운영자에게 알려 주세요. 그 판은 처음부터 다시 해요. 알리지 않고 계속 진행하면 재경기는 없어요.",en:"If anyone disconnects <b>within 10 seconds</b> of characters being able to move, both teams stop where they are and tell the organiser right away. That game is replayed from the start. If you keep playing without telling us, there is no replay.",ja:"キャラクターが動けるようになってから<b>10秒以内</b>に1人でも切断されたら、両チームともその場で止まり、すぐ運営に知らせてください。そのゲームは最初からやり直します。知らせずに続けた場合、再試合はありません。",zh:"角色可以移動後<b>10 秒內</b>只要有 1 人斷線，雙方都請原地停下並立刻通知管理員，該局從頭重打。若沒有通知而繼續進行，就不重賽。"},
+  r_bug2:{ko:"캐릭터가 움직일 수 있게 된 뒤 <b>10초 안에</b> 한 명이라도 튕기면, 양 팀 모두 그 자리에서 멈추고 바로 운영자에게 알려 주세요(한국 팀은 리더방, 일본·유럽 팀은 디스코드). 그 판은 처음부터 다시 해요. 알리지 않고 계속 진행하면 재경기는 없어요.",en:"If anyone disconnects <b>within 10 seconds</b> of characters being able to move, both teams stop where they are and tell the organisers right away (Korean teams: leaders' room; Japanese and EU teams: Discord). That game is replayed from the start. If you keep playing without telling us, there is no replay.",ja:"キャラクターが動けるようになってから<b>10秒以内</b>に1人でも切断されたら、両チームともその場で止まり、すぐ運営に知らせてください（韓国チームはリーダー部屋、日本・ヨーロッパチームはDiscord）。そのゲームは最初からやり直します。知らせずに続けた場合、再試合はありません。",zh:"角色可以移動後<b>10 秒內</b>只要有 1 人斷線，雙方都請原地停下並立刻通知管理員（韓國隊伍：隊長群；日本與歐洲隊伍：Discord），該局從頭重打。若沒有通知而繼續進行，就不重賽。"},
   r_bug3:{ko:"서버 장애로 게임 자체가 끊겨 결과가 남지 않으면 그 판을 다시 해요.",en:"If a server problem cuts off the game itself and no result is saved, that game is replayed.",ja:"サーバー障害でゲーム自体が切れて結果が残らなかった場合は、そのゲームをやり直します。",zh:"若因伺服器問題整局中斷、沒有留下結果，該局重打。"},
   r_bug4:{ko:"판이 끝난 뒤에 튕겼다면, 게임 서버에 결과가 남아 있으면 그 결과를 인정해요.",en:"If someone disconnects after the game has ended, the result stands as long as the game server saved it.",ja:"ゲーム終了後に切断された場合、ゲームサーバーに結果が残っていればその結果を認めます。",zh:"一局結束後才斷線時，只要遊戲伺服器有留下結果，就承認該結果。"},
   r_bug5:{ko:"10초가 지난 뒤 개인 문제로 튕긴 경우(발열 · 배터리 · 앱 튕김 · 와이파이나 데이터 끊김 등)에는 재경기 없이 게임을 계속해요. 다시 들어올 수 있으면 들어오고, 안 되면 남은 인원으로 끝까지 해요. <b>경기 전에 배터리, 와이파이, 데이터 연결을 한 번 더 확인해 주세요.</b>",en:"After those 10 seconds, a disconnect caused by a player's own issue (overheating, battery, app crash, Wi-Fi or mobile data dropping, etc.) means no replay and the game goes on. They rejoin if they can; otherwise the team plays it out with the players left. <b>Please double-check your battery, Wi-Fi and data connection before your match.</b>",ja:"10秒を過ぎてから個人の問題で切断された場合（発熱・バッテリー・アプリ落ち・Wi-Fiやデータ通信の切断など）は、再試合なしでゲームを続行します。再接続できれば戻り、できなければ残りの人数で最後までプレイします。<b>試合前にバッテリー、Wi-Fi、データ通信をもう一度確認してください。</b>",zh:"10 秒過後因個人問題斷線（發熱、電量、App 閃退、Wi-Fi 或行動數據中斷等），不重賽，繼續進行。能重新連線就回來，不能就由剩下的人打完。<b>比賽前請再確認一次電量、Wi-Fi 和行動數據連線。</b>"},
   r_dq:{ko:"매너 · 실격",en:"Conduct & DQ",ja:"マナー・失格",zh:"行為・取消資格"},
   r_dq_sum:{ko:"아래 행동은 실격이에요 — 실격 팀은 상품을 받을 수 없어요:",en:"These get a team disqualified — no prizes for DQ'd teams:",ja:"以下の行為は失格 — 失格チームは賞品対象外：",zh:"以下行為將被取消資格 — 取消資格的隊伍無法獲獎："},
-  r_dq1:{ko:"노쇼 (지각은 출석 규정에 따라 몰수패)",en:"No-show (lateness is a forfeit under the attendance rules)",ja:"無断欠席（遅刻は出席ルールにより不戦敗）",zh:"缺席（遲到依出席規定判負）"},
+  r_dq1:{ko:"노쇼 (지각은 출석 규정에 따라 몰수패)",en:"No-show (lateness is a forfeit under the attendance rules)",ja:"無断欠席（遅刻は出席ルールにより没収負け）",zh:"缺席（遲到依出席規定判負）"},
   r_dq2:{ko:"고의 트롤 · 던지기 (리플레이로 판정)",en:"Trolling / throwing (judged by replay)",ja:"故意のトロール・投げ（リプレイで判定）",zh:"故意擺爛（依重播判定）"},
   r_dq3:{ko:"거짓 결과 제출",en:"Submitting false results",ja:"虚偽の結果報告",zh:"謊報比賽結果"},
   r_dq4:{ko:"미등록 선수 · 대리 플레이",en:"Unregistered players / someone else playing on a registered account",ja:"未登録選手・代理プレイ",zh:"未註冊選手・代打"},
@@ -6664,7 +6680,7 @@ const CUP_R = {
   r_mvp6:{ko:"<b>MVP 등수가 같으면</b> 아래 순서로 정해요.<br>① 판 1등을 더 많이 한 선수<br>② 팀 최종 순위가 높은 선수<br>③ 판마다 \"내 점수 ÷ 그 판 6명의 평균 점수\"를 구해, 그 평균이 높은 선수<br>한 판 안에서 점수가 똑같으면 등수를 나눠 가져요(공동 1·2등이면 둘 다 1.5등).",en:"<b>If MVP placings are tied</b>, in this order:<br>① more 1st places<br>② better final team placing<br>③ higher average of \"my score ÷ the average score of the 6 players in that game\"<br>Players with the exact same score in a game share the placing (tied 1st–2nd = 1.5 each).",ja:"<b>MVP順位が同じ場合</b>は次の順で決めます。<br>① ゲーム1位の回数が多い選手<br>② チームの最終順位が高い選手<br>③ 毎ゲーム「自分のスコア ÷ そのゲームの6人の平均スコア」を出し、その平均が高い選手<br>同じゲームでスコアがまったく同じなら順位を分け合います（1・2位が同点なら2人とも1.5位）。",zh:"<b>MVP 名次相同時</b>依下列順序決定：<br>① 單局第 1 名次數較多者<br>② 隊伍最終名次較高者<br>③ 每局算出「自己分數 ÷ 該局 6 人平均分數」，其平均較高者<br>同一局內分數完全相同則平分名次（並列第 1、2 名則兩人都算 1.5 名）。"},
   r_mvp7:{ko:"조별 리그 · 4강 · 결승 · 3·4위전의 모든 공식 판을 세요. 다시 한 판은 마지막에 끝까지 한 판만, 몰수된 판은 빼요. 리플레이를 읽지 못한 판은 빼고 결과표에 그 사실을 적어요.",en:"Every official game counts — group stage, semi-finals, final and 3rd-place match. For replayed games only the last completed one counts; forfeits don't count. A game whose replay can't be read is left out, and the results say so.",ja:"グループリーグ・準決勝・決勝・3位決定戦のすべての公式ゲームを数えます。やり直したゲームは最後まで行ったゲームのみ、没収されたゲームは除外。リプレイを読めなかったゲームは除外し、結果表にその旨を記します。",zh:"計入所有正式對局：分組賽、準決賽、決賽與季軍戰。重賽只計最後完整的一局，棄權局不計。無法讀取回放的對局將排除，並在結果表中註明。"},
   r_mvp8:{ko:"결승 다음 날까지 모든 선수의 판별 점수·등수표와 매치 코드를 공개하고, 24시간 동안 이의 제기를 받은 뒤 확정해요. 매치 코드로 누구나 같은 리플레이를 확인할 수 있고, 등수를 직접 더하고 나눠 검산할 수 있어요.",en:"By the day after the final, every player's per-game scores and placings and all match codes are published; after 24 hours for objections the result is final. Anyone can check the same replays with the match codes and recompute the averages by hand.",ja:"決勝の翌日までに全選手のゲームごとのスコア・順位表とマッチコードを公開し、24時間の異議申し立て期間の後に確定します。マッチコードで誰でも同じリプレイを確認でき、順位を自分で足して割って検算できます。",zh:"決賽隔天前公開所有選手每局的分數、名次表與對局代碼，接受 24 小時異議後確定。任何人都能以對局代碼查看同一份回放，並自行加總平均來驗算。"},
-  r_ask:{ko:"궁금한 건 소통 → 피드백이나 디스코드로 물어보세요.",en:"Questions? Ask in Chat → Feedback or on Discord.",ja:"質問は「交流 → フィードバック」またはDiscordへどうぞ。",zh:"有問題請至 交流 → 意見回饋 或 Discord 詢問。"},
+  r_ask:{ko:"궁금한 건 소통 → 피드백이나 디스코드로 물어보세요. 대회 당일 튕김·분쟁·결과 문의는 한국 팀은 카톡 리더방, 일본·유럽 팀은 디스코드로 바로 알려 주세요.",en:"Questions? Ask in Chat → Feedback or on Discord. On the day, report disconnects, disputes and results right away: Korean teams in the KakaoTalk leaders' room, Japanese and EU teams on Discord.",ja:"質問は「交流 → フィードバック」またはDiscordへどうぞ。大会当日の切断・トラブル・結果の連絡は、韓国チームはカカオトークのリーダー部屋、日本・ヨーロッパチームはDiscordですぐに知らせてください。",zh:"有問題請至 交流 → 意見回饋 或 Discord 詢問。比賽當天的斷線、爭議與結果，韓國隊伍請在 KakaoTalk 隊長群、日本與歐洲隊伍請在 Discord 立即通知。"},
   r_note_head:{ko:"운영자 공지",en:"Organiser's note",ja:"運営からのお知らせ",zh:"管理員公告"}
 };
 const CUPR = k => { const o=CUP_R[k]||{}; const v=o[LANG]; return v!==undefined?v:(o.en!==undefined?o.en:o.ko); };
@@ -6761,6 +6777,7 @@ let trMetaLoaded = false;
 try{ const _c = JSON.parse(localStorage.getItem("rs_trmeta") || "null"); if(_c && typeof _c === "object") trMeta = _c; }catch(e){}
 let trRules = null, trMatches = [], trHall = [];      // 규칙 v31: tourney/rules · tourney/matches · tourney/hall
 let trReports = [];                                   // 규칙 v38: tourney/reports/<매치코드> — 리더(방장)가 직접 올리는 경기 보고(공개)
+let trBEdit = null;   // 대진표에서 수정 중인 경기 id (2026-10-23)
 let trStDraft = null, trRpDraft = null, trRpOpen = false;   // 운영진 대신 등록·경기 보고 입력 중인 값(구독으로 화면이 다시 그려져도 안 날아가게)
 const TR_MGR = () => !!(IS_ADMIN || IS_TSTAFF);        // 관리자 또는 대회 운영진
 /* 대회 상태 순서: 의향 조사 → 접수 → 마감 → 진행 → 종료. interest 는 2026-08-19 추가(규칙 v30). */
@@ -7092,7 +7109,7 @@ const TR_RP_CODE = /^[A-Z0-9]{6,12}$/;
 const trRpIsOpen = () => {
   if(TR_MGR()) return true;
   const st = trMeta && trMeta.state;
-  return !!(trMeta && trMeta.on && (st === "closed" || st === "live" || st === "done"));
+  return !!(trMeta && trMeta.on && st === "live");   /* 2026-10-23 규칙 v40: 보고는 대회 진행 중(live)에만 — 운영진은 언제나 */
 };
 function trRpWinOpts(d, wk){
   const o = (val, label) => `<option value="${val}"${(d[wk||"win"]||"")===val?" selected":""}>${label}</option>`;
@@ -7188,6 +7205,12 @@ const trDraftInput = e => {
 };
 document.addEventListener("input", trDraftInput);
 document.addEventListener("change", trDraftInput);
+/* 2026-10-23: 다른 경기 보고·대진이 들어올 때마다 화면 전체를 다시 그려서, 보고서를 쓰던 사람의 폰 키보드·선택 목록이 닫혔다.
+   보고 칸이나 운영진 입력칸에 커서가 있는 동안은 다시 그리기를 미루고, 칸을 벗어나면 한 번에 그린다. */
+let trRenderPending = false;
+const trTyping = () => { const ae = document.activeElement; return !!(ae && ae.closest && ae.closest(".cupRpForm, #trBracketAdmin, [data-trst]") && /^(INPUT|SELECT|TEXTAREA)$/.test(ae.tagName)); };
+const trRenderSafe = () => { if(trTyping()){ trRenderPending = true; return; } trRenderPending = false; renderTourney(); };
+document.addEventListener("focusout", () => setTimeout(() => { if(trRenderPending && !trTyping()){ trRenderPending = false; renderTourney(); } }, 120));
 document.addEventListener("toggle", e => {
   const t = e.target; if(!t || !t.classList) return;
   if(t.classList.contains("cupRpForm")) trRpOpen = t.open;
@@ -7373,17 +7396,19 @@ function renderTrBracket(){
   const H=[trReportCard()];
   if(!trMatches.length){ H.push(`<div class="rptcard"><h3>${TRL("b_head")}</h3><div class="rnote">${TRL("b_none")}</div></div>`); }
   else{
-    const embOf = n => { const t = trTeams.find(x => x.name===n || (x.solo && x.m1===n)); return t ? t.emb : null; };
+    const embOf = n => { const k = String(n||"").replace(/[\s\u1160\u3164]+/g," ").trim().toLowerCase(); const t = trTeams.find(x => String(x.name||"").replace(/[\s\u1160\u3164]+/g," ").trim().toLowerCase()===k || (x.solo && x.m1===n)); return t ? t.emb : null; };
     const shSvg = sz => `<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="#5f6a80" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path></svg>`;
     const av = (n,sz) => { const e=embOf(n); return (e!==null&&e!==undefined) ? cupEmbImg(e,sz)
       : `<span class="cupEmb" style="width:${sz}px;height:${sz}px;border-color:#3a4660">${shSvg(Math.round(sz*.55))}</span>`; };
     const parseSc = m => String(m.score||"").match(/(\d+)\s*[:\-]\s*(\d+)/);
+    const isFF = m => /몰수|forfeit|\bFF\b|没収|不戦|棄權/i.test(m.score||"");   /* 2026-10-23: 몰수는 "0-2 몰수"처럼 적는다 */
+    const nk = n => String(n||"").replace(/[\s\u1160\u3164]+/g," ").trim().toLowerCase();   /* 띄어쓰기 두 칸·채움 문자 차이로 같은 팀이 두 줄 되지 않게 */
     const IC_CUP='<path d="M7 3h10v5.5a5 5 0 0 1-10 0z"></path><path d="M12 13.5V16M8.5 21h7"></path>';
     const IC_PL='<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path>';
     const IC_RD='<circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle>';
     const secHead = (icn, txt) => `<div class="cupSecHead" style="margin-top:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icn}</svg><b>${esc(txt)}</b><i></i></div>`;
     const meta = m => (m.code?`<div class="cupMtCode">${TRL("b_code")}: <span>${esc(m.code)}</span></div>`:"")
-      + (IS_ADMIN?`<div class="cupMtCode"><button class="cmtbtn" data-trmdel="${esc(m.id)}">${TRL("a_del")}</button></div>`:"");
+      + (TR_MGR()?`<div class="cupMtCode"><button class="cmtbtn" data-trmedit="${esc(m.id)}">${TRL("b_a_edit")}</button> <button class="cmtbtn" data-trmdel="${esc(m.id)}">${TRL("a_del")}</button></div>`:"");
     /* 예선용 VS 카드 */
     const tcell = (n, win) => `<div class="cupMtT${win?" win":""}">${av(n,40)}<span class="cupMtN">${esc(n)}</span></div>`;
     const bigCard = m => {
@@ -7402,8 +7427,9 @@ function renderTrBracket(){
                 : `<img class="bo-emblem" src="cosimg/${e}.webp" alt="">`;
     };
     const boChips = m => (m.code?`<button type="button" class="bo-code" data-cupcode="${esc(m.code)}" aria-label="${TRL("b_code")} ${esc(m.code)}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"></path></svg></button>`:"")
-      + (IS_ADMIN?`<button type="button" class="bo-del" data-trmdel="${esc(m.id)}" aria-label="${TRL("a_del")}">×</button>`:"");
-    const boScore = (sc, m) => sc ? `${+sc[1]>+sc[2]?`<b>${sc[1]}</b>`:sc[1]} : ${+sc[2]>+sc[1]?`<b>${sc[2]}</b>`:sc[2]}` : (m.score?esc(m.score):"VS");
+      + (TR_MGR()?`<button type="button" class="bo-edit" data-trmedit="${esc(m.id)}">${TRL("b_a_edit")}</button><button type="button" class="bo-del" data-trmdel="${esc(m.id)}" aria-label="${TRL("a_del")}">×</button>`:"");
+    const boScore = (sc, m) => (sc ? `${+sc[1]>+sc[2]?`<b>${sc[1]}</b>`:sc[1]} : ${+sc[2]>+sc[1]?`<b>${sc[2]}</b>`:sc[2]}` : (m.score?esc(m.score):"VS"))
+      + (sc && isFF(m) ? `<small class="bo-ff">${TRL("b_ff")}</small>` : "");
     const band = (m, tag) => {
       const sc = parseSc(m); const wA = sc&&+sc[1]>+sc[2], wB = sc&&+sc[2]>+sc[1];
       const st = sc ? `is-done ${wA?"is-win-l":wB?"is-win-r":""}` : "is-upcoming";
@@ -7434,21 +7460,25 @@ function renderTrBracket(){
       + `<div class="bo-side bo-side--r"><span class="bo-emblem bo-embFb">${shSvg(24)}</span><span class="bo-name" style="color:#5f6a80">?</span></div>`
       + `<div class="bo-plate"><span class="bo-score">VS</span></div><span class="bo-when">${TRL("b_upcoming")}</span></div></article>`;
     /* 결선 분류 */
-    const isPl = r=>/플레이트|plate/i.test(r||""), isCp = r=>/컵|cup/i.test(r||"") && !isPl(r);
-    const isSemi = r=>/4강|준결승|semi/i.test(r||""), isFin = r=>/결승|final/i.test(r||"") && !isSemi(r);
-    const fam = { cup:{semi:[],fin:[]}, plate:{semi:[],fin:[]} };
+    /* 2026-10-23: 예전엔 라운드 이름에 "컵"이 있어야 결선으로 봤다 → "4강"·"결승"만 쓰면 예선 순위에 섞였고 3·4위전 칸이 없었다 */
+    const isPl = r=>/플레이트|plate/i.test(r||"");
+    const isThird = r=>/3\s*[·.,\/\-]?\s*4\s*위|3위|third|3rd/i.test(r||"");
+    const isSemi = r=>/4강|준결승|semi/i.test(r||"") && !isThird(r), isFin = r=>/결승|final/i.test(r||"") && !isSemi(r) && !isThird(r);
+    const fam = { cup:{semi:[],fin:[],third:[]}, plate:{semi:[],fin:[],third:[]} };
     const rest = [];
     for(const m of trMatches){
-      const r=m.round||"", f = isCp(r)?"cup":isPl(r)?"plate":null;
-      if(f && (isSemi(r)||isFin(r))){ (isSemi(r)?fam[f].semi:fam[f].fin).push(m); }
+      const r=m.round||"", f = isPl(r)?"plate":"cup";
+      if(isThird(r)) fam[f].third.push(m);
+      else if(isSemi(r)||isFin(r)) (isSemi(r)?fam[f].semi:fam[f].fin).push(m);
       else rest.push(m);
     }
     const stage = (f, key, title) => {
-      if(!f.semi.length && !f.fin.length) return;
+      if(!f.semi.length && !f.fin.length && !f.third.length) return;
       const S=[`<section class="bo-stage" data-bracket="${key}">`, `<h3 class="bo-round">${esc(title)}</h3>`];
       f.semi.slice(0,2).forEach((m,i)=>{
         S.push(band(m, `${esc(m.round)}${f.semi.length>1?` · ${i+1}`:""}`));
       });
+      for(const m of f.third) S.push(band(m, esc(m.round || TRL("b_third"))));
       if(f.fin.length){ for(const m of f.fin) S.push(finalBand(m)); }
       else if(f.semi.length) S.push(finalTbd);
       S.push(`</section>`);
@@ -7456,31 +7486,55 @@ function renderTrBracket(){
     };
     stage(fam.cup, "cup", LANG==="ko"?"컵 · 결선":LANG==="ja"?"カップ決勝":LANG==="zh"?"盃賽決賽":"CUP FINALS");
     stage(fam.plate, "plate", LANG==="ko"?"플레이트 · 결선":LANG==="ja"?"プレート決勝":LANG==="zh"?"Plate 決賽":"PLATE FINALS");
-    /* 예선 순위 — 방송 순위 보드: 상단 금색권 / 하단 청은권 / 사이에 "결선 진출 컷" 라인 */
+    /* 예선 순위 — 방송 순위 보드. 2026-10-23: 두 조를 한 표에 섞고 이긴 경기 수로만 줄 세우던 것을
+       조별로 나누고 규칙 탭 동점 규칙(이긴 경기 → 판 득실 → 이긴 판 → 두 팀만 같으면 맞대결)대로. 조 = 라운드 이름의 "1조"·"A조"·"Group A" */
     if(rest.length){
-      const W={},L={};
-      for(const m of rest){ const sc=parseSc(m); if(!sc) continue;
-        const aw=+sc[1]>+sc[2];
-        W[m.a]=(W[m.a]||0)+(aw?1:0); L[m.a]=(L[m.a]||0)+(aw?0:1);
-        W[m.b]=(W[m.b]||0)+(aw?0:1); L[m.b]=(L[m.b]||0)+(aw?1:0);
-      }
-      const names=[...new Set(rest.flatMap(m=>[m.a,m.b]))];
-      if(names.length>=4 && Object.keys(W).length){
-        names.sort((x,y)=>(W[y]||0)-(W[x]||0));
-        const inCup = new Set(fam.cup.semi.concat(fam.cup.fin).flatMap(m=>[m.a,m.b]));
-        const inPl  = new Set(fam.plate.semi.concat(fam.plate.fin).flatMap(m=>[m.a,m.b]));
-        const cut = inCup.size ? names.filter(n=>inCup.has(n)).length : Math.ceil(names.length/2);
-        const wl = LANG==="ko"?["승","패"]:LANG==="ja"?["勝","敗"]:LANG==="zh"?["勝","敗"]:["W","L"];
-        H.push(`<div class="bo-qhead"><i></i><span>${LANG==="ko"?"예선 순위":LANG==="ja"?"予選順位":LANG==="zh"?"預賽排名":"STANDINGS"}</span><i></i></div>`);
+      const grpOf = r => { const mm = String(r||"").match(/([A-Za-z0-9]+)\s*조/) || String(r||"").match(/group\s*([A-Za-z0-9]+)/i); return mm ? mm[1].toUpperCase() : ""; };
+      const groups = {};
+      for(const m of rest){ const g = grpOf(m.round); (groups[g] = groups[g] || []).push(m); }
+      const gkeys = Object.keys(groups).sort();
+      const hasGroups = gkeys.some(g => g);
+      const inCup = new Set(fam.cup.semi.concat(fam.cup.fin, fam.cup.third).flatMap(m=>[nk(m.a),nk(m.b)]));
+      const inPl  = new Set(fam.plate.semi.concat(fam.plate.fin, fam.plate.third).flatMap(m=>[nk(m.a),nk(m.b)]));
+      const wl = LANG==="ko"?["승","패"]:LANG==="ja"?["勝","敗"]:LANG==="zh"?["勝","敗"]:["W","L"];
+      for(const g of gkeys){
+        const ms = groups[g]; const S = {}, disp = {};
+        const add = n => { const k = nk(n); if(!S[k]){ S[k] = {W:0,L:0,GW:0,GL:0}; disp[k] = n; } return k; };
+        for(const m of ms){
+          const ka = add(m.a), kb = add(m.b), sc = parseSc(m); if(!sc) continue;
+          const x = +sc[1], y = +sc[2]; if(x === y) continue;            // 같은 점수는 결과로 치지 않는다(입력 오류)
+          S[ka].GW += x; S[ka].GL += y; S[kb].GW += y; S[kb].GL += x;
+          if(x > y){ S[ka].W++; S[kb].L++; } else { S[kb].W++; S[ka].L++; }
+        }
+        const keys = Object.keys(S);
+        if(keys.length < 2 || !ms.some(m => parseSc(m))) continue;
+        const gd = k => S[k].GW - S[k].GL;
+        const same = (p,q) => S[p].W===S[q].W && gd(p)===gd(q) && S[p].GW===S[q].GW;
+        keys.sort((p,q) => (S[q].W-S[p].W) || (gd(q)-gd(p)) || (S[q].GW-S[p].GW) || disp[p].localeCompare(disp[q]));
+        const tied = new Set();
+        for(let i=0;i<keys.length;){
+          let j=i; while(j+1<keys.length && same(keys[i],keys[j+1])) j++;
+          if(j-i===1){                                                      // 두 팀만 같으면 맞대결
+            const p=keys[i], q=keys[j];
+            const h = ms.find(m => { const ka=nk(m.a), kb=nk(m.b); return ((ka===p&&kb===q)||(ka===q&&kb===p)) && parseSc(m) && +parseSc(m)[1]!==+parseSc(m)[2]; });
+            if(h){ const sc=parseSc(h), aw=+sc[1]>+sc[2], win = aw?nk(h.a):nk(h.b); if(win===q){ keys[i]=q; keys[j]=p; } }
+            else { tied.add(p); tied.add(q); }
+          } else if(j>i){ for(let k=i;k<=j;k++) tied.add(keys[k]); }     // 세 팀 이상 같으면 라이브 추첨
+          i=j+1;
+        }
+        const cut = hasGroups ? Math.min(2, keys.length) : (inCup.size ? keys.filter(k=>inCup.has(k)).length : Math.ceil(keys.length/2));
+        const title = (LANG==="ko"?"예선 순위":LANG==="ja"?"予選順位":LANG==="zh"?"預賽排名":"STANDINGS") + (g ? " · " + TRL("b_grp").replace("{g}", g) : "");
+        H.push(`<div class="bo-qhead"><i></i><span>${esc(title)}</span><i></i></div>`);
         const rows=[];
-        names.forEach((n,ix)=>{
-          if(ix===cut && cut>0 && cut<names.length)
+        keys.forEach((k,ix)=>{
+          if(ix===cut && cut>0 && cut<keys.length)
             rows.push(`<div class="bo-stcut" aria-hidden="true"><i class="ln"></i><span>${LANG==="ko"?"결선 진출 컷":LANG==="ja"?"決勝進出ライン":LANG==="zh"?"晉級線":"FINALS CUTOFF"}</span><i class="ln"></i></div>`);
-          const tag = inCup.has(n)
+          const tag = inCup.has(k)
             ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC_CUP}</svg>`
-            : inPl.has(n)
+            : inPl.has(k)
             ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5da9ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC_PL}</svg>` : "";
-          rows.push(`<div class="bo-strow ${ix<cut?"top":"bot"}${ix===0?" r1":""}"><span class="bo-strk">${ix+1}</span>${boEmb(n)}<span class="bo-stname">${esc(n)}</span><span class="bo-stwl">${W[n]||0}${wl[0]} ${L[n]||0}${wl[1]}</span>${tag}</div>`);
+          const d = gd(k), dTxt = (d>0?"+":"") + d;
+          rows.push(`<div class="bo-strow ${ix<cut?"top":"bot"}${ix===0?" r1":""}"><span class="bo-strk">${ix+1}</span>${boEmb(disp[k])}<span class="bo-stname">${esc(disp[k])}${tied.has(k)?` <small class="bo-sttie">${TRL("b_tie")}</small>`:""}</span><span class="bo-stwl">${S[k].W}${wl[0]} ${S[k].L}${wl[1]} <small title="${esc(TRL("b_gd"))}">${dTxt}</small></span>${tag}</div>`);
         });
         H.push(`<div class="bo-stand">`+rows.join("")+`</div>`);
       }
@@ -7505,15 +7559,23 @@ function renderTrBracket(){
   H.push(trReportList());
   box.innerHTML=H.join("");
   const ad=document.getElementById("trBracketAdmin"); if(!ad) return;
-  if(!IS_ADMIN){ ad.style.display="none"; ad.innerHTML=""; return; }
+  if(!TR_MGR()){ ad.style.display="none"; ad.innerHTML=""; return; }
+  /* 2026-10-23: 운영진(망굳)도 쓰도록(규칙 v40) · 팀 이름은 목록에서 골라 오타·띄어쓰기 차이 방지 · 점수 수정 */
+  const keepB = {}; ["trBRound","trBA","trBB","trBScore","trBCode"].forEach(id => { const el = document.getElementById(id); if(el) keepB[id] = el.value; });
+  const ed = trBEdit && trMatches.find(m => m.id === trBEdit);
+  if(trBEdit && !ed) trBEdit = null;
   ad.style.display="block";
   ad.innerHTML = `<div class="rptcard"><h3>${TRL("b_a_head")}</h3>`
-    + `<input class="cmtname trin" id="trBRound" maxlength="40" placeholder="${TRL("b_a_round")}" aria-label="${TRL("b_a_round")}">`
-    + `<input class="cmtname trin" id="trBA" maxlength="24" placeholder="${TRL("b_a_a")}" aria-label="${TRL("b_a_a")}">`
-    + `<input class="cmtname trin" id="trBB" maxlength="24" placeholder="${TRL("b_a_b")}" aria-label="${TRL("b_a_b")}">`
+    + (ed ? `<div class="rnote" style="color:#ffd257">${TRL("b_a_editing")}: ${esc(ed.round)} · ${esc(ed.a)} vs ${esc(ed.b)}</div>` : "")
+    + `<datalist id="trBRounds">${["1조","2조","4강","3·4위전","결승"].map(r=>`<option value="${r}">`).join("")}</datalist>`
+    + `<datalist id="trBTeams">${trTeams.filter(t=>!t.solo).map(t=>`<option value="${esc(t.name)}">`).join("")}</datalist>`
+    + `<input class="cmtname trin" id="trBRound" list="trBRounds" maxlength="40" placeholder="${TRL("b_a_round")}" aria-label="${TRL("b_a_round")}">`
+    + `<input class="cmtname trin" id="trBA" list="trBTeams" maxlength="24" placeholder="${TRL("b_a_a")}" aria-label="${TRL("b_a_a")}">`
+    + `<input class="cmtname trin" id="trBB" list="trBTeams" maxlength="24" placeholder="${TRL("b_a_b")}" aria-label="${TRL("b_a_b")}">`
     + `<input class="cmtname trin" id="trBScore" maxlength="12" placeholder="${TRL("b_a_score")}" aria-label="${TRL("b_a_score")}">`
     + `<input class="cmtname trin" id="trBCode" maxlength="60" placeholder="${TRL("b_a_code")}" aria-label="${TRL("b_a_code")}">`
-    + `<div class="trbtns"><button id="trBAdd" class="cmtbtn">${TRL("b_a_add")}</button></div></div>`;
+    + `<div class="trbtns"><button id="trBAdd" class="cmtbtn">${TRL(ed ? "b_a_save" : "b_a_add")}</button>${ed ? ` <button id="trBCancel" class="cmtbtn">${TRL("b_a_cancel")}</button>` : ""}</div></div>`;
+  Object.entries(keepB).forEach(([id,v]) => { const el = document.getElementById(id); if(el) el.value = v; });
 }
 function renderTrHall(){
   const box=document.getElementById("trHall"); if(!box) return;
@@ -7687,16 +7749,32 @@ document.addEventListener("click", async e => {
     catch(err){ permToast(err); }
     return;
   }
-  if(e.target.id === "trBAdd" && IS_ADMIN){
-    const round=val("trBRound"), a=val("trBA"), b=val("trBB");
+  if(e.target.id === "trBAdd" && TR_MGR()){
+    const round=val("trBRound"), a=val("trBA"), b=val("trBB"), score=val("trBScore"), code=val("trBCode");
     if(!round||!a||!b){ toast(TRL("b_a_need")); return; }
-    try{ await FB.push(FB.ref(FB.db, "tourney/matches"), { round, a, b, score: val("trBScore"), code: val("trBCode"), ts: FB.serverTimestamp() }); toast(TRL("a_saved")); }
+    if(score){ const sc = score.match(/^\s*(\d+)\s*[:\-]\s*(\d+)/); if(!sc || +sc[1] === +sc[2]){ toast(TRL("b_a_bad")); return; } }
+    try{
+      if(trBEdit){ await FB.update(FB.ref(FB.db, "tourney/matches/" + trBEdit), { round, a, b, score, code }); trBEdit = null; }
+      else await FB.push(FB.ref(FB.db, "tourney/matches"), { round, a, b, score, code, ts: FB.serverTimestamp() });
+      ["trBScore","trBCode"].forEach(id => { const el = document.getElementById(id); if(el) el.value = ""; });
+      toast(TRL("a_saved")); renderTourney();
+    }
     catch(err){ permToast(err); }
     return;
   }
+  if(e.target.id === "trBCancel"){ trBEdit = null; ["trBRound","trBA","trBB","trBScore","trBCode"].forEach(id => { const el = document.getElementById(id); if(el) el.value = ""; }); renderTourney(); return; }
+  const med = e.target.closest && e.target.closest("[data-trmedit]");
+  if(med && TR_MGR()){
+    const m = trMatches.find(x => x.id === med.getAttribute("data-trmedit")); if(!m) return;
+    trBEdit = m.id; renderTourney();
+    const set = (id,v) => { const el = document.getElementById(id); if(el) el.value = v; };
+    set("trBRound", m.round); set("trBA", m.a); set("trBB", m.b); set("trBScore", m.score); set("trBCode", m.code);
+    const box = document.getElementById("trBracketAdmin"); if(box) box.scrollIntoView({block:"center"});
+    return;
+  }
   const mdl = e.target.closest && e.target.closest("[data-trmdel]");
-  if(mdl && IS_ADMIN){
-    if(!confirm(TRL("a_del_ask"))) return;
+  if(mdl && TR_MGR()){
+    if(!confirm(TRL("b_a_mdel_ask"))) return;
     try{ await FB.remove(FB.ref(FB.db, "tourney/matches/" + mdl.getAttribute("data-trmdel"))); }catch(err){ permToast(err); }
     return;
   }
@@ -7782,7 +7860,7 @@ FB.onValue(FB.ref(FB.db, "tourney/matches"), snap => {
   const v = snap.val() || {};
   trMatches = Object.entries(v).map(([id,m])=>({ id, round:(m&&m.round)||"", a:(m&&m.a)||"", b:(m&&m.b)||"", score:(m&&m.score)||"", code:(m&&m.code)||"", ts:(m&&m.ts)||0 }))
     .filter(m=>m.round&&m.a&&m.b).sort((x,y)=>(x.ts||0)-(y.ts||0));
-  renderTourney(); if(window.renderSubnav) window.renderSubnav();
+  trRenderSafe(); if(window.renderSubnav) window.renderSubnav();
 }, () => { trMatches = []; renderTourney(); });
 FB.onValue(FB.ref(FB.db, "tourney/hall"), snap => {
   const v = snap.val() || {};
@@ -7799,7 +7877,7 @@ FB.onValue(FB.ref(FB.db, "tourney/reports"), snap => {
       uid:(r&&r.uid)||"", nick:(r&&r.nick)||"", note:(r&&r.note)||"", ts:(r&&r.ts)||0 }))
     .filter(r => TR_RP_CODE.test(r.code) && typeof r.a === "string" && r.a && typeof r.b === "string" && r.b)
     .sort((x,y)=>(y.ts||0)-(x.ts||0));
-  renderTourney();
+  trRenderSafe();
 }, () => { trReports = []; renderTourney(); });
 
 FB.onValue(FB.ref(FB.db, "tourney/interest"), snap => {
