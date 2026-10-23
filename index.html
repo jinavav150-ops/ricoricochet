@@ -1111,6 +1111,9 @@
 .hlEmptyT{text-align:center;margin:10px 0 0;font-size:13px;color:#9aa6bd}
 @media (max-width:360px){.hlBan{width:212px}.hlTeam{font-size:26px}.hlSmall{gap:10px}.hlSmall .hlBan{width:120px}}
 @media (prefers-reduced-motion:reduce){.hlBan,.hlCloth,.hlCloth:after{animation:none}.hlCloth:after{display:none}}
+.bo-host{display:flex;align-items:center;gap:6px;margin:-4px 4px 10px;padding:0 4px;font-size:12px;color:#9aa6bd;line-height:1.4}
+.bo-host svg{flex:0 0 13px;color:#ffb02e}
+.bo-host b{color:#ffd364;font-weight:800}
 @keyframes trLiveDot{0%,100%{opacity:1}50%{opacity:.25}}
 .trLiveLink{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:12px;padding:11px 14px;border-radius:12px;background:linear-gradient(180deg,#3a0d10,#22090b);border:1px solid #ff4b4b;color:#ffd9d9;font-size:13.5px;font-weight:800;text-decoration:none;text-align:center;line-height:1.4}
 .trLiveLink i{flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:#ff4b4b;box-shadow:0 0 8px #ff4b4b;animation:trLiveDot 1.4s ease-in-out infinite}
@@ -5224,7 +5227,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.23-m";
+const SITE_VERSION = "2026.10.24-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7778,6 +7781,28 @@ function renderTrBracket(){
     };
     const boChips = m => (m.code?`<button type="button" class="bo-code" data-cupcode="${esc(m.code)}" aria-label="${TRL("b_code")} ${esc(m.code)}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"></path></svg></button>`:"")
       + "";
+    /* 2026-10-24: 경기마다 누가 방을 만드는지(방장) — 규칙 탭 r_set2c 와 같은 판정. 10/23 서버 시험: 아시아 선수가 플레이어로 유럽 팀을 초대하면 유럽 서버.
+       라이브 = 민트K(관전) · 유럽끼리 = 왼쪽 팀(유럽 서버) · 왼쪽 유럽 팀 대 아시아 팀 = 그 유럽 팀 · 왼쪽 아시아 팀 대 유럽 팀 = MAMMON(관전) · 나머지 = 왼쪽 팀.
+       팀이 아직 안 정해진 칸(「1조 1위」「4강 승자」)·점수가 들어간 경기는 표시하지 않는다(라이브 칸은 팀이 없어도 표시). */
+    const BO_EU = new Set(["지지 kimcheeze", "ox"]);   // 이번 대회 유럽 팀(대진표 이름 기준)
+    const boTbd = n => /\d\s*조\s*\d\s*위|승자|패자|winner|loser/i.test(n || "");
+    const BOH = { lab:{ko:"방장",en:"Host",ja:"部屋作成",zh:"開房"}, spec:{ko:"관전으로 양 팀 초대",en:"spectator, invites both teams",ja:"観戦で両チームを招待",zh:"觀戰並邀請雙方"},
+      inv:{ko:"상대 팀 초대",en:"invites the other team",ja:"相手チームを招待",zh:"邀請對手"}, eu:{ko:"유럽 서버",en:"EU server",ja:"ヨーロッパサーバー",zh:"歐洲伺服器"},
+      mint:{ko:"민트K",en:"MintK",ja:"MintK",zh:"MintK"} };
+    const boL = k => BOH[k][LANG] || BOH[k].en;
+    const boHost = m => {
+      if(parseSc(m)) return "";
+      const live = /라이브|live/i.test(m.round || "");
+      let who, note;
+      if(live){ who = boL("mint"); note = boL("spec"); }
+      else{
+        if(boTbd(m.a) || boTbd(m.b) || !m.a || !m.b) return "";
+        const aE = BO_EU.has(nk(m.a)), bE = BO_EU.has(nk(m.b));
+        if(!aE && bE){ who = "MAMMON"; note = boL("spec"); }
+        else{ who = esc(m.a); note = boL("inv") + (aE && bE ? " · " + boL("eu") : ""); }
+      }
+      return `<div class="bo-host"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>${boL("lab")} <b>${who}</b> · ${note}</span></div>`;
+    };
     /* 2026-10-23: 운영진 수정·삭제 버튼이 오른쪽 팀 이름을 가렸다(MAMMON 폰 화면) → 카드 밖 아래 줄로 */
     const boAdm = m => TR_MGR() ? `<div class="bo-adm"><button type="button" class="bo-edit" data-trmedit="${esc(m.id)}">${TRL("b_a_edit")}</button><button type="button" class="bo-del" data-trmdel="${esc(m.id)}" aria-label="${TRL("a_del")}">${TRL("a_del")}</button></div>` : "";
     const boScore = (sc, m) => (sc ? `${+sc[1]>+sc[2]?`<b>${sc[1]}</b>`:sc[1]} : ${+sc[2]>+sc[1]?`<b>${sc[2]}</b>`:sc[2]}` : (m.score?esc(m.score):"VS"))
@@ -7791,7 +7816,7 @@ function renderTrBracket(){
         + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span><i class="bo-ticket">${CUPL(tk||"cp_adv")}</i></div>`
         + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
         + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
-        + boChips(m) + `</article>` + boAdm(m);
+        + boChips(m) + `</article>` + boHost(m) + boAdm(m);
     };
     const finalBand = m => {
       const sc = parseSc(m); const wA = sc&&+sc[1]>+sc[2], wB = sc&&+sc[2]>+sc[1];
@@ -7805,7 +7830,7 @@ function renderTrBracket(){
         + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
         + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
         + (champ?`<div class="bo-champ">${CUPL("cp_win")} · ${esc(champ)}</div>`:"")
-        + boChips(m) + `</div></article>` + boAdm(m);
+        + boChips(m) + `</div></article>` + boHost(m) + boAdm(m);
     };
     const finalTbd = `<article class="bo-match bo-final is-upcoming"><div class="bo-final__in"><span class="bo-tag">FINAL</span>`
       + `<div class="bo-side bo-side--l"><span class="bo-emblem bo-embFb">${shSvg(24)}</span><span class="bo-name" style="color:#5f6a80">?</span></div>`
@@ -7900,7 +7925,7 @@ function renderTrBracket(){
         + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span></div>`
         + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
         + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
-        + boChips(m) + `</article>` + boAdm(m);
+        + boChips(m) + `</article>` + boHost(m) + boAdm(m);
     };
     const rounds=[]; for(const m of rest){ if(!rounds.includes(m.round)) rounds.push(m.round); }
     for(const rd of rounds){
