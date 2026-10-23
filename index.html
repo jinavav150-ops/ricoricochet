@@ -1048,6 +1048,7 @@
 .cupSub i{height:1px;width:24px;background:rgba(255,176,46,.5);display:inline-block}
 .cupOpen{position:relative;display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:7px 14px;border-radius:999px;background:rgba(255,176,46,.1);border:1px solid rgba(255,176,46,.4);font-size:13px;font-weight:700;color:#ffd257}
 .cupOpen i{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block}
+.cupSt_closed i,.cupSt_done i{background:#9aa3b5}.cupSt_live i{background:#ff5a5a}
 .cupSecHead{display:flex;align-items:center;gap:8px;margin:2px 0 10px}
 .cupSecHead b{font-family:'Black Han Sans',sans-serif;font-size:16px;font-weight:400;color:#fff;letter-spacing:.02em}
 .cupSecHead .cupTag{font-size:11px;padding:3px 8px;border-radius:5px;background:rgba(93,169,255,.12);color:#5da9ff;font-weight:700}
@@ -5017,7 +5018,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.21-a";
+const SITE_VERSION = "2026.10.23-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6556,6 +6557,9 @@ const TRL = k => { const o=TR_L[k]||{}; const v=o[LANG]; return v!==undefined?v:
 const TR_CUP = {
   cp_sub:{ko:"3v3 · 개발사 후원 상품 · 온라인",en:"3v3 · Dev-sponsored prizes · Online",ja:"3v3・開発元提供の賞品・オンライン",zh:"3v3・開發商贊助獎品・線上"},
   cp_open:{ko:"지금 팀 접수 중",en:"Team sign-ups open now",ja:"チーム受付中",zh:"隊伍報名進行中"},
+  cp_closed:{ko:"접수 마감",en:"Sign-ups closed",ja:"受付終了",zh:"報名已截止"},
+  cp_live:{ko:"대회 진행 중",en:"Cup in progress",ja:"大会進行中",zh:"比賽進行中"},
+  cp_done:{ko:"대회 종료",en:"Cup finished",ja:"大会終了",zh:"比賽結束"},
   /* 🇰🇷 2026-08-26: 마감·일시를 서버 한 줄(모든 언어 공통)로 두니 영어를 섞어야 했다 → 코드에 언어별로 둔다. 한국인은 한국어만 본다. */
   cp_subtag:{ko:"예비",en:"SUB",ja:"補欠",zh:"替補"},
   /* ♿ 화면을 못 보는 사용자용 엠블럼 버튼 이름 — 엠블럼에 고유 이름 데이터가 없어 순번으로 구분한다 */
@@ -6880,7 +6884,7 @@ function renderTourney(){
       + `<svg style="position:relative;margin-top:10px" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10v5.5a5 5 0 0 1-10 0z"></path><path d="M7 5H4.2a3.2 3.2 0 0 0 3 4.2M17 5h2.8a3.2 3.2 0 0 1-3 4.2"></path><path d="M12 13.5V16M8.5 21h7M10 18.5h4v2.5h-4z"></path><path d="M10.3 6.2l1.7-1.2 1.7 1.2-.6 2h-2.2z" fill="rgba(255,176,46,.25)"></path></svg>`
       + `<div class="cupTitle">${esc(m.title || "COMMUNITY CUP")}</div>`
       + `<div class="cupSub"><i></i><span>${CUPL("cp_sub")} · ${CUPL("cp_when")}${m.tz?` (${esc(m.tz)})`:""}</span><i></i></div>`
-      + `<div class="cupOpen"><i></i>${CUPL("cp_open")}</div>`
+      + `<div class="cupOpen cupSt_${state}"><i></i>${CUPL(state === "signup" ? "cp_open" : "cp_" + state)}</div>`   /* 2026-10-23: 마감 뒤에도 "지금 팀 접수 중"이 떠 있던 것 — 상태별 문구 */
       + `<div class="rnote" style="position:relative;margin-top:10px">${CUPL("cp_deadline")}</div>`
       + `<div class="rnote" style="position:relative;margin-top:6px">${CUPL("cp_draw")}</div>`
       + `<div class="rnote" style="position:relative;margin-top:6px">${TR_STREAM_URL?`<a href="${esc(TR_STREAM_URL)}" target="_blank" rel="noopener">${CUPL("cp_stream")}</a>`:CUPL("cp_stream")}</div>`
