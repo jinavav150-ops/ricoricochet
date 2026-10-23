@@ -44,7 +44,7 @@
 <!-- 🔒 CSP (v2026.09.17-a) — 스크립트·연결 출처를 여기 적힌 곳으로만 제한. 인라인 핸들러가 남아 있어 'unsafe-inline'은 아직 필요.
      새 외부 서비스를 붙이면 connect-src(또는 img-src)에 주소를 추가할 것. 빠지면 조용히 차단된다(콘솔에 CSP 오류).
      ⚠️ script-src 의 *.firebasedatabase.app 는 지우지 말 것 — WebSocket 이 막힌 네트워크에서 Firebase 가 쓰는 롱폴링(JSONP .lp 스크립트)이 여기서 온다(v09.17-b 에서 발견). -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.googleapis.com https://clients5.google.com https://ipapi.co https://rico-match-analyze.onrender.com https://www.gstatic.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://*.firebasedatabase.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.googleapis.com https://clients5.google.com https://ipapi.co https://rico-match-analyze.onrender.com https://www.gstatic.com https://raw.githubusercontent.com/jinavav150-ops/ricoricochet/; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -1044,6 +1044,103 @@
 .cupEyebrow{position:relative;font-size:11px;letter-spacing:.28em;color:#ffb02e;font-weight:700}
 .cupTitle{position:relative;font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-size:38px;line-height:.98;margin-top:10px;background:linear-gradient(100deg,#ffb02e 30%,#ffe9b0 45%,#ffb02e 60%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:cupShine 5s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.cupRaysEl,.cupTitle{animation:none}}
+/* 🏅 대회 MVP 탭 (2026-10-23) — 참가 탭 맨 위 트로피 화면과 같은 빛살·광채에 왕관·반짝이·이름 광택·숫자 올라가기를 더했다 */
+@keyframes mvFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+@keyframes mvTwinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
+@keyframes mvPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,194,61,.45),0 0 22px rgba(255,176,46,.18)}50%{box-shadow:0 0 0 1px rgba(255,194,61,.7),0 0 34px rgba(255,176,46,.34)}}
+@keyframes mvRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#trMvp{padding-bottom:8px}
+#trMvp section{animation:mvRise .5s ease both}
+#trMvp section.mvHero{animation:mvPulse 4s ease-in-out infinite,mvRise .5s ease both}
+#trMvp section:nth-of-type(2){animation-delay:.08s}#trMvp section:nth-of-type(3){animation-delay:.16s}#trMvp section:nth-of-type(4){animation-delay:.24s}
+.mvSample{background:#3a1d00;border:1px dashed #ffb02e;color:#ffd27a;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;margin-bottom:8px;text-align:center}
+.mvStatus{border-radius:10px;padding:9px 12px;font-size:13px;font-weight:700;text-align:center;margin-bottom:10px;background:rgba(255,176,46,.1);border:1px solid rgba(255,176,46,.45);color:#ffd890}
+.mvStatus.ok{background:rgba(70,200,120,.12);border-color:rgba(70,200,120,.5);color:#9ff0bd}
+.mvHero{position:relative;overflow:hidden;text-align:center;padding:24px 14px 18px;border-radius:16px;background:radial-gradient(120% 80% at 50% 0%,#2a1a04,#0a0c14 62%);margin-bottom:12px;animation:mvPulse 4s ease-in-out infinite,mvRise .5s ease both}
+.mvHero>*{position:relative}
+.mvHero .cupRaysEl,.mvHero .cupGlow,.mvHero .mvSpark{position:absolute}
+.mvSpark{width:13px;height:13px;pointer-events:none;animation:mvTwinkle 2.6s ease-in-out infinite;background:radial-gradient(circle,#fff6d6 0 18%,transparent 20%),linear-gradient(0deg,transparent 44%,#ffe39a 44% 56%,transparent 56%),linear-gradient(90deg,transparent 44%,#ffe39a 44% 56%,transparent 56%)}
+.mvKk{font-size:11px;letter-spacing:.24em;color:#ffb02e;font-weight:700}
+.mvCrown{display:block;margin:12px auto 0;filter:drop-shadow(0 4px 10px rgba(255,176,46,.45));animation:mvFloat 3.2s ease-in-out infinite}
+.mvName{font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-weight:400;font-size:40px;line-height:1.05;margin:6px 0 0;word-break:break-all;background:linear-gradient(100deg,#ffb02e 30%,#fff4cc 45%,#ffb02e 60%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:cupShine 4s ease-in-out infinite}
+.mvWho{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;font-size:13.5px;color:#d6dcea;font-weight:700}
+.mvStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px auto 0;max-width:420px}
+.mvStats>div{background:rgba(10,12,20,.72);border:1px solid #2f3a52;border-radius:12px;padding:10px 4px 8px}
+.mvStats>div.g{border-color:rgba(255,194,61,.6);background:rgba(40,26,4,.75)}
+.mvStats b{font-family:'Black Han Sans','Noto Sans KR',sans-serif;font-weight:400;font-size:28px;color:#fff;font-variant-numeric:tabular-nums}
+.mvStats .g b{color:#ffd364}
+.mvStats small{font-size:12px;color:#c8d0de;margin-left:2px}
+.mvStats span{display:block;font-size:11.5px;color:#9aa6bd;margin-top:2px}
+.mvRks{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:10px}
+.mvRk{display:inline-block;min-width:30px;padding:2px 6px;border-radius:6px;font-size:11.5px;font-weight:800;text-align:center;background:#1a2030;color:#aab4c8;border:1px solid #2a3347}
+.mvRk.g{background:linear-gradient(180deg,#ffe08a,#e9a415);color:#3a2400;border-color:#ffd364}
+.mvRk.s{background:#283247;color:#e6ebf5;border-color:#3d4a66}
+.mvF{margin-top:10px;font-size:12.5px;color:#c8d0de;font-variant-numeric:tabular-nums}
+.mvF b{color:#ffd364}
+.mvTie{margin-top:6px;font-size:11.5px;color:#ffcf7a;line-height:1.45}
+.mvCard{background:#0d111b;border:1px solid #232c40;border-radius:14px;padding:14px;margin-bottom:12px}
+.mvCard h3{margin:0 0 4px;font-size:16px;color:#ffd364}
+.mvTx{font-size:12.5px;color:#9aa6bd;line-height:1.55;margin:0 0 10px}
+.mvLg{display:inline-flex;align-items:center;gap:4px;margin-left:6px;color:#c8d0de;white-space:nowrap}
+.mvLg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.mvLg i.me,.mvBar i.me{background:linear-gradient(90deg,#e9a415,#ffd364)}
+.mvLg i.av,.mvBar i.av{background:#4a5672}
+.mvBars{display:flex;flex-direction:column;gap:9px}
+.mvBar{display:grid;grid-template-columns:auto 1fr 58px 50px;align-items:center;gap:8px;font-size:12.5px}
+.mvBar .l{color:#c8d0de;font-weight:700;white-space:nowrap;min-width:64px}
+.mvBar .t{display:flex;flex-direction:column;gap:3px}
+.mvBar i{display:block;height:8px;border-radius:4px;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.mvBar i.av{height:5px}
+.mvBar .v{text-align:right;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+.mvBar .v.up{color:#ffd364}
+.mvBar .a{text-align:right;color:#7d89a3;font-variant-numeric:tabular-nums}
+.mvNote{font-size:11.5px;color:#7d89a3;line-height:1.5;margin:10px 0 0}
+.mvPodium{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.mvPd{position:relative;text-align:center;background:#0d111b;border:1px solid #2f3a52;border-radius:14px;padding:36px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.mvPd.p2{border-color:#8f9bb3;background:linear-gradient(180deg,rgba(200,210,230,.1),#0d111b 60%)}
+.mvPd.p3{border-color:#b9773d;background:linear-gradient(180deg,rgba(205,127,50,.13),#0d111b 60%)}
+.mvPd .n{position:absolute;top:8px;left:10px;font-family:'Black Han Sans',sans-serif;font-size:22px;color:#c8d0de}
+.mvPd.p3 .n{color:#e0a26a}
+.mvPd b{font-size:15px;color:#fff;word-break:break-all}
+.mvPd small{font-size:11.5px;color:#9aa6bd}
+.mvPd em{font-style:normal;font-size:12.5px;color:#ffd364;font-weight:800}
+.mvPd .mvRks{margin-top:4px}
+.mvRow{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:start;padding:10px 4px;border-top:1px solid #1c2334}
+.mvRow:first-of-type{border-top:0}
+.mvRow.me{background:linear-gradient(90deg,rgba(255,176,46,.12),transparent);border-radius:10px}
+.mvRow .no{font-family:'Black Han Sans',sans-serif;font-size:20px;color:#7d89a3;text-align:center;line-height:1.2}
+.mvRow.me .no{color:#ffd364}
+.mvRow .pl b{font-size:14.5px;color:#fff;word-break:break-all}
+.mvRow .pl em{font-style:normal;font-size:11.5px;color:#9aa6bd;margin-left:6px}
+.mvRow .pl small{display:block;font-size:11.5px;color:#8792aa;margin-top:2px}
+.mvRow .mvRks{justify-content:flex-start;margin-top:6px}
+.mvRow .sc{text-align:right;font-family:'Black Han Sans',sans-serif;font-size:20px;color:#fff;font-variant-numeric:tabular-nums}
+.mvRow.me .sc{color:#ffd364}
+.mvRow .sc small{display:block;font-family:'Noto Sans KR',sans-serif;font-size:10.5px;color:#7d89a3}
+.mvRow.off{opacity:.7}
+.mvGm{border:1px solid #232c40;border-radius:10px;margin-top:8px;overflow:hidden}
+.mvGm summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:10px 12px;font-size:12.5px;background:#111727}
+.mvGm summary::-webkit-details-marker{display:none}
+.mvGm summary .code{font-family:ui-monospace,Menlo,monospace;font-weight:800;color:#ffd364;letter-spacing:.04em}
+.mvGm summary .md{color:#c8d0de}
+.mvGm summary .g1{margin-left:auto;color:#9aa6bd}
+.mvTw{overflow-x:auto}
+.mvTw table{width:100%;border-collapse:collapse;font-size:12px;min-width:460px}
+.mvTw th{text-align:right;padding:7px 8px;color:#7d89a3;font-weight:700;border-bottom:1px solid #232c40;white-space:nowrap}
+.mvTw th:nth-child(-n+2){text-align:left}
+.mvTw td{text-align:right;padding:7px 8px;border-bottom:1px solid #161d2d;color:#e6ebf5;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mvTw td:nth-child(-n+2){text-align:left}
+.mvTw td small{display:block;font-size:10.5px;color:#7d89a3}
+.mvTw td.pn b{color:#fff}
+.mvTw td.pn small{color:#8792aa}
+.mvTw .w{display:inline-block;font-size:10px;font-weight:800;color:#0b2a17;background:#5fd38d;border-radius:4px;padding:0 4px;vertical-align:1px}
+.mvTw td.tot{font-weight:800;color:#ffd364}
+.mvSrc{display:flex;flex-direction:column;gap:10px;font-size:12.5px;color:#aab4c8;line-height:1.6}
+.mvSrc b{color:#e6ebf5}
+.mvSrc ul{margin:4px 0 0;padding-left:18px}
+.mvEmb{vertical-align:middle}
+@media (max-width:380px){.mvName{font-size:34px}.mvBar{grid-template-columns:auto 1fr 52px 44px;gap:6px}}
+@media (prefers-reduced-motion:reduce){.mvHero,.mvCrown,.mvName,.mvSpark,#trMvp section{animation:none}.mvSpark{opacity:.8}.mvBar i{transition:none}}
 .cupSub{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:13px;color:#c8d0de}
 .cupSub i{height:1px;width:24px;background:rgba(255,176,46,.5);display:inline-block}
 .cupOpen{position:relative;display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:7px 14px;border-radius:999px;background:rgba(255,176,46,.1);border:1px solid rgba(255,176,46,.4);font-size:13px;font-weight:700;color:#ffd257}
@@ -1579,6 +1676,7 @@
   <!-- 🏆 대회 서브탭 3개 (규칙 v31): tourney/rules · tourney/matches · tourney/hall. 전부 관리자 UI로 채운다(배포 불필요). -->
   <section id="tab-trrules" class="tab"><div id="trRules"></div><div id="trRulesAdmin" style="display:none"></div></section>
   <section id="tab-trbracket" class="tab"><div id="trBracket"></div><div id="trBracketAdmin" style="display:none"></div></section>
+  <section id="tab-trmvp" class="tab"><div id="trMvp"></div></section>
   <section id="tab-trhall" class="tab"><div id="trHall"></div><div id="trHallAdmin" style="display:none"></div></section>
 
   <section id="tab-creators" class="tab">
@@ -4348,7 +4446,7 @@ function cupBannerKey(st){ return "rs_cupbanner_done_" + st; }
 function rsCupBannerSync(){
   const b=document.getElementById("cupBanner"); if(!b) return;
   const st = window.rsTrBannerState ? window.rsTrBannerState() : null;   // {on,state,title} — 모듈 쪽 브리지
-  const onView = /^(tourney|trrules|trbracket|trhall)$/.test(CURVIEW);
+  const onView = /^(tourney|trrules|trbracket|trmvp|trhall)$/.test(CURVIEW);
   let done=false; try{ done = !!(st && localStorage.getItem(cupBannerKey(st.state))); }catch(e){}
   if(!st || !st.on || !(st.state==="interest" || st.state==="signup" || st.state==="live" || st.state==="done") || onView || done){ b.dataset.want="0"; rsBannerReflow(); return; }   /* 2026-10-23: 대회 진행 중·종료에도 띄워 대진표로 */
   const L=LANG, t=st.title||"Community Cup";
@@ -4510,7 +4608,7 @@ function applyHeader(){
   /* 🔍 경기 분석 — 사전은 모듈 쪽(RPT_L)에 있어 window 브리지로 (§클래식↔모듈 스코프 함정) */
   if(v==="replay"){ if(window.rsReplayHead){ const h=window.rsReplayHead(); setHead(h[0],h[1]); } return; }
   /* 🏆 대회 — 사전(TR_L)이 모듈 쪽이라 같은 브리지. 없으면 직전 화면 제목이 남는다(08.18-a~19-b 빈틈, 2026-08-19 수정) */
-  if(v==="tourney"||v==="trrules"||v==="trbracket"||v==="trhall"){ if(window.rsTourneyHead){ const h=window.rsTourneyHead(); setHead(h[0],h[1]); } return; }
+  if(v==="tourney"||v==="trrules"||v==="trbracket"||v==="trmvp"||v==="trhall"){ if(window.rsTourneyHead){ const h=window.rsTourneyHead(); setHead(h[0],h[1]); } return; }
   const info=TAB_INFO[v]; if(info) setHead(v==="info"?SL("info"):T(info.title),T(info.desc));
 }
 /* ══════ 통합 라우팅 (상단 5개 대분류 → 서브탭 → 실제 뷰) ══════
@@ -4518,7 +4616,7 @@ function applyHeader(){
 const SUB_OF = {
   notice:{g:"notice", view:"notice"},
   chat:{g:"talk", view:"comm:chat"}, board:{g:"talk", view:"board"},
-  pick:{g:"guide", view:"pick"}, replay:{g:"guide", view:"replay"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, prorank:{g:"guide", view:"prorank"}, tips:{g:"guide", view:"comm:tips"}, tourney:{g:"tourney", view:"tourney"}, trrules:{g:"tourney", view:"trrules"}, trbracket:{g:"tourney", view:"trbracket"}, trhall:{g:"tourney", view:"trhall"}, creators:{g:"guide", view:"creators"},
+  pick:{g:"guide", view:"pick"}, replay:{g:"guide", view:"replay"}, builds:{g:"guide", view:"builds"}, tier:{g:"guide", view:"comm:tier"}, prorank:{g:"guide", view:"prorank"}, tips:{g:"guide", view:"comm:tips"}, tourney:{g:"tourney", view:"tourney"}, trrules:{g:"tourney", view:"trrules"}, trbracket:{g:"tourney", view:"trbracket"}, trmvp:{g:"tourney", view:"trmvp"}, trhall:{g:"tourney", view:"trhall"}, creators:{g:"guide", view:"creators"},
   dex:{g:"codex", view:"dex"}, info:{g:"codex", view:"info"}, codes:{g:"codex", view:"codes"}, issues:{g:"codex", view:"issues"},
   fb:{g:"feedback", view:"comm:fb"}, stats:{g:"stats", view:"comm:stats"}
 };
@@ -4534,7 +4632,7 @@ const NAV_GROUPS = {
   /* 순서 = 화면 서브탭 순서 (MAMMON 지정 2026-08-29): 카운터픽 → 빌드 → 프로 랭킹 → 티어표 → 경기 분석 → 팁.
      크리에이터는 명단이 비면 숨겨지므로 항상 맨 끝. */
   guide:{ subs:["pick","builds","prorank","tier","replay","tips","creators"] },
-  tourney:{ subs:["tourney","trrules","trbracket","trhall"] },   /* 🏆 대회 = 대분류(2026-08-19 MAMMON). 꺼져 있으면 nav 버튼 자체를 숨김.
+  tourney:{ subs:["tourney","trrules","trbracket","trmvp","trhall"] },   /* 🏆 대회 = 대분류(2026-08-19 MAMMON). 꺼져 있으면 nav 버튼 자체를 숨김.
      서브: 참가 · 규칙(항상) · 대진표 · 명예의 전당(데이터 있을 때만 — 크리에이터 탭과 같은 방식) */
   codex:{ subs:["dex","info","codes","issues"] },
   feedback:{ subs:["fb"], solo:true },
@@ -4567,6 +4665,7 @@ const SUB_LABEL = {
   creators:{ko:"크리에이터",en:"Creators",ja:"クリエイター",zh:"創作者",fr:"Créateurs",de:"Creator",es:"Creadores",pt:"Criadores",ru:"Авторы"},
   trrules:{ko:"규칙",en:"Rules",ja:"ルール",zh:"規則",fr:"Règles",de:"Regeln",es:"Reglas",pt:"Regras",ru:"Правила"},
   trbracket:{ko:"대진표",en:"Bracket",ja:"対戦表",zh:"對戰表",fr:"Tableau",de:"Spielplan",es:"Cuadro",pt:"Chave",ru:"Сетка"},
+  trmvp:{ko:"MVP",en:"MVP",ja:"MVP",zh:"MVP",fr:"MVP",de:"MVP",es:"MVP",pt:"MVP",ru:"MVP"},
   trhall:{ko:"명예의 전당",en:"Hall of Fame",ja:"殿堂",zh:"名人堂",fr:"Palmarès",de:"Ruhmeshalle",es:"Salón de la fama",pt:"Hall da Fama",ru:"Зал славы"},
   fb:{ko:"피드백",en:"Feedback",ja:"フィードバック",zh:"意見回饋",fr:"Feedback",de:"Feedback",es:"Feedback",pt:"Feedback",ru:"Отзывы"},
   stats:{ko:"통계",en:"Stats",ja:"統計",zh:"統計",fr:"Stats",de:"Statistik",es:"Estadísticas",pt:"Estatísticas",ru:"Статистика"}
@@ -4586,6 +4685,7 @@ const SUB_ICON = {
   tourney:'<svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5.5H4.5v1A3.5 3.5 0 0 0 8 10"/><path d="M17 5.5h2.5v1A3.5 3.5 0 0 1 16 10"/><path d="M12 14v3"/><path d="M8.5 20h7"/><path d="M10 17h4l.7 3h-5.4z"/></svg>',
   trrules:'<svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><line x1="8.5" y1="8" x2="15.5" y2="8"/><line x1="8.5" y1="12" x2="15.5" y2="12"/><line x1="8.5" y1="16" x2="12.5" y2="16"/></svg>',
   trbracket:'<svg viewBox="0 0 24 24"><path d="M4 6h5v4H4zM4 14h5v4H4z"/><path d="M9 8h3v8H9"/><path d="M12 12h4"/><path d="M16 10h4v4h-4z"/></svg>',
+  trmvp:'<svg viewBox="0 0 24 24"><path d="M4 18 L5.5 7 L9.5 11.5 L12 5 L14.5 11.5 L18.5 7 L20 18 Z"/></svg>',
   trhall:'<svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.4 6.7 19.1l1-5.8-4.2-4.1 5.9-.9z"/></svg>',
   creators:'<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M10.3 9.3l4.6 2.7-4.6 2.7z"/></svg>',
   prorank:'<svg viewBox="0 0 24 24"><path d="M4 19.5V13"/><path d="M9.3 19.5V8"/><path d="M14.7 19.5v-4"/><path d="M20 19.5V4.5"/></svg>'
@@ -4628,6 +4728,7 @@ function subShown(s){
   if(s==="creators") return window.rsCreVisible ? window.rsCreVisible() : false;
   if(s==="tourney" || s==="trrules") return window.rsTrVisible ? window.rsTrVisible() : false;
   if(s==="trbracket") return window.rsTrBracketVisible ? window.rsTrBracketVisible() : false;
+  if(s==="trmvp") return window.rsTrMvpVisible ? window.rsTrMvpVisible() : false;
   if(s==="trhall") return window.rsTrHallVisible ? window.rsTrHallVisible() : false;
   if(s==="codes") return CODES_ENABLED;   // 🎁 코드 탭은 CODES_ENABLED=false면 숨김(구글 검토 대응)
   return true;
@@ -5037,7 +5138,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.23-f";
+const SITE_VERSION = "2026.10.23-g";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6828,12 +6929,133 @@ const TR_STATE = s => TRL("st_" + (TR_STATES.includes(s) ? s : "interest"));   /
 const trMine = () => trTeams.find(t => t.uid === MY_UID) || null;
 const trMyInt = () => trInterest.find(t => t.uid === MY_UID) || null;
 
+/* 🏅 대회 MVP 결과 탭 (2026-10-23) — 결과는 저장소의 mvp.json(운영진이 대회 뒤 계산해 대회운영/배포.py --mvp 로 올림)에서 읽는다. 파일이 없으면 탭이 숨는다.
+   순위·동점 처리는 계산 프로그램이 정한 그대로 보여 준다(여기서 다시 계산하지 않음). 영웅·모드·맵 이름은 T()로 번역. */
+let trMvp = null;
+const MVL = {
+  tab:{ko:"MVP",en:"MVP",ja:"MVP",zh:"MVP"},
+  pre:{ko:"잠정 결과 · 이의 제기 마감 {d} · 문제가 없으면 그대로 확정돼요",en:"Provisional result · objections until {d} · if nothing comes up, it becomes final",ja:"暫定結果・異議申し立ては {d} まで・問題がなければそのまま確定します",zh:"暫定結果・異議受理至 {d}・若無問題即確定"},
+  pre2:{ko:"잠정 결과 · 공개 후 24시간 동안 이의 제기를 받아요",en:"Provisional result · objections are open for 24 hours",ja:"暫定結果・公開後24時間、異議を受け付けます",zh:"暫定結果・公開後 24 小時內受理異議"},
+  fin:{ko:"확정 결과",en:"Final result",ja:"確定結果",zh:"最終結果"},
+  kk:{ko:"ASIA COMMUNITY CUP · 데이터 MVP",en:"ASIA COMMUNITY CUP · DATA MVP",ja:"ASIA COMMUNITY CUP・データMVP",zh:"ASIA COMMUNITY CUP・數據 MVP"},
+  main:{ko:"주로 {h}",en:"Main: {h}",ja:"メイン：{h}",zh:"主玩：{h}"},
+  s_mvp:{ko:"MVP 등수",en:"MVP rank",ja:"MVP順位",zh:"MVP 名次"}, u_rank:{ko:"등",en:"",ja:"位",zh:"名"},
+  s_first:{ko:"판 1등",en:"Game #1s",ja:"ゲーム1位",zh:"單局第1"}, u_cnt:{ko:"번",en:"",ja:"回",zh:"次"},
+  s_n:{ko:"출전",en:"Games",ja:"出場",zh:"出賽"}, u_g:{ko:"판",en:"",ja:"ゲーム",zh:"局"},
+  rk:{ko:"{n}등",en:"#{n}",ja:"{n}位",zh:"第{n}"},
+  why_h:{ko:"왜 MVP인가",en:"Why the MVP",ja:"なぜMVPか",zh:"為何是 MVP"},
+  why_t:{ko:"뛴 판의 판당 평균을, 같은 판에서 뛴 다른 선수들의 평균과 비교했어요.",en:"Per-game averages compared with the other players in the same games.",ja:"出場したゲームの1ゲーム平均を、同じゲームの他の選手の平均と比べました。",zh:"以出賽局的每局平均，與同局其他選手的平均比較。"},
+  lg_avg:{ko:"같은 판 다른 선수 평균",en:"Others in the same games",ja:"同じゲームの他の選手の平均",zh:"同局其他選手平均"},
+  w_K:{ko:"처치",en:"Kills",ja:"キル",zh:"擊殺"}, w_D:{ko:"사망",en:"Deaths",ja:"デス",zh:"死亡"}, w_dmg:{ko:"적 영웅 피해",en:"Hero damage",ja:"敵ヒーローへのダメージ",zh:"英雄傷害"},
+  w_sup:{ko:"회복·실드",en:"Healing·Shield",ja:"回復・シールド",zh:"治療・護盾"}, w_obj:{ko:"목표 시간",en:"Objective time",ja:"目標時間",zh:"目標時間"}, w_S:{ko:"판 점수",en:"Game score",ja:"ゲームスコア",zh:"單局分數"},
+  u_s:{ko:"초",en:"s",ja:"秒",zh:"秒"},
+  why_n:{ko:"사망은 적을수록 좋아요. 판 점수 = 처치 ×100 · 사망 ×−100 · (적 영웅 피해 + 회복·실드 + 이상현상 피해) 817당 +100 · 목표 시간 1초당 +10",en:"Fewer deaths is better. Game score = kills ×100 · deaths ×−100 · +100 per 817 of (hero damage + healing/shield + anomaly damage) · +10 per objective second",ja:"デスは少ないほど良い。ゲームスコア＝キル×100・デス×−100・（敵ヒーローダメージ＋回復・シールド＋アノマリーダメージ）817ごとに+100・目標時間1秒+10",zh:"死亡越少越好。單局分數＝擊殺×100・死亡×−100・（英雄傷害＋治療護盾＋異常現象傷害）每 817 加 100・目標時間每秒 +10"},
+  rank_h:{ko:"MVP 순위",en:"MVP ranking",ja:"MVP順位",zh:"MVP 排名"},
+  rank_t:{ko:"매 판 같이 뛴 6명 중 등수에 3.5등 3개를 더해 평균을 낸 MVP 등수가 작을수록 위예요. 2판 이상 뛴 선수가 후보예요.",en:"Each game ranks its 6 players; MVP rank = average of your ranks plus three 3.5s — lower is better. Players with 2+ games are eligible.",ja:"毎ゲーム6人の中の順位に3.5位を3つ加えて平均したMVP順位が小さいほど上位です。2ゲーム以上出場した選手が候補です。",zh:"每局 6 人排名，加上三個 3.5 後取平均即 MVP 名次，越小越好。出賽 2 局以上者為候選。"},
+  row_s:{ko:"{n}판 · 판 1등 {f}번",en:"{n} games · {f}× game #1",ja:"{n}ゲーム・1位 {f}回",zh:"{n} 局・單局第1 {f} 次"},
+  t_first:{ko:"MVP 등수가 같아 판 1등 횟수로 갈림 ({a}번 vs {b}번)",en:"Tied MVP rank — decided by game #1s ({a} vs {b})",ja:"MVP順位が同じため1位回数で決定（{a}回 vs {b}回）",zh:"MVP 名次相同，以單局第1次數決定（{a} vs {b}）"},
+  t_place:{ko:"MVP 등수·1등 횟수가 같아 팀 최종 순위로 갈림 (팀 {a}위 vs {b}위)",en:"Tied — decided by team final placing ({a} vs {b})",ja:"MVP順位・1位回数が同じためチーム最終順位で決定（{a}位 vs {b}位）",zh:"相同，以隊伍最終名次決定（第{a} vs 第{b}）"},
+  t_ratio:{ko:"MVP 등수·1등 횟수가 같아 판 평균 대비 점수로 갈림 ({a}배 vs {b}배 · {o})",en:"Tied — decided by score vs game average ({a}× vs {b}× · {o})",ja:"同順位のためゲーム平均比スコアで決定（{a}倍 vs {b}倍・{o}）",zh:"相同，以相對單局平均分數決定（{a} 倍 vs {b} 倍・{o}）"},
+  non_h:{ko:"후보가 아닌 선수",en:"Not eligible",ja:"候補外の選手",zh:"非候選選手"},
+  non_r:{ko:"{n}판 출전 · 2판 이상이어야 후보",en:"{n} game(s) · needs 2+ games",ja:"{n}ゲーム出場・2ゲーム以上で候補",zh:"出賽 {n} 局・需 2 局以上"},
+  g_h:{ko:"판별 점수표",en:"Game-by-game scores",ja:"ゲーム別スコア",zh:"各局分數"},
+  g_t:{ko:"판을 누르면 6명의 항목별 점수가 보여요. 작은 숫자가 그 항목으로 얻은 점수예요. 매치 코드로 게임에서 같은 리플레이를 볼 수 있어요.",en:"Tap a game to see each player's points by category (small numbers). Use the match code to watch the same replay in game.",ja:"ゲームを押すと6人の項目別スコアが見られます（小さい数字がその項目の点数）。マッチコードでゲーム内の同じリプレイを見られます。",zh:"點開對局可看 6 人各項得分（小字為該項分數）。可用對戰代碼在遊戲中觀看同一重播。"},
+  g_first:{ko:"1등 {n}",en:"#1 {n}",ja:"1位 {n}",zh:"第1 {n}"},
+  th:{ko:["등수","선수","처치","사망","피해+회복·실드","목표","판 점수"],en:["Rank","Player","K","D","Dmg+Heal·Shield","Obj","Score"],ja:["順位","選手","キル","デス","ダメージ+回復・シールド","目標","スコア"],zh:["名次","選手","擊殺","死亡","傷害+治療護盾","目標","分數"]},
+  won:{ko:"승",en:"W",ja:"勝",zh:"勝"},
+  src_h:{ko:"계산 방법과 데이터",en:"Method & data",ja:"計算方法とデータ",zh:"計算方式與資料"},
+  src_m:{ko:"<b>계산 방법</b> — 매 판 판 점수로 6명의 등수를 매기고(같은 점수는 등수 평균), MVP 등수 = (판별 등수 합 + 3.5 × 3) ÷ (판 수 + 3). 같으면 판 1등 횟수 → 팀 최종 순위 → 판 평균 대비 점수 순서로 정해요. 자세한 기준은 「대회 → 규칙 → 대회 MVP」.",en:"<b>Method</b> — each game ranks its 6 players by game score (ties share the average rank); MVP rank = (sum of ranks + 3.5 × 3) ÷ (games + 3). Ties: game #1s → team final placing → score vs game average. Details: Cup → Rules → Cup MVP.",ja:"<b>計算方法</b> — 毎ゲーム、ゲームスコアで6人に順位を付け（同点は平均順位）、MVP順位＝（順位の合計＋3.5×3）÷（ゲーム数＋3）。同じなら1位回数→チーム最終順位→ゲーム平均比スコアの順。詳しくは「大会→規則→大会MVP」。",zh:"<b>計算方式</b> — 每局以單局分數為 6 人排名（同分取平均名次），MVP 名次＝（名次總和＋3.5×3）÷（局數＋3）。相同時依單局第1次數→隊伍最終名次→相對單局平均分數。詳見「賽事→規則→賽事 MVP」。"},
+  src_d:{ko:"<b>데이터 출처</b> — 처치·사망·적 영웅 피해는 게임 서버의 공식 경기 결과, 회복·실드·목표 시간은 경기 리플레이에서 읽었어요. 계산한 판 {g}개 · 후보 {c}명 · 계산 {t}",en:"<b>Data</b> — kills, deaths and hero damage from the official match results; healing, shields and objective time read from the replays. {g} games · {c} eligible players · computed {t}",ja:"<b>データ出典</b> — キル・デス・敵ヒーローダメージはゲームサーバーの公式試合結果、回復・シールド・目標時間は試合リプレイから読み取りました。計算したゲーム {g}・候補 {c}人・計算 {t}",zh:"<b>資料來源</b> — 擊殺、死亡、英雄傷害取自遊戲伺服器官方結果，治療、護盾、目標時間讀自對局重播。計算 {g} 局・候選 {c} 人・計算時間 {t}"},
+  src_x:{ko:"<b>계산에서 빠진 판</b>",en:"<b>Games left out</b>",ja:"<b>計算から外したゲーム</b>",zh:"<b>未計入的對局</b>"},
+  src_x0:{ko:"없음 — 보고된 판을 모두 계산했어요",en:"None — every reported game was counted",ja:"なし — 報告されたゲームをすべて計算しました",zh:"無 — 已計入所有回報的對局"},
+  src_v:{ko:"<b>검증과 이의 제기</b> — 매치 코드를 게임 「다른 매치」에 넣으면 같은 리플레이를 볼 수 있어요. 이상한 점은 한국 팀은 카톡 리더방, 일본·유럽 팀은 디스코드로 알려 주세요.",en:"<b>Check it yourself</b> — enter a match code under \"Other match\" in game to watch the same replay. Report anything odd on Discord (Korean teams: the KakaoTalk leaders' room).",ja:"<b>検証と異議</b> — マッチコードをゲームの「他のマッチ」に入れると同じリプレイを見られます。気になる点は日本・ヨーロッパチームはDiscord、韓国チームはリーダー部屋で知らせてください。",zh:"<b>驗證與異議</b> — 在遊戲「其他對戰」輸入對戰代碼即可觀看同一重播。有疑問請日本與歐洲隊伍在 Discord、韓國隊伍在隊長群通知。"}
+};
+const MV = (k, v) => { const o = MVL[k]; let s = (o && (o[LANG] || o.en || o.ko)) || ""; if(v) for(const x in v) s = s.split("{"+x+"}").join(v[x]); return s; };
+const mvNum = (x, d) => Number(x).toLocaleString(LANG === "ko" ? "ko-KR" : LANG, { minimumFractionDigits: d||0, maximumFractionDigits: d||0 });
+const mvRk = k => MV("rk", { n: (k % 1 ? k.toFixed(1) : String(k)) });
+const mvChip = k => `<span class="mvRk ${k===1?"g":(k<=3?"s":"n")}">${mvRk(k)}</span>`;
+const mvEmb = (e, sz) => (e !== null && e !== undefined && e !== "") ? cupEmbImg(e, sz, "mvEmb") : "";   // 팀 엠블럼(움직이는 엠블럼 포함) — 참가 탭과 같은 그림
+function mvDeadline(iso){
+  try{ const d = new Date(iso); if(isNaN(d)) return "";
+    return new Intl.DateTimeFormat(LANG === "zh" ? "zh-TW" : (["ko","ja"].includes(LANG) ? LANG : "en"), { timeZone: "Asia/Seoul", month: "long", day: "numeric", weekday: "short", hour: "numeric", minute: "2-digit" }).format(d) + " (KST)";
+  }catch(e){ return ""; }
+}
+function mvTie(p){
+  const t = p.tie; if(!t) return "";
+  if(t.by === "first") return MV("t_first", { a: t.me, b: t.other });
+  if(t.by === "place") return MV("t_place", { a: t.me, b: t.other });
+  return MV("t_ratio", { a: Number(t.me).toFixed(2), b: Number(t.other).toFixed(2), o: esc(t.oname || "") });
+}
+function renderTrMvp(){
+  const box = document.getElementById("trMvp"); if(!box) return;
+  const d = trMvp; if(!d || !d.players || !d.players.length){ box.innerHTML = ""; box.dataset.k = ""; return; }
+  /* renderTourney 는 대회 DB가 바뀔 때마다 불린다 — 내용·언어가 그대로면 다시 그리지 않는다(애니메이션이 매번 처음부터 도는 것 방지) */
+  const key = LANG + "|" + d.computed + "|" + d.status + "|" + d.deadline + "|" + d.players.length;
+  if(box.dataset.k === key && box.firstChild) return;
+  box.dataset.k = key;
+  const top = d.players[0], H = [];
+  if(d.sample) H.push(`<div class="mvSample">${esc(d.sample)}</div>`);
+  H.push(d.status === "final" ? `<div class="mvStatus ok">${MV("fin")}</div>`
+    : `<div class="mvStatus">${d.deadline && mvDeadline(d.deadline) ? MV("pre", { d: esc(mvDeadline(d.deadline)) }) : MV("pre2")}</div>`);
+  const sparks = Array.from({length: 12}, (_, i) => `<i class="mvSpark" style="left:${(7 + i * 7.9) % 96}%;top:${(12 + (i * 37) % 70)}%;animation-delay:${(i * 0.37).toFixed(2)}s"></i>`).join("");
+  const sub = [top.team ? esc(top.team) : "", top.hero ? MV("main", { h: esc(T(top.hero)) }) : ""].filter(Boolean).join(" · ");
+  const formula = `(${top.ranks.map(k => (k % 1 ? k.toFixed(1) : k)).join(" + ")} + 3.5×3) ÷ (${top.n} + 3) = <b>${mvRk(Number(top.mvp.toFixed(2)))}</b>`;
+  H.push(`<section class="mvHero"><div class="cupRaysEl"></div><div class="cupGlow"></div>${sparks}
+    <div class="mvKk">${esc(MV("kk"))}</div>
+    <svg class="mvCrown" viewBox="0 0 64 40" width="64" height="40" aria-hidden="true"><defs><linearGradient id="mvCg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset=".55" stop-color="#ffc23d"/><stop offset="1" stop-color="#b77a10"/></linearGradient></defs><path d="M4 34 L10 8 L22 22 L32 4 L42 22 L54 8 L60 34 Z" fill="url(#mvCg)" stroke="#7a4f08" stroke-width="1.5"/><circle cx="10" cy="8" r="2.6" fill="#fff3c4"/><circle cx="32" cy="4" r="2.6" fill="#fff3c4"/><circle cx="54" cy="8" r="2.6" fill="#fff3c4"/></svg>
+    <h2 class="mvName">${esc(top.name)}</h2>
+    <div class="mvWho">${mvEmb(top.emb, 26)}<span>${sub}</span></div>
+    <div class="mvStats"><div class="g"><b data-mvto="${top.mvp}" data-mvd="2">${top.mvp.toFixed(2)}</b><small>${MV("u_rank")}</small><span>${MV("s_mvp")}</span></div>
+      <div><b data-mvto="${top.first}" data-mvd="0">${top.first}</b><small>${MV("u_cnt")}</small><span>${MV("s_first")}</span></div>
+      <div><b data-mvto="${top.n}" data-mvd="0">${top.n}</b><small>${MV("u_g")}</small><span>${MV("s_n")}</span></div></div>
+    <div class="mvRks">${top.ranks.map(mvChip).join("")}</div>
+    <div class="mvF">${formula}</div>${top.tie ? `<div class="mvTie">${mvTie(top)}</div>` : ""}</section>`);
+  if(d.why && d.why.length){
+    const fmt = (k, v) => k === "obj" ? mvNum(v, 1) + MV("u_s") : (k === "K" || k === "D") ? mvNum(v, 1) : mvNum(v, 0);
+    H.push(`<section class="mvCard"><h3>${MV("why_h")}</h3><p class="mvTx">${MV("why_t")} <span class="mvLg"><i class="me"></i>${esc(top.name)}</span> <span class="mvLg"><i class="av"></i>${MV("lg_avg")}</span></p><div class="mvBars">`
+      + d.why.map(w => { const mx = Math.max(w.me, w.avg, 1e-9), up = w.k === "D" ? w.me < w.avg : w.me > w.avg;
+          return `<div class="mvBar"><span class="l">${MV("w_" + w.k)}</span><div class="t"><i class="me" style="--w:${(w.me / mx * 100).toFixed(0)}%"></i><i class="av" style="--w:${(w.avg / mx * 100).toFixed(0)}%"></i></div><span class="v${up ? " up" : ""}">${fmt(w.k, w.me)}</span><span class="a">${fmt(w.k, w.avg)}</span></div>`; }).join("")
+      + `</div><p class="mvNote">${MV("why_n")}</p></section>`);
+  }
+  if(d.players.length >= 3){
+    const pc = (p, n) => `<div class="mvPd p${n}"><span class="n">${n}</span>${mvEmb(p.emb, 34)}<b>${esc(p.name)}</b><small>${esc(p.team || "")}</small><em>${mvRk(Number(p.mvp.toFixed(2)))}</em><div class="mvRks">${p.ranks.map(mvChip).join("")}</div></div>`;
+    H.push(`<section class="mvPodium">${pc(d.players[1], 2)}${pc(d.players[2], 3)}</section>`);
+  }
+  H.push(`<section class="mvCard"><h3>${MV("rank_h")}</h3><p class="mvTx">${MV("rank_t")}</p>` + d.players.map((p, i) =>
+    `<div class="mvRow${i === 0 ? " me" : ""}"><div class="no">${i + 1}</div><div class="pl"><b>${esc(p.name)}</b>${p.team ? `<em>${esc(p.team)}</em>` : ""}<small>${p.hero ? esc(T(p.hero)) + " · " : ""}${MV("row_s", { n: p.n, f: p.first })}</small><div class="mvRks">${p.ranks.map(mvChip).join("")}</div>${p.tie ? `<div class="mvTie">${mvTie(p)}</div>` : ""}</div><div class="sc">${p.mvp.toFixed(2)}<small>${MV("s_mvp")}</small></div></div>`).join("") + `</section>`);
+  if(d.nonc && d.nonc.length) H.push(`<section class="mvCard"><h3>${MV("non_h")}</h3>` + d.nonc.map(p => `<div class="mvRow off"><div class="no">–</div><div class="pl"><b>${esc(p.name)}</b>${p.team ? `<em>${esc(p.team)}</em>` : ""}<small>${MV("non_r", { n: p.n })}</small></div><div class="sc">${p.mvp.toFixed(2)}<small>${MV("s_mvp")}</small></div></div>`).join("") + `</section>`);
+  const th = (MVL.th[LANG] || MVL.th.en);
+  H.push(`<section class="mvCard"><h3>${MV("g_h")}</h3><p class="mvTx">${MV("g_t")}</p>` + (d.games || []).map(g => `<details class="mvGm"><summary><span class="code">${esc(g.code)}</span><span class="md">${esc(T(g.mode || ""))}${g.map ? " · " + esc(T(g.map)) : ""}</span><span class="g1">${MV("g_first", { n: esc(g.rows[0] ? g.rows[0].name : "") })}</span></summary><div class="mvTw"><table><thead><tr>${th.map(x => `<th>${esc(x)}</th>`).join("")}</tr></thead><tbody>`
+    + g.rows.map(r => `<tr><td>${mvChip(r.rank)}</td><td class="pn"><b>${esc(r.name)}</b>${r.won ? ` <span class="w">${MV("won")}</span>` : ""}<small>${esc(T(r.hero || ""))}</small></td><td>${r.K}<small>+${mvNum(r.pK)}</small></td><td>${r.D}<small>${mvNum(r.pD)}</small></td><td>${mvNum(r.hp)}<small>+${mvNum(r.pHP)}</small></td><td>${mvNum(r.obj, 1)}${MV("u_s")}<small>+${mvNum(r.pO)}</small></td><td class="tot">${mvNum(r.S)}</td></tr>`).join("")
+    + `</tbody></table></div></details>`).join("") + `</section>`);
+  H.push(`<section class="mvCard"><h3>${MV("src_h")}</h3><div class="mvSrc"><div>${MV("src_m")}</div><div>${MV("src_d", { g: d.games_n || (d.games || []).length, c: d.players.length, t: esc(d.computed || "") })}</div><div>${MV("src_x")}<ul>${(d.excl && d.excl.length) ? d.excl.map(x => `<li><b>${esc(x.code)}</b> — ${esc(x.why)}</li>`).join("") : `<li>${MV("src_x0")}</li>`}</ul></div><div>${MV("src_v")}</div></div></section>`);
+  box.innerHTML = H.join("");
+  /* 움직임: 숫자 올라가기 · 막대 차오르기 (동작 줄이기 설정이면 바로 최종값) */
+  const still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  requestAnimationFrame(() => box.querySelectorAll(".mvBar i").forEach(el => el.style.width = el.style.getPropertyValue("--w")));
+  if(!still) box.querySelectorAll("[data-mvto]").forEach(el => {
+    const to = +el.dataset.mvto, dg = +el.dataset.mvd, from = dg ? Math.min(6, to + 3) : 0, t0 = performance.now(), dur = 1100;
+    const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = (from + (to - from) * e).toFixed(dg); if(k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+}
+window.rsTrMvpVisible = () => !!(trMvp && trMvp.players && trMvp.players.length);
+/* 사이트 주소(같은 출처)로 받으면 sw.js 가 요청마다 캐시에 쌓아 두므로, 저장소 원본 주소(다른 출처·CORS 허용·5분 캐시)에서 읽는다. 로컬 미리보기는 폴더의 mvp.json. */
+const MVP_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? "mvp.json" : "https://raw.githubusercontent.com/jinavav150-ops/ricoricochet/main/mvp.json";
+function trMvpLoad(){
+  fetch(MVP_URL + "?t=" + Date.now(), { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(d => {
+    trMvp = (d && Array.isArray(d.players) && d.players.length) ? d : null; renderTrMvp(); if(window.renderSubnav) window.renderSubnav();
+    if(!trMvp && typeof CURVIEW !== "undefined" && CURVIEW === "trmvp" && window.goSub) goSub("trbracket");   // 결과가 아직 없는데 ?tab=trmvp 로 들어오면 빈 화면 대신 대진표
+  }).catch(() => { if(typeof CURVIEW !== "undefined" && CURVIEW === "trmvp" && window.goSub) goSub("trbracket"); });
+}
+trMvpLoad();
+
 function renderTourney(){
   /* 상단 대분류 버튼: 대회 켜짐 또는 관리자일 때만 보인다 */
   const nb = document.querySelector('nav button[data-g="tourney"]');
-  if(nb) nb.style.display = (window.rsTrVisible() || window.rsTrHallVisible()) ? "" : "none";   // 명예의 전당만 남아도 버튼은 산다
-  if(typeof CURVIEW !== "undefined" && /^(tourney|trrules|trbracket|trhall)$/.test(CURVIEW) && typeof applyHeader === "function") applyHeader();
-  renderTrRules(); renderTrBracket(); renderTrHall();
+  if(nb) nb.style.display = (window.rsTrVisible() || window.rsTrHallVisible() || window.rsTrMvpVisible()) ? "" : "none";   // 명예의 전당만 남아도 버튼은 산다
+  if(typeof CURVIEW !== "undefined" && /^(tourney|trrules|trbracket|trmvp|trhall)$/.test(CURVIEW) && typeof applyHeader === "function") applyHeader();
+  renderTrRules(); renderTrBracket(); renderTrMvp(); renderTrHall();
   if(window.rsCupBannerSync) window.rsCupBannerSync();
   const head = document.getElementById("trHead"); if(!head) return;
   /* 🩹 2026-08-26: 서버 응답 전이고 기억해 둔 설정도 없다(=이 기기 첫 방문). 틀린 단계를 자신 있게 보여주느니
@@ -7646,7 +7868,7 @@ function renderTrHall(){
 
 function renderTrAdmin(){
   const box = document.getElementById("trAdmin"); if(!box) return;
-  /* 2026-08-25 MAMMON 결정: 대회 설정 창 제거 — 상태·제목·일시 변경은 Claude가 서비스 계정으로 직접 처리한다.
+  /* 2026-08-25 MAMMON 결정: 대회 설정 창 제거 — 상태·제목·일시 변경은 운영진이 서비스 계정 도구로 직접 처리한다.
      (저장 안 누름/오입력 사고 방지. 복원하려면 아래 return 한 줄만 지우면 된다.) */
   box.style.display="none"; box.innerHTML=""; return;
   if(!IS_ADMIN){ box.style.display="none"; box.innerHTML=""; return; }
