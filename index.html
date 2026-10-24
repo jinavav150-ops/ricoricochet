@@ -1583,6 +1583,8 @@
 .bo-q .bo-plate{min-width:62px;padding:5px 10px}
 .bo-q.is-upcoming .bo-score{font-size:13px}
 .bo-q .bo-when{bottom:4px}
+.bo-when.now{color:#ff7a7a;font-weight:800;white-space:nowrap}
+.bo-when.now i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#ff4b4b;margin-right:4px;vertical-align:1px;animation:trLiveDot 1.4s ease-in-out infinite}
 .bo-stand{margin:0 4px}
 .bo-strow{position:relative;display:flex;align-items:center;gap:9px;height:44px;padding:0 12px;margin:5px 0;background:#0a0d14;border:1px solid #232b3d;clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
 .bo-strow.top{background:linear-gradient(90deg,rgba(255,176,46,.10),rgba(255,176,46,.015) 55%,#0a0d14)}
@@ -5235,7 +5237,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.24-b";
+const SITE_VERSION = "2026.10.24-c";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7795,6 +7797,10 @@ function renderTrBracket(){
     /* 2026-10-24: 경기마다 누가 방을 만드는지(방장) — 규칙 탭 r_set2c 와 같은 판정. 10/23 서버 시험: 아시아 선수가 플레이어로 유럽 팀을 초대하면 유럽 서버.
        라이브 = 민트K(관전) · 유럽끼리 = 왼쪽 팀(유럽 서버) · 왼쪽 유럽 팀 대 아시아 팀 = 그 유럽 팀 · 왼쪽 아시아 팀 대 유럽 팀 = MAMMON(관전) · 나머지 = 왼쪽 팀.
        팀이 아직 안 정해진 칸(「1조 1위」「4강 승자」)·점수가 들어간 경기는 표시하지 않는다(라이브 칸은 팀이 없어도 표시). */
+    /* 2026-10-24: 지금 하는 경기 표시 — 라운드 이름 끝에 " · 진행 중"이 붙어 있으면(cup.py now) "예정" 대신 빨간 점 "진행 중". 결과가 들어가면 cup.py 가 떼어 낸다. */
+    const boNow = m => /·\s*진행 ?중/.test(m.round || "") && !parseSc(m);
+    const boRnd = r => String(r || "").replace(/\s*·\s*진행 ?중/g, "");
+    const boWhen = m => { return boNow(m) ? `<span class="bo-when now"><i></i>${({ko:"진행 중",en:"In progress",ja:"試合中",zh:"進行中"})[LANG] || "In progress"}</span>` : `<span class="bo-when">${TRL("b_upcoming")}</span>`; };
     const BO_EU = new Set(["지지 kimcheeze", "ox"]);   // 이번 대회 유럽 팀(대진표 이름 기준)
     const boTbd = n => /\d\s*조\s*\d\s*위|승자|패자|winner|loser/i.test(n || "");
     const BOH = { lab:{ko:"방장",en:"Host",ja:"部屋作成",zh:"開房"}, spec:{ko:"관전으로 양 팀 초대",en:"spectator, invites both teams",ja:"観戦で両チームを招待",zh:"觀戰並邀請雙方"},
@@ -7826,7 +7832,7 @@ function renderTrBracket(){
         + `<div class="bo-side bo-side--l">${boEmb(m.a)}<span class="bo-name">${esc(m.a)}</span><i class="bo-ticket">${CUPL(tk||"cp_adv")}</i></div>`
         + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span><i class="bo-ticket">${CUPL(tk||"cp_adv")}</i></div>`
         + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
-        + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
+        + (!sc?boWhen(m):"")
         + boChips(m) + `</article>` + boHost(m) + boAdm(m);
     };
     const finalBand = m => {
@@ -7839,7 +7845,7 @@ function renderTrBracket(){
         + `<div class="bo-side bo-side--l">${boEmb(m.a)}<span class="bo-name">${esc(m.a)}</span></div>`
         + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span></div>`
         + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
-        + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
+        + (!sc?boWhen(m):"")
         + (champ?`<div class="bo-champ">${CUPL("cp_win")} · ${esc(champ)}</div>`:"")
         + boChips(m) + `</div></article>` + boHost(m) + boAdm(m);
     };
@@ -7864,9 +7870,9 @@ function renderTrBracket(){
       if(!f.semi.length && !f.fin.length && !f.third.length) return;
       const S=[`<section class="bo-stage" data-bracket="${key}">`, `<h3 class="bo-round">${esc(title)}</h3>`];
       f.semi.slice(0,2).forEach((m,i)=>{
-        S.push(band(m, `${esc(m.round)}${f.semi.length>1?` · ${i+1}`:""}`));
+        S.push(band(m, `${esc(boRnd(m.round))}${f.semi.length>1?` · ${i+1}`:""}`));
       });
-      for(const m of f.third) S.push(band(m, esc(m.round || TRL("b_third")), "cp_third"));
+      for(const m of f.third) S.push(band(m, esc(boRnd(m.round) || TRL("b_third")), "cp_third"));
       if(f.fin.length){ for(const m of f.fin) S.push(finalBand(m)); }
       else if(f.semi.length) S.push(finalTbd);
       S.push(`</section>`);
@@ -7935,7 +7941,7 @@ function renderTrBracket(){
         + `<div class="bo-side bo-side--l">${boEmb(m.a)}<span class="bo-name">${esc(m.a)}</span></div>`
         + `<div class="bo-side bo-side--r">${boEmb(m.b)}<span class="bo-name">${esc(m.b)}</span></div>`
         + `<div class="bo-plate"><span class="bo-score">${boScore(sc,m)}</span></div>`
-        + (!sc?`<span class="bo-when">${TRL("b_upcoming")}</span>`:"")
+        + (!sc?boWhen(m):"")
         + boChips(m) + `</article>` + boHost(m) + boAdm(m);
     };
     const rounds=[]; for(const m of rest){ if(!rounds.includes(m.round)) rounds.push(m.round); }
