@@ -1087,8 +1087,8 @@
 .hlSmall:before{content:"";position:absolute;top:0;left:50%;width:min(300px,90%);transform:translateX(-50%);height:5px;border-radius:3px;background:linear-gradient(180deg,#d9dee8,#7c8597);box-shadow:0 3px 6px rgba(0,0,0,.5)}
 .hlSmall .hlBan{width:132px;padding-top:10px;animation-duration:11s}
 .hlCol{width:132px}
-.hlSubN{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:6px;text-align:center}
-.hlSubN span{font-size:11.5px;font-weight:700;line-height:1.35;word-break:break-all;color:#c9d1de}
+.hlSubN{display:flex;flex-direction:column;align-items:center;gap:3px;width:118px;margin:14px auto 0;text-align:center}
+.hlSubN span{font-size:11px;font-weight:600;line-height:1.35;word-break:break-all;color:#c9d1de}
 .hlSubN.hn_third span{color:#e6c2a0}
 .hlSubN span.s{font-weight:600;opacity:.85}
 .hlSubN em{font-style:normal;font-size:9.5px;margin-left:4px;padding:0 3px;border:1px solid currentColor;border-radius:3px;opacity:.8}
@@ -5246,7 +5246,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.25-a";
+const SITE_VERSION = "2026.10.25-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
