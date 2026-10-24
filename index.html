@@ -1213,6 +1213,8 @@
 .mvGm summary .code{font-family:ui-monospace,Menlo,monospace;font-weight:800;color:#ffd364;letter-spacing:.04em}
 .mvGm summary .md{color:#c8d0de}
 .mvGm summary .g1{margin-left:auto;color:#9aa6bd}
+.mvGm summary .vs{flex:0 0 100%;font-size:12px;font-weight:800;color:#e6ebf5}
+.mvTk .st{font-size:10.5px;font-weight:800;color:#ffd364}
 .mvTw{overflow-x:auto}
 .mvTw table{width:100%;border-collapse:collapse;font-size:12px;min-width:460px}
 .mvTw th{text-align:right;padding:7px 8px;color:#7d89a3;font-weight:700;border-bottom:1px solid #232c40;white-space:nowrap}
@@ -5238,7 +5240,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.24-e";
+const SITE_VERSION = "2026.10.24-f";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7120,7 +7122,7 @@ function renderTrMvp(){
   /* 계산식은 3.5를 세 번 그대로 적는다(“×3”·“+3”보다 바로 읽힌다) */
   const formula = `${MV("s_mvp")} = (${top.ranks.map(k => (k % 1 ? k.toFixed(1) : k)).join(" + ")} + 3.5 + 3.5 + 3.5) ÷ ${top.n + 3} = <b>${top.mvp.toFixed(2)}</b>`;
   H.push(`<section class="mvCard"><h3>${MV("run_h")}</h3><p class="mvTx">${MV("run_t")}</p><div class="mvRun">`
-    + gl.map(g => `<div class="mvTk ${g.rank === 1 ? "g" : g.rank <= 3 ? "s" : ""}"><b>${g.rank % 1 ? g.rank.toFixed(1) : g.rank}<small>${MV("u_rank")}</small></b>${g.mode ? `<span>${esc(T(g.mode))}${g.map ? "<br>" + esc(T(g.map)) : ""}</span>` : ""}${g.won ? `<i>${MV("won")}</i>` : ""}</div>`).join("")
+    + gl.map(g => `<div class="mvTk ${g.rank === 1 ? "g" : g.rank <= 3 ? "s" : ""}"><b>${g.rank % 1 ? g.rank.toFixed(1) : g.rank}<small>${MV("u_rank")}</small></b>${g.stk ? `<span class="st">${TRL("rp_st_" + g.stk)}</span>` : ""}${g.mode ? `<span>${esc(T(g.mode))}${g.map ? "<br>" + esc(T(g.map)) : ""}</span>` : ""}${g.won ? `<i>${MV("won")}</i>` : ""}</div>`).join("")
     + `</div><div class="mvF">${formula}</div>${top.tie ? `<div class="mvTie">${mvTie(top)}</div>` : ""}</section>`);
   /* ③ 왜 MVP인가 — 방송 기록 비교처럼 양쪽 막대(왼쪽 MVP, 오른쪽 같은 판 다른 선수 평균) */
   if(d.why && d.why.length){
@@ -7140,7 +7142,7 @@ function renderTrMvp(){
     `<div class="mvRow${i === 0 ? " me" : ""}"><div class="no">${i + 1}</div><div class="pl"><b>${esc(p.name)}</b>${p.team ? `<em>${esc(p.team)}</em>` : ""}<small>${p.hero ? esc(T(p.hero)) + " · " : ""}${MV("row_s", { n: p.n, f: p.first })}</small><div class="mvRks">${p.ranks.map(mvChip).join("")}</div>${p.tie ? `<div class="mvTie">${mvTie(p)}</div>` : ""}</div><div class="sc">${p.mvp.toFixed(2)}<small>${MV("s_mvp")}</small></div></div>`).join("") + `</section>`);
   if(d.nonc && d.nonc.length) H.push(`<section class="mvCard"><h3>${MV("non_h")}</h3>` + d.nonc.map(p => `<div class="mvRow off"><div class="no">–</div><div class="pl"><b>${esc(p.name)}</b>${p.team ? `<em>${esc(p.team)}</em>` : ""}<small>${MV("non_r", { n: p.n })}</small></div><div class="sc">${p.mvp.toFixed(2)}<small>${MV("s_mvp")}</small></div></div>`).join("") + `</section>`);
   const th = (MVL.th[LANG] || MVL.th.en);
-  H.push(`<section class="mvCard"><h3>${MV("g_h")}</h3><p class="mvTx">${MV("g_t")}</p>` + (d.games || []).map(g => `<details class="mvGm"><summary><span class="code">${esc(g.code)}</span><span class="md">${esc(T(g.mode || ""))}${g.map ? " · " + esc(T(g.map)) : ""}</span><span class="g1">${MV("g_first", { n: esc(g.rows[0] ? g.rows[0].name : "") })}</span></summary><div class="mvTw"><table><thead><tr>${th.map(x => `<th>${esc(x)}</th>`).join("")}</tr></thead><tbody>`
+  H.push(`<section class="mvCard"><h3>${MV("g_h")}</h3><p class="mvTx">${MV("g_t")}</p>` + (d.games || []).map(g => `<details class="mvGm"><summary>${g.stk ? `<span class="vs">${TRL("rp_st_" + g.stk)} · ${esc(g.a || "")} vs ${esc(g.b || "")}</span>` : ""}<span class="code">${esc(g.code)}</span><span class="md">${esc(T(g.mode || ""))}${g.map ? " · " + esc(T(g.map)) : ""}</span><span class="g1">${MV("g_first", { n: esc(g.rows[0] ? g.rows[0].name : "") })}</span></summary><div class="mvTw"><table><thead><tr>${th.map(x => `<th>${esc(x)}</th>`).join("")}</tr></thead><tbody>`
     + g.rows.map(r => `<tr><td>${mvChip(r.rank)}</td><td class="pn"><b>${esc(r.name)}</b>${r.won ? ` <span class="w">${MV("won")}</span>` : ""}<small>${esc(mvH(r.hero))}</small></td><td>${r.K}<small>+${mvNum(r.pK)}</small></td><td>${r.D}<small>${mvNum(r.pD)}</small></td><td>${mvNum(r.hp)}<small>+${mvNum(r.pHP)}</small></td><td>${mvNum(r.obj, 1)}${MV("u_s")}<small>+${mvNum(r.pO)}</small></td><td class="tot">${mvNum(r.S)}</td></tr>`).join("")
     + `</tbody></table></div></details>`).join("") + `</section>`);
   H.push(`<section class="mvCard"><h3>${MV("src_h")}</h3><div class="mvSrc"><div>${MV("src_m")}</div><div>${MV("src_d", { g: d.games_n || (d.games || []).length, c: d.players.length, t: esc(d.computed || "") })}</div><div>${MV("src_x")}<ul>${(d.excl && d.excl.length) ? d.excl.map(x => `<li><b>${esc(x.code)}</b> — ${esc(x.why)}</li>`).join("") : `<li>${MV("src_x0")}</li>`}</ul></div><div>${MV("src_v")}</div></div></section>`);
