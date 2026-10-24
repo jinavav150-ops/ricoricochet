@@ -5237,7 +5237,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.24-c";
+const SITE_VERSION = "2026.10.24-d";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6744,6 +6744,7 @@ const TR_L = {
     zh:"一場比賽（三戰兩勝，決賽五戰三勝）結束後，房主在這裡一次上傳該場的對局代碼。每局都有各自的對局代碼 — 請把<b>該場所有局（不論輸贏）</b>都填上，每局填「代碼＋該局獲勝隊伍」（2:0 填 2 局，2:1 填 3 局・決賽 3:0 填 3 局，3:1 填 4 局，3:2 填 5 局）。比賽中不必退出遊戲，最晚請在當天最後一場比賽結束後立即回報。未回報的比賽不計成績，代碼會用於數據 MVP 計算。"},
   rp_wait:{ko:"경기 보고는 대회가 시작되면(10월 24일 저녁 8시) 열리고, 대회가 끝나면 닫혀요.",en:"Match reports open when the cup starts (Oct 24, 20:00 KST) and close when it ends.",ja:"試合報告は大会開始時（10月24日20時）に開き、大会終了で閉じます。",zh:"比賽回報將於賽事開始時（10月24日 20:00）開放，賽事結束後關閉。"},
   rp_mini:{ko:"방장용 · 눌러서 열기",en:"for room hosts · tap to open",ja:"部屋作成者用・タップで開く",zh:"房主用・點擊展開"},
+  rp_mini_done:{ko:"대회가 끝나 닫혔어요",en:"closed — the cup is over",ja:"大会終了のため締め切りました",zh:"賽事已結束，已關閉"},
   rp_mini_wait:{ko:"대회가 시작되면 열려요",en:"opens when the cup starts",ja:"大会開始で開きます",zh:"賽事開始後開放"},
   rp_open_btn:{ko:"＋ 경기 보고하기 (코드 한 번에)",en:"＋ Report a match (all codes at once)",ja:"＋ 試合を報告（コードまとめて）",zh:"＋ 回報比賽（代碼一次上傳）"},
   rp_code:{ko:"{n}판 매치 코드",en:"Game {n} match code",ja:"{n}試合目のマッチコード",zh:"第 {n} 局比賽代碼"},
@@ -7497,7 +7498,7 @@ function trRpLiveText(d){
 }
 function trReportCard(){
   /* 2026-10-24 MAMMON: 민트K 라이브 화면·대진표를 보는 사람에게 큰 보고 카드가 거슬린다 → 맨 위에 한 줄로 접어 두고, 누르면 설명·입력 칸이 열린다 */
-  const H = [`<div class="cupRpMiniWrap" id="trRpCard"><details class="cupRpForm cupRpMini"${trRpOpen?" open":""}><summary class="cupRpMiniSum"><span>📝 ${TRL("rp_head")}</span><small>${TRL(trRpIsOpen() ? "rp_mini" : "rp_mini_wait")}</small></summary>`
+  const H = [`<div class="cupRpMiniWrap" id="trRpCard"><details class="cupRpForm cupRpMini"${trRpOpen?" open":""}><summary class="cupRpMiniSum"><span>📝 ${TRL("rp_head")}</span><small>${TRL(trRpIsOpen() ? "rp_mini" : (trMeta && trMeta.state === "done") ? "rp_mini_done" : "rp_mini_wait")}</small></summary>`
     + `<div class="cupRpMiniBody"><div class="rnote">${TRL("rp_how")}</div>`];
   if(!trRpIsOpen()){ H.push(`<div class="rnote" style="margin-top:6px;color:#ffd257">${TRL("rp_wait")}</div></div></details></div>`); return H.join(""); }
   const d = trRpDraft || {};
