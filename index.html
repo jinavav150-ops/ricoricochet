@@ -1261,6 +1261,14 @@
 .cupStEmb .cupEmbGrid{margin-top:8px}
 .cupRpSum{display:block;text-align:center;padding:11px;border-radius:10px;background:rgba(255,176,46,.12);border:1px solid rgba(255,176,46,.45);color:#ffd257;font-weight:700;cursor:pointer;list-style:none;margin-top:10px}
 .cupRpSum::-webkit-details-marker{display:none}
+.cupRpMiniWrap{margin-bottom:12px}
+.cupRpMiniSum{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border-radius:10px;border:1px dashed #2f3a52;background:rgba(13,17,27,.6);color:#c8d0de;font-size:13px;font-weight:700;cursor:pointer;list-style:none}
+.cupRpMiniSum::-webkit-details-marker{display:none}
+.cupRpMiniSum small{font-size:11.5px;font-weight:600;color:#8792aa}
+.cupRpMiniSum small:after{content:" ▾";color:#ffb02e}
+.cupRpMini[open]>.cupRpMiniSum{border-style:solid;border-color:rgba(255,176,46,.45);border-radius:10px 10px 0 0}
+.cupRpMini[open]>.cupRpMiniSum small:after{content:" ▴"}
+.cupRpMiniBody{padding:12px;border:1px solid rgba(255,176,46,.45);border-top:0;border-radius:0 0 10px 10px;background:#0d111b}
 .cupRpForm[open]>.cupRpSum{margin-bottom:4px}
 .cupRpCodeIn{text-transform:uppercase}
 .cupRpGame{display:grid;grid-template-columns:42px minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:center;margin-top:6px}
@@ -5227,7 +5235,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.24-a";
+const SITE_VERSION = "2026.10.24-b";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -6733,6 +6741,8 @@ const TR_L = {
     ja:"試合（2本先取・BO3、決勝は3本先取・BO5）が終わったら、ホストがその試合のマッチコードをここにまとめて登録します。1ゲームごとにマッチコードが別々に出ます — <b>勝ち負けに関係なくその試合の全ゲーム</b>を、1ゲームずつ「コード＋そのゲームの勝者」で入力してください（2–0なら2つ、2–1なら3つ・決勝は3–0なら3つ、3–1なら4つ、3–2なら5つ）。途中でゲームを抜ける必要はなく、遅くともその日の最終試合が終わったらすぐに登録してください。未報告の試合は無効で、コードはデータMVPの計算に使われます。",
     zh:"一場比賽（三戰兩勝，決賽五戰三勝）結束後，房主在這裡一次上傳該場的對局代碼。每局都有各自的對局代碼 — 請把<b>該場所有局（不論輸贏）</b>都填上，每局填「代碼＋該局獲勝隊伍」（2:0 填 2 局，2:1 填 3 局・決賽 3:0 填 3 局，3:1 填 4 局，3:2 填 5 局）。比賽中不必退出遊戲，最晚請在當天最後一場比賽結束後立即回報。未回報的比賽不計成績，代碼會用於數據 MVP 計算。"},
   rp_wait:{ko:"경기 보고는 대회가 시작되면(10월 24일 저녁 8시) 열리고, 대회가 끝나면 닫혀요.",en:"Match reports open when the cup starts (Oct 24, 20:00 KST) and close when it ends.",ja:"試合報告は大会開始時（10月24日20時）に開き、大会終了で閉じます。",zh:"比賽回報將於賽事開始時（10月24日 20:00）開放，賽事結束後關閉。"},
+  rp_mini:{ko:"방장용 · 눌러서 열기",en:"for room hosts · tap to open",ja:"部屋作成者用・タップで開く",zh:"房主用・點擊展開"},
+  rp_mini_wait:{ko:"대회가 시작되면 열려요",en:"opens when the cup starts",ja:"大会開始で開きます",zh:"賽事開始後開放"},
   rp_open_btn:{ko:"＋ 경기 보고하기 (코드 한 번에)",en:"＋ Report a match (all codes at once)",ja:"＋ 試合を報告（コードまとめて）",zh:"＋ 回報比賽（代碼一次上傳）"},
   rp_code:{ko:"{n}판 매치 코드",en:"Game {n} match code",ja:"{n}試合目のマッチコード",zh:"第 {n} 局比賽代碼"},
   rp_stage:{ko:"경기 구분 고르기",en:"Choose stage",ja:"区分を選択",zh:"選擇階段"},
@@ -7484,14 +7494,15 @@ function trRpLiveText(d){
   return `${TRL("rp_live")}: <b>${A} ${wa} : ${wb} ${B}</b>`;
 }
 function trReportCard(){
-  const H = [`<div class="rptcard cupRp" id="trRpCard"><h3>📝 ${TRL("rp_head")}</h3><div class="rnote">${TRL("rp_how")}</div>`];
-  if(!trRpIsOpen()){ H.push(`<div class="rnote" style="margin-top:6px;color:#ffd257">${TRL("rp_wait")}</div></div>`); return H.join(""); }
+  /* 2026-10-24 MAMMON: 민트K 라이브 화면·대진표를 보는 사람에게 큰 보고 카드가 거슬린다 → 맨 위에 한 줄로 접어 두고, 누르면 설명·입력 칸이 열린다 */
+  const H = [`<div class="cupRpMiniWrap" id="trRpCard"><details class="cupRpForm cupRpMini"${trRpOpen?" open":""}><summary class="cupRpMiniSum"><span>📝 ${TRL("rp_head")}</span><small>${TRL(trRpIsOpen() ? "rp_mini" : "rp_mini_wait")}</small></summary>`
+    + `<div class="cupRpMiniBody"><div class="rnote">${TRL("rp_how")}</div>`];
+  if(!trRpIsOpen()){ H.push(`<div class="rnote" style="margin-top:6px;color:#ffd257">${TRL("rp_wait")}</div></div></details></div>`); return H.join(""); }
   const d = trRpDraft || {};
   const v = k => esc(d[k] || "");
   const opt = (k, val, label) => `<option value="${val}"${String(d[k]||"")===String(val)?" selected":""}>${label}</option>`;
   const names = [...new Set(trTeams.filter(t=>!t.solo).map(t=>t.name))];
-  H.push(`<details class="cupRpForm"${trRpOpen?" open":""}><summary class="cupRpSum">${TRL("rp_open_btn")}</summary>`
-    + `<select class="cmtname trin" data-trrp="stage" aria-label="${TRL("rp_stage")}">${opt("stage","",TRL("rp_stage"))}${TR_RP_STAGES.map(k=>opt("stage",k,TRL("rp_st_"+k))).join("")}</select>`
+  H.push(`<select class="cmtname trin" data-trrp="stage" aria-label="${TRL("rp_stage")}">${opt("stage","",TRL("rp_stage"))}${TR_RP_STAGES.map(k=>opt("stage",k,TRL("rp_st_"+k))).join("")}</select>`
     + `<datalist id="trRpTeams">${names.map(n=>`<option value="${esc(n)}"></option>`).join("")}</datalist>`
     + `<div class="cupRpVs"><input class="cmtname trin" data-trrp="a" list="trRpTeams" maxlength="24" placeholder="${TRL("rp_a")}" value="${v("a")}" aria-label="${TRL("rp_a")}"><span>VS</span>`
     +   `<input class="cmtname trin" data-trrp="b" list="trRpTeams" maxlength="24" placeholder="${TRL("rp_b")}" value="${v("b")}" aria-label="${TRL("rp_b")}"></div>`
@@ -7503,7 +7514,7 @@ function trReportCard(){
     + `<div class="cupRpLive" id="trRpLive">${trRpLiveText(d)}</div>`
     + `<input class="cmtname trin" data-trrp="note" maxlength="80" placeholder="${TRL("rp_note")}" value="${v("note")}" aria-label="${TRL("rp_note")}">`
     + `<div class="trbtns" style="margin-top:10px"><button id="trRpGo" class="cupGo" style="height:44px">${TRL("rp_send")}</button></div>`
-    + `</details></div>`);
+    + `</div></details></div>`);
   return H.join("");
 }
 function trReportList(){
