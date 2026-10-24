@@ -5240,7 +5240,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.25-d";
+const SITE_VERSION = "2026.10.25-e";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -7057,9 +7057,9 @@ const MVL = {
   why_t:{ko:"뛴 판의 판당 평균을, 같은 판에서 뛴 다른 선수들의 평균과 비교했어요.",en:"Per-game averages compared with the other players in the same games.",ja:"出場したゲームの1ゲーム平均を、同じゲームの他の選手の平均と比べました。",zh:"以出賽局的每局平均，與同局其他選手的平均比較。"},
   lg_avg:{ko:"같은 판 다른 선수 평균",en:"Others in the same games",ja:"同じゲームの他の選手の平均",zh:"同局其他選手平均"},
   w_K:{ko:"처치",en:"Kills",ja:"キル",zh:"擊殺"}, w_D:{ko:"사망",en:"Deaths",ja:"デス",zh:"死亡"}, w_dmg:{ko:"적 영웅 피해",en:"Hero damage",ja:"敵ヒーローへのダメージ",zh:"英雄傷害"},
-  w_sup:{ko:"회복·실드",en:"Healing·Shield",ja:"回復・シールド",zh:"治療・護盾"}, w_obj:{ko:"목표 시간",en:"Objective time",ja:"目標時間",zh:"目標時間"}, w_S:{ko:"판 점수",en:"Game score",ja:"ゲームスコア",zh:"單局分數"},
+  w_sup:{ko:"아군 회복·실드",en:"Ally healing·shield",ja:"味方への回復・シールド",zh:"給隊友的治療・護盾"}, w_obj:{ko:"목표 시간",en:"Objective time",ja:"目標時間",zh:"目標時間"}, w_S:{ko:"판 점수",en:"Game score",ja:"ゲームスコア",zh:"單局分數"},
   u_s:{ko:"초",en:"s",ja:"秒",zh:"秒"},
-  why_n:{ko:"사망은 적을수록 좋아요. 판 점수 = 처치 ×100 · 사망 ×−100 · (적 영웅 피해 + 회복·실드 + 이상현상 피해) 817당 +100 · 목표 시간 1초당 +10",en:"Fewer deaths is better. Game score = kills ×100 · deaths ×−100 · +100 per 817 of (hero damage + healing/shield + anomaly damage) · +10 per objective second",ja:"デスは少ないほど良い。ゲームスコア＝キル×100・デス×−100・（敵ヒーローダメージ＋回復・シールド＋アノマリーダメージ）817ごとに+100・目標時間1秒+10",zh:"死亡越少越好。單局分數＝擊殺×100・死亡×−100・（英雄傷害＋治療護盾＋異常現象傷害）每 817 加 100・目標時間每秒 +10"},
+  why_n:{ko:"사망은 적을수록 좋아요. 판 점수 = 처치 ×100 · 사망 ×−100 · (적 영웅 피해 + 아군 회복·실드 + 이상현상 피해) 817당 +100 · 목표 시간 1초당 +10",en:"Fewer deaths is better. Game score = kills ×100 · deaths ×−100 · +100 per 817 of (hero damage + ally healing/shield + anomaly damage) · +10 per objective second",ja:"デスは少ないほど良い。ゲームスコア＝キル×100・デス×−100・（敵ヒーローダメージ＋味方への回復・シールド＋アノマリーダメージ）817ごとに+100・目標時間1秒+10",zh:"死亡越少越好。單局分數＝擊殺×100・死亡×−100・（英雄傷害＋隊友治療護盾＋異常現象傷害）每 817 加 100・目標時間每秒 +10"},
   rank_h:{ko:"MVP 순위",en:"MVP ranking",ja:"MVP順位",zh:"MVP 排名"},
   rank_t:{ko:"MVP 등수(숫자)가 작을수록 위예요. 2판 이상 뛴 선수가 후보이고, 작은 표는 판마다의 등수예요.",en:"Lower MVP rank (the number) is better. Players with 2+ games are eligible; the small tags are their placing in each game.",ja:"MVP順位(数字)が小さいほど上位です。2ゲーム以上出場した選手が候補で、小さな札はゲームごとの順位です。",zh:"MVP 名次(數字)越小越前面。出賽 2 局以上者為候選，小標籤是各局名次。"},
   row_s:{ko:"{n}판 · 판 1등 {f}번",en:"{n} games · {f}× game #1",ja:"{n}ゲーム・1位 {f}回",zh:"{n} 局・單局第1 {f} 次"},
@@ -7071,11 +7071,11 @@ const MVL = {
   g_h:{ko:"판별 점수표",en:"Game-by-game scores",ja:"ゲーム別スコア",zh:"各局分數"},
   g_t:{ko:"판을 누르면 6명의 항목별 점수가 보여요. 작은 숫자가 그 항목으로 얻은 점수예요. 매치 코드로 게임에서 같은 리플레이를 볼 수 있어요.",en:"Tap a game to see each player's points by category (small numbers). Use the match code to watch the same replay in game.",ja:"ゲームを押すと6人の項目別スコアが見られます（小さい数字がその項目の点数）。マッチコードでゲーム内の同じリプレイを見られます。",zh:"點開對局可看 6 人各項得分（小字為該項分數）。可用對戰代碼在遊戲中觀看同一重播。"},
   g_first:{ko:"1등 {n}",en:"#1 {n}",ja:"1位 {n}",zh:"第1 {n}"},
-  th:{ko:["등수","선수","처치","사망","피해+회복·실드","목표","판 점수"],en:["Rank","Player","K","D","Dmg+Heal·Shield","Obj","Score"],ja:["順位","選手","キル","デス","ダメージ+回復・シールド","目標","スコア"],zh:["名次","選手","擊殺","死亡","傷害+治療護盾","目標","分數"]},
+  th:{ko:["등수","선수","처치","사망","피해+아군 회복·실드","목표","판 점수"],en:["Rank","Player","K","D","Dmg+Ally Heal·Shield","Obj","Score"],ja:["順位","選手","キル","デス","ダメージ+味方回復・シールド","目標","スコア"],zh:["名次","選手","擊殺","死亡","傷害+隊友治療護盾","目標","分數"]},
   won:{ko:"승",en:"W",ja:"勝",zh:"勝"},
   src_h:{ko:"계산 방법과 데이터",en:"Method & data",ja:"計算方法とデータ",zh:"計算方式與資料"},
   src_m:{ko:"<b>계산 방법</b> — 매 판 판 점수로 6명의 등수를 매기고(같은 점수는 등수 평균), MVP 등수 = (판별 등수 합 + 3.5 × 3) ÷ (판 수 + 3). 같으면 판 1등 횟수 → 팀 최종 순위 → 판 평균 대비 점수 순서로 정해요. 자세한 기준은 「대회 → 규칙 → 대회 MVP」.",en:"<b>Method</b> — each game ranks its 6 players by game score (ties share the average rank); MVP rank = (sum of ranks + 3.5 × 3) ÷ (games + 3). Ties: game #1s → team final placing → score vs game average. Details: Cup → Rules → Cup MVP.",ja:"<b>計算方法</b> — 毎ゲーム、ゲームスコアで6人に順位を付け（同点は平均順位）、MVP順位＝（順位の合計＋3.5×3）÷（ゲーム数＋3）。同じなら1位回数→チーム最終順位→ゲーム平均比スコアの順。詳しくは「大会→規則→大会MVP」。",zh:"<b>計算方式</b> — 每局以單局分數為 6 人排名（同分取平均名次），MVP 名次＝（名次總和＋3.5×3）÷（局數＋3）。相同時依單局第1次數→隊伍最終名次→相對單局平均分數。詳見「賽事→規則→賽事 MVP」。"},
-  src_d:{ko:"<b>데이터 출처</b> — 처치·사망·적 영웅 피해는 게임 서버의 공식 경기 결과, 회복·실드·목표 시간은 경기 리플레이에서 읽었어요. 계산한 판 {g}개 · 후보 {c}명 · 계산 {t}",en:"<b>Data</b> — kills, deaths and hero damage from the official match results; healing, shields and objective time read from the replays. {g} games · {c} eligible players · computed {t}",ja:"<b>データ出典</b> — キル・デス・敵ヒーローダメージはゲームサーバーの公式試合結果、回復・シールド・目標時間は試合リプレイから読み取りました。計算したゲーム {g}・候補 {c}人・計算 {t}",zh:"<b>資料來源</b> — 擊殺、死亡、英雄傷害取自遊戲伺服器官方結果，治療、護盾、目標時間讀自對局重播。計算 {g} 局・候選 {c} 人・計算時間 {t}"},
+  src_d:{ko:"<b>데이터 출처</b> — 처치·사망·적 영웅 피해는 게임 서버의 공식 경기 결과, 아군 회복·실드·목표 시간은 경기 리플레이에서 읽었어요. 계산한 판 {g}개 · 후보 {c}명 · 계산 {t}",en:"<b>Data</b> — kills, deaths and hero damage from the official match results; ally healing, shields and objective time read from the replays. {g} games · {c} eligible players · computed {t}",ja:"<b>データ出典</b> — キル・デス・敵ヒーローダメージはゲームサーバーの公式試合結果、味方への回復・シールド・目標時間は試合リプレイから読み取りました。計算したゲーム {g}・候補 {c}人・計算 {t}",zh:"<b>資料來源</b> — 擊殺、死亡、英雄傷害取自遊戲伺服器官方結果，隊友治療、護盾、目標時間讀自對局重播。計算 {g} 局・候選 {c} 人・計算時間 {t}"},
   src_x:{ko:"<b>계산에서 빠진 판</b>",en:"<b>Games left out</b>",ja:"<b>計算から外したゲーム</b>",zh:"<b>未計入的對局</b>"},
   src_x0:{ko:"없음 — 보고된 판을 모두 계산했어요",en:"None — every reported game was counted",ja:"なし — 報告されたゲームをすべて計算しました",zh:"無 — 已計入所有回報的對局"},
   src_v:{ko:"<b>검증과 이의 제기</b> — 매치 코드를 게임 「다른 매치」에 넣으면 같은 리플레이를 볼 수 있어요. 이상한 점은 한국 팀은 카톡 리더방, 일본·유럽 팀은 디스코드로 알려 주세요.",en:"<b>Check it yourself</b> — enter a match code under \"Other match\" in game to watch the same replay. Report anything odd on Discord (Korean teams: the KakaoTalk leaders' room).",ja:"<b>検証と異議</b> — マッチコードをゲームの「他のマッチ」に入れると同じリプレイを見られます。気になる点は日本・ヨーロッパチームはDiscord、韓国チームはリーダー部屋で知らせてください。",zh:"<b>驗證與異議</b> — 在遊戲「其他對戰」輸入對戰代碼即可觀看同一重播。有疑問請日本與歐洲隊伍在 Discord、韓國隊伍在隊長群通知。"}
