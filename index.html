@@ -1086,20 +1086,6 @@
 .hlSmall{position:relative;display:flex;justify-content:center;gap:16px;margin-top:24px;padding-top:7px}
 .hlSmall:before{content:"";position:absolute;top:0;left:50%;width:min(300px,90%);transform:translateX(-50%);height:5px;border-radius:3px;background:linear-gradient(180deg,#d9dee8,#7c8597);box-shadow:0 3px 6px rgba(0,0,0,.5)}
 .hlSmall .hlBan{width:132px;padding-top:10px;animation-duration:11s}
-.hlCol{display:flex;flex-direction:column;width:132px}
-/* 준우승·3위 명판 — 우승 놋쇠 명판(.hlPlate)의 작은 판. 준우승 = 은, 3위 = 동. 좁은 판이라 리벳은 위 두 모서리 */
-.hlSubN{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;box-sizing:border-box;margin:14px auto 0;padding:13px 6px 9px;border-radius:5px;text-align:center;
-  background:linear-gradient(180deg,#f1f4f8,#b9c1ce 55%,#858fa1);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -2px 0 rgba(0,0,0,.22),0 6px 14px rgba(0,0,0,.45)}
-.hlSubN:before,.hlSubN:after{content:"";position:absolute;top:5px;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#6b7384 70%)}
-.hlSubN:before{left:6px}.hlSubN:after{right:6px}
-.hlSubN span{font-size:11px;font-weight:800;line-height:1.35;word-break:break-all;color:#1f2a3d;text-shadow:0 1px 0 rgba(255,255,255,.6)}
-.hlSubN span.s{font-weight:700;color:#3a4558}
-.hlSubN em{font-style:normal;font-size:9.5px;margin-left:4px;padding:0 3px;border:1px solid rgba(31,42,61,.45);border-radius:3px}
-.hlSubN.hn_third{background:linear-gradient(180deg,#f2c595,#c27d42 55%,#8c5226)}
-.hlSubN.hn_third:before,.hlSubN.hn_third:after{background:radial-gradient(circle at 35% 35%,#ffe6cc,#7a4520 70%)}
-.hlSubN.hn_third span{color:#3a1d08;text-shadow:0 1px 0 rgba(255,226,196,.55)}
-.hlSubN.hn_third span.s{color:#56301a}
-.hlSubN.hn_third em{border-color:rgba(58,29,8,.45)}
 .hlSmall .hlRod:before,.hlSmall .hlRod:after{height:12px;background:linear-gradient(#aeb6c4,#6b7384)}
 .hlSmall .hlCloth{padding:14px 8px 40px;gap:4px;clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 22px),0 100%);animation-delay:.35s}
 .hl_runner .hlCloth{background:repeating-linear-gradient(90deg,rgba(0,0,0,.09) 0 2px,transparent 2px 18px),linear-gradient(90deg,rgba(0,0,0,.35),transparent 18%,transparent 82%,rgba(0,0,0,.35)),linear-gradient(180deg,#2f56a8,#1a3270 68%,#11214c);box-shadow:inset 0 0 0 4px rgba(0,0,0,.18),inset 0 0 0 5px #cfd6e2}
@@ -1124,7 +1110,7 @@
 .hl_empty .hlCloth{background:repeating-linear-gradient(90deg,rgba(0,0,0,.08) 0 2px,transparent 2px 24px),linear-gradient(180deg,#2d3342,#1c212c);box-shadow:inset 0 0 0 4px rgba(0,0,0,.18),inset 0 0 0 6px rgba(226,176,78,.45)}
 .hlQ{font-family:'Black Han Sans',sans-serif;font-size:64px;line-height:1.1;color:rgba(255,255,255,.22)}
 .hlEmptyT{text-align:center;margin:10px 0 0;font-size:13px;color:#9aa6bd}
-@media (max-width:360px){.hlBan{width:212px}.hlTeam{font-size:26px}.hlSmall{gap:10px}.hlSmall .hlBan,.hlCol{width:120px}.hlSubN{padding:13px 4px 9px}.hlSubN span{font-size:10.5px}}
+@media (max-width:360px){.hlBan{width:212px}.hlTeam{font-size:26px}.hlSmall{gap:10px}.hlSmall .hlBan{width:120px}}
 @media (prefers-reduced-motion:reduce){.hlBan,.hlCloth,.hlCloth:after{animation:none}.hlCloth:after{display:none}}
 .bo-host{display:flex;align-items:center;gap:6px;margin:-4px 4px 10px;padding:0 4px;font-size:12px;color:#9aa6bd;line-height:1.4}
 .bo-host svg{flex:0 0 13px;color:#ffb02e}
@@ -5254,7 +5240,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.25-c";
+const SITE_VERSION = "2026.10.25-d";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
@@ -8006,13 +7992,6 @@ const HL = (k, v) => { const o = HLL[k]; let s = (o && (o[LANG] || o.en || o.ko)
 const hlDate = d => { try{ const t = new Date(d + "T12:00:00+09:00"); return isNaN(t) ? esc(d) : new Intl.DateTimeFormat(LANG === "zh" ? "zh-TW" : (["ko","ja"].includes(LANG) ? LANG : "en"), { year:"numeric", month:"long", day:"numeric" }).format(t); }catch(e){ return esc(d); } };
 const hlEmb = (e, sz) => (e !== null && e !== undefined && e !== "") ? cupEmbImg(e, sz, "hlEmbI") : "";
 const hlBanner = (kind, inner) => `<div class="hlBan hl_${kind}"><span class="hlRod"></span><div class="hlCloth">${inner}</div></div>`;
-/* 준우승·3위 = 작은 배너 + 그 아래 선수 이름(2026-10-25 MAMMON, 0판 예비는 cup.py hall 이 뺀다). 이름은 흔들리는 배너 밖에 둔다 */
-const hlSmallCol = (kind, t) => `<div class="hlCol">`
-  + hlBanner(kind, `<div class="hlEmb s">${hlEmb(t.emb, 40)}</div><div class="hlTeam s">${esc(t.name)}</div><div class="hlWin s">${HL(kind)}</div>`)
-  + (((t.roster || []).length || (t.subs || []).length) ? `<div class="hlSubN hn_${kind}">`
-      + (t.roster || []).map(n => `<span>${esc(n)}</span>`).join("")
-      + (t.subs || []).map(n => `<span class="s">${esc(n)}<em>${HL("sub")}</em></span>`).join("") + `</div>` : "")
-  + `</div>`;
 function renderTrHall(){
   const box=document.getElementById("trHall"); if(!box) return;
   const H=[`<div class="hlHall"><div class="hlHead"><h3>${TRL("h_head")}</h3><p>${TRL("h_sub")}</p></div>`];
@@ -8036,8 +8015,8 @@ function renderTrHall(){
         + (fz.score ? `<div class="hlFin">${HL("fin", { a: esc(String(fz.score).split(/[:\-]/)[0].trim()), b: esc(String(fz.score).split(/[:\-]/)[1] ? String(fz.score).split(/[:\-]/)[1].trim() : "") })}${fz.vs ? ` · vs ${esc(fz.vs)}` : ""}</div>` : "")
       + `</div>`
       + ((ru.name || th.name) ? `<div class="hlSmall">`
-          + (ru.name ? hlSmallCol("runner", ru) : "")
-          + (th.name ? hlSmallCol("third", th) : "")
+          + (ru.name ? hlBanner("runner", `<div class="hlEmb s">${hlEmb(ru.emb, 40)}</div><div class="hlTeam s">${esc(ru.name)}</div><div class="hlWin s">${HL("runner")}</div>`) : "")
+          + (th.name ? hlBanner("third", `<div class="hlEmb s">${hlEmb(th.emb, 40)}</div><div class="hlTeam s">${esc(th.name)}</div><div class="hlWin s">${HL("third")}</div>`) : "")
         + `</div>` : "")
       + (mv && mv.name ? `<div class="hlMvp"><div class="hlMedal" aria-hidden="true"><span>MVP</span></div><div class="hlMvpT"><small>${HL("mvp")}</small><b>${esc(mv.name)}</b><span>${[mv.team ? esc(mv.team) : "", mv.hero ? esc(T(mv.hero)) : ""].filter(Boolean).join(" · ")}</span>`
           + (window.rsTrMvpVisible && window.rsTrMvpVisible() ? `<button type="button" class="hlWhy" data-hlwhy="1">${HL("why")}</button>` : "")
