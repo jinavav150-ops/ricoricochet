@@ -2514,7 +2514,7 @@ const DEFAULT_MATCHUPS = {
   "magnus>remedy": [1, "그래플로 레메디를 아군 보호 범위에서 끌어내 집중 사격을 노린다. 명중과 후속 화력이 필요하며 점프 패드·중력 깔때기 반격도 가능하다."],
   "magnus>khan": [1, "그래플로 칸을 아군과 분리해 근접전을 노린다. 이미 부여된 실드가 거리만으로 사라진다고 볼 수 없고 첫 충격 무적 특전도 확인해야 한다."],
   "fury>magnus": [1, "산탄 교환 타이밍에 오버드라이브를 켜고 킥으로 공격을 끊는 구도. 망누스가 사격을 멈추거나 무적을 사용하면 같은 교환을 기대하기 어렵다."],
-  "dread>magnus": [1, "방패를 산탄 방향에 맞추고 접근 후 봉쇄를 노린다. 방패 내구와 궁극기 준비 여부가 핵심이며 그래플 이후 무조건 반격할 수 있는 것은 아니다."],
+  "magnus>dread": [1, "근거리 산탄 교환에서 DPS 차이로 앞선다(실전 피드백). 드레드의 도약 착지 지점을 읽어 대응하고, 봉쇄가 준비된 드레드에게 붙을 때는 빠져나갈 경로를 남긴다."],
   "leo>twinkle": [1, "기동으로 폭발 지점을 피하며 다른 사격 각을 만든다. 접착 지뢰는 모든 표면에 붙고 유도 미사일도 있어 공중에서 폭발물이 무용해지는 것은 아니다."],
   "twinkle>vector": [1, "수류탄과 지뢰로 벡터가 머무는 지역을 압박한다. 설치물 파괴와 윈드게이트 통과 후 유도 미사일 추적은 각각 판정 확인이 필요하다."],
   "remedy>twinkle": [0, "분산 피해를 치유로 회복할 수 있지만 수류탄·지뢰·유도 미사일이 겹치는 순간 피해도 있다. 치유만으로 모두 상쇄한다는 우열은 보류한다."],
@@ -2536,7 +2536,7 @@ const DEFAULT_MATCHUPS = {
   "dread>remedy": [1, "봉쇄가 준비됐을 때 도약·방패로 접근해 힐러를 아군에게서 분리한다. 점프 패드와 중력 깔때기로 대응할 수 있으므로 진입만으로 성공하지는 않는다."],
   "jagger>khan": [1, "벽을 활용해 지속 사격 시간을 확보하고 레킹 볼로 진형을 흔든다. 실드와 포탑이 함께 있는 정면에서는 방어 지속 시간을 먼저 확인한다."],
   "fury>jagger": [1, "재거가 계속 사격할 때 오버드라이브로 받아내고 근거리 킥을 노린다. 사격 중단·벽·레킹 볼 이탈로 대응할 수 있어 흡수를 항상 강요할 수는 없다."],
-  "jagger>dread": [0, "지속 사격으로 방패를 소모시키고 벽으로 사선을 끊는 구도지만 방패 관통 능력은 확인되지 않았다. 도약·봉쇄 역진입도 있어 단순 DPS로 우열을 정하지 않는다."]
+  "jagger>dread": [1, "램프업 지속 사격의 DPS 차이로 방패와 체력을 함께 깎아 낸다(실전 피드백). 벽으로 도약 진입 경로를 막고, 봉쇄가 닿는 거리 안으로는 들어가지 않는다."]
 };
 
 /* ════════ 미러전 팁 (같은 영웅 맞대결 시 승부처) ════════ */
@@ -2631,7 +2631,7 @@ catch(e){
 /* 시드 상성 마이그레이션 — 기본 상성표가 바뀌면, 사용자가 직접 수정하지 않은 항목만 새 기본값으로 갱신.
    (직접 수정한 항목은 보존. 새 항목 추가 시: SEEDV 올리고 여기 케이스 추가) */
 (function(){
-  const SEEDV = 6;
+  const SEEDV = 7;
   const same = (a,b) => JSON.stringify(a) === JSON.stringify(b);
   try{
     if(matchupStorageInvalid) return;
@@ -2700,9 +2700,22 @@ catch(e){
     }
     if(cur < 6){
       for(const [k,previous] of Object.entries(MATCHUPS_SEED_V5)){
-        if(same(MATCHUPS[k],previous)) MATCHUPS[k]=[...DEFAULT_MATCHUPS[k]];
+        if(same(MATCHUPS[k],previous)){ if(DEFAULT_MATCHUPS[k]) MATCHUPS[k]=[...DEFAULT_MATCHUPS[k]]; else delete MATCHUPS[k]; }   // 7에서 뒤집힌 짝(dread>magnus)은 기본표에 없다
       }
       // An intentional deletion remains absent. Custom explanations and reverse pairs remain intact.
+      MATCHUPS=validateMatchups(MATCHUPS);
+      if(!store.set(MATCHUPS)) return;
+    }
+    /* 7 (2026-11-03 피드백: あろめん侍) — 드레드는 탱커에게 약하다: 망누스·재거가 DPS 차이로 앞서고 도약도 대응당한다.
+       드레드>망누스(유리)를 망누스>드레드로 뒤집고, 재거>드레드를 보류(0) → 유리(1). 직접 고친 항목은 그대로. */
+    if(cur < 7){
+      const OLD7 = {
+        "dread>magnus": [1, "방패를 산탄 방향에 맞추고 접근 후 봉쇄를 노린다. 방패 내구와 궁극기 준비 여부가 핵심이며 그래플 이후 무조건 반격할 수 있는 것은 아니다."],
+        "jagger>dread": [0, "지속 사격으로 방패를 소모시키고 벽으로 사선을 끊는 구도지만 방패 관통 능력은 확인되지 않았다. 도약·봉쇄 역진입도 있어 단순 DPS로 우열을 정하지 않는다."]
+      };
+      if(same(MATCHUPS["dread>magnus"], OLD7["dread>magnus"]) || same(MATCHUPS["dread>magnus"], MATCHUPS_SEED_V5["dread>magnus"])) delete MATCHUPS["dread>magnus"];
+      if(!MATCHUPS["dread>magnus"] && !MATCHUPS["magnus>dread"]) MATCHUPS["magnus>dread"] = [...DEFAULT_MATCHUPS["magnus>dread"]];
+      if(same(MATCHUPS["jagger>dread"], OLD7["jagger>dread"]) || (!MATCHUPS["jagger>dread"] && !MATCHUPS["dread>jagger"])) MATCHUPS["jagger>dread"] = [...DEFAULT_MATCHUPS["jagger>dread"]];
       MATCHUPS=validateMatchups(MATCHUPS);
       if(!store.set(MATCHUPS)) return;
     }
@@ -2796,6 +2809,8 @@ const COUNTER_TRANSLATIONS = {
   "봉쇄가 준비됐을 때 도약·방패로 접근해 힐러를 아군에게서 분리한다. 점프 패드와 중력 깔때기로 대응할 수 있으므로 진입만으로 성공하지는 않는다.": "When Lockdown is ready, approach with Leap and shield to separate the healer. Jump pads and the funnel can counter the entry.",
   "벽을 활용해 지속 사격 시간을 확보하고 레킹 볼로 진형을 흔든다. 실드와 포탑이 함께 있는 정면에서는 방어 지속 시간을 먼저 확인한다.": "Use the wall to build sustained fire and the rolling ball to disrupt positioning. Against shields and a turret together, first check the defensive window.",
   "재거가 계속 사격할 때 오버드라이브로 받아내고 근거리 킥을 노린다. 사격 중단·벽·레킹 볼 이탈로 대응할 수 있어 흡수를 항상 강요할 수는 없다.": "Use Overdrive against continued fire and seek a close Kick. Jagger can stop firing, use a wall or roll away; shield feeding cannot always be forced.",
+  "근거리 산탄 교환에서 DPS 차이로 앞선다(실전 피드백). 드레드의 도약 착지 지점을 읽어 대응하고, 봉쇄가 준비된 드레드에게 붙을 때는 빠져나갈 경로를 남긴다.": "Wins close-range shotgun trades on raw DPS (player feedback). Read where Dread's Leap will land, and keep an exit route when Dread has Lockdown ready.",
+  "램프업 지속 사격의 DPS 차이로 방패와 체력을 함께 깎아 낸다(실전 피드백). 벽으로 도약 진입 경로를 막고, 봉쇄가 닿는 거리 안으로는 들어가지 않는다.": "Out-damages Dread with ramped-up sustained fire, wearing down both shield and health (player feedback). Use the wall to block Leap approaches and stay out of Lockdown reach.",
   "지속 사격으로 방패를 소모시키고 벽으로 사선을 끊는 구도지만 방패 관통 능력은 확인되지 않았다. 도약·봉쇄 역진입도 있어 단순 DPS로 우열을 정하지 않는다.": "Sustained fire can pressure shield health and the wall can block sightlines, but shield penetration is unverified. Leap and Lockdown also prevent a simple DPS verdict.",
   "상대 순간이동기를 확인하고 표식 사격을 이어간다. 과부하 광선을 쓸 때는 충전 중 노출과 퇴로를 확인한다.": "Watch the opposing teleport and maintain marked shots. Check exposure and an escape route when charging the beam.",
   "이동·투척에 쓸 물체와 돌진 충전을 관리한다. 상대 공허 전하가 준비됐다면 근접에서 동시에 소모하지 않도록 간격을 둔다.": "Manage objects and dash charges. Space your approach around the opposing ultimate.",
@@ -5240,7 +5255,7 @@ if("serviceWorker" in navigator){
 }
 
 /* ════════ 사이트 버전 (배포 반영 확인 · 제보 버전 식별용) ════════ */
-const SITE_VERSION = "2026.10.25-e";
+const SITE_VERSION = "2026.11.03-a";
 function showVersion(){ const v=document.getElementById("verTag"); if(v) v.textContent="v"+SITE_VERSION; }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", showVersion);
 else showVersion();
