@@ -1,0 +1,4 @@
+# 대회 결과 파일(mvp.json · hall.json)과 tools/ 만 바뀐 커밋은 다시 배포하지 않는다.
+# 사이트는 이 파일들을 저장소 원본 주소에서 직접 읽으므로 재배포가 필요 없다.
+[build]
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)mvp.json' ':(exclude)hall.json' ':(exclude)tools'"
